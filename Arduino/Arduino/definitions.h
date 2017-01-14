@@ -6,7 +6,7 @@
 #define NUMBER_OF_BUTTONS 10
 #define NUMBER_OF_LIGHTS 10
 #define NUMBER_OF_RELAYS 10
-#define NUMBER_OF_ACTIONS 10
+#define NUMBER_OF_ACTIONS 50
 #define ID_LENGTH 5
 
 #define BUTTON_LONG_PRESS	1500	//after milis button is long pressed

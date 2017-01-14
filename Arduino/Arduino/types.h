@@ -32,22 +32,12 @@
 
  
   typedef struct {
+	  char originId[ID_LENGTH];
       Action action;
-      byte condition;
-      char Id[ID_LENGTH]; 
+      byte event;
+      char targetId[ID_LENGTH]; 
     } ActionDescription;
 
-/*
-  typedef struct {
-    char Id[ID_LENGTH];
-    byte Type;
-    bool io;
-    byte AdType;
-    byte Pin;
-    double Value;
-    ActionDescription Action[NUMBER_OF_ACTIONS];
-  } PeripheralUnit;
-*/
 
   typedef enum {
     BTN_OFF=0,
@@ -59,7 +49,7 @@
   typedef struct {
     char Id[ID_LENGTH];
     byte Pin;
-    ActionDescription Actions[NUMBER_OF_ACTIONS];
+    //ActionDescription Actions[NUMBER_OF_ACTIONS];
 	bool isLongMode;
     unsigned long startPressing;
   } ButtonUnit;
@@ -69,13 +59,13 @@
     byte Pin;
 	bool status;
 	byte dimValue;
-    ActionDescription Actions[NUMBER_OF_ACTIONS];
+    //ActionDescription Actions[NUMBER_OF_ACTIONS];
   } LightUnit;
 
   typedef struct {
 	  char Id[ID_LENGTH];
 	  byte Pin;
-	  ActionDescription Actions[NUMBER_OF_ACTIONS];
+	  //ActionDescription Actions[NUMBER_OF_ACTIONS];
 	  bool status;
 	  bool lhOn;
   } RelayUnit;

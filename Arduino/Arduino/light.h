@@ -1,5 +1,5 @@
 #pragma once
-#include "peripheral.h"
+#include "types.h"
 
 LightUnit* FindLight(char* id);
 void LightSet(char* id, bool isOn);

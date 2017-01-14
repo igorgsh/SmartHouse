@@ -1,6 +1,6 @@
 #pragma once
-#include "peripheral.h"
+#include "types.h"
 #include "definitions.h"
 
-void ProcessAction(char* id, ActionDescription* actions, byte event, unsigned long newValue, unsigned long oldValue);
+void ProcessAction(char* id,  byte event, unsigned long newValue, unsigned long oldValue);
 

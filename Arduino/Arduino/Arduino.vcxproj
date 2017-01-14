@@ -92,7 +92,7 @@
     <ClInclude Include="global.h" />
     <ClInclude Include="initdata.h" />
     <ClInclude Include="light.h" />
-    <ClInclude Include="peripheral.h" />
+    <ClInclude Include="types.h" />
     <ClInclude Include="process.h" />
     <ClInclude Include="relay.h" />
     <ClInclude Include="rest_module.h" />
@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="button.cpp" />
+    <ClCompile Include="initdata.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="process.cpp" />
     <ClCompile Include="relay.cpp" />

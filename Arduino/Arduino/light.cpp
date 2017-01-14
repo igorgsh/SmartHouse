@@ -18,12 +18,12 @@ LightUnit * FindLight(char * id) {
 void LightSet(char * id, bool isOn) {
 	LightUnit *unit = FindLight(id);
 
-	Debug("Light!!!" + isOn);
+	Debug((isOn ? "Light ON" : "Light Off"));
 
 	if (unit != NULL) {
 		digitalWrite(unit->Pin, isOn);
 	}
-	ProcessAction(unit->Id, unit->Actions, isOn, isOn, unit->status);
+	ProcessAction(unit->Id, isOn, isOn, unit->status);
 	unit->status = isOn;
 }
 

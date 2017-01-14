@@ -1,6 +1,3 @@
-// 
-// 
-// 
 
 #include "relay.h"
 #include "process.h"
@@ -21,11 +18,11 @@ RelayUnit * FindRelay(char * id) {
 
 void RelaySet(char * id, bool highLow) {
 	RelayUnit *unit = FindRelay(id);
-	Debug((highLow==HIGH? "Relay HIGH" : "Relay LOW"));
+	//Debug((highLow==HIGH? "Relay HIGH" : "Relay LOW"));
 	if (unit != NULL) {
 		digitalWrite(unit->Pin, (highLow == HIGH? unit->lhOn : !unit->lhOn));
 	}
-	ProcessAction(unit->Id, unit->Actions, highLow, highLow, unit->status);
+	ProcessAction(unit->Id, highLow, highLow, unit->status);
 	unit->status = highLow;
 }
 

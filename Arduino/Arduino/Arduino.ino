@@ -7,7 +7,7 @@
 #include "relay.h"
 #include "Arduino.h"
 #include "definitions.h"
-#include "peripheral.h"
+#include "types.h"
 #include "global.h"
 
 #include "button.h"
@@ -65,8 +65,8 @@ void loop() {
 	unsigned long startTime = millis();
 	// Step 1. Read all buttons
 	for (int i = 0; i < NUMBER_OF_BUTTONS && &Buttons[i] != (ButtonUnit*)NULL && Buttons[i].Id[0] != 0; i++) {
-//		sprintf(buf, "Button:%u, id=%s, starting=%lu", i, Buttons[i].Id, Buttons[i].startPressing);
-//		Log(D_DEBUG, buf);
+		sprintf(buf, "Button:%u, id=%s, starting=%lu", i, Buttons[i].Id, Buttons[i].startPressing);
+		Log(D_DEBUG, buf);
 		ProcessButton(&(Buttons[i]));
 	}
 

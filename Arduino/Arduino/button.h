@@ -1,6 +1,6 @@
 #pragma once
 
 #include "definitions.h"
-#include "peripheral.h"
+#include "types.h"
 
 void ProcessButton(ButtonUnit *unit);
