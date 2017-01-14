@@ -94,6 +94,7 @@
     <ClInclude Include="light.h" />
     <ClInclude Include="peripheral.h" />
     <ClInclude Include="process.h" />
+    <ClInclude Include="relay.h" />
     <ClInclude Include="rest_module.h" />
     <ClInclude Include="__vm\.Arduino.vsarduino.h" />
   </ItemGroup>
@@ -101,6 +102,7 @@
     <ClCompile Include="button.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="process.cpp" />
+    <ClCompile Include="relay.cpp" />
     <ClCompile Include="rest_module.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

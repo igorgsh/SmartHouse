@@ -1,6 +1,7 @@
 #include "process.h"
 #include "light.h"
 #include "ext_global.h"
+#include "relay.h"
 
 
 void ProcessAction(char * id, ActionDescription * actions, byte event, unsigned long newValue, unsigned long oldValue) {
@@ -33,6 +34,18 @@ void ProcessAction(char * id, ActionDescription * actions, byte event, unsigned 
 			}
 			case ACT_LIGHT_OFF: {
 				LightSet(actions[i].Id, LOW);
+				break;
+			}
+			case ACT_RELAY_SWITCH: {
+				RelaySwitch(actions[i].Id);
+				break;
+			}
+			case ACT_RELAY_ON: {
+				RelaySet(actions[i].Id, HIGH);
+				break;
+			}
+			case ACT_RELAY_OFF: {
+				RelaySet(actions[i].Id, LOW);
 				break;
 			}
 

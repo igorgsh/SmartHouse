@@ -4,6 +4,7 @@
  Author:	Igor Shevchenko
 */
 
+#include "relay.h"
 #include "Arduino.h"
 #include "definitions.h"
 #include "peripheral.h"
@@ -39,6 +40,15 @@ void InitPins() {
 		}
 	}
 
+	// Initialize Relays
+	for (int i = 0; i < NUMBER_OF_RELAYS; i++) {
+		if (Relays[i].Pin != 0) {
+			pinMode(Relays[i].Pin, OUTPUT);
+			RelaySet(Relays[i].Id, Relays[i].status);
+
+		}
+	}
+
 
 }
 
@@ -48,15 +58,11 @@ void setup() {
 	Serial.begin(9600);
 	InitializeData();
 	InitPins();
-	Debug("Size Buttons=" + sizeof(ButtonUnit));
 }
 
 // the loop function runs over and over again until power down or reset
 void loop() {
 	unsigned long startTime = millis();
-	char buf[50];
-	sprintf(buf,"Size Buttons=%u" ,sizeof(ButtonUnit));
-	Debug(buf);
 	// Step 1. Read all buttons
 	for (int i = 0; i < NUMBER_OF_BUTTONS && &Buttons[i] != (ButtonUnit*)NULL && Buttons[i].Id[0] != 0; i++) {
 //		sprintf(buf, "Button:%u, id=%s, starting=%lu", i, Buttons[i].Id, Buttons[i].startPressing);
