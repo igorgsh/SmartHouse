@@ -78,10 +78,19 @@ void InitializeButtons() {
   Buttons[n].Actions[j].action = Action::ACT_RELAY_ON;
   strcpy(Buttons[n].Actions[j].Id, "Rl01");
   Buttons[n].Actions[j].condition = BTN_ON;
+  j++;
+  Buttons[n].Actions[j].action = Action::ACT_RELAY_ON;
+  strcpy(Buttons[n].Actions[j].Id, "SSR1");
+  Buttons[n].Actions[j].condition = BTN_ON;
 
   j++;
   Buttons[n].Actions[j].action = Action::ACT_RELAY_OFF;
   strcpy(Buttons[n].Actions[j].Id, "Rl01");
+  Buttons[n].Actions[j].condition = BTN_LONG;
+
+  j++;
+  Buttons[n].Actions[j].action = Action::ACT_RELAY_OFF;
+  strcpy(Buttons[n].Actions[j].Id, "SSR1");
   Buttons[n].Actions[j].condition = BTN_LONG;
 
   j++;
@@ -99,6 +108,13 @@ void InitializeRelays() {
 	Relays[n].Pin = 43;
 	Relays[n].status = LOW;
 	Relays[n].lhOn = LOW;
+	Relays[n].Actions[j].action = Action::ACT_NO_ACTION;
+
+	n++;
+	strcpy(Relays[n].Id, "SSR1");
+	Relays[n].Pin = 44;
+	Relays[n].status = LOW;
+	Relays[n].lhOn = HIGH;
 	Relays[n].Actions[j].action = Action::ACT_NO_ACTION;
 
 }
