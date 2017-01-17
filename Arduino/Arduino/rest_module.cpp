@@ -151,10 +151,8 @@ void JsonToAction(JsonObject& root, ActionUnit* unit) {
 }
 
 
-void ListUnits(Client& client, String part, String unitId) {
 
-	DynamicJsonBuffer jsonBuffer;
-	JsonObject& root = jsonBuffer.createObject();
+void UnitsToJson(JsonObject& root,  String part, String unitId) {
 
 	if (part.equals(REST_COMMAND_BUTTONS)) {
 		if (unitId[0] != 0) {
@@ -214,10 +212,29 @@ void ListUnits(Client& client, String part, String unitId) {
 			}
 		}
 	}
+
+}
+
+
+void ListUnits(Client& client, String part, String unitId) {
+
+	DynamicJsonBuffer jsonBuffer;
+	JsonObject& root = jsonBuffer.createObject();
+	UnitsToJson(root, part, unitId);
 	HttpHeader(client, HTTP_CODE_200, "");
 	root.printTo(client);
+}
 
+void ListConfig(Client& client) {
 
+	DynamicJsonBuffer jsonBuffer;
+	JsonObject& root = jsonBuffer.createObject();
+	UnitsToJson(root, REST_COMMAND_BUTTONS, "");
+	UnitsToJson(root, REST_COMMAND_LIGHTS, "");
+	UnitsToJson(root, REST_COMMAND_RELAYS, "");
+	UnitsToJson(root, REST_COMMAND_ACTIONS, "");
+	HttpHeader(client, HTTP_CODE_200, "");
+	root.printTo(client);
 }
 
 
@@ -434,6 +451,10 @@ void ParseCommand(Client& client, HttpRequest request) {
 		}
 		else if (commands[0].equals(REST_COMMAND_HW) || commands[0].equals(REST_COMMAND_ACTIONS)) {
 			ListUnits(client, commands[1], commands[2]);
+			return;
+		}
+		else if (commands[0].equals(REST_COMMAND_CONFIG)) {
+			ListConfig(client);
 			return;
 		}
 		else {
