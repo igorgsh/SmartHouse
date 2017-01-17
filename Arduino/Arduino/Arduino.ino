@@ -53,13 +53,13 @@ void setup() {
 void loop() {
 	unsigned long startTime = millis();
 	// Step 1. Read all buttons
-	ButtonScan();
+	//ButtonScan();
 	
 	//	Step 2. Listening a server requests
 	ProcessServerRequests();
-
+/*
 	Log_(D_INFO, "Working time:");
 	Log2(D_INFO, (millis() - startTime), DEC);
 	Log(D_INFO, "==================================================================");
-
+*/
 }

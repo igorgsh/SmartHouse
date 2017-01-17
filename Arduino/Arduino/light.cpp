@@ -26,7 +26,7 @@ LightUnit* FindLight(const char* id) {
 void LightSet(char * id, bool isOn) {
 	LightUnit *unit = FindLight(id);
 
-	Debug((isOn ? "Light ON" : "Light Off"));
+	//Debug((isOn ? "Light ON" : "Light Off"));
 
 	if (unit != NULL) {
 		digitalWrite(unit->Pin, isOn);

@@ -3,12 +3,14 @@
 #include "Arduino.h"
 #include <ArduinoJson.h>
 
+//#include "definitions.h"
 #include "ext_global.h"
 #include "button.h"
 #include "light.h"
 #include "relay.h"
 #include "action.h"
 #include "configuration.h"
+
 
 const char* HTTP_CODE_200 = "200 Ok";
 const char* HTTP_CODE_400 = (const char*)"400 Bad Request";
@@ -83,7 +85,6 @@ void LightToJson(JsonObject& root, LightUnit* unit) {
 		root[F("status")] = unit->status;
 
 	}
-
 }
 
 void JsonToLight(JsonObject& root, LightUnit* unit) {
@@ -128,7 +129,7 @@ void ActionToJson(JsonObject& root, ActionUnit* action) {
 		root[F("unit")] = F("action");
 		root[F("id")] = action->Id;
 		root[F("event")] = action->event;
-		root[F("action")] = action->action;
+		root[F("action")] = (byte)action->action;
 		root[F("originId")] = action->originId;
 		root[F("targetId")] = action->targetId;
 
@@ -152,7 +153,7 @@ void JsonToAction(JsonObject& root, ActionUnit* unit) {
 
 void ListUnits(Client& client, String part, String unitId) {
 
-	StaticJsonBuffer<200> jsonBuffer;
+	DynamicJsonBuffer jsonBuffer;
 	JsonObject& root = jsonBuffer.createObject();
 
 	if (part.equals(REST_COMMAND_BUTTONS)) {
@@ -181,6 +182,7 @@ void ListUnits(Client& client, String part, String unitId) {
 				JsonObject& unitData = unitArray.createNestedObject();
 				LightToJson(unitData, &(Lights[i]));
 			}
+			Debug("End");
 		}
 
 	}
