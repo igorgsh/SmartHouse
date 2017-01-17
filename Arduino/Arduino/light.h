@@ -1,11 +1,12 @@
 #pragma once
 #include "types.h"
 
-LightUnit* FindLight(char* id);
+LightUnit* FindLight(const char* id);
 void LightSet(char* id, bool isOn);
 
 void LightSwitch(char* id);
 
 void LightDim(char* Id);
+void DefaultLightValue(LightUnit* light);
 
 

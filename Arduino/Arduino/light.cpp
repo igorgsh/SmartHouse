@@ -2,15 +2,23 @@
 #include "process.h"
 #include "ext_global.h"
 
-LightUnit * FindLight(char * id) {
+void DefaultLightValue(LightUnit* light) {
+	light->dimValue = 1;
+	light->status = LOW;
+
+}
+
+LightUnit* FindLight(const char* id) {
 
 	LightUnit *unit = NULL;
 
-	for (int i = 0; i < NUMBER_OF_LIGHTS && &(Lights[i]) != NULL && Lights[i].Id[0] != 0; i++) {
+	for (int i = 0; i < NUMBER_OF_LIGHTS && &(Lights[i]) != NULL; i++) {
 		if (strcmp(Lights[i].Id, id) == 0) {
 			unit = &(Lights[i]);
 			break;
 		}
+		if (Lights[i].Id[0] == 0)
+			break;
 	}
 	return unit;
 }

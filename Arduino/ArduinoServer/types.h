@@ -1,6 +1,7 @@
 #pragma once
 #include "Arduino.h"
-#include "definitions.h"
+
+#define ID_LENGTH 5
 
   typedef enum {
     UT_NOPE=0, 
@@ -32,12 +33,11 @@
 
  
   typedef struct {
-	  char Id[ID_LENGTH];
 	  char originId[ID_LENGTH];
       Action action;
       byte event;
       char targetId[ID_LENGTH]; 
-    } ActionUnit;
+    } ActionDescription;
 
 
   typedef enum {
@@ -58,27 +58,13 @@
   typedef struct {
     char Id[ID_LENGTH];
     byte Pin;
-	byte dimValue;
 	bool status;
+	byte dimValue;
   } LightUnit;
 
   typedef struct {
 	  char Id[ID_LENGTH];
 	  byte Pin;
-	  bool lhOn;
 	  bool status;
+	  bool lhOn;
   } RelayUnit;
-
-
-  typedef enum {
-	  GET = 0,
-	  POST = 1
-  } RequestType;
-
-  typedef struct {
-	  RequestType type;
-	  String URL;
-	  String host;
-	  String body;
-  } HttpRequest;
-

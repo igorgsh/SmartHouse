@@ -2,6 +2,28 @@
 #include "process.h"
 #include "ext_global.h"
 
+void DefaultButtonValue(ButtonUnit* btn) {
+	btn->startPressing = 0;
+	btn->isLongMode = false;
+}
+
+
+ButtonUnit * FindButton(const char* id) {
+
+	ButtonUnit *unit = NULL;
+
+	for (int i = 0; i < NUMBER_OF_BUTTONS && &(Buttons[i]) != NULL; i++) {
+		if (strcmp(Buttons[i].Id, id) == 0) {
+			unit = &(Buttons[i]);
+			break;
+		}
+		if (Buttons[i].Id[0] == 0)
+			break;
+	}
+	return unit;
+}
+
+
 void ProcessButton(ButtonUnit * unit) {
 
 	byte btnValue;
@@ -9,8 +31,8 @@ void ProcessButton(ButtonUnit * unit) {
 	unsigned long now = millis();
 	btnValue = digitalRead(unit->Pin);
 
-	btnValue = !btnValue; //The buttons are pulled up to HIGH. And switched to GND
-	if (btnValue == 1) {// button is pressed
+	//btnValue = !btnValue; //The buttons are pulled up to HIGH. And switched to GND
+	if (btnValue == unit->lhOn) {// button is pressed
 		if (unit->startPressing == 0) { // start pressing
 			unit->startPressing = now;
 		btnValue = BTN_OFF;

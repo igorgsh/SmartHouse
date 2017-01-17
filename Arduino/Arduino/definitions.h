@@ -14,6 +14,7 @@
 #define BUTTON_WRONG_PRESS	200		//ignore click less than this amount of millis 
 
 #define MAX_DIM_VALUE 3 //number of Dimmable levels
+#define NUMBER_OF_URL_PARTS		5
 
 typedef enum {
 	D_OFF = 0,
@@ -29,4 +30,5 @@ extern DebugLevel dLevel;
 
 #define Log2(LEVEL, X, Y) {if (LEVEL <= dLevel) {Serial.println((X),(Y));}};
 #define Log(LEVEL, X) {if (LEVEL <= dLevel) {Serial.println((X));}};
+#define Log_(LEVEL,X) {if (LEVEL <= dLevel) {Serial.print((X));}};
 #define Debug(X)	Log(D_DEBUG, X)

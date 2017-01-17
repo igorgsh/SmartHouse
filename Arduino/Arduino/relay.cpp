@@ -3,17 +3,25 @@
 #include "process.h"
 #include "ext_global.h"
 
-RelayUnit * FindRelay(char * id) {
+RelayUnit* FindRelay(const char* id) {
 
 	RelayUnit *unit = NULL;
 
-	for (int i = 0; i < NUMBER_OF_RELAYS && &(Relays[i]) != NULL && Relays[i].Id[0] != 0; i++) {
+	for (int i = 0; i < NUMBER_OF_RELAYS && &(Relays[i]) != NULL; i++) {
 		if (strcmp(Relays[i].Id, id) == 0) {
 			unit = &(Relays[i]);
 			break;
 		}
+		if (Relays[i].Id[0] != 0) {
+			break;
+		}
 	}
 	return unit;
+}
+
+void DefaultRelayValue(RelayUnit* relay) {
+
+	relay->status = LOW;
 }
 
 void RelaySet(char * id, bool highLow) {
