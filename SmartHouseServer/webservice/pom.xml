@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>SmartHouseServer</artifactId>
+        <groupId>SmartHouse</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>webservice</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-parent</artifactId>
+            <version>${org.springframework.boot.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${org.springframework.boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>SmartHouse</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!--
+               <dependency>
+                   <groupId>com.fasterxml.jackson.dataformat</groupId>
+                   <artifactId>jackson-dataformat-xml</artifactId>
+                   <version>${com.fasterxml.jackson.version}</version>
+               </dependency>
+               <dependency>
+                   <groupId>com.fasterxml.jackson.datatype</groupId>
+                   <artifactId>jackson-datatype-jsr310</artifactId>
+                   <version>${com.fasterxml.jackson.version}</version>
+               </dependency>
+               <dependency>
+                   <groupId>com.fasterxml.jackson.core</groupId>
+                   <artifactId>jackson-core</artifactId>
+                   <version>${com.fasterxml.jackson.version}</version>
+               </dependency>
+               <dependency>
+                   <groupId>com.fasterxml.jackson.core</groupId>
+                   <artifactId>jackson-databind</artifactId>
+                   <version>${com.fasterxml.jackson.version}</version>
+               </dependency>
+       -->
+      </dependencies>
+
+
+</project>
