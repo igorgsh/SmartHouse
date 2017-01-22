@@ -1,3 +1,5 @@
+
+
 #include "rest_module.h"
 
 #include "Arduino.h"
@@ -24,12 +26,19 @@ const char* REST_COMMAND_RELAYS = (const char*)"relays";
 
 
 /*
-void SendPost(char * id, double oldValue, double newValue) {
-	char str[100];
-	sprintf(str, "Send Post: Unit ""%s"" changed value %u -> %u", id, (int)oldValue, (int)newValue);
-	Serial.println(str);
+	Send message to server (REST):
+	"id": id of origination unit
+	"oldValue": previous value (when available)
+	"newValue": new value (required)
+
+*/
+void SendPost(JsonObject root, char * id, int oldValue, int newValue) {
+	root[F("id")] = id;
+	root[F("oldValue")] = oldValue;
+	root[F("newValue")] = newValue;
 }
 
+/*
 void SendLog(char * id, double oldValue, double newValue) {
 	char str[100];
 
@@ -38,6 +47,12 @@ void SendLog(char * id, double oldValue, double newValue) {
 }
 */
 
+
+/*	Print HTTP Header into Client stream
+	Parameters:
+		error: String started with error code and some text(optional)
+		reason: Any text clarifying error
+*/
 void HttpHeader(Client& client, String error, String reason) {
 	client.println("HTTP/1.1 " + error);
 	client.println(F("Content-Type: application/json; charset=utf-8"));
@@ -54,7 +69,9 @@ void HttpHeader(Client& client, String error, String reason) {
 	}
 }
 
-
+/*
+		Serialize Button Unit into Json
+*/
 void ButtonToJson(JsonObject& root, ButtonUnit* btn) {
 
 	if (btn != NULL) {
@@ -66,6 +83,9 @@ void ButtonToJson(JsonObject& root, ButtonUnit* btn) {
 
 }
 
+/*
+	Deserialize ButtonUnit from Json
+*/
 void JsonToButton(JsonObject& root, ButtonUnit* unit) {
 
 	strcpy(unit->Id, root[F("id")]);
