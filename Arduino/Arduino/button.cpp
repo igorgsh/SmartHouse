@@ -17,8 +17,8 @@ ButtonUnit * FindButton(const char* id) {
 			unit = &(Buttons[i]);
 			break;
 		}
-		if (Buttons[i].Id[0] == 0)
-			break;
+		//if (Buttons[i].Id[0] == 0)
+		//	break;
 	}
 	return unit;
 }

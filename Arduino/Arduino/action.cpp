@@ -14,8 +14,8 @@ ActionUnit* FindAction(const char* id) {
 			unit = &(Actions[i]);
 			break;
 		}
-		if (Actions[i].Id[0] == 0)
-			break;
+		//if (Actions[i].Id[0] == 0)
+		//	break;
 	}
 	return unit;
 

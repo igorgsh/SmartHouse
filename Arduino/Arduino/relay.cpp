@@ -12,9 +12,9 @@ RelayUnit* FindRelay(const char* id) {
 			unit = &(Relays[i]);
 			break;
 		}
-		if (Relays[i].Id[0] != 0) {
-			break;
-		}
+		//if (Relays[i].Id[0] != 0) {
+		//	break;
+		//}
 	}
 	return unit;
 }

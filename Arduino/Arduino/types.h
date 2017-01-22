@@ -72,7 +72,8 @@
 
   typedef enum {
 	  GET = 0,
-	  POST = 1
+	  POST = 1,
+	  DELETE = 2
   } RequestType;
 
   typedef struct {

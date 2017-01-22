@@ -17,8 +17,8 @@ LightUnit* FindLight(const char* id) {
 			unit = &(Lights[i]);
 			break;
 		}
-		if (Lights[i].Id[0] == 0)
-			break;
+		//if (Lights[i].Id[0] == 0)
+		//	break;
 	}
 	return unit;
 }

@@ -32,4 +32,5 @@ extern DebugLevel dLevel;
 #define Log(LEVEL, X) {if (LEVEL <= dLevel) {Serial.println((X));}};
 #define Log_(LEVEL,X) {if (LEVEL <= dLevel) {Serial.print((X));}};
 #define Debug(X)	Log(D_DEBUG, X)
+#define Debug_(X)	Log_(D_DEBUG, X)
 #define Debug2(X,Y)	Log2(D_DEBUG, X, Y)

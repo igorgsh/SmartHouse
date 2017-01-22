@@ -135,10 +135,11 @@ void InitializeActions() {
 	strcpy(Actions[actionIndex].targetId, "SSR1");
 	Actions[actionIndex].event = BTN_OFF;
 	
-
+	/*
 	actionIndex++;
+	Actions[actionIndex].Id[0]=0
 	Actions[actionIndex].action = Action::ACT_NO_ACTION;
-
+	*/
 
 }
 

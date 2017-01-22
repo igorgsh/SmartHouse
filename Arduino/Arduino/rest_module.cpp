@@ -162,9 +162,11 @@ void UnitsToJson(JsonObject& root,  String part, String unitId) {
 		else { //All units
 			JsonArray& unitArray = root.createNestedArray(REST_COMMAND_BUTTONS);
 
-			for (int i = 0; i < NUMBER_OF_BUTTONS && &(Buttons[i]) != NULL && Buttons[i].Id[0] != 0; i++) {
-				JsonObject& unitData = unitArray.createNestedObject();
-				ButtonToJson(unitData, &(Buttons[i]));
+			for (int i = 0; i < NUMBER_OF_BUTTONS && &(Buttons[i]) != NULL; i++) {
+				if (Buttons[i].Id[0] != 0) {
+					JsonObject& unitData = unitArray.createNestedObject();
+					ButtonToJson(unitData, &(Buttons[i]));
+				}
 			}
 		}
 	}
@@ -176,9 +178,11 @@ void UnitsToJson(JsonObject& root,  String part, String unitId) {
 		else { //All units
 			JsonArray& unitArray = root.createNestedArray(REST_COMMAND_LIGHTS);
 
-			for (int i = 0; i < NUMBER_OF_LIGHTS && &(Lights[i]) != NULL && Lights[i].Id[0] != 0; i++) {
-				JsonObject& unitData = unitArray.createNestedObject();
-				LightToJson(unitData, &(Lights[i]));
+			for (int i = 0; i < NUMBER_OF_LIGHTS && &(Lights[i]) != NULL; i++) {
+				if (Lights[i].Id[0] != 0) {
+					JsonObject& unitData = unitArray.createNestedObject();
+					LightToJson(unitData, &(Lights[i]));
+				}
 			}
 			Debug("End");
 		}
@@ -192,9 +196,11 @@ void UnitsToJson(JsonObject& root,  String part, String unitId) {
 		else { //All units
 			JsonArray& unitArray = root.createNestedArray(REST_COMMAND_RELAYS);
 
-			for (int i = 0; i < NUMBER_OF_RELAYS && &(Relays[i]) != NULL && Relays[i].Id[0] != 0; i++) {
-				JsonObject& unitData = unitArray.createNestedObject();
-				RelayToJson(unitData, &(Relays[i]));
+			for (int i = 0; i < NUMBER_OF_RELAYS && &(Relays[i]) != NULL ; i++) {
+				if (Relays[i].Id[0] != 0) {
+					JsonObject& unitData = unitArray.createNestedObject();
+					RelayToJson(unitData, &(Relays[i]));
+				}
 			}
 		}
 	}
@@ -206,9 +212,11 @@ void UnitsToJson(JsonObject& root,  String part, String unitId) {
 		else { //All units
 			JsonArray& unitArray = root.createNestedArray(REST_COMMAND_ACTIONS);
 
-			for (int i = 0; i < NUMBER_OF_ACTIONS && &(Actions[i]) != NULL && Actions[i].Id[0] != 0; i++) {
-				JsonObject& unitData = unitArray.createNestedObject();
-				ActionToJson(unitData, &(Actions[i]));
+			for (int i = 0; i < NUMBER_OF_ACTIONS && &(Actions[i]) != NULL; i++) {
+				if (Actions[i].Id[0] != 0) {
+					JsonObject& unitData = unitArray.createNestedObject();
+					ActionToJson(unitData, &(Actions[i]));
+				}
 			}
 		}
 	}
@@ -246,11 +254,15 @@ int ProcessRequest(Client& client, HttpRequest* request) {
 
 	// Read type of request
 	line = client.readStringUntil('/');
+	Debug(line);
 	if (line.startsWith("GET")) {
 		request->type = GET;
 	}
 	else if (line.startsWith("POST")) {
 		request->type = POST;
+	}
+	else if (line.startsWith("DELETE")) {
+		request->type = DELETE;
 	}
 	else {
 		return -1; //Unsupported type
@@ -266,14 +278,6 @@ int ProcessRequest(Client& client, HttpRequest* request) {
 	//Read parameters of header
 	while (client.available()) {
 		line = client.readStringUntil(HTTP_END_OF_LINE);
-		/*
-				Serial.print(line);
-				Serial.print("#");
-				Serial.print(line.length(), DEC);
-				Serial.print("#");
-				Serial.print(line[0], HEX);
-				Serial.println("#");
-				*/
 		if (line.length() == 1 && line[0] == 0x0D) {// Empty line. The body will be next section
 			request->body = client.readString();
 		}
@@ -283,16 +287,6 @@ int ProcessRequest(Client& client, HttpRequest* request) {
 			}
 		}
 	}
-	/*
-	Serial.println("Result:");
-	Serial.println((request.type == GET ? "Type: GET" : "Type: POST"));
-	Serial.print("URL:");
-	Serial.println(request.URL);
-	Serial.print("Host:");
-	Serial.println(request.host);
-	Serial.print("Body:");
-	Serial.println(request.body);
-	*/
 	return 0;
 }
 
@@ -321,7 +315,7 @@ void UpdateUnit(Client& client, String part, String unitId, String json) {
 					return;
 				}
 				isNew = true;
-			}
+			} 
 			if (root[F("id")] != "") {
 				if (isNew) {
 					DefaultButtonValue(unit);
@@ -409,6 +403,60 @@ void UpdateUnit(Client& client, String part, String unitId, String json) {
 
 }
 
+void DeleteUnit(Client& client, String part, String unitId) {
+
+	if (unitId == "") {
+		HttpHeader(client, HTTP_CODE_400, F("Empty unit ID for DELETE command"));
+		return;
+	}
+
+	if (part.equals(REST_COMMAND_BUTTONS)) {
+			ButtonUnit *unit = FindButton(unitId.c_str());
+
+			if (unit == NULL) {//Not Found. 
+				HttpHeader(client, HTTP_CODE_400, F("Unit not found"));
+				return;
+			}
+			DeleteConfiguration(unit);
+			unit->Id[0] = 0;
+	}
+	else if (part.equals(REST_COMMAND_LIGHTS)) {
+		LightUnit *unit = FindLight(unitId.c_str());
+
+		if (unit == NULL) {//Not Found. 
+			HttpHeader(client, HTTP_CODE_400, F("Unit not found"));
+			return;
+		}
+		DeleteConfiguration(unit);
+		unit->Id[0] = 0;
+	}
+	else if (part.equals(REST_COMMAND_RELAYS)) {
+		RelayUnit *unit = FindRelay(unitId.c_str());
+
+		if (unit == NULL) {//Not Found. 
+			HttpHeader(client, HTTP_CODE_400, F("Unit not found"));
+			return;
+		}
+		DeleteConfiguration(unit);
+		unit->Id[0] = 0;
+	}
+	else if (part.equals(REST_COMMAND_ACTIONS)) {
+		ActionUnit *unit = FindAction(unitId.c_str());
+
+		if (unit == NULL) {//Not Found. 
+			HttpHeader(client, HTTP_CODE_400, F("Unit not found"));
+			return;
+		}
+		DeleteConfiguration(unit);
+		unit->Id[0] = 0;
+	
+	}
+
+	HttpHeader(client, HTTP_CODE_200, "");
+
+
+}
+
 
 
 void ParseCommand(Client& client, HttpRequest request) {
@@ -476,7 +524,21 @@ void ParseCommand(Client& client, HttpRequest request) {
 		}
 
 	}
-	HttpHeader(client, HTTP_CODE_400, F("Just GET and POST supported"));
+	else if (request.type == DELETE) {
+		if (request.URL.length() == 0) {// empty command
+			HttpHeader(client, HTTP_CODE_400, F("Non-supported DELETE with empty URL"));
+			return;
+		}
+		else if (commands[0].equals(REST_COMMAND_ACTIONS) || commands[0].equals(REST_COMMAND_HW)) {
+			DeleteUnit(client, commands[1], commands[2]);
+			return;
+		} 
+		else {
+			HttpHeader(client, HTTP_CODE_400, F("Unknown command"));
+		}
+
+	}
+	HttpHeader(client, HTTP_CODE_400, F("Just GET, POST and DELETE are supported"));
 }
 
 
@@ -487,6 +549,8 @@ void ProcessServerRequests() {
 		HttpRequest request;
 
 		if (ProcessRequest(client, &request) == 0) {
+			Debug_("Request type:");
+			Debug2(request.type, DEC);
 			ParseCommand(client, request);
 		}
 		/*
