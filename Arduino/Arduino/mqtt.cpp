@@ -68,8 +68,12 @@ void MessageRelay(String topic, String payload) {
 		RelayUnit *unit = FindRelay(deviceId.c_str());
 		byte oldValue = unit->status;
 		unit->status = (bool)ToInt(payload);
-		if (unit->status != oldValue)
+		if (unit->status != oldValue) {
+			Debug_("Status:");
+			Debug(unit->status);
+			RelaySet(unit, unit->status);
 			ProcessAction(unit->Id, unit->status, unit->status, oldValue);
+		}
 	}
 
 }

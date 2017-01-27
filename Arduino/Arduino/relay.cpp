@@ -27,14 +27,16 @@ void DefaultRelayValue(RelayUnit* relay) {
 
 void RelaySet(char * id, bool highLow) {
 	RelayUnit *unit = FindRelay(id);
+	RelaySet(unit, highLow);
+}
+void RelaySet(RelayUnit* unit, bool highLow)
+{
 	if (unit != NULL) {
-		if (unit->status != highLow) {
-			Debug((highLow == HIGH ? "Relay HIGH" : "Relay LOW"));
-			digitalWrite(unit->Pin, (highLow == HIGH ? unit->lhOn : !unit->lhOn));
-			unit->status = highLow;
-			PublishRelay(*unit);
-			ProcessAction(unit->Id, highLow, highLow, !highLow);
-		}
+		Debug((highLow == HIGH ? "Relay HIGH" : "Relay LOW"));
+		digitalWrite(unit->Pin, (highLow == HIGH ? unit->lhOn : !unit->lhOn));
+		unit->status = highLow;
+		PublishRelay(*unit);
+		ProcessAction(unit->Id, highLow, highLow, !highLow);
 	}
 }
 
@@ -42,7 +44,7 @@ void RelaySwitch(char * id) {
 	RelayUnit *unit = FindRelay(id);
 
 	if (unit != NULL) {
-		RelaySet(id, !(unit->status));
+		RelaySet(unit, !(unit->status));
 	}
 }
 
