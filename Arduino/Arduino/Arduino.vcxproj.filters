@@ -42,9 +42,6 @@
     <ClInclude Include="button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rest_module.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="relay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -55,6 +52,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="configuration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mqtt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -68,9 +68,6 @@
     <ClCompile Include="button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rest_module.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="relay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -81,6 +78,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="configuration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mqtt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

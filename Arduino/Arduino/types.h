@@ -51,6 +51,7 @@
     char Id[ID_LENGTH];
     byte Pin;
 	bool lhOn;
+	ButtonStatus status;
 	bool isLongMode;
     unsigned long startPressing;
   } ButtonUnit;

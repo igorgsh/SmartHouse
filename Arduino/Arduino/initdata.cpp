@@ -26,7 +26,9 @@ void InitPins() {
 	// Initialize Relays
 	for (int i = 0; i < NUMBER_OF_RELAYS; i++) {
 		if (Relays[i].Pin != 0) {
+			//Debug(Relays[i].Pin);
 			pinMode(Relays[i].Pin, OUTPUT);
+			digitalWrite(Relays[i].Pin, !Relays[i].lhOn);
 			RelaySet(Relays[i].Id, Relays[i].status);
 
 		}
@@ -42,14 +44,14 @@ void InitializeServer() {
 		// try to congifure using IP address instead of DHCP:
 		Ethernet.begin(mac, ip);
 	}
-	server.begin();
+	//Server.begin();
 	Log_(D_INFO,"Server is at ");
 	Log(D_INFO,Ethernet.localIP());
 }
 
 
 void InitializeLights() {
-
+/*
 	int n = 0;
 
 	strcpy(Lights[n].Id, "LgtG");
@@ -80,6 +82,7 @@ void InitializeLights() {
 
 	n++;
 	Lights[n].Id[0] = 0;
+	*/
 }
 
 static int actionIndex = 0;
@@ -87,12 +90,12 @@ static int actionIndex = 0;
 
 void InitializeActions() {
 
-	strcpy(Actions[actionIndex].Id, "Act1");
-	strcpy(Actions[actionIndex].originId, "Btn0");
-	Actions[actionIndex].action = Action::ACT_LIGHT_SWITCH;
-	strcpy(Actions[actionIndex].targetId, "LgtG");
+	strcpy(Actions[actionIndex].Id, "A01");
+	strcpy(Actions[actionIndex].originId, "B01");
+	Actions[actionIndex].action = Action::ACT_RELAY_SWITCH;
+	strcpy(Actions[actionIndex].targetId, "R01");
 	Actions[actionIndex].event = BTN_ON;
-
+	/*
 	actionIndex++;
 	strcpy(Actions[actionIndex].Id, "Act2");
 	strcpy(Actions[actionIndex].originId, "Btn0");
@@ -134,12 +137,12 @@ void InitializeActions() {
 	Actions[actionIndex].action = Action::ACT_RELAY_OFF;
 	strcpy(Actions[actionIndex].targetId, "SSR1");
 	Actions[actionIndex].event = BTN_OFF;
-	
-	/*
-	actionIndex++;
-	Actions[actionIndex].Id[0]=0
-	Actions[actionIndex].action = Action::ACT_NO_ACTION;
 	*/
+	
+	actionIndex++;
+	Actions[actionIndex].Id[0] = 0;
+	Actions[actionIndex].action = Action::ACT_NO_ACTION;
+	
 
 }
 
@@ -147,17 +150,18 @@ void InitializeButtons() {
 
 	int n = 0;
 
-	strcpy(Buttons[n].Id, "Btn0");
-	Buttons[n].Pin = 30;
+	strcpy(Buttons[n].Id, "B01");
+	Buttons[n].Pin = 23;
 	Buttons[n].lhOn = LOW;
 	DefaultButtonValue(&Buttons[n]);
-
+	
+	/*
 	n++;
-	strcpy(Buttons[n].Id, "Btn1");
-	Buttons[n].Pin = 42;
+	strcpy(Buttons[n].Id, "B02");
+	Buttons[n].Pin = 0;
 	Buttons[n].lhOn = LOW;
 	DefaultButtonValue(&Buttons[n]);
-
+	*/
 	n++;
 	Buttons[n].Id[0] = 0;
 
@@ -167,17 +171,17 @@ void InitializeRelays() {
 
 	int n = 0;
 
-	strcpy(Relays[n].Id, "Rl01");
-	Relays[n].Pin = 43;
+	strcpy(Relays[n].Id, "R01");
+	Relays[n].Pin = 22;
 	Relays[n].lhOn = LOW;
 	DefaultRelayValue(&Relays[n]);
-
+	/*
 	n++;
 	strcpy(Relays[n].Id, "SSR1");
 	Relays[n].Pin = 44;
 	Relays[n].lhOn = HIGH;
 	DefaultRelayValue(&Relays[n]);
-
+	*/
 	n++;
 	Relays[n].Id[0] = 0;
 

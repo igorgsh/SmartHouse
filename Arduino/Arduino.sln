@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test_RESTful", "Test_RESTfu
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArduinoServer", "ArduinoServer\ArduinoServer.vcxproj", "{CA672696-4D0D-404E-BFDB-965749ECAF21}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test_MQTT", "Test_MQTT\Test_MQTT.vcxproj", "{73F903DA-6D48-488F-BA6F-9775B6B6059F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -46,6 +48,14 @@ Global
 		{CA672696-4D0D-404E-BFDB-965749ECAF21}.Reset|x86.Build.0 = Release|Win32
 		{CA672696-4D0D-404E-BFDB-965749ECAF21}.Test_Ethernet|x86.ActiveCfg = Release|Win32
 		{CA672696-4D0D-404E-BFDB-965749ECAF21}.Test_Ethernet|x86.Build.0 = Release|Win32
+		{73F903DA-6D48-488F-BA6F-9775B6B6059F}.Debug|x86.ActiveCfg = Debug|Win32
+		{73F903DA-6D48-488F-BA6F-9775B6B6059F}.Debug|x86.Build.0 = Debug|Win32
+		{73F903DA-6D48-488F-BA6F-9775B6B6059F}.Release|x86.ActiveCfg = Release|Win32
+		{73F903DA-6D48-488F-BA6F-9775B6B6059F}.Release|x86.Build.0 = Release|Win32
+		{73F903DA-6D48-488F-BA6F-9775B6B6059F}.Reset|x86.ActiveCfg = Release|Win32
+		{73F903DA-6D48-488F-BA6F-9775B6B6059F}.Reset|x86.Build.0 = Release|Win32
+		{73F903DA-6D48-488F-BA6F-9775B6B6059F}.Test_Ethernet|x86.ActiveCfg = Release|Win32
+		{73F903DA-6D48-488F-BA6F-9775B6B6059F}.Test_Ethernet|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,6 +4,8 @@
  Author:	Igor Shevchenko
 */
 
+#include "mqtt.h"
+#include <PubSubClient.h>
 #include "configuration.h"
 #include "action.h"
 #include <ArduinoJson.h>
@@ -18,12 +20,13 @@
 #include "definitions.h"
 #include "types.h"
 #include "global.h"
+#include "mqtt.h"
 
 #include "button.h"
 #include "light.h"
 
 
-#include "rest_module.h"
+//#include "rest_module.h"
 //#include "process.h"
 #include "ext_global.h"
 #include "definitions.h"
@@ -36,6 +39,8 @@ void ButtonScan() {
 	}
 
 }
+//void callback(char* topic, byte* payload, unsigned int length);
+
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -44,19 +49,25 @@ void setup() {
 		delay(10); // wait for serial port to connect. Needed for native USB port only
 	}
 	//GetInitialConfiguration();
+	Debug("Init Ethernet")
 	InitializeServer();
+	Debug("Initialize units");
 	InitializeData();
+	Debug("Initialize pins");
 	InitPins();
+	Debug("Initialize MQTT");
+	InitMqtt();
 }
 
 // the loop function runs over and over again until power down or reset
 void loop() {
-	unsigned long startTime = millis();
+	//unsigned long startTime = millis();
 	// Step 1. Read all buttons
-	//ButtonScan();
+	ButtonScan();
 	
 	//	Step 2. Listening a server requests
-	ProcessServerRequests();
+	//ProcessServerRequests();
+	MqttLoop();
 /*
 	Log_(D_INFO, "Working time:");
 	Log2(D_INFO, (millis() - startTime), DEC);

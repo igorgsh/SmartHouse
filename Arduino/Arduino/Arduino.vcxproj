@@ -91,7 +91,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\libraries\Ethernet\src;C:\Users\Igor Shevchenko\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.17\libraries\SPI\src;$(ProjectDir)..\..\..\..\Documents\Arduino\libraries\ArduinoJson;C:\Program Files (x86)\Arduino\libraries\Ethernet\src\utility;C:\Program Files (x86)\Arduino\libraries;C:\Users\Igor Shevchenko\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.17\libraries;$(ProjectDir)..\..\..\..\Documents\Arduino\libraries;C:\Users\Igor Shevchenko\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.17\cores\arduino;C:\Users\Igor Shevchenko\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.17\variants\mega;$(ProjectDir)..\Arduino;C:\Users\Igor Shevchenko\AppData\Local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atmel3.5.3-arduino2\avr\include\;C:\Users\Igor Shevchenko\AppData\Local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atmel3.5.3-arduino2\avr\include\avr\;C:\Users\Igor Shevchenko\AppData\Local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atmel3.5.3-arduino2\lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\Documents\Arduino\libraries\ArduinoJson;C:\Program Files (x86)\Arduino\libraries\Ethernet\src;C:\Users\Igor Shevchenko\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.17\libraries\SPI\src;C:\Program Files (x86)\Arduino\libraries\Ethernet\src\utility;$(ProjectDir)..\..\..\..\Documents\Arduino\libraries\PubSubClient\src;C:\Program Files (x86)\Arduino\libraries;C:\Users\Igor Shevchenko\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.17\libraries;$(ProjectDir)..\..\..\..\Documents\Arduino\libraries;C:\Users\Igor Shevchenko\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.17\cores\arduino;C:\Users\Igor Shevchenko\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.17\variants\mega;$(ProjectDir)..\Arduino;C:\Users\Igor Shevchenko\AppData\Local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atmel3.5.3-arduino2\avr\include\;C:\Users\Igor Shevchenko\AppData\Local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atmel3.5.3-arduino2\avr\include\avr\;C:\Users\Igor Shevchenko\AppData\Local\arduino15\packages\arduino\tools\avr-gcc\4.9.2-atmel3.5.3-arduino2\lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ProjectDir)__vm\.Arduino.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <PreprocessorDefinitions>__AVR_ATmega2560__;F_CPU=16000000L;ARDUINO=10800;ARDUINO_AVR_MEGA2560;ARDUINO_ARCH_AVR;__cplusplus=201103L;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -158,10 +158,10 @@
     <ClInclude Include="global.h" />
     <ClInclude Include="initdata.h" />
     <ClInclude Include="light.h" />
+    <ClInclude Include="mqtt.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="process.h" />
     <ClInclude Include="relay.h" />
-    <ClInclude Include="rest_module.h" />
     <ClInclude Include="__vm\.Arduino.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
@@ -170,9 +170,9 @@
     <ClCompile Include="configuration.cpp" />
     <ClCompile Include="initdata.cpp" />
     <ClCompile Include="light.cpp" />
+    <ClCompile Include="mqtt.cpp" />
     <ClCompile Include="process.cpp" />
     <ClCompile Include="relay.cpp" />
-    <ClCompile Include="rest_module.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

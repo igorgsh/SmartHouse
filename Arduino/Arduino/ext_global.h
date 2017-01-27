@@ -1,5 +1,6 @@
 #pragma once
 #include <Ethernet.h>
+#include <PubSubClient.h>
 #include "definitions.h"
 #include "types.h"
 
@@ -13,7 +14,8 @@ extern ActionUnit Actions[NUMBER_OF_ACTIONS];
 extern DebugLevel dLevel;
 extern byte mac[];
 extern IPAddress ip;
-extern const byte serverPort;
+extern const byte ServerPort;
 
-extern EthernetServer server;
-extern EthernetClient client;
+//extern EthernetServer Server;
+extern EthernetClient EthClient;
+extern PubSubClient MqttClient;

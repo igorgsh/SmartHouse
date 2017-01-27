@@ -1,10 +1,12 @@
 #include "button.h"
 #include "process.h"
 #include "ext_global.h"
+#include "mqtt.h"
 
 void DefaultButtonValue(ButtonUnit* btn) {
 	btn->startPressing = 0;
 	btn->isLongMode = false;
+	btn->status = ButtonStatus::BTN_OFF;
 }
 
 
@@ -30,13 +32,13 @@ void ProcessButton(ButtonUnit * unit) {
 
 	unsigned long now = millis();
 	btnValue = digitalRead(unit->Pin);
-
+	
 	//btnValue = !btnValue; //The buttons are pulled up to HIGH. And switched to GND
 	if (btnValue == unit->lhOn) {// button is pressed
 		if (unit->startPressing == 0) { // start pressing
 			unit->startPressing = now;
-		btnValue = BTN_OFF;
-		//Log(D_DEBUG, "Start pressing");
+			btnValue = BTN_OFF;
+		Log(D_DEBUG, "Start pressing");
 		}
 		else {
 			if (unit->startPressing + BUTTON_LONG_PRESS <= now) { // Yes! Button is long pressed
@@ -51,8 +53,8 @@ void ProcessButton(ButtonUnit * unit) {
 					Debug("Short during Long")
 				}
 				else {
-					btnValue = BTN_OFF; //Button pressed less than long press and not released yet
-					Debug("Not Long time");
+					unit->status = BTN_OFF; //Button pressed less than long press and not released yet
+					//Debug("Not Long time");
 				}
 			}
 		}
@@ -82,7 +84,13 @@ void ProcessButton(ButtonUnit * unit) {
 			btnValue = BTN_OFF;
 		}
 	}
-	Debug("Button is:" + (32+btnValue));
-	ProcessAction(unit->Id, btnValue, 0, 0);
 
+	if (btnValue != BTN_OFF) {
+		unit->status = (ButtonStatus)btnValue;
+		PublishButton(*unit);
+		ProcessAction(unit->Id, unit->status, unit->status, 0);
+		// Reset button status
+		unit->status = BTN_OFF;
+		PublishButton(*unit);
+	}
 }

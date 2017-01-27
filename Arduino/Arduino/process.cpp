@@ -6,18 +6,26 @@
 
 void ProcessAction(char * id,  byte event, unsigned long newValue, unsigned long oldValue) {
 
-	char buf[50];
+	char buf[150];
 
-	//sprintf(buf, "PAction: unit=%s, event=%u, newValue=%lu, oldValue=%lu", id, event, newValue, oldValue);
-	//Debug(buf);
+	sprintf(buf, "PAction: unit=%s, event=%u, newValue=%lu, oldValue=%lu", id, event, newValue, oldValue);
+	Debug(buf);
 
 
 	for (int i = 0; i < NUMBER_OF_ACTIONS && &(Actions[i]) != NULL /*&& Actions[i].action != ACT_NO_ACTION*/; i++) {
+		//Debug_("ActionId:")
+		//Debug(Actions[i].Id);
 		if (Actions[i].Id[0] != 0) {
+			//Debug_("OriginId:");
+			//Debug(Actions[i].originId);
 			if (strcmp(Actions[i].originId, id) == 0) {
+				//Debug_("Action:");
+				//Debug(Actions[i].event);
+				//Debug_("Actions[i].event == event:");
+				//Debug((Actions[i].event == event));
 				if (Actions[i].event == event) {
-					sprintf(buf, "ActionN: %u, event=%u", i, event);
-					Debug(buf);
+					//sprintf(buf, "ActionN: %u, event=%u", i, event);
+					//Debug(buf);
 					switch (Actions[i].action)
 					{
 					case ACT_NO_ACTION: {

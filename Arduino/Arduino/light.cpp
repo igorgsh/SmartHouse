@@ -1,6 +1,7 @@
 #include "light.h"
 #include "process.h"
 #include "ext_global.h"
+#include "mqtt.h"
 
 void DefaultLightValue(LightUnit* light) {
 	light->dimValue = 1;
@@ -29,10 +30,13 @@ void LightSet(char * id, bool isOn) {
 	//Debug((isOn ? "Light ON" : "Light Off"));
 
 	if (unit != NULL) {
-		digitalWrite(unit->Pin, isOn);
+		if (unit->status != isOn) {
+			unit->status = isOn;
+			digitalWrite(unit->Pin, isOn);
+			PublishLight(*unit);
+			ProcessAction(unit->Id, isOn, isOn, unit->status);
+		}
 	}
-	ProcessAction(unit->Id, isOn, isOn, unit->status);
-	unit->status = isOn;
 }
 
 void LightSwitch(char * id) {

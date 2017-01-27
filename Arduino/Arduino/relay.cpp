@@ -2,6 +2,7 @@
 #include "relay.h"
 #include "process.h"
 #include "ext_global.h"
+#include "mqtt.h"
 
 RelayUnit* FindRelay(const char* id) {
 
@@ -26,12 +27,15 @@ void DefaultRelayValue(RelayUnit* relay) {
 
 void RelaySet(char * id, bool highLow) {
 	RelayUnit *unit = FindRelay(id);
-	//Debug((highLow==HIGH? "Relay HIGH" : "Relay LOW"));
 	if (unit != NULL) {
-		digitalWrite(unit->Pin, (highLow == HIGH? unit->lhOn : !unit->lhOn));
+		if (unit->status != highLow) {
+			Debug((highLow == HIGH ? "Relay HIGH" : "Relay LOW"));
+			digitalWrite(unit->Pin, (highLow == HIGH ? unit->lhOn : !unit->lhOn));
+			unit->status = highLow;
+			PublishRelay(*unit);
+			ProcessAction(unit->Id, highLow, highLow, !highLow);
+		}
 	}
-	ProcessAction(unit->Id, highLow, highLow, unit->status);
-	unit->status = highLow;
 }
 
 void RelaySwitch(char * id) {

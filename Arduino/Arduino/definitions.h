@@ -28,7 +28,8 @@ typedef enum {
 
 extern DebugLevel dLevel;
 
-#define Log2(LEVEL, X, Y) {if (LEVEL <= dLevel) {Serial.println((X),(Y));}};
+#define Log2(LEVEL, X, Y) {if (LEVEL <= dLevel) {Serial.println((X),Y);}};
+#define Log2_(LEVEL, X, Y) {if (LEVEL <= dLevel) {Serial.print((X),Y);}};
 #define Log(LEVEL, X) {if (LEVEL <= dLevel) {Serial.println((X));}};
 #define Log_(LEVEL,X) {if (LEVEL <= dLevel) {Serial.print((X));}};
 #define Debug(X)	Log(D_DEBUG, X)
