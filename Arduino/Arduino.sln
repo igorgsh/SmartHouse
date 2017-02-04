@@ -13,6 +13,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArduinoServer", "ArduinoSer
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test_MQTT", "Test_MQTT\Test_MQTT.vcxproj", "{73F903DA-6D48-488F-BA6F-9775B6B6059F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test_RTC", "Test_RTC\Test_RTC.vcxproj", "{545C30EA-E5CD-40D8-A690-3CC0B04B0711}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test_DS1820", "Test_DS1820\Test_DS1820.vcxproj", "{D4BC0364-3FD6-48E3-9206-5E1ABE169929}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -56,6 +60,22 @@ Global
 		{73F903DA-6D48-488F-BA6F-9775B6B6059F}.Reset|x86.Build.0 = Release|Win32
 		{73F903DA-6D48-488F-BA6F-9775B6B6059F}.Test_Ethernet|x86.ActiveCfg = Release|Win32
 		{73F903DA-6D48-488F-BA6F-9775B6B6059F}.Test_Ethernet|x86.Build.0 = Release|Win32
+		{545C30EA-E5CD-40D8-A690-3CC0B04B0711}.Debug|x86.ActiveCfg = Debug|Win32
+		{545C30EA-E5CD-40D8-A690-3CC0B04B0711}.Debug|x86.Build.0 = Debug|Win32
+		{545C30EA-E5CD-40D8-A690-3CC0B04B0711}.Release|x86.ActiveCfg = Release|Win32
+		{545C30EA-E5CD-40D8-A690-3CC0B04B0711}.Release|x86.Build.0 = Release|Win32
+		{545C30EA-E5CD-40D8-A690-3CC0B04B0711}.Reset|x86.ActiveCfg = Release|Win32
+		{545C30EA-E5CD-40D8-A690-3CC0B04B0711}.Reset|x86.Build.0 = Release|Win32
+		{545C30EA-E5CD-40D8-A690-3CC0B04B0711}.Test_Ethernet|x86.ActiveCfg = Release|Win32
+		{545C30EA-E5CD-40D8-A690-3CC0B04B0711}.Test_Ethernet|x86.Build.0 = Release|Win32
+		{D4BC0364-3FD6-48E3-9206-5E1ABE169929}.Debug|x86.ActiveCfg = Debug|Win32
+		{D4BC0364-3FD6-48E3-9206-5E1ABE169929}.Debug|x86.Build.0 = Debug|Win32
+		{D4BC0364-3FD6-48E3-9206-5E1ABE169929}.Release|x86.ActiveCfg = Release|Win32
+		{D4BC0364-3FD6-48E3-9206-5E1ABE169929}.Release|x86.Build.0 = Release|Win32
+		{D4BC0364-3FD6-48E3-9206-5E1ABE169929}.Reset|x86.ActiveCfg = Release|Win32
+		{D4BC0364-3FD6-48E3-9206-5E1ABE169929}.Reset|x86.Build.0 = Release|Win32
+		{D4BC0364-3FD6-48E3-9206-5E1ABE169929}.Test_Ethernet|x86.ActiveCfg = Release|Win32
+		{D4BC0364-3FD6-48E3-9206-5E1ABE169929}.Test_Ethernet|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
