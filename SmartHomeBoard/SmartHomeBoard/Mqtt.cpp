@@ -9,6 +9,7 @@ Author:	Igor Shevchenko
 #include "mqtt.h"
 #include "Loger.h"
 #include "definitions.h"
+#include "utils.h"
 
 extern Mqtt MqttClient;
 
@@ -84,6 +85,8 @@ bool Mqtt::MqttReconnect() {
 }
 void Mqtt::Callback(char* topic, uint8_t* payload, unsigned int length) {
 	//преобразуем тему(topic) и значение (payload) в строку
+	Debug2("Point6.4.2:", memoryFree());
+
 	payload[length] = '\0';
 	String strTopic = String(topic);
 	String strPayload = String((char*)payload);
@@ -92,12 +95,21 @@ void Mqtt::Callback(char* topic, uint8_t* payload, unsigned int length) {
 	Debug_(strTopic);
 	Debug_("]:");
 	Debug(strPayload);
+	Debug2("Point6.4.4:", memoryFree());
 	if (strTopic.startsWith((String)(SUFFIX_CONFIG_RESPONSE), strlen(topicPrefix) + 1)) {
 		Config.UpdateConfig(strPayload.c_str());
 	}
 	else if (strTopic.startsWith((String)(SUFFIX_ACTIONS_RESPONSE), strlen(topicPrefix) + 1)) {
 		Config.UpdateActions(strPayload.c_str());
 	}
+	else if (strTopic.startsWith((String)(SUFFIX_GET_BUTTONS), strlen(topicPrefix) + 1)) {
+		Config.UpdateButton(strTopic.substring(strlen(topicPrefix) + 1 + strlen(SUFFIX_GET_BUTTONS)+2), strPayload);
+	}
+	else if (strTopic.startsWith((String)(SUFFIX_GET_RELAYS), strlen(topicPrefix) + 1)) {
+		Config.UpdateRelay(strTopic.substring(strlen(topicPrefix) + 1 + strlen(SUFFIX_GET_RELAYS)+2), strPayload);
+	}
+	Debug2("Point6.4.6:", memoryFree());
+
 	/*
 	if (strTopic.startsWith(TOPIC_SUBSCRIPTION_BUTTONS)) {
 		//MessageButton(strTopic, strPayload);
@@ -116,22 +128,28 @@ void Mqtt::Callback(char* topic, uint8_t* payload, unsigned int length) {
 }
 
 void Mqtt::SetTopicNames() {
-	char buf[3];
 	int ind = strlen(topicPrefix) - 2;
-	sprintf(buf, "%02X", Config.BoardId);
-	topicPrefix[ind] = buf[0];
-	topicPrefix[ind + 1] = buf[1];
+	topicPrefix[ind] = (int)'0' + (int)((Config.BoardId >> 4) & 0x0F);
+	topicPrefix[ind+1] = (int)'0' + (int)(Config.BoardId & 0x0F);
 }
 
 void Mqtt::InitMqtt(void) {
+	Debug2("Point5.2:", memoryFree());
+
 	SetTopicNames();
+	Debug2("Point5.4:", memoryFree());
 	MqttReconnect();
+	Debug2("Point5.6:", memoryFree());
 }
 
 void Mqtt::MqttLoop() {
+	Debug2("PointLoop Start", memoryFree());
+
 	if (MqttReconnect()) {
 		loop();
 	}
+	Debug2("PointLoop Finish", memoryFree());
+
 }
 void Mqtt::PublishLog(DebugLevel level, String message) {
 	char topic[TOPIC_LENGTH];
@@ -141,14 +159,26 @@ void Mqtt::PublishLog(DebugLevel level, String message) {
 
 
 void Mqtt::GetConfiguration() {
-	char buf[10];
-	sprintf(buf, "%lu", random(0, 1000));
+	//char buf[10];
+	//Debug2("Point6.2.2:", memoryFree());
+
+	uint8_t rnd = random(0, 1000);
+	//sprintf(buf, "%lu", random(0, 1000));
+	//Debug2("Point6.2.4:", memoryFree());
 	char topic[TOPIC_LENGTH];
-	Debug2("Configuration:", buf);
+	//Debug2("Configuration:", buf);
 	Config.IsConfigReady = false;
-	sprintf(topic, "%s/%s", topicPrefix, SUFFIX_CONFIG_REQUEST);
+	//Debug2("Point6.2.6:", memoryFree());
+	strcpy(topic, topicPrefix);
+	strcat(topic,"/");
+	strcat(topic, SUFFIX_CONFIG_REQUEST);
+	//sprintf(topic, "%s/%s", topicPrefix, SUFFIX_CONFIG_REQUEST);
+	//Debug2("Point6.2.8:", memoryFree());
 	Debug2("Request:", topic);
-	publish(topic, buf);
+	//publish(topic, buf);
+	publish(topic, &rnd, 3);
+	//Debug2("Point6.2.10:", memoryFree());
+
 }
 
 void Mqtt::PublishUnit(const Unit *unit) {
@@ -166,7 +196,7 @@ void Mqtt::PublishUnit(const Unit *unit) {
 	}
 	sprintf(topic, "%s/%s/%c%02X", topicPrefix, middle, unit->Type, unit->Id);
 	char payload[PAYLOAD_LENGTH];
-	sprintf(payload, "%s", (unit->status ? "true" : "false"));
+	sprintf(payload, "%u", unit->status);
 	Debug_("Publish:[");
 	Debug_(topic);
 	Debug_("]:");

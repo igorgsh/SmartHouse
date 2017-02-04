@@ -26,6 +26,8 @@ public:
 	void InitUnit();
 	void ProcessButton();
 
+	void ProcessUnit(byte newStatus);
+
 	/*
 	void ProcessButton(Button *unit);
 	//ButtonUnit* FindButton(const char* id);

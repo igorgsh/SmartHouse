@@ -100,6 +100,7 @@
     <ClInclude Include="Relay.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="Unit.h" />
+    <ClInclude Include="utils.h" />
     <ClInclude Include="__vm\.SmartHomeBoard.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
@@ -113,6 +114,7 @@
     <ClCompile Include="Process.cpp" />
     <ClCompile Include="Relay.cpp" />
     <ClCompile Include="Unit.cpp" />
+    <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

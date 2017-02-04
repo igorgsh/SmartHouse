@@ -25,7 +25,7 @@ public:
 	void UpdateActions(const char *jsonConfig);
 	void BuildConfig();
 	void BuildActions();
-	//Unit* FindUnit(byte id, byte type);
+	Unit* FindUnit(byte id, byte type);
 //	void UpdateStorage(const Unit* u);
 	void StoreUnits();
 	void ReadUnit(int i, Unit* u);
@@ -34,8 +34,10 @@ public:
 	void StoreActions();
 	void ReadAction(int i, Action* u);
 	void WriteAction(int i, const Action* u);
+	void UpdateButton(String button, String value) { UpdateUnit(UnitType::BUTTON, button, value); };
+	void UpdateRelay(String button, String value) { UpdateUnit(UnitType::BUTTON, button, value); };
+	void UpdateUnit(UnitType type, String name, String value);
 
-	
 	static const char* MqttServer() {
 		return "192.168.0.32"; //IP-адрес сервера ioBroker
 	}

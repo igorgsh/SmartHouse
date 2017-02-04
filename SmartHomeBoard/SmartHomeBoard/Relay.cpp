@@ -20,36 +20,21 @@ void Relay::InitUnit() {
 
 void Relay::RelaySet(bool highLow)
 {
-	Debug((highLow == HIGH ? "Relay HIGH" : "Relay LOW"));
-	digitalWrite(Pin, (highLow == HIGH ? lhOn : !lhOn));
-	status = highLow;
-	MqttClient.PublishUnit(this);
-	ProcessAction(Id, highLow, highLow, !highLow);
+	ProcessUnit(highLow);
+
 }
 
 void Relay::RelaySwitch() {
 	RelaySet(!status);
 }
 
+void Relay::ProcessUnit(byte newStatus) {
+	Debug((newStatus == HIGH ? "Relay HIGH" : "Relay LOW"));
+	digitalWrite(Pin, (newStatus == HIGH ? lhOn : !lhOn));
+	status = newStatus;
+	MqttClient.PublishUnit(this);
+	ProcessAction(Id, newStatus, newStatus, !newStatus);
 
-/*
-RelayUnit* FindRelay(const char* id) {
-
-	RelayUnit *unit = NULL;
-
-	for (int i = 0; i < NUMBER_OF_RELAYS && &(Relays[i]) != NULL; i++) {
-		if (strcmp(Relays[i].Id, id) == 0) {
-			unit = &(Relays[i]);
-			break;
-		}
-		//if (Relays[i].Id[0] != 0) {
-		//	break;
-		//}
-	}
-	return unit;
 }
 
-
-
-*/
 

@@ -11,14 +11,7 @@ public:
 	void InitUnit();
 	void RelaySet(bool highLow);
 	void RelaySwitch();
-
-/*
-	RelayUnit* FindRelay(const char * id);
-	void RelaySwitch(char *Id);
-	void RelaySet(char* Id, bool highLow);
-	void RelaySet(RelayUnit* unit, bool highLow);
-	void DefaultRelayValue(RelayUnit* relay);
-	*/
+	void ProcessUnit(byte newStatus);
 };
 
 

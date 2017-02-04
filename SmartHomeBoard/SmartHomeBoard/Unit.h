@@ -22,11 +22,13 @@ public:
 	void SetDefault() {};
 	void FillFrom(Unit* u);
 	virtual void InitUnit() =0;
+	virtual void ProcessUnit(byte newStatus) = 0;
 	virtual ~Unit() {};
 };
 
 class UnitProto : public Unit {
 public:
 	void InitUnit() {};
+	void ProcessUnit(byte newStatus) {};
 
 };

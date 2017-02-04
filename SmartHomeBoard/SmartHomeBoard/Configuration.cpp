@@ -11,6 +11,7 @@
 #include "Unit.h"
 #include "Board.h"
 #include "Loger.h"
+#include "utils.h"
 
 extern Mqtt MqttClient;
 
@@ -35,7 +36,7 @@ void Configuration::CreateActions() {
 	actions = (Action**)malloc(numberActions * sizeof(Action*));
 }
 
-/*
+
 Unit* Configuration::FindUnit(byte id, byte type) {
 	
 	if (units != NULL && IsConfigReady ) {
@@ -47,7 +48,6 @@ Unit* Configuration::FindUnit(byte id, byte type) {
 	}
 	return NULL;
 }
-*/
 
 void Configuration::Init() {
 	ReadBoardId();
@@ -76,26 +76,37 @@ Unit* CreateTypedUnit(byte type) {
 
 void Configuration::UpdateConfig(const char *jsonConfig) {
 	//return;
+	Debug2("Point6.4.4.2:", memoryFree());
+
 	static bool lenDetected = false;
 	DynamicJsonBuffer jsonBuffer;
 	JsonObject& root = jsonBuffer.parse(jsonConfig);
 	Debug("Update Config");
 	//root.prettyPrintTo(Serial);
+	Debug2("Point6.4.4.3:", memoryFree());
 	if (root.containsKey("length")) {
 		Debug2("Length:", (int)root["length"]);
 
 		int n = (int)root["length"];
+		Debug2("Point6.4.4.4:", memoryFree());
 		if (n != numberUnits) {
 			numberUnits = n;
 			WriteNumberUnits();
 		}
+		Debug2("Point6.4.4.6:", memoryFree());
+
 		configCounter = 0;
 		CreateUnits();
 		lenDetected = true;
+		Debug2("Point6.4.4.8:", memoryFree());
 	}
 	else if (lenDetected && root.containsKey("type") && root.containsKey("id")) {
 		Debug("Unit detected");
+		Debug2("Point6.4.4.10:", memoryFree());
+
 		units[configCounter] = CreateTypedUnit(((const char*)root["type"])[0]);
+		Debug2("Point6.4.4.12:", memoryFree());
+
 		if (units[configCounter] != NULL) {
 			if (root.containsKey("id")) {
 				units[configCounter]->Id = root["id"];
@@ -110,6 +121,8 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 				units[configCounter]->status = root["status"];
 			}
 		}
+		Debug2("Point6.4.4.14:", memoryFree());
+
 		Debug_("Id:");
 		Debug_(units[configCounter]->Id);
 		Debug_(";type:");
@@ -121,6 +134,8 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 		Debug("#");
 
 		configCounter++;
+		Debug2("Point6.4.4.16:", memoryFree());
+
 		if (configCounter == numberUnits) {
 			Debug("Finish update configuration");
 			StoreUnits();
@@ -136,17 +151,24 @@ void Configuration::BuildConfig() {
 	IsConfigReady = false;
 	ReadNumberUnits();
 	Debug2("NumberOfunits=", numberUnits);
+	Debug2("Point6.2:", memoryFree());
+
 	MqttClient.GetConfiguration();
 	unsigned long startServerRead = millis();
+	Debug2("Point6.4:", memoryFree());
 	while (!IsConfigReady && startServerRead+10000 > millis()) { // we have a 10 seconds to get configuration
 		MqttClient.MqttLoop();
 	}
+	Debug2("Point6.6:", memoryFree());
+
 	Debug2("IsConfigReady=", IsConfigReady);
 	Debug2("1NumberOfunits=", numberUnits);
 	if (!IsConfigReady) { // We can't get config from server. Read from EEPROM
 		IsServerConfig = false;
 		Debug("Get From EEPROM");
+
 		CreateUnits();
+		Debug2("Point6.8:", memoryFree());
 		for (int i = 0; i < numberUnits; i++) {
 			UnitProto u0;
 			ReadUnit(i, &u0);
@@ -167,9 +189,17 @@ void Configuration::BuildConfig() {
 		}
 		Debug2("2NumberOfunits=", numberUnits);
 		Debug("Done!");
+		Debug2("Point6.10:", memoryFree());
+
 	}
+	Debug2("Point6.12:", memoryFree());
+
 	InitializeUnits();
+	Debug2("Point6.14:", memoryFree());
+
 	BuildActions();
+	Debug2("Point6.16:", memoryFree());
+
 	IsConfigReady = true;
 }
 
@@ -336,6 +366,7 @@ void Configuration::BuildActions() {
 		Debug("Get Actions From EEPROM");
 		CreateActions();
 		for (int i = 0; i < numberActions; i++) {
+			actions[i] = new Action();
 			ReadAction(i, actions[i]);
 		}
 		Debug2("2NumberOfActions=", numberActions);
@@ -351,6 +382,7 @@ int Configuration::GetActionsStartAddr() {
 
 void Configuration::ReadAction(int i, Action* a) {
 	int addr = GetActionsStartAddr() +  i * sizeOfAction;
+	Debug2("Address Actions=", addr);
 	a->Id = EEPROM.read(addr);
 	a->originId = EEPROM.read(addr+1);
 	a->originType = EEPROM.read(addr+2);
@@ -389,5 +421,16 @@ void Configuration::StoreActions() {
 			Debug2("Write Actions I=", i);
 			WriteAction(i, actions[i]);
 		}
+	}
+}
+
+void Configuration::UpdateUnit(UnitType type, String name, String value) {
+
+	Debug2("Name=", name);
+	Debug2("Value=", value);
+	Unit *u = FindUnit(name.toInt(), type);
+	if (u != NULL) {
+		//u->status = value.toInt();
+		u->ProcessUnit(value.toInt());
 	}
 }

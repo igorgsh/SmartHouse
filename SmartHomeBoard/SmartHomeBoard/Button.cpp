@@ -97,11 +97,15 @@ void Button::ProcessButton() {
 	}
 
 	if (btnValue != BTN_OFF) {
-		status = (ButtonStatus)btnValue;
-		MqttClient.PublishUnit(this);
-		ProcessAction(Id, status, status, 0);
-		// Reset button status
-		status = BTN_OFF;
-		MqttClient.PublishUnit(this);
+		ProcessUnit(btnValue);
 	}
+}
+void Button::ProcessUnit(byte newStatus) {
+	status = newStatus;
+	MqttClient.PublishUnit(this);
+	ProcessAction(Id, status, status, 0);
+	// Reset button status
+	status = BTN_OFF;
+	MqttClient.PublishUnit(this);
+
 }
