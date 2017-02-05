@@ -3,26 +3,20 @@
  Created:	11.01.17 22:04:42
  Author:	Igor Shevchenko
 */
-
-//#include <EthernetUdp.h>
-//#include <EthernetServer.h>
-//#include <EthernetClient.h>
+#include <PubSubClient.h>
+#include <DallasTemperature.h>
+#include <OneWire.h>
 #include "utils.h"
 #include <Ethernet.h>
-//#include <Dns.h>
-//#include <Dhcp.h>
 #include "avr\wdt.h"
-#include "mqtt.h"
-//#include <PubSubClient.h>
+#include "Mqtt.h"
 #include "configuration.h"
-#include "action.h"
-//#include <ArduinoJson.h>
-#include "relay.h"
+#include "Action.h"
+#include "Relay.h"
 #include <Arduino.h>
 #include "definitions.h"
-#include "types.h"
 #include "global.h"
-#include "button.h"
+#include "Button.h"
 #include "Loger.h"
 
 #include "ext_global.h"
@@ -31,7 +25,10 @@
 #include "initdata.h"
 #include "utils.h"
 
-
+String printIP(IPAddress ip) {
+	String s = String(ip[0]) + "." + String(ip[1]) + "." + String(ip[2]) + "." + String(ip[3]);
+	return s;
+}
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -41,31 +38,22 @@ void setup() {
 	while (!Serial) {
 		delay(10); // wait for serial port to connect. Needed for native USB port only
 	}
-	//GetInitialConfiguration();
-	//Debug2("Point1:", memoryFree());
 	SerialLog(D_INFO, "Start");
 	//init random generator
 	randomSeed(analogRead(0));
-	//EEPROM.write(0, 0);
-	//Debug2("Point2:", memoryFree());
 	Config.Init();
-	//Debug2("Point3:", memoryFree());
 	SerialLog_(D_INFO, "Board Id: ");
 	SerialLog2(D_INFO, Config.BoardId, HEX);
-	//Debug2("Point4:", memoryFree());
 	SerialLog(D_INFO, "Init Ethernet");
 	InitializeServer();
-	//Debug2("Point5:", memoryFree());
 	SerialLog(D_INFO, "Initialize MQTT");
 	MqttClient.InitMqtt();
-	//Debug2("Point6:", memoryFree());
 	SerialLog(D_INFO, "Build Configuration");
 	Config.BuildConfig();
-	//Debug2("Point7:", memoryFree());
-	Loger::Info("Board is ready");
 	MqttClient.SubscribeUnits();
-	//Debug2("Point8:", memoryFree());
-
+	Loger::Info("Board is ready");
+	Loger::Info("Board Id:" + String(Config.BoardId));
+	Loger::Info("IP Address is:" + printIP(Ethernet.localIP()));
 }
 
 // the loop function runs over and over again until power down or reset

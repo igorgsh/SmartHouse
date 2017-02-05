@@ -12,6 +12,8 @@
 #include "Board.h"
 #include "Loger.h"
 #include "utils.h"
+#include "OneWireBus.h"
+#include "OneWireThermo.h"
 
 extern Mqtt MqttClient;
 
@@ -49,11 +51,23 @@ Unit* Configuration::FindUnit(byte id) {
 	return NULL;
 }
 
+Unit* Configuration::FindUnitByTypeAndPin(UnitType type, byte pin) {
+	if (units != NULL && IsConfigReady) {
+		for (int i = 0; i < numberUnits; i++) {
+			if (units[i]->Type == type && units[i]->Pin == pin ) {
+				return units[i];
+			}
+		}
+	}
+	return NULL;
+
+}
+
 void Configuration::Init() {
 	ReadBoardId();
 }
 
-Unit* CreateTypedUnit(byte type) {
+Unit* Configuration::CreateTypedUnit(byte type) {
 	Unit *u = NULL;
 	if (type == UnitType::BUTTON) {
 		u = new Button();
@@ -62,26 +76,64 @@ Unit* CreateTypedUnit(byte type) {
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::BUTTON;
+		Debug("Button");
 	}
 	else if (type == UnitType::RELAY) {
 		u = new Relay();
 		if (u == NULL) {
-			Loger::Error("Can't create Button Unit");
+			Loger::Error("Can't create Relay Unit");
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::RELAY;
+		Debug("Relay");
+	}
+	else if (type == UnitType::ONE_WIRE_BUS) {
+		u = new OneWireBus();
+		if (u == NULL) {
+			Loger::Error("Can't create OneWire bus Unit");
+			Board::Reset(10000);
+		}
+		u->Type = UnitType::ONE_WIRE_BUS;
+		Debug("1-Wire bus");
+	}
+	else if (type == UnitType::ONE_WIRE_THERMO) {
+		u = new OneWireThermo();
+		if (u == NULL) {
+			Loger::Error("Can't create OneWire Thermometer Unit");
+			Board::Reset(10000);
+		}
+		u->Type = UnitType::ONE_WIRE_THERMO;
+		Debug("1-Wire Thermo");
 	}
 	return u;
+}
+void ConvertStringToAddress(DeviceAddress address, String addrStr) {
+	for (int i = 0, j=0; i < 16; i+=2, j++) {
+		unsigned long l = strtoul(addrStr.substring(i, i + 2).c_str(), NULL, 16);
+		//Debug2("l=", l);
+		address[j] = l;
+		//Debug3("address=", address[j], HEX);
+		/*
+		address[j] = addrStr[i] - '0';
+		address[j] <<= 4;
+		address[j] = address[j] & 0xF0;
+		address[j] = address[j] + (addrStr[i+1] - '0');
+		*/
+	}
 }
 
 void Configuration::UpdateConfig(const char *jsonConfig) {
 	//return;
-
+	//Debug2("Memory1=", memoryFree());
 	static bool lenDetected = false;
-	DynamicJsonBuffer jsonBuffer;
+	//DynamicJsonBuffer jsonBuffer;
+	StaticJsonBuffer<JSON_SIZE> jsonBuffer;
 	JsonObject& root = jsonBuffer.parse(jsonConfig);
-	Debug("Update Config");
+	//Debug("Update Config");
+	//root.prettyPrintTo(Serial);
+	//Debug2("Memory2=", memoryFree());
 	if (root.containsKey("length")) {
+		//Debug2("Memory3=", memoryFree());
 		Debug2("Length:", (int)root["length"]);
 
 		int n = (int)root["length"];
@@ -95,8 +147,9 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 		lenDetected = true;
 	}
 	else if (lenDetected && root.containsKey("type") && root.containsKey("id")) {
-		Debug("Unit detected");
+		//Debug2("Memory4=", memoryFree());
 		units[configCounter] = CreateTypedUnit(((const char*)root["type"])[0]);
+		//Debug2("Memory4.2=", memoryFree());
 		if (units[configCounter] != NULL) {
 			if (root.containsKey("id")) {
 				units[configCounter]->Id = root["id"];
@@ -110,19 +163,17 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 			if (root.containsKey("status")) {
 				units[configCounter]->status = root["status"];
 			}
+			if (root.containsKey("address")) {
+				if (units[configCounter]->Type == ONE_WIRE_THERMO) {
+					ConvertStringToAddress(((OneWireBusUnit*)units[configCounter])->address,root["address"]);
+				}
+			}
 		}
-		Debug_("Id:");
-		Debug_(units[configCounter]->Id);
-		Debug_(";type:");
-		Debug_(units[configCounter]->Type);
-		Debug_(";Pin:");
-		Debug_(units[configCounter]->Pin);
-		Debug_(";lhOn:");
-		Debug_(units[configCounter]->lhOn);
-		Debug("#");
-
+		units[configCounter]->print("Unit received", Serial);
 		configCounter++;
-
+		//Debug2("Memory5=", memoryFree());
+		//Debug2("NumberUnits=", numberUnits);
+		//Debug2("configCounter=", configCounter);
 		if (configCounter == numberUnits) {
 			Debug("Finish update configuration");
 			StoreUnits();
@@ -130,6 +181,8 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 			IsServerConfig = true;
 
 		}
+		//Debug2("Memory6=", memoryFree());
+
 	}
 
 }
@@ -137,7 +190,7 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 void Configuration::BuildConfig() {
 	IsConfigReady = false;
 	ReadNumberUnits();
-	//Debug2("NumberOfunits=", numberUnits);
+	Debug2("NumberOfunits=", numberUnits);
 
 	MqttClient.GetConfiguration();
 	unsigned long startServerRead = millis();
@@ -145,8 +198,8 @@ void Configuration::BuildConfig() {
 		MqttClient.MqttLoop();
 	}
 
-	//Debug2("IsConfigReady=", IsConfigReady);
-	//Debug2("1NumberOfunits=", numberUnits);
+	Debug2("IsConfigReady=", IsConfigReady);
+	Debug2("1NumberOfunits=", numberUnits);
 	if (!IsConfigReady) { // We can't get config from server. Read from EEPROM
 		IsServerConfig = false;
 		Debug("Get From EEPROM");
@@ -159,23 +212,15 @@ void Configuration::BuildConfig() {
 			units[i]->FillFrom(&u0);
 			units[i]->SetDefault();
 
-			Debug_("Id:");
-			Debug_(units[i]->Id);
-			Debug_(";type:");
-			Debug_(units[i]->Type);
-			Debug_(";Pin:");
-			Debug_(units[i]->Pin);
-			Debug_(";lhOn:");
-			Debug_(units[i]->lhOn);
-			Debug("#");
-
+			units[i]->print("Unit From ROM:", Serial);
 		}
 		//Debug2("2NumberOfunits=", numberUnits);
 		Debug("Done!");
 
 	}
-	InitializeUnits();
 	BuildActions();
+	InitializeUnits();
+	FinalizeInitUnits();
 	IsConfigReady = true;
 }
 
@@ -188,6 +233,14 @@ void Configuration::InitializeUnits() {
 	}
 
 }
+
+void Configuration::FinalizeInitUnits() {
+	Debug("Finalize Init Units");
+	for (int i = 0; i < numberUnits; i++) {
+		units[i]->FinalInitUnit();
+	}
+}
+
 
 void Configuration::InitializeActions() {
 	Debug("Init Actions");
@@ -203,7 +256,11 @@ void Configuration::ReadBoardId() {
 	mac[3] = BoardId;
 }
 
-void Configuration::ReadUnit(int i, Unit* u) {
+int Configuration::GetOneWireStartAddr(int ind) {
+	return addrUnits + numberUnits * sizeOfUnit + ind * sizeOfBusUnit;
+}
+
+void Configuration::ReadUnit(int ind, Unit* u) {
 	/*
 		Byte | Object
 		-------------
@@ -212,15 +269,21 @@ void Configuration::ReadUnit(int i, Unit* u) {
 		2: pin
 		3: lhOn
 	*/
-	int addr = Configuration::addrUnits + i * Configuration::sizeOfUnit;
+	int addr = Configuration::addrUnits + ind * Configuration::sizeOfUnit;
 	u->Id = EEPROM.read(addr);
 	u->Type = EEPROM.read(addr + 1);
 	u->Pin = EEPROM.read(addr + 2);
 	u->lhOn = EEPROM.read(addr + 3);
+	if (u->Type == UnitType::ONE_WIRE_THERMO) {
+		OneWireBusUnit* owU = (OneWireBusUnit*)u;
+		for (int i = 0; i < 8; i++) {
+			owU->address[i] = EEPROM.read(GetOneWireStartAddr(ind) + i);
+		}
+	}
 
 }
 
-void Configuration::WriteUnit(int i, const Unit* u) {
+void Configuration::WriteUnit(int ind, const Unit* u) {
 	/*
 	Byte | Object
 	-------------
@@ -229,12 +292,18 @@ void Configuration::WriteUnit(int i, const Unit* u) {
 	2: pin
 	3: lhOn
 	*/
-	int addr = Configuration::addrUnits + i * sizeOfUnit;
+	int addr = Configuration::addrUnits + ind * sizeOfUnit;
 
 	EEPROM.write(addr, u->Id);
 	EEPROM.write(addr + 1, u->Type);
 	EEPROM.write(addr + 2, u->Pin);
 	EEPROM.write(addr + 3, u->lhOn);
+	if (u->Type == UnitType::ONE_WIRE_THERMO) {
+		OneWireBusUnit* owU = (OneWireBusUnit*)u;
+		for (int i = 0; i < 8; i++) {
+			EEPROM.write(GetOneWireStartAddr(ind) + i, owU->address[i]);
+		}
+	}
 }
 
 void Configuration::WriteNumberUnits() {
@@ -243,6 +312,13 @@ void Configuration::WriteNumberUnits() {
 
 void Configuration::ReadNumberUnits() {
 	numberUnits = EEPROM.read(addrNumberUnits);
+}
+
+void Configuration::ReadNumberBusUnits() {
+	numberUnits = EEPROM.read(addrNumberBusUnits);
+}
+void Configuration::WriteNumberBusUnits() {
+	EEPROM.write(addrNumberBusUnits, numberBusUnits);
 }
 
 
@@ -254,8 +330,6 @@ void Configuration::StoreUnits() {
 		if (!units[i]->compare(&uROM)) {
 			Debug2("Write I=", i);
 			WriteUnit(i, units[i]);
-			//ReadUnit(i, &uROM);
-			//Debug2("2id=", uROM.Id);
 		}
 	}
 }
@@ -264,9 +338,9 @@ void Configuration::StoreUnits() {
 void Configuration::UpdateActions(const char *jsonConfig) {
 	//return;
 	static bool lenDetected = false;
-	DynamicJsonBuffer jsonBuffer;
+	StaticJsonBuffer<JSON_SIZE> jsonBuffer;
 	JsonObject& root = jsonBuffer.parse(jsonConfig);
-	Debug("Update Actions");
+	//Debug("Update Actions");
 	//root.prettyPrintTo(Serial);
 	if (root.containsKey("length")) {
 		Debug2("Length:", (int)root["length"]);
@@ -322,14 +396,14 @@ void Configuration::UpdateActions(const char *jsonConfig) {
 void Configuration::BuildActions() {
 	IsActionsReady = false;
 	ReadNumberActions();
-	Debug2("NumberOfActions=", numberActions);
+	//Debug2("NumberOfActions=", numberActions);
 	MqttClient.GetActions();
 	unsigned long startServerRead = millis();
 	while (!IsActionsReady && startServerRead + 10000 > millis()) { // we have a 10 seconds to get actions
 		MqttClient.MqttLoop();
 	}
-	Debug2("IsActionReady=", IsActionsReady);
-	Debug2("1NumberOfActions=", numberActions);
+	//Debug2("IsActionReady=", IsActionsReady);
+	//Debug2("1NumberOfActions=", numberActions);
 	if (!IsActionsReady) { // We can't get config from server. Read from EEPROM
 		IsServerActions = false;
 		Debug("Get Actions From EEPROM");
@@ -338,20 +412,20 @@ void Configuration::BuildActions() {
 			actions[i] = new Action();
 			ReadAction(i, actions[i]);
 		}
-		Debug2("2NumberOfActions=", numberActions);
+		//Debug2("2NumberOfActions=", numberActions);
 		Debug("Actions Done!");
 	}
 	InitializeActions();
 	IsActionsReady = true;
 }
 
-int Configuration::GetActionsStartAddr() {
-	return addrUnits + numberUnits * sizeOfUnit;
+int Configuration::GetActionsStartAddr(int i) {
+	return GetOneWireStartAddr(0) + numberBusUnits * sizeOfBusUnit;
 }
 
 void Configuration::ReadAction(int i, Action* a) {
-	int addr = GetActionsStartAddr() +  i * sizeOfAction;
-	Debug2("Address Actions=", addr);
+	int addr = GetActionsStartAddr(i);
+	//Debug2("Address Actions=", addr);
 	a->Id = EEPROM.read(addr);
 	a->originId = EEPROM.read(addr+1);
 	a->originType = EEPROM.read(addr+2);
@@ -362,7 +436,7 @@ void Configuration::ReadAction(int i, Action* a) {
 }
 
 void Configuration::WriteAction(int i, const Action* a) {
-	int addr = GetActionsStartAddr() + i * sizeOfAction;
+	int addr = GetActionsStartAddr(i);
 	EEPROM.write(addr, a->Id);
 	EEPROM.write(addr+1, a->originId);
 	EEPROM.write(addr+2, a->originType);

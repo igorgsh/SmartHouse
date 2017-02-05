@@ -1,7 +1,6 @@
 #pragma once
 
 #include "definitions.h"
-#include "types.h"
 #include "Unit.h"
 
 #define BUTTON_LONG_PRESS	1500	//after milis button is long pressed
@@ -28,12 +27,8 @@ public:
 
 	void ProcessUnit(byte newStatus);
 	void UnitLoop();
+	void FinalInitUnit() {};
 
-	/*
-	void ProcessButton(Button *unit);
-	//ButtonUnit* FindButton(const char* id);
-	void DefaultButtonValue(Button* btn);
-	*/
 };
 
 

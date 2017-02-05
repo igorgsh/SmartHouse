@@ -3,7 +3,9 @@
 #include <Ethernet.h>
 #include "Unit.h"
 #include "Action.h"
+#include <ArduinoJson.h>
 
+#define JSON_SIZE	200
 class Configuration {
 public:
 	byte BoardId = 0;
@@ -25,7 +27,8 @@ public:
 	void BuildConfig();
 	void BuildActions();
 	Unit* FindUnit(byte id);
-//	void UpdateStorage(const Unit* u);
+	Unit* FindUnitByTypeAndPin(UnitType type, byte pin);
+	//	void UpdateStorage(const Unit* u);
 	void StoreUnits();
 	void ReadUnit(int i, Unit* u);
 	void WriteUnit(int i, const Unit* u);
@@ -35,6 +38,8 @@ public:
 	void WriteAction(int i, const Action* u);
 	void UpdateButton(String button, String value) { UpdateUnit(UnitType::BUTTON, button, value); };
 	void UpdateRelay(String button, String value) { UpdateUnit(UnitType::BUTTON, button, value); };
+	void UpdateOneWireBus(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_BUS, button, value); };
+	void UpdateOneWireThermo(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_THERMO, button, value); };
 	void UpdateUnit(UnitType type, String name, String value);
 	void UnitsLoop();
 	void ProcessAction(byte id, byte event, unsigned long value);
@@ -42,11 +47,14 @@ public:
 	static const char* MqttServer() {
 		return "192.168.0.32"; //IP-адрес сервера ioBroker
 	}
+
+
 	int numberUnits = 0;
+	int numberActions = 0;
+	int numberBusUnits = 0;
 
 private:
 	int configCounter;
-	int numberActions = 0;
 	int actionCounter;
 
 
@@ -59,7 +67,8 @@ private:
 	static const int addrNumberUnits = 1;
 	//	2: Number of Actions
 	static const int addrNumberActions = 2;
-	//	3: Reserved
+	//	3: Number of bus units
+	static const int addrNumberBusUnits = 3;
 	//	4: Reserved
 	//	5: Start of Units
 	static const int addrUnits = 5;
@@ -71,7 +80,13 @@ private:
 	//	1: type
 	//	2: pin
 	//	3: lhOn
-	int GetActionsStartAddr();
+	int GetOneWireStartAddr(int i);
+	static const int sizeOfBusUnit = 8;
+	// Action structure
+	//	Byte | Object
+	//	-------------
+	//	0-7: address
+	int GetActionsStartAddr(int i);
 	static const int sizeOfAction = 6;
 	// Action structure
 	//	Byte | Object
@@ -88,10 +103,16 @@ private:
 	void ReadNumberUnits();
 	void WriteNumberActions();
 	void ReadNumberActions();
+	void WriteNumberBusUnits();
+	void ReadNumberBusUnits();
 	void CreateUnits();
 	void ReadBoardId();
 	void InitializeUnits();
+	void FinalizeInitUnits();
 	void CreateActions();
 	void InitializeActions();
+	Unit* CreateTypedUnit(byte type);
+
+//	StaticJsonBuffer<200> jsonBuffer;
 
 };

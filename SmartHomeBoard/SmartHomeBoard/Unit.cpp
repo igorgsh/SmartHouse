@@ -31,6 +31,6 @@ void Unit::print(const char* header, Stream& stream) {
 	stream.print(";lhOn:");
 	stream.print(lhOn, HEX);
 	stream.print(";status:");
-	stream.print(status, HEX);
-	stream.println(";;;");
+	stream.print((unsigned int)status, DEC);
+	stream.println(" @");
 }

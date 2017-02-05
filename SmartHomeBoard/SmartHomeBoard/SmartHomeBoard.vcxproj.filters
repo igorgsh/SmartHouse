@@ -58,7 +58,16 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="utils.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OneWireBus.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OneWireThermo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OneWireBusUnit.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +99,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OneWireBus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OneWireThermo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OneWireBusUnit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

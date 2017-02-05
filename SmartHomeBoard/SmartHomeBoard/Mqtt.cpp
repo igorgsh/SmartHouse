@@ -6,7 +6,8 @@ Name:		Mqtt
 Created:	11.01.17 22:04:42
 Author:	Igor Shevchenko
 */
-#include "mqtt.h"
+
+#include "Mqtt.h"
 #include "Loger.h"
 #include "definitions.h"
 #include "utils.h"
@@ -18,41 +19,20 @@ void callbackFunc(char* topic, uint8_t* payload, unsigned int length) {
 }
 
 
-/*
-String GetDeviceId(String topic) {
-	int index = topic.lastIndexOf("/");
-
-	if (index > 0) {
-		return topic.substring(index + 1);
-	}
-	else {
-		return "";
-	}
-}
-
-int ToInt(String s) {
-	if (s.equals("null"))
-		return 0;
-	else if (s.equals("true"))
-		return 1;
-	else if (s.equals("false"))
-		return 0;
-	return s.toInt();
-}
-*/
 
 bool Mqtt::MqttReconnect() {
+
 	//Если соединение MQTT неактивно, то пытаемся установить его и опубликовать/подписаться
 	static unsigned long errorTime = 0;
 	char topic[TOPIC_LENGTH];
 
 	if (!connected()) {
+		Debug("MQTT Failed");
 		if (errorTime == 0 || errorTime + MQTT_RECONNECT_TIME < millis()) { //reconnect
 
-			SerialLog(D_WARN, "Connect to MQTT-broker...  ");
+			//SerialLog(D_WARN, "Connect to MQTT-broker...  ");
 			//Подключаемся и подписываемся
 			if (connect(topicPrefix)) {
-				//Log(D_INFO, "MQTT connected");
 				errorTime = 0;
 				//Подписываемся на все темы
 				//MqttClient.subscribe(TOPIC_CONFIG_LENGTH);
@@ -62,13 +42,6 @@ bool Mqtt::MqttReconnect() {
 				sprintf(topic, "%s/%s", topicPrefix, SUFFIX_ACTIONS_RESPONSE);
 				Debug2("Subscribe:", topic);
 				subscribe(topic);
-				//SubscribeButtons();
-				//Debug("Buttons subscribed");
-				//SubscribeLigts();
-				//Debug("Lights subscribed");
-				//SubscribeRelays();
-				//Debug("Relays subscribed");
-				//Receive all messages
 				loop();
 			}
 			else {
@@ -85,7 +58,7 @@ bool Mqtt::MqttReconnect() {
 }
 void Mqtt::Callback(char* topic, uint8_t* payload, unsigned int length) {
 	//преобразуем тему(topic) и значение (payload) в строку
-	//Debug2("Point6.4.2:", memoryFree());
+	Debug2("Point6.4.2:", memoryFree());
 
 	payload[length] = '\0';
 	String strTopic = String(topic);
@@ -103,10 +76,16 @@ void Mqtt::Callback(char* topic, uint8_t* payload, unsigned int length) {
 		Config.UpdateActions(strPayload.c_str());
 	}
 	else if (strTopic.startsWith((String)(SUFFIX_GET_BUTTONS), strlen(topicPrefix) + 1)) {
-		Config.UpdateButton(strTopic.substring(strlen(topicPrefix) + 1 + strlen(SUFFIX_GET_BUTTONS)+2), strPayload);
+		Config.UpdateButton(strTopic.substring(strlen(topicPrefix) + 1 + strlen(SUFFIX_GET_BUTTONS) + 2), strPayload);
 	}
 	else if (strTopic.startsWith((String)(SUFFIX_GET_RELAYS), strlen(topicPrefix) + 1)) {
-		Config.UpdateRelay(strTopic.substring(strlen(topicPrefix) + 1 + strlen(SUFFIX_GET_RELAYS)+2), strPayload);
+		Config.UpdateRelay(strTopic.substring(strlen(topicPrefix) + 1 + strlen(SUFFIX_GET_RELAYS) + 2), strPayload);
+	}
+	else if (strTopic.startsWith((String)(SUFFIX_GET_1WIREBUS), strlen(topicPrefix) + 1)) {
+		Config.UpdateOneWireBus(strTopic.substring(strlen(topicPrefix) + 1 + strlen(SUFFIX_GET_1WIREBUS) + 2), strPayload);
+	}
+	else if (strTopic.startsWith((String)(SUFFIX_GET_1WIRETHERMO), strlen(topicPrefix) + 1)) {
+		Config.UpdateOneWireThermo(strTopic.substring(strlen(topicPrefix) + 1 + strlen(SUFFIX_GET_1WIRETHERMO) + 2), strPayload);
 	}
 	//Debug2("Point6.4.6:", memoryFree());
 }
@@ -114,7 +93,7 @@ void Mqtt::Callback(char* topic, uint8_t* payload, unsigned int length) {
 void Mqtt::SetTopicNames() {
 	int ind = strlen(topicPrefix) - 2;
 	topicPrefix[ind] = (int)'0' + (int)((Config.BoardId >> 4) & 0x0F);
-	topicPrefix[ind+1] = (int)'0' + (int)(Config.BoardId & 0x0F);
+	topicPrefix[ind + 1] = (int)'0' + (int)(Config.BoardId & 0x0F);
 }
 
 void Mqtt::InitMqtt(void) {
@@ -127,12 +106,12 @@ void Mqtt::InitMqtt(void) {
 }
 
 void Mqtt::MqttLoop() {
-	//Debug2("PointLoop Start", memoryFree());
+	//Debug2("PointLoop Start: ", memoryFree());
 
 	if (MqttReconnect()) {
 		loop();
 	}
-	//Debug2("PointLoop Finish", memoryFree());
+	//Debug2("PointLoop Finish: ", memoryFree());
 
 }
 void Mqtt::PublishLog(DebugLevel level, String message) {
@@ -143,26 +122,16 @@ void Mqtt::PublishLog(DebugLevel level, String message) {
 
 
 void Mqtt::GetConfiguration() {
-	//char buf[10];
-	//Debug2("Point6.2.2:", memoryFree());
 
 	uint8_t rnd = random(0, 1000);
-	//sprintf(buf, "%lu", random(0, 1000));
-	//Debug2("Point6.2.4:", memoryFree());
 	char topic[TOPIC_LENGTH];
-	//Debug2("Configuration:", buf);
 	Config.IsConfigReady = false;
-	//Debug2("Point6.2.6:", memoryFree());
 	strcpy(topic, topicPrefix);
-	strcat(topic,"/");
+	strcat(topic, "/");
 	strcat(topic, SUFFIX_CONFIG_REQUEST);
-	//sprintf(topic, "%s/%s", topicPrefix, SUFFIX_CONFIG_REQUEST);
-	//Debug2("Point6.2.8:", memoryFree());
+	Debug2("Rnd=", rnd);
 	Debug2("Request:", topic);
-	//publish(topic, buf);
-	publish(topic, &rnd, 3);
-	//Debug2("Point6.2.10:", memoryFree());
-
+	publish(topic, String(rnd).c_str());
 }
 
 void Mqtt::PublishUnit(const Unit *unit) {
@@ -175,6 +144,14 @@ void Mqtt::PublishUnit(const Unit *unit) {
 	}
 	case UnitType::RELAY: {
 		strcpy(middle, SUFFIX_PUT_RELAYS);
+		break;
+	}
+	case UnitType::ONE_WIRE_BUS: {
+		strcpy(middle, SUFFIX_PUT_1WIREBUS);
+		break;
+	}
+	case UnitType::ONE_WIRE_THERMO: {
+		strcpy(middle, SUFFIX_PUT_1WIRETHERMO);
 		break;
 	}
 	}
@@ -198,20 +175,29 @@ void Mqtt::GetActions() {
 	Debug2("Request:", topic);
 	publish(topic, buf);
 }
+
 void Mqtt::SubscribeUnits() {
 	char topic[TOPIC_LENGTH];
 	Debug("Subscribing Units...");
 	for (int i = 0; i < Config.numberUnits; i++) {
 
 		switch (Config.units[i]->Type) {
-			case UnitType::BUTTON: {
-				sprintf(topic, "%s/%s", topicPrefix, SUFFIX_GET_BUTTONS);
-				break;
-			}
-			case UnitType::RELAY: {
-				sprintf(topic, "%s/%s", topicPrefix, SUFFIX_GET_RELAYS);
-				break;
-			}
+		case UnitType::BUTTON: {
+			sprintf(topic, "%s/%s", topicPrefix, SUFFIX_GET_BUTTONS);
+			break;
+		}
+		case UnitType::RELAY: {
+			sprintf(topic, "%s/%s", topicPrefix, SUFFIX_GET_RELAYS);
+			break;
+		}
+		case UnitType::ONE_WIRE_BUS: {
+			sprintf(topic, "%s/%s", topicPrefix, SUFFIX_GET_1WIREBUS);
+			break;
+		}
+		case UnitType::ONE_WIRE_THERMO: {
+			sprintf(topic, "%s/%s", topicPrefix, SUFFIX_GET_1WIRETHERMO);
+			break;
+		}
 		}
 		sprintf(topic, "%s/%c%02X", topic, Config.units[i]->Type, Config.units[i]->Id);
 		Debug2("Subscription:", topic);

@@ -4,7 +4,9 @@
 
 typedef enum {
 	BUTTON = 'B',
-	RELAY = 'R'
+	RELAY = 'R',
+	ONE_WIRE_BUS = '1',
+	ONE_WIRE_THERMO = 'T'
 } UnitType;
 
 class Unit
@@ -18,19 +20,23 @@ public:
 	//static const int sizeOfUnits = 4;
 
 	bool compare(Unit* u);
-	void SetDefault() {};
-	void FillFrom(Unit* u);
-	virtual void UnitLoop() =0;
-	virtual void InitUnit() =0;
+	virtual void FillFrom(Unit* u);
+	virtual void SetDefault() =0;
+	virtual void UnitLoop() = 0;
+	virtual void InitUnit() = 0;
+	// All units are initialized. Link Bus devices
+	virtual void FinalInitUnit() = 0;
 	virtual void ProcessUnit(byte newStatus) = 0;
 	virtual ~Unit() {};
-	void print(const char* header, Stream& stream);
+	virtual void print(const char* header, Stream& stream);
 };
 
 class UnitProto : public Unit {
 public:
+	void SetDefault() {};
 	void InitUnit() {};
 	void ProcessUnit(byte newStatus) {};
 	void UnitLoop() {};
+	void FinalInitUnit() {};
 
 };

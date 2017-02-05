@@ -14,6 +14,7 @@ public:
 	void UnitLoop();
 	void RelayOn() { RelaySet(lhOn); };
 	void RelayOff() { RelaySet(!lhOn); };
+	void FinalInitUnit() {};
 
 };
 

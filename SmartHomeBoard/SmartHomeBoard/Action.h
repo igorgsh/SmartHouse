@@ -14,7 +14,8 @@ typedef enum {
 //	ACT_LIGHT_OFF = 6,
 	ACT_RELAY_ON = 7,
 	ACT_RELAY_OFF = 8,
-	ACT_RELAY_SWITCH = 9
+	ACT_RELAY_SWITCH = 9,
+	ACT_SENSOR_READY = 10
 
 } ActionType;
 
