@@ -37,7 +37,7 @@ ButtonUnit * FindButton(const char* id) {
 }
 */
 
-void Button::ProcessButton() {
+void Button::HandleButton() {
 
 	byte btnValue;
 
@@ -103,9 +103,13 @@ void Button::ProcessButton() {
 void Button::ProcessUnit(byte newStatus) {
 	status = newStatus;
 	MqttClient.PublishUnit(this);
-	ProcessAction(Id, status, status, 0);
+	Config.ProcessAction(Id, status, status);
 	// Reset button status
 	status = BTN_OFF;
 	MqttClient.PublishUnit(this);
 
 }
+
+void Button::UnitLoop() {
+	HandleButton();
+};

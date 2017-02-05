@@ -19,8 +19,10 @@ bool Action::compare(Action* a) {
 		);
 }
 
-void Action::print(Stream& stream) {
-
+void Action::print(const char* header,Stream& stream) {
+	if (header != NULL) {
+		stream.print(header);
+	}
 	stream.print("Id:");
 	stream.print(Id, HEX);
 	stream.print(";event:");
@@ -71,3 +73,4 @@ void DefaultActionValue(const ActionUnit* action) {
 
 }
 */
+

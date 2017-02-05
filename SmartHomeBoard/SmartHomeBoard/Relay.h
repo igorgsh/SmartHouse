@@ -1,7 +1,6 @@
 // relay.h
 #pragma once
 #include <Arduino.h>
-#include "types.h"
 #include "Unit.h"
 
 class Relay : public Unit
@@ -12,6 +11,10 @@ public:
 	void RelaySet(bool highLow);
 	void RelaySwitch();
 	void ProcessUnit(byte newStatus);
+	void UnitLoop();
+	void RelayOn() { RelaySet(lhOn); };
+	void RelayOff() { RelaySet(!lhOn); };
+
 };
 
 

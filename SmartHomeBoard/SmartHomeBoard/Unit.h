@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Arduino.h>
-#include "types.h"
 
 typedef enum {
 	BUTTON = 'B',
@@ -21,14 +20,17 @@ public:
 	bool compare(Unit* u);
 	void SetDefault() {};
 	void FillFrom(Unit* u);
+	virtual void UnitLoop() =0;
 	virtual void InitUnit() =0;
 	virtual void ProcessUnit(byte newStatus) = 0;
 	virtual ~Unit() {};
+	void print(const char* header, Stream& stream);
 };
 
 class UnitProto : public Unit {
 public:
 	void InitUnit() {};
 	void ProcessUnit(byte newStatus) {};
+	void UnitLoop() {};
 
 };

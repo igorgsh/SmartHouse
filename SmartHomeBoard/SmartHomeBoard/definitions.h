@@ -1,17 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
-//#include "ext_global.h"
-/*
-#define NUMBER_OF_BUTTONS 10
-#define NUMBER_OF_LIGHTS 10
-#define NUMBER_OF_RELAYS 10
-#define NUMBER_OF_ACTIONS 50
-#define ID_LENGTH 5
-*/
 
-//#define MAX_DIM_VALUE 3 //number of Dimmable levels
-//#define NUMBER_OF_URL_PARTS		5
 
 typedef enum {
 	D_OFF = 0,

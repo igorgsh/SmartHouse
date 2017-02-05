@@ -24,9 +24,10 @@ public:
 	
 	void SetDefault();
 	void InitUnit();
-	void ProcessButton();
+	void HandleButton();
 
 	void ProcessUnit(byte newStatus);
+	void UnitLoop();
 
 	/*
 	void ProcessButton(Button *unit);

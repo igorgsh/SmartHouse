@@ -33,8 +33,11 @@ void Relay::ProcessUnit(byte newStatus) {
 	digitalWrite(Pin, (newStatus == HIGH ? lhOn : !lhOn));
 	status = newStatus;
 	MqttClient.PublishUnit(this);
-	ProcessAction(Id, newStatus, newStatus, !newStatus);
+	Config.ProcessAction(Id, newStatus, newStatus);
 
 }
 
+void Relay::UnitLoop() {
+//nothing todo
+};
 

@@ -37,11 +37,11 @@ void Configuration::CreateActions() {
 }
 
 
-Unit* Configuration::FindUnit(byte id, byte type) {
+Unit* Configuration::FindUnit(byte id) {
 	
 	if (units != NULL && IsConfigReady ) {
 		for (int i = 0; i < numberUnits; i++) {
-			if (units[i]->Id == id && units[i]->Type == type) {
+			if (units[i]->Id == id) {
 				return units[i];
 			}
 		}
@@ -76,37 +76,27 @@ Unit* CreateTypedUnit(byte type) {
 
 void Configuration::UpdateConfig(const char *jsonConfig) {
 	//return;
-	Debug2("Point6.4.4.2:", memoryFree());
 
 	static bool lenDetected = false;
 	DynamicJsonBuffer jsonBuffer;
 	JsonObject& root = jsonBuffer.parse(jsonConfig);
 	Debug("Update Config");
-	//root.prettyPrintTo(Serial);
-	Debug2("Point6.4.4.3:", memoryFree());
 	if (root.containsKey("length")) {
 		Debug2("Length:", (int)root["length"]);
 
 		int n = (int)root["length"];
-		Debug2("Point6.4.4.4:", memoryFree());
 		if (n != numberUnits) {
 			numberUnits = n;
 			WriteNumberUnits();
 		}
-		Debug2("Point6.4.4.6:", memoryFree());
 
 		configCounter = 0;
 		CreateUnits();
 		lenDetected = true;
-		Debug2("Point6.4.4.8:", memoryFree());
 	}
 	else if (lenDetected && root.containsKey("type") && root.containsKey("id")) {
 		Debug("Unit detected");
-		Debug2("Point6.4.4.10:", memoryFree());
-
 		units[configCounter] = CreateTypedUnit(((const char*)root["type"])[0]);
-		Debug2("Point6.4.4.12:", memoryFree());
-
 		if (units[configCounter] != NULL) {
 			if (root.containsKey("id")) {
 				units[configCounter]->Id = root["id"];
@@ -121,8 +111,6 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 				units[configCounter]->status = root["status"];
 			}
 		}
-		Debug2("Point6.4.4.14:", memoryFree());
-
 		Debug_("Id:");
 		Debug_(units[configCounter]->Id);
 		Debug_(";type:");
@@ -134,7 +122,6 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 		Debug("#");
 
 		configCounter++;
-		Debug2("Point6.4.4.16:", memoryFree());
 
 		if (configCounter == numberUnits) {
 			Debug("Finish update configuration");
@@ -150,25 +137,21 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 void Configuration::BuildConfig() {
 	IsConfigReady = false;
 	ReadNumberUnits();
-	Debug2("NumberOfunits=", numberUnits);
-	Debug2("Point6.2:", memoryFree());
+	//Debug2("NumberOfunits=", numberUnits);
 
 	MqttClient.GetConfiguration();
 	unsigned long startServerRead = millis();
-	Debug2("Point6.4:", memoryFree());
 	while (!IsConfigReady && startServerRead+10000 > millis()) { // we have a 10 seconds to get configuration
 		MqttClient.MqttLoop();
 	}
-	Debug2("Point6.6:", memoryFree());
 
-	Debug2("IsConfigReady=", IsConfigReady);
-	Debug2("1NumberOfunits=", numberUnits);
+	//Debug2("IsConfigReady=", IsConfigReady);
+	//Debug2("1NumberOfunits=", numberUnits);
 	if (!IsConfigReady) { // We can't get config from server. Read from EEPROM
 		IsServerConfig = false;
 		Debug("Get From EEPROM");
 
 		CreateUnits();
-		Debug2("Point6.8:", memoryFree());
 		for (int i = 0; i < numberUnits; i++) {
 			UnitProto u0;
 			ReadUnit(i, &u0);
@@ -187,26 +170,18 @@ void Configuration::BuildConfig() {
 			Debug("#");
 
 		}
-		Debug2("2NumberOfunits=", numberUnits);
+		//Debug2("2NumberOfunits=", numberUnits);
 		Debug("Done!");
-		Debug2("Point6.10:", memoryFree());
 
 	}
-	Debug2("Point6.12:", memoryFree());
-
 	InitializeUnits();
-	Debug2("Point6.14:", memoryFree());
-
 	BuildActions();
-	Debug2("Point6.16:", memoryFree());
-
 	IsConfigReady = true;
 }
 
 
 
 void Configuration::InitializeUnits() {
-	// Initialize units
 	Debug("Init Units");
 	for (int i = 0; i < numberUnits; i++) {
 		units[i]->InitUnit();
@@ -215,7 +190,6 @@ void Configuration::InitializeUnits() {
 }
 
 void Configuration::InitializeActions() {
-	// Initialize units
 	Debug("Init Actions");
 	for (int i = 0; i < numberActions; i++) {
 		actions[i]->InitAction();
@@ -239,15 +213,10 @@ void Configuration::ReadUnit(int i, Unit* u) {
 		3: lhOn
 	*/
 	int addr = Configuration::addrUnits + i * Configuration::sizeOfUnit;
-	//Debug2("Addr=", addr);
 	u->Id = EEPROM.read(addr);
-	//Debug2("u->Id=", u->Id);
 	u->Type = EEPROM.read(addr + 1);
-	//Debug2("u->Type=", u->Type);
 	u->Pin = EEPROM.read(addr + 2);
-	//Debug2("u->Pin=", u->Pin);
 	u->lhOn = EEPROM.read(addr + 3);
-	//Debug2("u->lhOn=", u->lhOn);
 
 }
 
@@ -335,7 +304,7 @@ void Configuration::UpdateActions(const char *jsonConfig) {
 				actions[actionCounter]->targetAction = (ActionType)((byte)root["targetAction"]);
 			}
 
-			actions[actionCounter]->print(Serial);
+			actions[actionCounter]->print("Action received:", Serial);
 		}
 
 		actionCounter++;
@@ -389,8 +358,7 @@ void Configuration::ReadAction(int i, Action* a) {
 	a->event = EEPROM.read(addr+3);
 	a->targetId = EEPROM.read(addr+4);
 	a->targetAction = (ActionType)EEPROM.read(addr+5);
-	Debug("Action From ROM:")
-	a->print(Serial);
+	a->print("Action From ROM:", Serial);
 }
 
 void Configuration::WriteAction(int i, const Action* a) {
@@ -426,11 +394,79 @@ void Configuration::StoreActions() {
 
 void Configuration::UpdateUnit(UnitType type, String name, String value) {
 
-	Debug2("Name=", name);
-	Debug2("Value=", value);
-	Unit *u = FindUnit(name.toInt(), type);
+	Unit *u = FindUnit(name.toInt());
 	if (u != NULL) {
-		//u->status = value.toInt();
 		u->ProcessUnit(value.toInt());
+	}
+}
+
+void Configuration::UnitsLoop() {
+	for (int i = 0; i < numberUnits; i++) {
+		units[i]->UnitLoop();
+	}
+}
+
+
+void Configuration::ProcessAction(byte id, byte event, unsigned long value) {
+
+
+	for (int i = 0; i < numberActions; i++) {
+		if (actions[i]->originId == id) {
+			Debug3("ActionID=", actions[i]->Id, HEX);
+			if (actions[i]->event == event) {
+				Debug("Action Found!");
+				Unit* originU = FindUnit(id);
+
+				if (originU != NULL) {
+					originU->print("Origin:",Serial);
+					Unit* targetU = FindUnit(actions[i]->targetId);
+					if (targetU != NULL) {
+						targetU->print("Target: ", Serial);
+
+						switch (actions[i]->targetAction)
+						{
+						case ACT_NO_ACTION: {
+							break;
+						}
+						case ACT_RELAY_SWITCH: {
+							if (targetU->Type == UnitType::RELAY) {
+								((Relay*)targetU)->RelaySwitch();
+							}
+							else {
+								Loger::Error("Action:" + String(actions[i]->Id) + ". Wrong type of target");
+							}
+							break;
+						}
+						case ACT_RELAY_ON: {
+							if (originU->Type == UnitType::RELAY) {
+								((Relay*)targetU)->RelayOn();
+							}
+							else {
+								Loger::Error("Action:" + String(actions[i]->Id) + ". Wrong type of target");
+							}
+							break;
+						}
+						case ACT_RELAY_OFF: {
+							if (originU->Type == UnitType::RELAY) {
+								((Relay*)targetU)->RelayOff();
+							}
+							else {
+								Loger::Error("Action:" + String(actions[i]->Id) + ". Wrong type of target");
+							}
+							break;
+						}
+						default:
+							break;
+						}
+					}
+					else {
+						Loger::Error("Action:" + String(actions[i]->Id) + ". Target not found");
+					}
+				}
+				else {
+					Loger::Error("Action:" + String(actions[i]->Id) + ". Origin not found");
+				}
+			}
+		}
 	}
 }

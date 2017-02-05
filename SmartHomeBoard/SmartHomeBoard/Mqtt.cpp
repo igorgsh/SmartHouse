@@ -85,7 +85,7 @@ bool Mqtt::MqttReconnect() {
 }
 void Mqtt::Callback(char* topic, uint8_t* payload, unsigned int length) {
 	//преобразуем тему(topic) и значение (payload) в строку
-	Debug2("Point6.4.2:", memoryFree());
+	//Debug2("Point6.4.2:", memoryFree());
 
 	payload[length] = '\0';
 	String strTopic = String(topic);
@@ -95,7 +95,7 @@ void Mqtt::Callback(char* topic, uint8_t* payload, unsigned int length) {
 	Debug_(strTopic);
 	Debug_("]:");
 	Debug(strPayload);
-	Debug2("Point6.4.4:", memoryFree());
+	//Debug2("Point6.4.4:", memoryFree());
 	if (strTopic.startsWith((String)(SUFFIX_CONFIG_RESPONSE), strlen(topicPrefix) + 1)) {
 		Config.UpdateConfig(strPayload.c_str());
 	}
@@ -108,23 +108,7 @@ void Mqtt::Callback(char* topic, uint8_t* payload, unsigned int length) {
 	else if (strTopic.startsWith((String)(SUFFIX_GET_RELAYS), strlen(topicPrefix) + 1)) {
 		Config.UpdateRelay(strTopic.substring(strlen(topicPrefix) + 1 + strlen(SUFFIX_GET_RELAYS)+2), strPayload);
 	}
-	Debug2("Point6.4.6:", memoryFree());
-
-	/*
-	if (strTopic.startsWith(TOPIC_SUBSCRIPTION_BUTTONS)) {
-		//MessageButton(strTopic, strPayload);
-		//Debug("Point 1.1")
-	}
-	else if (strTopic.startsWith(TOPIC_SUBSCRIPTION_LIGHTS)) {
-		//MessageLight(strTopic, strPayload);
-		//Debug("Point 1.2")
-	}
-	else if (strTopic.startsWith(TOPIC_SUBSCRIPTION_RELAYS)) {
-		//MessageRelay(strTopic, strPayload);
-		//Debug("Point 1.3")
-	}
-	//Debug("Point 2");
-	*/
+	//Debug2("Point6.4.6:", memoryFree());
 }
 
 void Mqtt::SetTopicNames() {
@@ -134,21 +118,21 @@ void Mqtt::SetTopicNames() {
 }
 
 void Mqtt::InitMqtt(void) {
-	Debug2("Point5.2:", memoryFree());
+	//Debug2("Point5.2:", memoryFree());
 
 	SetTopicNames();
-	Debug2("Point5.4:", memoryFree());
+	//Debug2("Point5.4:", memoryFree());
 	MqttReconnect();
-	Debug2("Point5.6:", memoryFree());
+	//Debug2("Point5.6:", memoryFree());
 }
 
 void Mqtt::MqttLoop() {
-	Debug2("PointLoop Start", memoryFree());
+	//Debug2("PointLoop Start", memoryFree());
 
 	if (MqttReconnect()) {
 		loop();
 	}
-	Debug2("PointLoop Finish", memoryFree());
+	//Debug2("PointLoop Finish", memoryFree());
 
 }
 void Mqtt::PublishLog(DebugLevel level, String message) {

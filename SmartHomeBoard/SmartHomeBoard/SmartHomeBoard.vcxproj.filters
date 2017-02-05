@@ -51,13 +51,7 @@
     <ClInclude Include="Mqtt.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Process.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Relay.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="types.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Unit.h">
@@ -87,9 +81,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Mqtt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Process.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Relay.cpp">

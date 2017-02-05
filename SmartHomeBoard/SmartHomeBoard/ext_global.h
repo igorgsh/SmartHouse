@@ -2,7 +2,6 @@
 #include <Ethernet.h>
 #include <PubSubClient.h>
 #include "definitions.h"
-#include "types.h"
 #include "configuration.h"
 //#include "mqtt.h"
 

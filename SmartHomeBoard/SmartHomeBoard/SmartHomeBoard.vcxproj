@@ -96,9 +96,7 @@
     <ClInclude Include="initdata.h" />
     <ClInclude Include="Loger.h" />
     <ClInclude Include="Mqtt.h" />
-    <ClInclude Include="Process.h" />
     <ClInclude Include="Relay.h" />
-    <ClInclude Include="types.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="__vm\.SmartHomeBoard.vsarduino.h" />
@@ -111,7 +109,6 @@
     <ClCompile Include="initdata.cpp" />
     <ClCompile Include="Loger.cpp" />
     <ClCompile Include="Mqtt.cpp" />
-    <ClCompile Include="Process.cpp" />
     <ClCompile Include="Relay.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="utils.cpp" />

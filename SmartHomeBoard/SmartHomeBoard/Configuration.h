@@ -1,6 +1,5 @@
 // configuration.h
 #pragma once
-#include "types.h"
 #include <Ethernet.h>
 #include "Unit.h"
 #include "Action.h"
@@ -25,7 +24,7 @@ public:
 	void UpdateActions(const char *jsonConfig);
 	void BuildConfig();
 	void BuildActions();
-	Unit* FindUnit(byte id, byte type);
+	Unit* FindUnit(byte id);
 //	void UpdateStorage(const Unit* u);
 	void StoreUnits();
 	void ReadUnit(int i, Unit* u);
@@ -37,6 +36,8 @@ public:
 	void UpdateButton(String button, String value) { UpdateUnit(UnitType::BUTTON, button, value); };
 	void UpdateRelay(String button, String value) { UpdateUnit(UnitType::BUTTON, button, value); };
 	void UpdateUnit(UnitType type, String name, String value);
+	void UnitsLoop();
+	void ProcessAction(byte id, byte event, unsigned long value);
 
 	static const char* MqttServer() {
 		return "192.168.0.32"; //IP-адрес сервера ioBroker
