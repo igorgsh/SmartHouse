@@ -100,7 +100,7 @@ void Button::HandleButton() {
 		ProcessUnit(btnValue);
 	}
 }
-void Button::ProcessUnit(byte newStatus) {
+void Button::ProcessUnit(int newStatus) {
 	status = newStatus;
 	MqttClient.PublishUnit(this);
 	Config.ProcessAction(Id, status, status);

@@ -10,7 +10,7 @@ public:
 	void InitUnit();
 	void RelaySet(bool highLow);
 	void RelaySwitch();
-	void ProcessUnit(byte newStatus);
+	void ProcessUnit(int newStatus);
 	void UnitLoop();
 	void RelayOn() { RelaySet(lhOn); };
 	void RelayOff() { RelaySet(!lhOn); };

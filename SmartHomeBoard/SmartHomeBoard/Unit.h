@@ -26,7 +26,7 @@ public:
 	virtual void InitUnit() = 0;
 	// All units are initialized. Link Bus devices
 	virtual void FinalInitUnit() = 0;
-	virtual void ProcessUnit(byte newStatus) = 0;
+	virtual void ProcessUnit(int newStatus) = 0;
 	virtual ~Unit() {};
 	virtual void print(const char* header, Stream& stream);
 };
@@ -35,8 +35,7 @@ class UnitProto : public Unit {
 public:
 	void SetDefault() {};
 	void InitUnit() {};
-	void ProcessUnit(byte newStatus) {};
+	void ProcessUnit(int newStatus) {};
 	void UnitLoop() {};
 	void FinalInitUnit() {};
-
 };

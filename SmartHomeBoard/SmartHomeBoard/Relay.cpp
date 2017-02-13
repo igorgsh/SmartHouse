@@ -28,7 +28,7 @@ void Relay::RelaySwitch() {
 	RelaySet(!status);
 }
 
-void Relay::ProcessUnit(byte newStatus) {
+void Relay::ProcessUnit(int newStatus) {
 	Debug((newStatus == HIGH ? "Relay HIGH" : "Relay LOW"));
 	digitalWrite(Pin, (newStatus == HIGH ? lhOn : !lhOn));
 	status = newStatus;

@@ -5,6 +5,7 @@
 
 void OneWireBusUnit::InitUnit() {
 	Debug("Init OneWireBus Unit");
+	Debug2("Pin=", Pin);
 	parent = (OneWireBus*)Config.FindUnitByTypeAndPin(UnitType::ONE_WIRE_BUS, Pin);
 	if (parent == NULL) {
 		Loger::Error("Can't find bus for unit: " + String(Id));
@@ -16,9 +17,10 @@ void OneWireBusUnit::InitUnit() {
 		}
 		else {
 			IsAvailable = true;
+			parent->SetResolution(address);
 		}
-
 	}
+	prevCycle = 0;
 }
 
 bool OneWireBusUnit::IsAccessible() {
@@ -26,8 +28,11 @@ bool OneWireBusUnit::IsAccessible() {
 }
 
 void OneWireBusUnit::UnitLoop() {
-	if (prevCycle + lhOn * 1000 >= millis()) {
+	if (prevCycle + OneWireBus::BUS_INTERVAL < millis()) {
+		Debug2("prevCycle=", prevCycle);
+		parent->RequestTemperature();
 		HandleData();
+		prevCycle = millis();
 	}
 }
 
@@ -63,4 +68,7 @@ void OneWireBusUnit::print(const char* header, Stream& stream) {
 		stream.print(address[i], HEX);
 	}
 	stream.println(" @");
+}
+
+void OneWireBusUnit::FinalInitUnit() {
 }

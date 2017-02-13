@@ -58,7 +58,7 @@ bool Mqtt::MqttReconnect() {
 }
 void Mqtt::Callback(char* topic, uint8_t* payload, unsigned int length) {
 	//преобразуем тему(topic) и значение (payload) в строку
-	Debug2("Point6.4.2:", memoryFree());
+	//Debug2("Point6.4.2:", memoryFree());
 
 	payload[length] = '\0';
 	String strTopic = String(topic);

@@ -10,9 +10,9 @@ class OneWireThermo :
 public:
 	
 	void SetDefault();
-	//void UnitLoop();
+	void UnitLoop();
 	void InitUnit();
-	void ProcessUnit(byte newStatus);
+	void ProcessUnit(int newStatus);
 	//void FinalInitUnit();
 	void HandleData();
 

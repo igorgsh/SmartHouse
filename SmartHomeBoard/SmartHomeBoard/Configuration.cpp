@@ -52,7 +52,7 @@ Unit* Configuration::FindUnit(byte id) {
 }
 
 Unit* Configuration::FindUnitByTypeAndPin(UnitType type, byte pin) {
-	if (units != NULL && IsConfigReady) {
+	if (units != NULL /*&& IsConfigReady*/) {
 		for (int i = 0; i < numberUnits; i++) {
 			if (units[i]->Type == type && units[i]->Pin == pin ) {
 				return units[i];
@@ -476,6 +476,7 @@ void Configuration::UpdateUnit(UnitType type, String name, String value) {
 
 void Configuration::UnitsLoop() {
 	for (int i = 0; i < numberUnits; i++) {
+
 		units[i]->UnitLoop();
 	}
 }

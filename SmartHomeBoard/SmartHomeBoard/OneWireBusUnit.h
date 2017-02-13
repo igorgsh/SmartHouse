@@ -15,7 +15,7 @@ public:
 	virtual void HandleData()=0;
 	void UnitLoop();
 	void FillFrom(Unit* u);
-	void FinalInitUnit() {};
+	void FinalInitUnit();
 	void print(const char* header, Stream& stream) override;
 protected:
 	unsigned long prevCycle = 0;

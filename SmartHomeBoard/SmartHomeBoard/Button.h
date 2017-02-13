@@ -25,7 +25,7 @@ public:
 	void InitUnit();
 	void HandleButton();
 
-	void ProcessUnit(byte newStatus);
+	void ProcessUnit(int newStatus);
 	void UnitLoop();
 	void FinalInitUnit() {};
 
