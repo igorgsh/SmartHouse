@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="Contactor.h" />
     <ClInclude Include="DT.h" />
     <ClInclude Include="Sensor.h" />
     <ClInclude Include="TempSensor.h" />
@@ -94,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Config.cpp" />
+    <ClCompile Include="Contactor.cpp" />
     <ClCompile Include="DT.cpp" />
     <ClCompile Include="Sensor.cpp" />
     <ClCompile Include="TempSensor.cpp" />

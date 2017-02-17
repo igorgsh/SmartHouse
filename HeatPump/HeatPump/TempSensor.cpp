@@ -1,7 +1,7 @@
 #include "TempSensor.h"
 
 
-TempSensor::TempSensor(String label, int pin, float lowValue, float highValue) : Sensor(label, pin, lowValue, highValue) {
+TempSensor::TempSensor(String label, int pin, float lowValue, float highValue, int critThreshold) : Sensor(label, pin, lowValue, highValue, critThreshold) {
 	init();
 }
 
@@ -32,7 +32,19 @@ void TempSensor::requestTemperatures() {
 bool TempSensor::checkDataReady() {
 	bool ret = dt->isConversionAvailable(0);
 	if (ret) {
-		value = dt->getTempCByIndex(0);
+		floatValue = dt->getTempCByIndex(0);
+		if (floatValue<lowValue) {
+			setError(ErrorCode::LOW_VALUE);
+			ErrorCounter++;
+		} else if (floatValue>highValue) {
+			setError(ErrorCode::HIGH_VALUE);
+			ErrorCounter++;
+		}
+		else {
+			setError(ErrorCode::NO_ERROR);
+			ErrorCounter = 0;
+		}
+
 	}
 	return ret;
 }

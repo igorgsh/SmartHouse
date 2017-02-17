@@ -12,9 +12,10 @@ class Sensor
 {
 public:
 	Sensor();
-	Sensor(String label, int pin, float lowValue, float highValue);
+	Sensor(String label, int pin, float lowValue, float highValue, int critThreshold = 3);
+	Sensor(String label, int pin, int critThreshold = 3);
 	~Sensor();
-	virtual float getValue() { return value; };
+	virtual float getValue() { return floatValue; };
 	virtual bool checkDataReady() =0;
 	//virtual void setDataReady(bool val)=0;
 	void setError(ErrorCode e) { error = e; };
@@ -22,14 +23,21 @@ public:
 	void setPrepareData(bool val) { preparation = val; };
 	bool getPrepareData() { return preparation; };
 	String getLabel() { return label; };
+	int getPin() { return pin; };
+	int ErrorCounter = 0;
+	virtual bool isCritical() { return (ErrorCounter >= criticalThreshold); };
 protected:
 	ErrorCode error = NO_ERROR;
 	String label;
 	int pin;
 	float lowValue;
 	float highValue;
-	float value;
+	float floatValue;
+	int criticalThreshold;
 	//bool isDataReady;
 	bool preparation=false;
+private:
+	void init(String label, int pin, float lowValue, float highValue, int critThreshold);
+
 };
 
