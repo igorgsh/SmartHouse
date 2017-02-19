@@ -16,3 +16,18 @@ void Config::begin() {
 		tempSensors[i].begin();
 	}
 }
+
+bool Config::loop(unsigned long counter) {
+
+	bool result = true;
+	// check temperature
+	for (int i = 0; i < getNumberTemp(); i++) {
+		result &= tempSensors[i].loop(counter);
+	}
+	
+	// check contactors
+	for (int i = 0; i < getNumberCont(); i++) {
+		result &= contacts[i].loop(counter);
+	}
+	return result;
+}

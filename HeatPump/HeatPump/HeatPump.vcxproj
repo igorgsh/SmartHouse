@@ -89,6 +89,7 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="Contactor.h" />
     <ClInclude Include="DT.h" />
+    <ClInclude Include="Relay.h" />
     <ClInclude Include="Sensor.h" />
     <ClInclude Include="TempSensor.h" />
     <ClInclude Include="__vm\.HeatPump.vsarduino.h" />
@@ -97,6 +98,7 @@
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Contactor.cpp" />
     <ClCompile Include="DT.cpp" />
+    <ClCompile Include="Relay.cpp" />
     <ClCompile Include="Sensor.cpp" />
     <ClCompile Include="TempSensor.cpp" />
   </ItemGroup>

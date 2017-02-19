@@ -1,5 +1,6 @@
 #pragma once
 #include "Arduino.h"
+#include "Relay.h"
 
 typedef enum {
 	NO_ERROR=0,
@@ -12,32 +13,34 @@ class Sensor
 {
 public:
 	Sensor();
-	Sensor(String label, int pin, float lowValue, float highValue, int critThreshold = 3);
-	Sensor(String label, int pin, int critThreshold = 3);
+	Sensor(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, Relay* r, int critThreshold = 50);
+	Sensor(String label, int pin, Relay* r, int critThreshold = 3);
 	~Sensor();
-	virtual float getValue() { return floatValue; };
-	virtual bool checkDataReady() =0;
-	//virtual void setDataReady(bool val)=0;
+	virtual float getValue() { return currentValue; };
 	void setError(ErrorCode e) { error = e; };
 	ErrorCode getError() { return error; };
-	void setPrepareData(bool val) { preparation = val; };
-	bool getPrepareData() { return preparation; };
 	String getLabel() { return label; };
 	int getPin() { return pin; };
 	int ErrorCounter = 0;
 	virtual bool isCritical() { return (ErrorCounter >= criticalThreshold); };
+	virtual bool loop(unsigned long counter)=0;
+	bool getData();
+	bool isWaitingStart() { return waitingStart; };
 protected:
+	virtual bool checkDataReady() = 0;
 	ErrorCode error = NO_ERROR;
 	String label;
 	int pin;
-	float lowValue;
-	float highValue;
-	float floatValue;
+	float alarmLow;
+	float alarmHigh;
+	float currentValue;
+	float startLow;
+	float startHigh;
 	int criticalThreshold;
-	//bool isDataReady;
-	bool preparation=false;
+	int waitingStart = false;
+	Relay* r;
 private:
-	void init(String label, int pin, float lowValue, float highValue, int critThreshold);
+	void init(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, Relay* r, int critThreshold);
 
 };
 
