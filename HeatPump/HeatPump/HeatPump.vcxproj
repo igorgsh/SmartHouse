@@ -86,6 +86,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CentralThermo.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Contactor.h" />
     <ClInclude Include="DT.h" />
@@ -95,6 +96,7 @@
     <ClInclude Include="__vm\.HeatPump.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CentralThermo.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Contactor.cpp" />
     <ClCompile Include="DT.cpp" />

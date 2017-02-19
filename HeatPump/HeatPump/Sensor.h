@@ -26,6 +26,15 @@ public:
 	virtual bool loop(unsigned long counter)=0;
 	bool getData();
 	bool isWaitingStart() { return waitingStart; };
+	void setAlarmLow(float value) { alarmLow = value; };
+	float getAlarmLow() { return alarmLow; };
+	void setAlarmHigh(float value) { alarmHigh = value; };
+	float getAlarmHigh() { return alarmHigh; };
+	void setStartLow(float value) { startLow = value; };
+	float getStartLow() { return startLow; };
+	void setStartHigh(float value) { startHigh = value; };
+	float getStartHigh() { return startHigh; };
+
 protected:
 	virtual bool checkDataReady() = 0;
 	ErrorCode error = NO_ERROR;
