@@ -5,7 +5,7 @@
 class CentralThermo
 {
 public:
-	CentralThermo(TempSensor* t);
+	CentralThermo(TempSensor* t, float desired);
 	~CentralThermo();
 	float getTemp() { return thermometer->getValue(); };
 	void setDesiredTemp(float centralTemp);

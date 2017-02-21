@@ -1,23 +1,29 @@
-#include "Config.h"
+#include "Configuration.h"
+#include "Definitions.h"
 
 
-
-Config::Config()
+Configuration::Configuration()
 {
+	web = new ArduinoServer();
+	
 }
 
 
-Config::~Config()
+Configuration::~Configuration()
 {
+	delete web;
 }
 
-void Config::begin() {
+void Configuration::begin() {
+
+	web->begin();
+
 	for (int i = 0; i < NUMBER_OF_TEMP; i++) {
 		tempSensors[i].begin();
 	}
 }
 
-bool Config::loop(unsigned long counter) {
+bool Configuration::loop(unsigned long counter) {
 
 	bool result = true;
 	// check temperature
@@ -29,5 +35,7 @@ bool Config::loop(unsigned long counter) {
 	for (int i = 0; i < getNumberCont(); i++) {
 		result &= contacts[i].loop(counter);
 	}
+	
+	result &= web->loop();
 	return result;
 }

@@ -5,18 +5,29 @@
 */
 
 // the setup function runs once when you press reset or power the board
+//#include <HashMap.h>
+#include <EthernetUdp.h>
+#include <EthernetServer.h>
+#include <EthernetClient.h>
+#include <Ethernet.h>
+#include <Dns.h>
+#include <Dhcp.h>
 #include <MsTimer2.h>
 //#include <DallasTemperature.h>
 #include <OneWire.h>
 #include "DT.h"
-#include "Config.h"
+#include "Configuration.h"
+#include "Definitions.h"
+
+DebugLevel dLevel=D_ALL;
+
 
 #define LED_PIN	13
 #define ONEWIRE_PIN	40
 
 //OneWire wire(ONEWIRE_PIN);
 //DT tempSensors(&wire);
-Config Configuration;
+Configuration Config;
 /*
 void printAddress(DeviceAddress deviceAddress)
 {
@@ -32,21 +43,22 @@ int numbSensors = 0;
 void Timer2() { //it is started every 100ms
 	static byte counter = 0;
 
-	Configuration.loop(counter);
+	Config.loop(counter);
+	
 	
 	counter++;
 }
 
 void setup() {
 	Serial.begin(115200);
-	Configuration.begin();
+	Config.begin();
 	pinMode(LED_PIN, OUTPUT);
 	digitalWrite(LED_PIN, LOW);
 
 	// locate devices on the bus
 	Serial.print("Locating devices...");
 	Serial.print("Found ");
-	Serial.print(Configuration.getNumberTemp() + Configuration.getNumberCont(), DEC);
+	Serial.print(Config.getNumberTemp() + Config.getNumberCont(), DEC);
 	Serial.println(" devices.");
 	MsTimer2::set(100, Timer2);
 	MsTimer2::start();
@@ -61,14 +73,14 @@ void loop() {
 
 	bool isError = false;
 
-	for (int i = 0; i < Configuration.getNumberTemp(); i++) {
-		Serial.print(Configuration.tempSensors[i].getLabel());
+	for (int i = 0; i < Config.getNumberTemp(); i++) {
+		Serial.print(Config.tempSensors[i].getLabel());
 		Serial.print(":");
-		Serial.print(Configuration.tempSensors[i].getValue());
+		Serial.print(Config.tempSensors[i].getValue());
 		Serial.print(":");
-		Serial.print(Configuration.tempSensors[i].isWaitingStart() ? "W:" : "N:");
-		Serial.print(Configuration.tempSensors[i].isCritical() ? "*:" : " :");
-		switch (Configuration.tempSensors[i].getError()) {
+		Serial.print(Config.tempSensors[i].isWaitingStart() ? "W:" : "N:");
+		Serial.print(Config.tempSensors[i].isCritical() ? "*:" : " :");
+		switch (Config.tempSensors[i].getError()) {
 		case ErrorCode::NO_ERROR: {
 			//Serial.println(Configuration.tempSensors[i].getValue());
 			Serial.println();
@@ -76,29 +88,29 @@ void loop() {
 		}
 		case ErrorCode::HIGH_VALUE: {
 			Serial.println("HIGH");
-			isError = Configuration.tempSensors[i].isCritical();
+			isError = Config.tempSensors[i].isCritical();
 			break;
 		}
 		case ErrorCode::LOW_VALUE: {
 			Serial.println("LOW");
-			isError = Configuration.tempSensors[i].isCritical();
+			isError = Config.tempSensors[i].isCritical();
 			break;
 		}
 		case ErrorCode::SENSOR_DISCONNECTED: {
 			Serial.println("CONN");
-			isError = Configuration.tempSensors[i].isCritical();
+			isError = Config.tempSensors[i].isCritical();
 			break;
 		}
 		}
 	}
-	for (int i = 0; i < Configuration.getNumberCont(); i++) {
-		Serial.print(Configuration.contacts[i].getLabel());
+	for (int i = 0; i < Config.getNumberCont(); i++) {
+		Serial.print(Config.contacts[i].getLabel());
 		Serial.print(":");
-		Serial.print(Configuration.contacts[i].getIntValue());
+		Serial.print(Config.contacts[i].getIntValue());
 		Serial.print(":");
-		Serial.print(Configuration.contacts[i].isWaitingStart() ? "W:" : "N:");
-		Serial.print(Configuration.contacts[i].isCritical() ? "*:" : ":");
-		switch (Configuration.contacts[i].getError()) {
+		Serial.print(Config.contacts[i].isWaitingStart() ? "W:" : "N:");
+		Serial.print(Config.contacts[i].isCritical() ? "*:" : ":");
+		switch (Config.contacts[i].getError()) {
 		case ErrorCode::NO_ERROR: {
 //			Serial.println(Configuration.contacts[i].getIntValue());
 			Serial.println();
@@ -108,7 +120,7 @@ void loop() {
 		case ErrorCode::LOW_VALUE: 
 		case ErrorCode::SENSOR_DISCONNECTED: {
 			Serial.println("CONN");
-			isError = Configuration.contacts[i].isCritical();
+			isError = Config.contacts[i].isCritical();
 			break;
 		}
 		}

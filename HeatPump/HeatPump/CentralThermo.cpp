@@ -7,12 +7,14 @@ void CentralThermo::setDesiredTemp(float temp) {
 	thermometer->setStartLow(temp*0.7);
 	thermometer->setAlarmHigh(temp*1.3);
 	thermometer->setAlarmLow(temp*0.2);
+
+	centralTemp = temp;
 }
 
-CentralThermo::CentralThermo(TempSensor* t)
+CentralThermo::CentralThermo(TempSensor* t, float desired)
 {
 	thermometer = t;
-
+	this->setDesiredTemp(desired);
 }
 
 
