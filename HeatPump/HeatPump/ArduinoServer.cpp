@@ -2,6 +2,8 @@
 #include "Definitions.h"
 #include "Configuration.h"
 #include "HttpRequest.h"
+#include "SD.h"
+#include "SPI.h"
 
 extern Configuration Config;
 
@@ -120,15 +122,15 @@ void ArduinoServer::HttpHeader(Client& client, String error) {
 void ArduinoServer::ParseCommand(Client& client, HttpRequest request) {
 
 	Debug("Start ParseCommand");
-	if (request.URL.startsWith("main.html")) {
+	if (request.URL.startsWith("main.htm")) {
 		PrintMainPage(client, request);
 	}
-	else if (request.URL.startsWith("temptable.html")) {
+	else if (request.URL.startsWith("monitor.htm")) {
 		PrintTemperaturePage(client, request);
-		}
-		else {
+	}
+	else {
 		PrintErrorPage(client, "404 Page not found", "This page is anavailable");
-		}
+	}
 	Debug("End ParseCommand");
 }
 
@@ -143,8 +145,22 @@ void ArduinoServer::PrintMainPage(Client& client, HttpRequest request) {
 			Debug2("Desired=", Config.cThermo.getDesiredTemp());
 		}
 	}
+	File pageTpl = SD.open("main.htm", FILE_READ);
+	if (pageTpl) {
+		HttpHeader(client, "200 Ok");
+		while (pageTpl.available()) {
+			String s = pageTpl.readStringUntil(0x0A);
+			s.replace("%DesiredTemperature%", String(Config.cThermo.getDesiredTemp()));
+			s.replace("%CurrentTEmperature%", String(Config.cThermo.getTemp()));
+			client.println(s);
 
-	HttpHeader(client,"200 Ok");
+		}
+	}
+	else
+	{
+		PrintErrorPage(client, "404 Not Found", "Проблема с чтением темплейта");
+	}
+/*	
 	client.println("<html><head><title>Главная</title>");
 	client.println("<style>");
 	client.println("div{ display:inline; }");
@@ -163,11 +179,9 @@ void ArduinoServer::PrintMainPage(Client& client, HttpRequest request) {
 	client.println("var isEdit = 0;");
 	client.println("var dt = 'Пн, 20 фев. 12:34';");
 	client.println("var submitCounter = 0;");
-	/*
 	client.println("setInterval(function() {if (isEdit == 1) {submitCounter++;}");
 	client.println("if (isEdit == 0 || submitCounter >= 10) {window.location.reload(1);}");
 	client.println("}, 5000);");
-	*/
 	client.println("window.onload = function(){");
 	client.println("document.getElementById('desiredTemp').innerHTML = desTemp; ");
 	client.println("document.getElementById('currTemp').innerHTML = currTemp;");
@@ -192,6 +206,7 @@ void ArduinoServer::PrintMainPage(Client& client, HttpRequest request) {
 	client.println("<input id='formsubmit' name='formsubmit' type='submit' value='Ok'><br/>");
 	client.println("<a href='timetable.html'>Расписание</a>&nbsp;<a href='temptable.html'>Параметры котла</a>");
 	client.println("</form></body></html>");
+*/
 	Debug("End PrintMainPage");
 
 }

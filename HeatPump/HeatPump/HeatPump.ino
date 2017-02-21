@@ -6,6 +6,8 @@
 
 // the setup function runs once when you press reset or power the board
 //#include <HashMap.h>
+#include <SD.h>
+#include <SPI.h>
 #include <EthernetUdp.h>
 #include <EthernetServer.h>
 #include <EthernetClient.h>
@@ -19,11 +21,13 @@
 #include "Configuration.h"
 #include "Definitions.h"
 
+
 DebugLevel dLevel=D_ALL;
 
 
+#define SDCARD_SS	4
 #define LED_PIN	13
-#define ONEWIRE_PIN	40
+//#define ONEWIRE_PIN	40
 
 //OneWire wire(ONEWIRE_PIN);
 //DT tempSensors(&wire);
@@ -51,6 +55,7 @@ void Timer2() { //it is started every 100ms
 
 void setup() {
 	Serial.begin(115200);
+	SD.begin(SDCARD_SS);
 	Config.begin();
 	pinMode(LED_PIN, OUTPUT);
 	digitalWrite(LED_PIN, LOW);
