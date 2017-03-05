@@ -20,6 +20,7 @@ TempSensor::~TempSensor()
 }
 
 void TempSensor::init() {
+	this->type = THERMOMETER;
 	wire = new OneWire(pin);
 	dt = new DT(wire);
 }

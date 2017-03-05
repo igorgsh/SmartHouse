@@ -110,9 +110,11 @@ void ArduinoServer::PrintErrorPage(Client& client, String error, String reason) 
 void ArduinoServer::HttpHeader(Client& client, String error) {
 
 	client.println("HTTP/1.1 " + error);
-	client.println("Content - Type: text / html; charset = utf - 8");
+	client.println("Content-Type: text/html; charset=utf-8");
+	//client.println("Cache-Control: no-cache, must-revalidate");
+	//client.println("Pragma: no-cache");
+	//client.println("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 	client.println("Connection: close");  // the connection will be closed after completion of the response
-										  //client.println("Refresh: 5");  // refresh the page automatically every 5 sec
 	client.println();
 }
 
@@ -122,106 +124,294 @@ void ArduinoServer::HttpHeader(Client& client, String error) {
 void ArduinoServer::ParseCommand(Client& client, HttpRequest request) {
 
 	Debug("Start ParseCommand");
+	if (request.URL.endsWith(".htm")) {
+		PrintHtmPage(client, request);
+	}
+	else {
+		PrintAnyFile(client, request);
+	}
+	/*
 	if (request.URL.startsWith("main.htm")) {
 		PrintMainPage(client, request);
 	}
 	else if (request.URL.startsWith("monitor.htm")) {
-		PrintTemperaturePage(client, request);
+		PrintMonitorPage(client, request);
+	}
+	else if (request.URL.startsWith("schedule.htm")) {
+		PrintSchedulePage(client, request);
 	}
 	else {
-		PrintErrorPage(client, "404 Page not found", "This page is anavailable");
+		PrintErrorPage(client, "404 Page not found", "This page is unavailable");
 	}
+	*/
 	Debug("End ParseCommand");
 }
-
+/*
 void ArduinoServer::PrintMainPage(Client& client, HttpRequest request) {
 
 	Debug("Start PrintMainPage");
 	if (request.NumberParms != 0) {
-		Debug("Point1");
 		int ind = request.getIndexOfParmKey("desTemp");
 		if (ind!=-1) {
 			Config.cThermo.setDesiredTemp(request.getParmValue(ind).toFloat());
-			Debug2("Desired=", Config.cThermo.getDesiredTemp());
 		}
 	}
+	Debug2("Desired Temp=", Config.cThermo.getDesiredTemp());
+
 	File pageTpl = SD.open("main.htm", FILE_READ);
 	if (pageTpl) {
 		HttpHeader(client, "200 Ok");
 		while (pageTpl.available()) {
 			String s = pageTpl.readStringUntil(0x0A);
 			s.replace("%DesiredTemperature%", String(Config.cThermo.getDesiredTemp()));
-			s.replace("%CurrentTEmperature%", String(Config.cThermo.getTemp()));
+			s.replace("%CurrentTemperature%", String(Config.cThermo.getTemp()));
+			s.replace("%CurrentTime%", "тут будет дата-время");
 			client.println(s);
-
 		}
+		pageTpl.close();
 	}
 	else
 	{
+		Debug("File not found");
 		PrintErrorPage(client, "404 Not Found", "Проблема с чтением темплейта");
 	}
-/*	
-	client.println("<html><head><title>Главная</title>");
-	client.println("<style>");
-	client.println("div{ display:inline; }");
-	client.println(".text1{ font: 2.5em normal; }");
-	client.println(".desiredTemp{ font: 3em bold; color:green; }");
-	client.println(".currentTemp{ font: 5em bold; color:blue; }");
-	client.println("#formsubmit{visibility: hidden;	}");
-	client.println("</style>");
-	client.println("<script type = 'text/javascript'>");
-	client.print("var currTemp=");
-	client.print(Config.cThermo.getTemp());
-	client.println(";");
-	client.print("var desTemp =");
-	client.print(Config.cThermo.getDesiredTemp());
-	client.println(";");
-	client.println("var isEdit = 0;");
-	client.println("var dt = 'Пн, 20 фев. 12:34';");
-	client.println("var submitCounter = 0;");
-	client.println("setInterval(function() {if (isEdit == 1) {submitCounter++;}");
-	client.println("if (isEdit == 0 || submitCounter >= 10) {window.location.reload(1);}");
-	client.println("}, 5000);");
-	client.println("window.onload = function(){");
-	client.println("document.getElementById('desiredTemp').innerHTML = desTemp; ");
-	client.println("document.getElementById('currTemp').innerHTML = currTemp;");
-	client.println("document.getElementById('desTemp').value = desTemp; ");
-	client.println("document.getElementById('currTime').innerHTML = dt;}");
-	client.println("function chngTemp(c){desTemp += c;");
-	client.println("document.getElementById('desTemp').value = desTemp; ");
-	client.println("document.getElementById('desiredTemp').innerHTML = desTemp;");
-	client.println("document.getElementById('formsubmit').style.visibility = 'visible';");
-	client.println("submitCounter = 0;isEdit = 1;}");
-	client.println("</script>");
-	client.println("</head>");
-	client.println("<body bgcolor = '#E6E6FA'>");
-	client.println("<form  method = 'post' >");
-	client.println("<div id = 'currTime'></div><br/>");
-	client.println("<div>Текущая температура:</div>");
-	client.println("<div id='currTemp' class='currentTemp'></div><div class='currentTemp'>ºС</div><br/>");
-	client.println("<div>Установлена:</div><div id='desiredTemp' class='desiredTemp'></div><div class='desiredTemp'>ºС</div>");
-	client.println("<input type='button' onclick='chngTemp(1)' value = '+'>");
-	client.println("<input type='button' onclick='chngTemp(-1)' value='-'>");
-	client.println("<input type='hidden' name='desTemp' id='desTemp' value=0.0>");
-	client.println("<input id='formsubmit' name='formsubmit' type='submit' value='Ok'><br/>");
-	client.println("<a href='timetable.html'>Расписание</a>&nbsp;<a href='temptable.html'>Параметры котла</a>");
-	client.println("</form></body></html>");
+	Debug("End PrintMainPage");
+
+}
 */
+
+void ArduinoServer::PrintAnyFile(Client& client, HttpRequest request) {
+
+	Debug("Start PrintAnyFile");
+
+	File file = SD.open(request.URL, FILE_READ);
+	if (file) {
+		HttpHeader(client, "200 Ok");
+		while (file.available()) {
+			uint8_t buf[100];
+			file.readBytes(buf, 100);
+			client.write(buf, 100);
+		}
+		file.close();
+	}
+	else
+	{
+		Debug("File not found");
+		PrintErrorPage(client, "404 Not Found", "File:" + request.URL);
+	}
+	Debug("End PrintAnyFile");
+
+}
+
+
+String GetSensorParams(Sensor* sensor, String tpl) {
+	String res = "";
+	if (tpl.equals("%ArraySensorLabel%")) {
+		res += sensor->getLabel();
+	} else if (tpl.equals("%ArrayType%")) {
+		res += sensor->getType();
+	}
+	else if (tpl.equals("%ArrayCode%")) {
+		res += sensor->getPin();
+	}
+	else if (tpl.equals("%ArrayValue%")) {
+		res += sensor->getValue();
+	}
+	else if (tpl.equals("%ArrayError%")) {
+		res += sensor->getError();
+	}
+	else if (tpl.equals("%ArrayCritical%")) {
+		res += sensor->isCritical();
+	}
+	else if (tpl.equals("%ArrayCriticalCounter%")) {
+		res += sensor->getCriticalThreshold();
+	}
+	else if(tpl.equals("%ArrayAlarmLow%")) {
+		res += sensor->getAlarmLow();
+	}
+	else if (tpl.equals("%ArrayAlarmHigh%")) {
+		res += sensor->getAlarmHigh();
+	}
+	else if (tpl.equals("%ArrayStartLow%")) {
+		res += sensor->getStartLow();
+	}
+	else if (tpl.equals("%ArrayStartHigh%")) {
+		res += sensor->getStartHigh();
+	}
+	return res;
+}
+
+String GetTemplate(String tpl) {
+	String res = "";
+	if (tpl.startsWith("%Array")) {
+		res = "[";
+		for (int i = 0; i < Config.getNumberTemp(); i++) {
+			res += "'";
+			res += GetSensorParams(&(Config.tempSensors[i]), tpl);
+			res += "',";
+		}
+		for (int i = 0; i < Config.getNumberCont(); i++) {
+			res += "'";
+			res += GetSensorParams(&(Config.contacts[i]), tpl);
+			res += "',";
+		}
+		res[res.length() - 1] = ']';
+	}
+	return res;
+}
+
+byte hex2Byte(char c) {
+	byte res = 0;
+
+	if (c>='0' && c<='9') {
+		res = c - '0';
+	}
+	else if (c >= 'A' && c <= 'F') {
+		res = 10 + (c - 'A');
+	}
+	else if (c >= 'a' && c <= 'f') {
+		res = 10 + (c - 'a');
+	}
+	//Debug2("C=", c);
+	//Debug2("RES=", res);
+	return res;
+}
+
+String decodeHex(String s) {
+	String res = "";
+
+	for (unsigned int i = 0; i < s.length(); i++) {
+		if (s[i] == '%') {
+
+			res += char((hex2Byte(s[i + 1]) <<4) + hex2Byte(s[i + 2]));
+			i += 2;
+		}
+		else {
+			res += s[i];
+		}
+	}
+	return res;
+}
+
+void setArrayVar(String varName, int ind, String val) {
+	Sensor *s;
+	if (ind < Config.getNumberTemp()) {
+		s = &(Config.tempSensors[ind]);
+	}
+	else {
+		s = &(Config.contacts[ind - Config.getNumberTemp()]);
+	}
+	if (varName.equals("arrayLabel")) {
+		s->setLabel(decodeHex(val));
+		//s->setLabel(val);
+	}
+	else if (varName.equals("arrayCritCnt")) {
+		s->setCriticalThreshold(val.toInt());
+	}
+	else if (varName.equals("arrayAlarmLow")) {
+		s->setAlarmLow(val.toFloat());
+	}
+	else if (varName.equals("arrayAlarmHigh")) {
+		s->setAlarmHigh(val.toFloat());
+	}
+	else if (varName.equals("arrayStartLow")) {
+		s->setStartLow(val.toFloat());
+	}
+	else if (varName.equals("arrayStartHigh")) {
+		s->setStartHigh(val.toFloat());
+	}
+}
+
+void ArduinoServer::PrintHtmPage(Client& client, HttpRequest request) {
+
+	Debug("Start PrintMonitorPage");
+	
+	if (request.NumberParms != 0) { // Some POST variables submitted
+		int ind;
+
+		for (int i = 0; i < request.NumberParms; i++) {
+			if (request.ParamKeys[i].startsWith("array")) {
+				int n = request.ParamKeys[i].indexOf("_");
+				if (n > 0) {
+					int numb = request.ParamKeys[i].substring(n + 1).toInt();
+					String var = request.ParamKeys[i].substring(0, n);
+					setArrayVar(var, numb, request.ParamValues[i]);
+				}
+			}
+			else {
+				ind = request.getIndexOfParmKey("desTemp");
+				if (ind != -1) {
+					Config.cThermo.setDesiredTemp(request.getParmValue(ind).toFloat());
+				}
+			}
+		}
+
+	}
+	
+
+	File pageTpl = SD.open(request.URL, FILE_READ);
+	if (pageTpl) {
+		HttpHeader(client, "200 Ok");
+		bool isTpl = false;
+		bool isStart = true;
+		while (pageTpl.available()) {
+			if (isStart) {
+				String s = pageTpl.readStringUntil(0x0A);
+
+				if (s.startsWith("%TEMPLATE_START%")) {
+					isTpl = true;
+				}
+				else if (s.startsWith("%TEMPLATE_END%")) {
+					isTpl = false;
+					isStart = false;
+				}
+				else if (isTpl) {
+					String tpl = "";
+					s.replace("%ArraySensorLabel%", GetTemplate("%ArraySensorLabel%"));
+					s.replace("%ArrayType%", GetTemplate("%ArrayType%"));
+					s.replace("%ArrayCode%", GetTemplate("%ArrayCode%"));
+					s.replace("%ArrayValue%", GetTemplate("%ArrayValue%"));
+					s.replace("%ArrayError%", GetTemplate("%ArrayError%"));
+					s.replace("%ArrayCritical%", GetTemplate("%ArrayCritical%"));
+					s.replace("%ArrayCriticalCounter%", GetTemplate("%ArrayCriticalCounter%"));
+					s.replace("%ArrayAlarmLow%", GetTemplate("%ArrayAlarmLow%"));
+					s.replace("%ArrayAlarmHigh%", GetTemplate("%ArrayAlarmHigh%"));
+					s.replace("%ArrayStartLow%", GetTemplate("%ArrayStartLow%"));
+					s.replace("%ArrayStartHigh%", GetTemplate("%ArrayStartHigh%"));
+
+
+					s.replace("%DesiredTemperature%", String(Config.cThermo.getDesiredTemp()));
+					s.replace("%CurrentTemperature%", String(Config.cThermo.getTemp()));
+					s.replace("%CurrentTime%", "Date-Time here");
+
+
+
+					client.println(s);
+					Debug(s);
+				}
+				else { // ordinary line - nothing special
+					client.println(s);
+					//Debug(s);
+				}
+			}
+			else {
+#define BUF_SIZE	100
+				uint8_t buffer[BUF_SIZE];
+				int sz = pageTpl.readBytes(buffer, BUF_SIZE);
+				client.write(buffer, sz);
+			}
+		}
+		pageTpl.close();
+	}
+	else
+	{
+		Debug("File not found");
+		PrintErrorPage(client, "404 Not Found", "File:" + request.URL);
+	}
 	Debug("End PrintMainPage");
 
 }
 
-/*
-
-
-function form_submit() {
-isEdit=1;
-submitCounter=0;
-alert("Hello!");
-}
-*/
-
-
-void ArduinoServer::PrintTemperaturePage(Client& client, HttpRequest request) {
+void ArduinoServer::PrintSchedulePage(Client& client, HttpRequest request) {
 
 }

@@ -67,7 +67,7 @@ void setup() {
 	Serial.println(" devices.");
 	MsTimer2::set(100, Timer2);
 	MsTimer2::start();
-	delay(500);
+//	delay(500);
 }
 void Alarm(bool onOff) {
 	// some buzzer/flash/ should be here
@@ -75,7 +75,7 @@ void Alarm(bool onOff) {
 }
 // the loop function runs over and over again until power down or reset
 void loop() {
-
+/*
 	bool isError = false;
 
 	for (int i = 0; i < Config.getNumberTemp(); i++) {
@@ -131,5 +131,6 @@ void loop() {
 		}
 	}
 	Alarm(isError);
+	*/
 	delay(1000);
 }

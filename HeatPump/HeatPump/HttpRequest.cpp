@@ -41,7 +41,6 @@ void HttpRequest::ParseParameters() {
 			String parm;
 			int ind1;
 			ind1 = line.indexOf("&", ind);
-			Debug2("ind1=", ind1);
 			if (ind1 == -1) {
 				parm = line.substring(ind);
 			}

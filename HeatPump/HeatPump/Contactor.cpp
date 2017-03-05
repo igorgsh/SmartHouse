@@ -1,8 +1,9 @@
 #include "Contactor.h"
 
 
-Contactor::Contactor(String label, int pin, bool normal, Relay* r, int critThreshold) : Sensor(label, pin,r, critThreshold) {
+Contactor::Contactor(String label, int pin, bool normal, Relay* r, int critThreshold) : Sensor(label, pin,!normal,!normal,!normal,!normal,r, critThreshold ) {
 	this->normalState = normal;
+	this->type = CONTACT;
 	pinMode(pin, INPUT);
 	digitalWrite(pin, !normal);
 }
@@ -26,7 +27,7 @@ bool Contactor::checkDataReady() {
 	currentState = (bool)digitalRead(pin);
 //	Serial.println(currentState ? "Button is ON" : "Button is OFF");
 	if (currentState != normalState) {
-		setError(ErrorCode::SENSOR_DISCONNECTED);
+		setError(ErrorCode::CONTACT_ERROR);
 		ErrorCounter++;
 		res = false;
 	}

@@ -6,8 +6,14 @@ typedef enum {
 	NO_ERROR=0,
 	SENSOR_DISCONNECTED=1,
 	LOW_VALUE=2,
-	HIGH_VALUE=3
+	HIGH_VALUE=3,
+	CONTACT_ERROR = 4
 } ErrorCode;
+typedef enum {
+	NOSENSOR = 0,
+	THERMOMETER = 1,
+	CONTACT = 2
+} SensorType;
 
 class Sensor
 {
@@ -16,10 +22,13 @@ public:
 	Sensor(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, Relay* r, int critThreshold = 50);
 	Sensor(String label, int pin, Relay* r, int critThreshold = 3);
 	~Sensor();
+	SensorType type = NOSENSOR;
 	virtual float getValue() { return currentValue; };
+	SensorType getType() { return type; };
 	void setError(ErrorCode e) { error = e; };
 	ErrorCode getError() { return error; };
 	String getLabel() { return label; };
+	void setLabel(String lbl) { label = lbl; };
 	int getPin() { return pin; };
 	int ErrorCounter = 0;
 	virtual bool isCritical() { return (ErrorCounter >= criticalThreshold); };
@@ -34,7 +43,11 @@ public:
 	float getStartLow() { return startLow; };
 	void setStartHigh(float value) { startHigh = value; };
 	float getStartHigh() { return startHigh; };
-
+	void setCriticalThreshold(int value) { criticalThreshold = value; };
+	int getCriticalThreshold() { return criticalThreshold; };
+	//static String ErrorToString(ErrorCode);
+	const String ErrorStringShort[4] = { "","-","L","H" };
+	const String ErrorStringLong[4] = { "","DISCONNECTED","LOW","HIGH" };
 protected:
 	virtual bool checkDataReady() = 0;
 	ErrorCode error = NO_ERROR;
@@ -52,4 +65,14 @@ private:
 	void init(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, Relay* r, int critThreshold);
 
 };
-
+/*
+class BasicSensor : public Sensor
+{
+public:
+	bool loop(unsigned long counter) {};
+private:
+	bool checkDataReady() {
+		return false;
+	}
+};
+*/

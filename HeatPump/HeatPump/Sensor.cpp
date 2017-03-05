@@ -57,14 +57,24 @@ bool Sensor::getData() {
 	}
 	return res;
 }
+/*
+String Sensor::ErrorToString(ErrorCode code) {
 
-/*
-bool Sensor::checkDataReady() {
-	return isDataReady;
-}
-*/
-/*
-void Sensor::setDataReady(bool val) {
-	isDataReady = val;
+	switch (code)
+	{
+	case NO_ERROR:
+	default: {
+		return "";
+		break;
+	}
+	case ErrorCode::HIGH_VALUE: {
+		return "H";
+		break;
+	}
+	case ErrorCode::HIGH_VALUE: {
+		return "H";
+		break;
+	}
+	}
 }
 */

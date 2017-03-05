@@ -39,3 +39,14 @@ bool Configuration::loop(unsigned long counter) {
 	result &= web->loop();
 	return result;
 }
+
+// Функция, возвращающая количество свободного ОЗУ (RAM)
+int Configuration::memoryFree()
+{
+	int freeValue;
+	if ((int)__brkval == 0)
+		freeValue = ((int)&freeValue) - ((int)&__bss_end);
+	else
+		freeValue = ((int)&freeValue) - ((int)__brkval);
+	return freeValue;
+}

@@ -20,9 +20,11 @@ private:
 	int ProcessRequest(Client& client);
 	void PrintErrorPage(Client& client, String error, String reason);
 	void ParseCommand(Client& client, HttpRequest request);
-	void PrintMainPage(Client& client, HttpRequest request);
-	void PrintTemperaturePage(Client& client, HttpRequest request);
+	//void PrintMainPage(Client& client, HttpRequest request);
+	void PrintHtmPage(Client& client, HttpRequest request);
+	void PrintAnyFile(Client& client, HttpRequest request);
+	void PrintSchedulePage(Client& client, HttpRequest request);
 	void HttpHeader(Client& client, String error);
-
+	bool isTplMonitorActual = false;
 };
 
