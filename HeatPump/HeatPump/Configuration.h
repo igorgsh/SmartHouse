@@ -27,6 +27,7 @@ public:
 	Contactor contacts[NUMBER_OF_CONTACTOR] = { Contactor("C1",23,0, &relays[1], 5) };
 	CentralThermo cThermo = CentralThermo(&tempSensors[0], 35);
 	
+	ActionScenario StartPump = ActionScenario(1,{PumpItem(&relays[0])})
 	
 	int getNumberTemp() { return NUMBER_OF_TEMP; }
 	int getNumberCont() { return NUMBER_OF_CONTACTOR; }

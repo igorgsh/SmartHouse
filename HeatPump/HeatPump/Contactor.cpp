@@ -1,7 +1,8 @@
 #include "Contactor.h"
 
 
-Contactor::Contactor(String label, int pin, bool normal, Relay* r, int critThreshold) : Sensor(label, pin,!normal,!normal,!normal,!normal,r, critThreshold ) {
+Contactor::Contactor(String label, int pin, bool normal, ActionScenario* scenario[], int critThreshold) :
+	Sensor(label, pin,!normal,!normal,!normal,!normal, scenario, critThreshold) {
 	this->normalState = normal;
 	this->type = CONTACT;
 	pinMode(pin, INPUT);

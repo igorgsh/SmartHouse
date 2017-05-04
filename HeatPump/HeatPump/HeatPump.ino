@@ -5,7 +5,6 @@
 */
 
 // the setup function runs once when you press reset or power the board
-//#include <HashMap.h>
 #include <SD.h>
 #include <SPI.h>
 #include <EthernetUdp.h>
@@ -27,6 +26,7 @@ DebugLevel dLevel=D_ALL;
 
 #define SDCARD_SS	4
 #define LED_PIN	13
+
 //#define ONEWIRE_PIN	40
 
 //OneWire wire(ONEWIRE_PIN);
@@ -54,9 +54,14 @@ void Timer2() { //it is started every 100ms
 }
 
 void setup() {
+	//Configure Serial port and SD card
 	Serial.begin(115200);
 	SD.begin(SDCARD_SS);
+
+	// Initialize configuration
 	Config.begin();
+
+	// Prepare the light indicator 
 	pinMode(LED_PIN, OUTPUT);
 	digitalWrite(LED_PIN, LOW);
 
@@ -65,8 +70,11 @@ void setup() {
 	Serial.print("Found ");
 	Serial.print(Config.getNumberTemp() + Config.getNumberCont(), DEC);
 	Serial.println(" devices.");
+
+	//Set a timer 
 	MsTimer2::set(100, Timer2);
 	MsTimer2::start();
+
 //	delay(500);
 }
 void Alarm(bool onOff) {
@@ -132,5 +140,5 @@ void loop() {
 	}
 	Alarm(isError);
 	*/
-	delay(1000);
+//	delay(1000);
 }

@@ -4,7 +4,7 @@ class Contactor :
 	public Sensor
 {
 public:
-	Contactor(String label, int pin, bool normal, Relay* r, int critThreshold);
+	Contactor(String label, int pin, bool normal, ActionScenario* scenario[], int critThreshold);
 	void begin();
 	void requestState();
 	bool checkDataReady();

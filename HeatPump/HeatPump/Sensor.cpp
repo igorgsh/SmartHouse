@@ -1,25 +1,33 @@
 #include "Sensor.h"
 
-void Sensor::init(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, Relay* r, int critThreshold) {
+void Sensor::init(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, int critThreshold, ActionScenario* scenario[]) {
 	this->label = label;
 	this->pin = pin;
 	this->alarmLow = alarmLow;
 	this->alarmHigh = alarmHigh;
-	this->startLow = startLow;
-	this->startHigh = startHigh;
+	this->actionLow = startLow;
+	this->actionHigh = startHigh;
 	this->criticalThreshold = critThreshold;
-	this->r = r;
+	if (scenario != NULL) {
+		this->scenario[0] = scenario[0];
+		this->scenario[1] = scenario[1];
+		this->scenario[2] = scenario[2];
+		this->scenario[3] = scenario[3];
+	}
+	else {
+		this->scenario[0] = this->scenario[1] = this->scenario[2] = this->scenario[3] = NULL;
+	}
 }
 
 
-Sensor::Sensor(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, Relay* r, int critThreshold) {
-	init(label, pin, alarmLow, alarmHigh, startLow, startHigh,  r, critThreshold);
+Sensor::Sensor(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, ActionScenario* scenario[], int critThreshold) {
+	init(label, pin, alarmLow, alarmHigh, startLow, startHigh,  critThreshold, scenario);
 }
-
+/*
 Sensor::Sensor(String label, int pin, Relay* r, int critThreshold) {
 	init(label, pin, 0, 0, 0, 0, r, critThreshold);
 }
-
+*/
 Sensor::Sensor()
 {
 }
@@ -34,47 +42,23 @@ bool Sensor::getData() {
 
 	res = checkDataReady();
 	if (res) { //data is ready
-		if (startLow <= currentValue && currentValue >= startHigh) {
-			waitingStart = false;
-			if (r != NULL) {
-				r->connect();
-			}
+		if (actionLow <= currentValue) { // ActionLow
+			actionStatus = ACTION_LOW;
+		} else if (actionHigh >= currentValue) { // ActionHigh
+			actionStatus = ACTION_HIGH;
 		}
 		else {
-			waitingStart = true;
+			actionStatus = ACTION_NORMAL;
 		}
 	}
 	else { //result is absent
 		if (isCritical()) {
-			waitingStart = true;
-			if (r != NULL) {
-				r->disconnect();
-			}
+			actionStatus = ACTION_NODATA;
 		}
 		else {
-			waitingStart = true;
+			// Nothing todo. Keep the previous status
 		}
 	}
+	scenario[actionStatus]->Run();
 	return res;
 }
-/*
-String Sensor::ErrorToString(ErrorCode code) {
-
-	switch (code)
-	{
-	case NO_ERROR:
-	default: {
-		return "";
-		break;
-	}
-	case ErrorCode::HIGH_VALUE: {
-		return "H";
-		break;
-	}
-	case ErrorCode::HIGH_VALUE: {
-		return "H";
-		break;
-	}
-	}
-}
-*/
