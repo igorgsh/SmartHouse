@@ -18,14 +18,14 @@ public:
 	virtual bool DeviceCommand(ScenarioCommand cmd) = 0;
 	bool IsDeviceReady() { return (nextDeviceReady <= Config.counter100); };
 	ScenarioCommand currentCmd = ScenarioCommand::COMMAND_NO_COMMAND;
-	void(*callBack)() = NULL;
+	//void(*callBack)() = NULL;
 	DeviceStatus status = STATUS_UNKNOWN;
 
 protected:
 	long lastStatusTimestamp = 0;
 	int minTimeOff = 0;
 	int minTimeOn = 0;
-	void WaitTime(unsigned long delay, void (*callBack)());
+	//void WaitTime(unsigned long delay, void (*callBack)());
 	void WaitTime(unsigned long delay);
 	unsigned long nextDeviceReady = 0;
 	//void SetDelay(long time, )

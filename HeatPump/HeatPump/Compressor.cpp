@@ -25,6 +25,8 @@ bool Compressor::DeviceCommand(ScenarioCommand cmd)
 {
 	if (cmd == COMMAND_FORCE_STOP) {
 		StopCompressor();
+		currentCmd = COMMAND_NO_COMMAND;
+		status = STATUS_OFF;
 	}
 	else if (IsDeviceReady()) {
 		if (cmd == COMMAND_STOP) {
@@ -40,11 +42,13 @@ bool Compressor::DeviceCommand(ScenarioCommand cmd)
 					Config.outputDevices[i].Command(COMMAND_START);
 				}
 			}
-			// check statuses and start
+			// check statuses and start ñùüçêóûûùê
 			if (Config.outputDevices[1].status == STATUS_ON
 				&& Config.outputDevices[2].status == STATUS_ON
 				&& Config.outputDevices[3].status == STATUS_ON) {
 				StartCompressor();
+				currentCmd = COMMAND_NO_COMMAND;
+				status = STATUS_ON;
 			}
 			else {
 				WaitTime(1000); //wait 1 sec until pumps are ready

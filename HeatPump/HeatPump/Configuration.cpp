@@ -33,12 +33,7 @@ bool Configuration::loop(unsigned long counter) {
 			counter1000 = counter500 * 2;
 			for (int i = 0; i < NUMBER_OF_OUTPUTDEVICES; i++) {
 				if (outputDevices[i].IsDeviceReady() && outputDevices[i].currentCmd != COMMAND_NO_COMMAND) {
-					if (outputDevices[i].callBack != NULL) {
-						outputDevices[i].callBack();
-					}
-					else {
-						result &= outputDevices[i].DeviceCommand(outputDevices[i].currentCmd);
-					}
+					result &= outputDevices[i].DeviceCommand(outputDevices[i].currentCmd);
 				}
 			}
 		}
