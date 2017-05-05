@@ -1,5 +1,7 @@
 #pragma once
-class Relay
+#include "OutputDevice.h"
+class Relay : 
+	public OutputDevice
 {
 public:
 	Relay(int pin, bool on);
