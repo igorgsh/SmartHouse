@@ -69,6 +69,12 @@
     <ClInclude Include="OutputDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DeviceItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SleepItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DT.cpp">
@@ -114,6 +120,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OutputDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SleepItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

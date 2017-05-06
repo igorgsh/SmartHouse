@@ -1,16 +1,17 @@
 #pragma once
-#include "Scenario.h"
+#include "ScenarioItem.h"
 
 class ActionScenario :
-	public Scenario
+	public ScenarioItem
 {
 public:
-	ActionScenario(int maxStep);
+	ActionScenario(int maxStep, ScenarioItem** items);
 	~ActionScenario();
-	void Run();
-	void NextStep();
+	bool NextStep();
+	bool Run();
+	bool IsRunning = false;
 protected:
-	Scenario* steps;
+	ScenarioItem** steps;
 	int currenStep = 0;
 	int maxStep;
 };

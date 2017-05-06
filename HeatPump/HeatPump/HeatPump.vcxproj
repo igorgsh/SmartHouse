@@ -93,6 +93,7 @@
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="Contactor.h" />
     <ClInclude Include="Definitions.h" />
+    <ClInclude Include="DeviceItem.h" />
     <ClInclude Include="DT.h" />
     <ClInclude Include="HttpRequest.h" />
     <ClInclude Include="OutputDevice.h" />
@@ -101,6 +102,7 @@
     <ClInclude Include="Relay.h" />
     <ClInclude Include="ScenarioItem.h" />
     <ClInclude Include="Sensor.h" />
+    <ClInclude Include="SleepItem.h" />
     <ClInclude Include="TempSensor.h" />
     <ClInclude Include="__vm\.HeatPump.vsarduino.h" />
   </ItemGroup>
@@ -111,6 +113,7 @@
     <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Contactor.cpp" />
+    <ClCompile Include="DeviceItem.cpp" />
     <ClCompile Include="DT.cpp" />
     <ClCompile Include="HttpRequest.cpp" />
     <ClCompile Include="OutputDevice.cpp" />
@@ -119,6 +122,7 @@
     <ClCompile Include="Relay.cpp" />
     <ClCompile Include="ScenarioItem.cpp" />
     <ClCompile Include="Sensor.cpp" />
+    <ClCompile Include="SleepItem.cpp" />
     <ClCompile Include="TempSensor.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

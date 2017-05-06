@@ -2,8 +2,12 @@
 
 
 
-Compressor::Compressor(int pin, bool on) : OutputDevice(pin, on)
+Compressor::Compressor(int pin, bool on, unsigned long minTimeOn, unsigned long minTimeOff) : OutputDevice()
 {
+	this->r = new Relay(pin, on);
+	this->minTimeOn = minTimeOn;
+	this->minTimeOff = minTimeOff;
+
 }
 
 

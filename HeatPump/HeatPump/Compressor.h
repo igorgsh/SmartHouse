@@ -6,7 +6,7 @@ class Compressor :
 	public OutputDevice
 {
 public:
-	Compressor(int pin, bool on);
+	Compressor(int pin, bool on, unsigned long minTimeOn, unsigned long minTimeOff);
 	~Compressor();
 
 private:

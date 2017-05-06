@@ -15,7 +15,7 @@ public:
 	~OutputDevice();
 
 	void Command(ScenarioCommand cmd);
-	virtual bool DeviceCommand(ScenarioCommand cmd) = 0;
+	virtual bool DeviceCommand(ScenarioCommand cmd);
 	bool IsDeviceReady() { return (nextDeviceReady <= Config.counter100); };
 	ScenarioCommand currentCmd = ScenarioCommand::COMMAND_NO_COMMAND;
 	//void(*callBack)() = NULL;

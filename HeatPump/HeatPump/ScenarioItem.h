@@ -12,5 +12,6 @@ class ScenarioItem
 public:
 	ScenarioItem();
 	~ScenarioItem();
+	virtual bool Run();
 };
 

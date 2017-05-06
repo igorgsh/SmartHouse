@@ -31,4 +31,16 @@ void Relay::disconnect() {
 }
 
 
+bool Relay::DeviceCommand(ScenarioCommand cmd)
+{
+	if (cmd == COMMAND_FORCE_STOP || cmd == COMMAND_STOP) {
+		disconnect();
+	} else {
+		connect();
+	}
+	return true;
+}
+
+
+
 

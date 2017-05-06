@@ -2,8 +2,9 @@
 
 
 
-Pump::Pump(int pin, bool on, int minTimeOn, int minTimeOff) 
+Pump::Pump(int pin, bool on, unsigned long minTimeOn, unsigned long minTimeOff)
 {
+	r = new Relay(pin, on);
 	this->minTimeOn = minTimeOn;
 	this->minTimeOff = minTimeOff;
 }

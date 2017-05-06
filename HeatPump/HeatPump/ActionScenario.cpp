@@ -1,28 +1,38 @@
 #include "ActionScenario.h"
+#include "SleepItem.h"
 
 
-
-ActionScenario::ActionScenario()
-{
-}
-
-
-ActionScenario::ActionScenario(int maxStep)
+ActionScenario::ActionScenario(int maxStep, ScenarioItem** items)
 {
 	this->maxStep = maxStep;
+	this->steps = items;
 }
 
 ActionScenario::~ActionScenario()
 {
 }
 
-void ActionScenario::Run()
+bool ActionScenario::NextStep()
 {
-	currenStep = 0;
-	NextStep();
-	return;
+	if (currenStep == maxStep) {
+		IsRunning = false;
+		return true;
+	}
+	currenStep++;
+	return false;
 }
 
-void ActionScenario::NextStep() {
-
+bool ActionScenario::Run()
+{
+	if (currenStep <= maxStep) {
+		IsRunning = true;
+		if (dynamic_cast<SleepItem*> (steps[currenStep]) != NULL ) 
+		steps[currenStep]->Run();
+		currenStep++;
+	}
+	else {
+		currenStep = 0;
+		IsRunning = false;
+	}
+	return NextStep();
 }

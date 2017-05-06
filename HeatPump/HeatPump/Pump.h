@@ -6,7 +6,7 @@ class Pump :
 	public OutputDevice
 {
 public:
-	Pump(int pin, bool on, int minTimeOn, int minTimeOff);
+	Pump(int pin, bool on, unsigned long minTimeOn, unsigned long minTimeOff);
 	~Pump();
 private:
 	Relay* r;
