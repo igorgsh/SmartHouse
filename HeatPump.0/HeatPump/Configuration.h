@@ -9,6 +9,7 @@
 #include "Pump.h"
 #include "Compressor.h"
 #include "DeviceItem.h"
+#include "DeviceManager.h"
 
 #define NUMBER_OF_TEMP 2
 #define NUMBER_OF_CONTACTOR 1
@@ -29,14 +30,12 @@ class Configuration
 public:
 	Configuration();
 	~Configuration();
+
+	DeviceManager DevManager = DeviceManager();
+
 	ActionScenario StartCompressor = ActionScenario(NUMBER_ITEM_COMPRESSOR_START, compressorStart);
 	ActionScenario StopCompressor = ActionScenario(NUMBER_ITEM_COMPRESSOR_STOP, compressorStop);
 
-	Compressor compressor = Compressor(20, LOW, 3000, 3000);
-	Pump pumpGeo = Pump(21, LOW, 3000, 3000);
-	Pump pumpContour1 = Pump(22, LOW, 3000, 3000);
-	Pump pumpContour2 = Pump(23, LOW, 3000, 3000);
-	Pump pumpHeat = Pump(24, LOW, 3000, 3000);
 
 	OutputDevice* outputDevices[NUMBER_OF_OUTPUTDEVICES] = { &compressor, &pumpGeo, &pumpContour1, &pumpContour2, &pumpHeat };
 
@@ -49,17 +48,18 @@ public:
 	int getNumberTemp() { return NUMBER_OF_TEMP; }
 	int getNumberCont() { return NUMBER_OF_CONTACTOR; }
 	void begin();
-	bool loop(unsigned long counter);
+	bool loop1(unsigned long counter);
 	static int memoryFree();
-	unsigned long counter100 = 0;
-	unsigned long counter500 = 0;
-	unsigned long counter1000 = 0;
+	unsigned long counter1 = 0;
+	unsigned long counter5 = 0;
+	unsigned long counter10 = 0;
 private:
 	ArduinoServer* web;
 
 	// IP address in case DHCP fails
 	//IPAddress* ip;
 	//IPAddress ip = new IPAddress()
+	/*
 	ScenarioItem* compressorStart[NUMBER_ITEM_COMPRESSOR_START]
 	{ 
 		new DeviceItem(&pumpGeo, ScenarioCommand::COMMAND_START),
@@ -78,6 +78,6 @@ private:
 		new DeviceItem(&pumpContour1, ScenarioCommand::COMMAND_STOP),
 		new DeviceItem(&pumpHeat, ScenarioCommand::COMMAND_STOP),
 	};
-
+	*/
 };
 

@@ -23,14 +23,14 @@ void Configuration::begin() {
 	}
 }
 
-bool Configuration::loop(unsigned long counter) {
+bool Configuration::loop1(unsigned long counter) {
 
 	bool result = true;
-	counter100 = counter;
-	if (counter100 % 5 == 0) {
-		counter500 = counter100 * 5;
-		if (counter500 % 2 == 0) {
-			counter1000 = counter500 * 2;
+/*
+	if (counter1 % 5 == 0) {
+		counter5 = counter1 * 5;
+		if (counter5 % 2 == 0) {
+			counter10 = counter5 * 2;
 			for (int i = 0; i < NUMBER_OF_OUTPUTDEVICES; i++) {
 				if (outputDevices[i].IsDeviceReady() && outputDevices[i].currentCmd != COMMAND_NO_COMMAND) {
 					result &= outputDevices[i].DeviceCommand(outputDevices[i].currentCmd);
@@ -38,6 +38,7 @@ bool Configuration::loop(unsigned long counter) {
 			}
 		}
 	}
+	*/
 	// check temperature
 	for (int i = 0; i < getNumberTemp(); i++) {
 		result &= tempSensors[i].loop(counter);

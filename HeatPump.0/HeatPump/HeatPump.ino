@@ -45,10 +45,18 @@ void printAddress(DeviceAddress deviceAddress)
 int numbSensors = 0;
 */
 void Timer2() { //it is started every 100ms
-	static byte counter100 = 0;
+	//static byte counter100 = 0;
 
-	Config.loop(counter100);
-	counter100++;
+	Config.loop1(Config.counter1);
+	Config.counter1++;
+	if (Config.counter1 % 5 == 0) {
+		Config.loop5(Config.counter5);
+		Config.counter5++;
+		if (Config.counter1 % 10 == 10) {
+			Config.loop10(Config.counter10);
+			Config.counter10++;
+		}
+	}
 }
 
 void setup() {

@@ -20,7 +20,7 @@ void Sensor::init(String label, int pin, float alarmLow, float alarmHigh, float 
 }
 
 
-Sensor::Sensor(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, ActionScenario* scenario[], int critThreshold) {
+Sensor::Sensor(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, int critThreshold) {
 	init(label, pin, alarmLow, alarmHigh, startLow, startHigh,  critThreshold, scenario);
 }
 /*

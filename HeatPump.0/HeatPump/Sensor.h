@@ -29,26 +29,35 @@ class Sensor
 {
 public:
 	Sensor();
-	Sensor(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, ActionScenario* scenario[]=NULL, int critThreshold = 5);
-	//Sensor(String label, int pin, ActionScenario* scenario[] = NULL, int critThreshold = 5);
+//	Sensor(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, ActionScenario* scenario[]=NULL, int critThreshold = 5);
+	Sensor(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, int critThreshold = 5);
 	~Sensor();
+	//SType of Sensor
 	SensorType type = NOSENSOR;
 	SensorType getType() { return type; };
 
+	//Current value of sensor
 	virtual float getValue() { return currentValue; };
 
-	void setError(ErrorCode e) { error = e; };
+	// Last Eror
 	ErrorCode getError() { return error; };
+	void setError(ErrorCode e) { error = e; };
+	// Number of errors occured
+	int ErrorCounter = 0;
+	// Is error critical
+	virtual bool isCritical() { return (ErrorCounter >= criticalThreshold); };
 
+	//Label of Sensor
 	String getLabel() { return label; };
 	void setLabel(String lbl) { label = lbl; };
 
+	//Pin where sensor is connected
 	int getPin() { return pin; };
-	int ErrorCounter = 0;
-	virtual bool isCritical() { return (ErrorCounter >= criticalThreshold); };
+
+	// Request valus from sensor
 	virtual bool loop(unsigned long counter)=0;
+
 	bool getData();
-	//bool isWaitingStart() { return waitingStart; };
 	ActionStatus getActionStatus(){ return actionStatus; };
 
 	void setAlarmLow(float value) { alarmLow = value; };
@@ -61,7 +70,7 @@ public:
 	float getStartHigh() { return actionHigh; };
 	void setCriticalThreshold(int value) { criticalThreshold = value; };
 	int getCriticalThreshold() { return criticalThreshold; };
-	//static String ErrorToString(ErrorCode);
+
 	const String ErrorStringShort[4] = { "","-","L","H" };
 	const String ErrorStringLong[4] = { "","DISCONNECTED","LOW","HIGH" };
 protected:

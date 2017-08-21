@@ -94,6 +94,7 @@
     <ClInclude Include="Contactor.h" />
     <ClInclude Include="Definitions.h" />
     <ClInclude Include="DeviceItem.h" />
+    <ClInclude Include="DeviceManager.h" />
     <ClInclude Include="DT.h" />
     <ClInclude Include="HttpRequest.h" />
     <ClInclude Include="OutputDevice.h" />
@@ -114,6 +115,7 @@
     <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Contactor.cpp" />
     <ClCompile Include="DeviceItem.cpp" />
+    <ClCompile Include="DeviceManager.cpp" />
     <ClCompile Include="DT.cpp" />
     <ClCompile Include="HttpRequest.cpp" />
     <ClCompile Include="OutputDevice.cpp" />

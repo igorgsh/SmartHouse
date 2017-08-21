@@ -1,17 +1,11 @@
 #include "TempSensor.h"
 
 
-TempSensor::TempSensor(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, Relay* r, int critThreshold) 
-	: Sensor(label, pin, alarmLow, alarmHigh, startLow,  startHigh, r, critThreshold) {
+TempSensor::TempSensor(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, int critThreshold) 
+	: Sensor(label, pin, alarmLow, alarmHigh, startLow,  startHigh, critThreshold) {
 	init();
 }
 
-/*
-TempSensor::TempSensor()
-{
-	init();
-}
-*/
 
 TempSensor::~TempSensor()
 {
@@ -62,7 +56,7 @@ bool TempSensor::loop(unsigned long counter) {
 		requestTemperatures();
 		result = true;
 	}
-	else if (counter % 10 == 9) { // the last loop. All sensors which didn't ready marked as Disconnected 
+	else if (counter % 10 == 9) { // the last loop. All sensors which didn't ready are marked as Disconnected 
 		if (!getData()) {
 			setError(ErrorCode::SENSOR_DISCONNECTED);
 			ErrorCounter++;

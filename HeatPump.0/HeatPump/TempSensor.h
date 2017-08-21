@@ -8,7 +8,7 @@ class TempSensor :
 	public Sensor
 {
 public:
-	TempSensor(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, Relay* r, int critThreshold);
+	TempSensor(String label, int pin, float alarmLow, float alarmHigh, float startLow, float startHigh, int critThreshold);
 	//TempSensor();
 	~TempSensor();
 	void begin();
