@@ -19,5 +19,6 @@ public:
 		Log(D_WARN, message);
 	}
 
+
 };
 

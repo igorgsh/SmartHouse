@@ -8,6 +8,8 @@
 #define JSON_SIZE	200
 class Configuration {
 public:
+	bool IsEthernetConnection=false;
+
 	byte BoardId = 0;
 	byte mac[6] = { 0x00, 0xAA, 0x22, 0x07, 0x69, 0x00 };
 	// IP address in case DHCP fails

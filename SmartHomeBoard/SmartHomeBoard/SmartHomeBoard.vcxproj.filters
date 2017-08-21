@@ -22,52 +22,52 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Action.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Board.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Configuration.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="definitions.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ext_global.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="global.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="initdata.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Loger.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Mqtt.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Relay.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Unit.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utils.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OneWireBus.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OneWireThermo.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OneWireBusUnit.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OneWireThermo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Relay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="definitions.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

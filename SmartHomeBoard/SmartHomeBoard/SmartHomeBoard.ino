@@ -39,25 +39,30 @@ void setup() {
 		delay(10); // wait for serial port to connect. Needed for native USB port only
 	}
 	SerialLog(D_INFO, "Start");
+	
 	//init random generator
 	randomSeed(analogRead(0));
 	Config.Init();
 	SerialLog_(D_INFO, "Board Id: ");
 	SerialLog2(D_INFO, Config.BoardId, HEX);
-	SerialLog(D_INFO, "Init Ethernet");
-	InitializeServer();
-	SerialLog(D_INFO, "Initialize MQTT");
-	MqttClient.InitMqtt();
+	if (Config.IsEthernetConnection) {
+		SerialLog(D_INFO, "Init Ethernet");
+		InitializeServer();
+		SerialLog(D_INFO, "Initialize MQTT");
+		MqttClient.InitMqtt();
+	}
 	SerialLog(D_INFO, "Build Configuration");
 	Config.BuildConfig();
 	MqttClient.SubscribeUnits();
 	Loger::Info("Board is ready");
 	Loger::Info("Board Id:" + String(Config.BoardId));
 	Loger::Info("IP Address is:" + printIP(Ethernet.localIP()));
+	
 }
 
 // the loop function runs over and over again until power down or reset
 void loop() {
+	
 	//unsigned long startTime = millis();
 	//Debug2("Point10:", memoryFree());
 

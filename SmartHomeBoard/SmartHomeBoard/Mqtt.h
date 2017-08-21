@@ -53,7 +53,7 @@ class Mqtt : public PubSubClient
 		void PublishLog(DebugLevel level, String message);
 		void PublishUnit(const Unit* unit);
 		void SubscribeUnits();
-
+		void Subscribe(char* topic);
 
 		Mqtt() : PubSubClient(Configuration::MqttServer(), Configuration::MqttPort,callbackFunc, EthClient) {};
 		void Callback(char* topic, uint8_t* payload, unsigned int length);

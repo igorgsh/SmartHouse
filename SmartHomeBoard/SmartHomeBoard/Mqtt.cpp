@@ -21,7 +21,7 @@ void callbackFunc(char* topic, uint8_t* payload, unsigned int length) {
 
 
 bool Mqtt::MqttReconnect() {
-
+	
 	//Если соединение MQTT неактивно, то пытаемся установить его и опубликовать/подписаться
 	static unsigned long errorTime = 0;
 	char topic[TOPIC_LENGTH];
@@ -98,18 +98,20 @@ void Mqtt::SetTopicNames() {
 
 void Mqtt::InitMqtt(void) {
 	//Debug2("Point5.2:", memoryFree());
-
-	SetTopicNames();
-	//Debug2("Point5.4:", memoryFree());
-	MqttReconnect();
+	if (Config.IsEthernetConnection) {
+		SetTopicNames();
+		//Debug2("Point5.4:", memoryFree());
+		MqttReconnect();
+	}
 	//Debug2("Point5.6:", memoryFree());
 }
 
 void Mqtt::MqttLoop() {
 	//Debug2("PointLoop Start: ", memoryFree());
-
-	if (MqttReconnect()) {
-		loop();
+	if (Config.IsEthernetConnection) {
+		if (MqttReconnect()) {
+			loop();
+		}
 	}
 	//Debug2("PointLoop Finish: ", memoryFree());
 
@@ -201,6 +203,12 @@ void Mqtt::SubscribeUnits() {
 		}
 		sprintf(topic, "%s/%c%02X", topic, Config.units[i]->Type, Config.units[i]->Id);
 		Debug2("Subscription:", topic);
+		Subscribe(topic);
+	}
+}
+
+void Mqtt::Subscribe(char* topic) {
+	if (Config.IsEthernetConnection) {
 		subscribe(topic);
 	}
 }
