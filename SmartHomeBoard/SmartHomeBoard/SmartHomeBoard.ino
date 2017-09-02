@@ -50,6 +50,8 @@ void setup() {
 	Loger::Info("Board is ready");
 	Loger::Info("Board Id:" + String(Config.BoardId));
 	Loger::Info("IP Address is:" + printIP(Ethernet.localIP()));
+	pinMode(13, OUTPUT);
+	digitalWrite(13, HIGH);
 	//Loger::Info("Ethernet Status is:" + String(Ethernet._state));
 	//Debug2("Ethernet Status is:", Ethernet._state);
 }
