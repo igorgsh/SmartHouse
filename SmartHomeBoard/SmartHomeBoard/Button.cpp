@@ -72,6 +72,7 @@ void Button::HandleButton() {
 	}
 	else { //Button is released
 		if (startPressing != 0) { // Yes! Button had been pressed before
+			Debug2("Button pressed(ms):", now - startPressing);
 			if (startPressing + BUTTON_WRONG_PRESS > now) { // Button is pressed too short
 				btnValue = BTN_OFF;
 				Debug("Short Detected");

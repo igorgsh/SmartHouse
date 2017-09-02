@@ -8,7 +8,7 @@
 #define JSON_SIZE	200
 class Configuration {
 public:
-	bool IsEthernetConnection=false;
+	bool IsEthernetConnection=true;
 
 	byte BoardId = 0;
 	byte mac[6] = { 0x00, 0xAA, 0x22, 0x07, 0x69, 0x00 };
@@ -26,7 +26,6 @@ public:
 	void Init();
 	void UpdateConfig(const char *jsonConfig);
 	void UpdateActions(const char *jsonConfig);
-	void BuildConfig();
 	void BuildActions();
 	Unit* FindUnit(byte id);
 	Unit* FindUnitByTypeAndPin(UnitType type, byte pin);
@@ -43,8 +42,8 @@ public:
 	void UpdateOneWireBus(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_BUS, button, value); };
 	void UpdateOneWireThermo(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_THERMO, button, value); };
 	void UpdateUnit(UnitType type, String name, String value);
-	void UnitsLoop();
 	void ProcessAction(byte id, byte event, unsigned long value);
+	void MainLoop();
 
 	static const char* MqttServer() {
 		return "192.168.0.32"; //IP-адрес сервера ioBroker
@@ -74,6 +73,7 @@ private:
 	//	4: Reserved
 	//	5: Start of Units
 	static const int addrUnits = 5;
+	int GetUnitsAddr(int i);
 	static const int sizeOfUnit = 4;
 	// Unit structure
 	//	Byte | Object
@@ -82,13 +82,13 @@ private:
 	//	1: type
 	//	2: pin
 	//	3: lhOn
-	int GetOneWireStartAddr(int i);
+	int GetOneWireAddr(int i);
 	static const int sizeOfBusUnit = 8;
 	// Action structure
 	//	Byte | Object
 	//	-------------
 	//	0-7: address
-	int GetActionsStartAddr(int i);
+	int GetActionsAddr(int i);
 	static const int sizeOfAction = 6;
 	// Action structure
 	//	Byte | Object
@@ -114,6 +114,9 @@ private:
 	void CreateActions();
 	void InitializeActions();
 	Unit* CreateTypedUnit(byte type);
+	void BuildConfig();
+	void InitializeServer();
+	void UnitsLoop();
 
 //	StaticJsonBuffer<200> jsonBuffer;
 

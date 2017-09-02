@@ -7,7 +7,7 @@
 #include <DallasTemperature.h>
 #include <OneWire.h>
 #include "utils.h"
-#include <Ethernet.h>
+//#include <Ethernet.h>
 #include "avr\wdt.h"
 #include "Mqtt.h"
 #include "configuration.h"
@@ -22,7 +22,7 @@
 #include "ext_global.h"
 
 
-#include "initdata.h"
+//#include "initdata.h"
 #include "utils.h"
 
 String printIP(IPAddress ip) {
@@ -38,26 +38,20 @@ void setup() {
 	while (!Serial) {
 		delay(10); // wait for serial port to connect. Needed for native USB port only
 	}
-	SerialLog(D_INFO, "Start");
+	Debug("Start");
 	
 	//init random generator
 	randomSeed(analogRead(0));
+	//initialization of config
 	Config.Init();
-	SerialLog_(D_INFO, "Board Id: ");
-	SerialLog2(D_INFO, Config.BoardId, HEX);
-	if (Config.IsEthernetConnection) {
-		SerialLog(D_INFO, "Init Ethernet");
-		InitializeServer();
-		SerialLog(D_INFO, "Initialize MQTT");
-		MqttClient.InitMqtt();
-	}
-	SerialLog(D_INFO, "Build Configuration");
-	Config.BuildConfig();
-	MqttClient.SubscribeUnits();
+	Debug_("Board Id: ");
+	Debug_(Config.BoardId);
+	Debug_("Build Configuration");
 	Loger::Info("Board is ready");
 	Loger::Info("Board Id:" + String(Config.BoardId));
 	Loger::Info("IP Address is:" + printIP(Ethernet.localIP()));
-	
+	//Loger::Info("Ethernet Status is:" + String(Ethernet._state));
+	//Debug2("Ethernet Status is:", Ethernet._state);
 }
 
 // the loop function runs over and over again until power down or reset
@@ -66,12 +60,7 @@ void loop() {
 	//unsigned long startTime = millis();
 	//Debug2("Point10:", memoryFree());
 
-	//	Step 1. Listening a server requests
-	MqttClient.MqttLoop();
-	//Debug2("Point11:", memoryFree());
-
-	// Step 2. Read all buttons
-	Config.UnitsLoop();
+	Config.MainLoop();
 
 /*
 	Log_(D_INFO, "Working time:");

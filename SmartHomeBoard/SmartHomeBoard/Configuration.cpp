@@ -20,22 +20,30 @@ extern Mqtt MqttClient;
 void Configuration::CreateUnits() {
 	if (units != NULL) {
 		for (int i = 0; i < numberUnits; i++) {
-			delete units[i];
+			if (units[i] != NULL) {
+				delete units[i];
+			}
 		}
-		free(units);
+		//free(units);
+		delete units;
 	}
-	units = (Unit**)malloc(numberUnits * sizeof(Unit*));
+	units = new Unit*[numberUnits];
+	//units = (Unit**)malloc(numberUnits * sizeof(Unit*));
 
 }
 
 void Configuration::CreateActions() {
 	if (actions != NULL) {
 		for (int i = 0; i < numberActions; i++) {
-			delete actions[i];
+			if (actions[i] != NULL) {
+				delete actions[i];
+			}
 		}
-		free(actions);
+		//free(actions);
+		delete actions;
 	}
-	actions = (Action**)malloc(numberActions * sizeof(Action*));
+	//actions = (Action**)malloc(numberActions * sizeof(Action*));
+	actions = new Action*[numberActions];
 }
 
 
@@ -63,8 +71,42 @@ Unit* Configuration::FindUnitByTypeAndPin(UnitType type, byte pin) {
 
 }
 
+void Configuration::MainLoop() {
+	//	Step 1. Listening a server requests
+	MqttClient.MqttLoop();
+	// Step 2. Read all buttons
+	Config.UnitsLoop();
+}
+
+void Configuration::InitializeServer() {
+
+	if (Ethernet.begin(Config.mac) == 0) {
+		SerialLog(D_ERROR, "Failed to configure Ethernet using DHCP");
+		// no point in carrying on, so do nothing forevermore:
+		// try to congifure using IP address instead of DHCP:
+		//if (Ethernet.begin(Config.mac, Config.ip) == 0) {
+		//	SerialLog(D_ERROR, "Failed to configure Ethernet using DHCP");
+		Config.IsEthernetConnection = false;
+	}
+	if (Config.IsEthernetConnection) {
+		SerialLog_(D_INFO, "Server is at ");
+		SerialLog(D_INFO, Ethernet.localIP());
+	}
+}
+
+
 void Configuration::Init() {
 	ReadBoardId();
+	if (IsEthernetConnection) {
+		SerialLog(D_INFO, "Init Ethernet");
+		InitializeServer();
+		if (IsEthernetConnection) {
+			SerialLog(D_INFO, "Initialize MQTT");
+			MqttClient.InitMqtt();
+			MqttClient.SubscribeUnits();
+		}
+	}
+	BuildConfig();
 }
 
 Unit* Configuration::CreateTypedUnit(byte type) {
@@ -165,10 +207,11 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 			}
 			if (root.containsKey("address")) {
 				if (units[configCounter]->Type == ONE_WIRE_THERMO) {
-					ConvertStringToAddress(((OneWireBusUnit*)units[configCounter])->address,root["address"]);
+					ConvertStringToAddress(((OneWireBusUnit*)units[configCounter])->address, root["address"]);
 				}
 			}
 		}
+
 		units[configCounter]->print("Unit received", Serial);
 		configCounter++;
 		//Debug2("Memory5=", memoryFree());
@@ -182,9 +225,7 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 
 		}
 		//Debug2("Memory6=", memoryFree());
-
 	}
-
 }
 
 void Configuration::BuildConfig() {
@@ -192,14 +233,15 @@ void Configuration::BuildConfig() {
 	ReadNumberUnits();
 	Debug2("NumberOfunits=", numberUnits);
 
-	MqttClient.GetConfiguration();
-	unsigned long startServerRead = millis();
-	while (!IsConfigReady && startServerRead+10000 > millis()) { // we have a 10 seconds to get configuration
-		MqttClient.MqttLoop();
+	if (IsEthernetConnection) {
+		MqttClient.GetConfiguration();
+		unsigned long startServerRead = millis();
+		while (!IsConfigReady && startServerRead + 10000 > millis()) { // we have a 10 seconds to get configuration
+			MqttClient.MqttLoop();
+		}
 	}
-
-	Debug2("IsConfigReady=", IsConfigReady);
-	Debug2("1NumberOfunits=", numberUnits);
+	Debug2("1IsConfigReady=", IsConfigReady);
+	Debug2("NumberOfunits=", numberUnits);
 	if (!IsConfigReady) { // We can't get config from server. Read from EEPROM
 		IsServerConfig = false;
 		Debug("Get From EEPROM");
@@ -256,8 +298,8 @@ void Configuration::ReadBoardId() {
 	mac[3] = BoardId;
 }
 
-int Configuration::GetOneWireStartAddr(int ind) {
-	return addrUnits + numberUnits * sizeOfUnit + ind * sizeOfBusUnit;
+int Configuration::GetOneWireAddr(int ind) {
+	return GetUnitsAddr(0) + numberUnits * sizeOfUnit + ind * sizeOfBusUnit;
 }
 
 void Configuration::ReadUnit(int ind, Unit* u) {
@@ -277,9 +319,15 @@ void Configuration::ReadUnit(int ind, Unit* u) {
 	if (u->Type == UnitType::ONE_WIRE_THERMO) {
 		OneWireBusUnit* owU = (OneWireBusUnit*)u;
 		for (int i = 0; i < 8; i++) {
-			owU->address[i] = EEPROM.read(GetOneWireStartAddr(ind) + i);
+			owU->address[i] = EEPROM.read(GetOneWireAddr(ind) + i);
 		}
 	}
+
+}
+
+int Configuration::GetUnitsAddr(int i) {
+
+	return Configuration::addrUnits + i * sizeOfUnit;
 
 }
 
@@ -292,8 +340,7 @@ void Configuration::WriteUnit(int ind, const Unit* u) {
 	2: pin
 	3: lhOn
 	*/
-	int addr = Configuration::addrUnits + ind * sizeOfUnit;
-
+	int addr = GetUnitsAddr(ind);
 	EEPROM.write(addr, u->Id);
 	EEPROM.write(addr + 1, u->Type);
 	EEPROM.write(addr + 2, u->Pin);
@@ -301,7 +348,7 @@ void Configuration::WriteUnit(int ind, const Unit* u) {
 	if (u->Type == UnitType::ONE_WIRE_THERMO) {
 		OneWireBusUnit* owU = (OneWireBusUnit*)u;
 		for (int i = 0; i < 8; i++) {
-			EEPROM.write(GetOneWireStartAddr(ind) + i, owU->address[i]);
+			EEPROM.write(GetOneWireAddr(ind) + i, owU->address[i]);
 		}
 	}
 }
@@ -389,18 +436,19 @@ void Configuration::UpdateActions(const char *jsonConfig) {
 			IsServerActions = true;
 
 		}
+
 	}
-
 }
-
 void Configuration::BuildActions() {
 	IsActionsReady = false;
 	ReadNumberActions();
 	//Debug2("NumberOfActions=", numberActions);
-	MqttClient.GetActions();
-	unsigned long startServerRead = millis();
-	while (!IsActionsReady && startServerRead + 10000 > millis()) { // we have a 10 seconds to get actions
-		MqttClient.MqttLoop();
+	if (IsEthernetConnection) {
+		MqttClient.GetActions();
+		unsigned long startServerRead = millis();
+		while (!IsActionsReady && startServerRead + 10000 > millis()) { // we have a 10 seconds to get actions
+			MqttClient.MqttLoop();
+		}
 	}
 	//Debug2("IsActionReady=", IsActionsReady);
 	//Debug2("1NumberOfActions=", numberActions);
@@ -419,12 +467,12 @@ void Configuration::BuildActions() {
 	IsActionsReady = true;
 }
 
-int Configuration::GetActionsStartAddr(int i) {
-	return GetOneWireStartAddr(0) + numberBusUnits * sizeOfBusUnit;
+int Configuration::GetActionsAddr(int i) {
+	return GetOneWireAddr(0) + numberBusUnits * sizeOfBusUnit + i * sizeOfAction;
 }
 
 void Configuration::ReadAction(int i, Action* a) {
-	int addr = GetActionsStartAddr(i);
+	int addr = GetActionsAddr(i);
 	//Debug2("Address Actions=", addr);
 	a->Id = EEPROM.read(addr);
 	a->originId = EEPROM.read(addr+1);
@@ -436,7 +484,9 @@ void Configuration::ReadAction(int i, Action* a) {
 }
 
 void Configuration::WriteAction(int i, const Action* a) {
-	int addr = GetActionsStartAddr(i);
+	int addr = GetActionsAddr(i);
+	a->print("Action To ROM:", Serial);
+	
 	EEPROM.write(addr, a->Id);
 	EEPROM.write(addr+1, a->originId);
 	EEPROM.write(addr+2, a->originType);
@@ -457,11 +507,15 @@ void Configuration::ReadNumberActions() {
 void Configuration::StoreActions() {
 	for (int i = 0; i < numberActions; i++) {
 		Action aROM;
+		Debug2("Action i=", i);
 		ReadAction(i, &aROM);
+
 		Debug2("id=", aROM.Id);
 		if (!actions[i]->compare(&aROM)) {
 			Debug2("Write Actions I=", i);
 			WriteAction(i, actions[i]);
+			ReadAction(i, &aROM);
+
 		}
 	}
 }
@@ -490,6 +544,7 @@ void Configuration::ProcessAction(byte id, byte event, unsigned long value) {
 			Debug3("ActionID=", actions[i]->Id, HEX);
 			if (actions[i]->event == event) {
 				Debug("Action Found!");
+				actions[i]->print("ACTION:", Serial);
 				Unit* originU = FindUnit(id);
 
 				if (originU != NULL) {
@@ -497,13 +552,14 @@ void Configuration::ProcessAction(byte id, byte event, unsigned long value) {
 					Unit* targetU = FindUnit(actions[i]->targetId);
 					if (targetU != NULL) {
 						targetU->print("Target: ", Serial);
-
+			//			Debug2("Action target:", actions[i]->targetAction);
 						switch (actions[i]->targetAction)
 						{
 						case ACT_NO_ACTION: {
 							break;
 						}
 						case ACT_RELAY_SWITCH: {
+							Debug("Relay Switch");
 							if (targetU->Type == UnitType::RELAY) {
 								((Relay*)targetU)->RelaySwitch();
 							}
@@ -513,7 +569,7 @@ void Configuration::ProcessAction(byte id, byte event, unsigned long value) {
 							break;
 						}
 						case ACT_RELAY_ON: {
-							if (originU->Type == UnitType::RELAY) {
+							if (targetU->Type == UnitType::RELAY) {
 								((Relay*)targetU)->RelayOn();
 							}
 							else {
@@ -522,7 +578,7 @@ void Configuration::ProcessAction(byte id, byte event, unsigned long value) {
 							break;
 						}
 						case ACT_RELAY_OFF: {
-							if (originU->Type == UnitType::RELAY) {
+							if (targetU->Type == UnitType::RELAY) {
 								((Relay*)targetU)->RelayOff();
 							}
 							else {

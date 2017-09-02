@@ -93,7 +93,6 @@
     <ClInclude Include="definitions.h" />
     <ClInclude Include="ext_global.h" />
     <ClInclude Include="global.h" />
-    <ClInclude Include="initdata.h" />
     <ClInclude Include="Loger.h" />
     <ClInclude Include="Mqtt.h" />
     <ClInclude Include="OneWireBus.h" />
@@ -109,7 +108,6 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Configuration.cpp" />
-    <ClCompile Include="initdata.cpp" />
     <ClCompile Include="Loger.cpp" />
     <ClCompile Include="Mqtt.cpp" />
     <ClCompile Include="OneWireBus.cpp" />

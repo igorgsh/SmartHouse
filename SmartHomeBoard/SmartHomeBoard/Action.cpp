@@ -9,6 +9,13 @@
 
 bool Action::compare(Action* a) {
 	if (a == NULL) return false;
+	Debug2("id:", (Id == a->Id));
+	Debug2("event:", (event == a->event));
+	Debug2("originId:", (originId == a->originId));
+	Debug2("origintType:", (originType == a->originType));
+	Debug2("targetAction:", (targetAction == a->targetAction));
+	Debug2("Targetid:", (targetId == a->targetId));
+
 	return (
 		Id == a->Id &&
 		event == a->event &&

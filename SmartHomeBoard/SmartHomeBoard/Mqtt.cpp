@@ -98,11 +98,9 @@ void Mqtt::SetTopicNames() {
 
 void Mqtt::InitMqtt(void) {
 	//Debug2("Point5.2:", memoryFree());
-	if (Config.IsEthernetConnection) {
-		SetTopicNames();
-		//Debug2("Point5.4:", memoryFree());
-		MqttReconnect();
-	}
+	SetTopicNames();
+	//Debug2("Point5.4:", memoryFree());
+	MqttReconnect();
 	//Debug2("Point5.6:", memoryFree());
 }
 
@@ -137,34 +135,36 @@ void Mqtt::GetConfiguration() {
 }
 
 void Mqtt::PublishUnit(const Unit *unit) {
-	char topic[TOPIC_LENGTH];
-	char middle[TOPIC_LENGTH];
-	switch (unit->Type) {
-	case UnitType::BUTTON: {
-		strcpy(middle, SUFFIX_PUT_BUTTONS);
-		break;
+	if (Config.IsEthernetConnection) {
+		char topic[TOPIC_LENGTH];
+		char middle[TOPIC_LENGTH];
+		switch (unit->Type) {
+		case UnitType::BUTTON: {
+			strcpy(middle, SUFFIX_PUT_BUTTONS);
+			break;
+		}
+		case UnitType::RELAY: {
+			strcpy(middle, SUFFIX_PUT_RELAYS);
+			break;
+		}
+		case UnitType::ONE_WIRE_BUS: {
+			strcpy(middle, SUFFIX_PUT_1WIREBUS);
+			break;
+		}
+		case UnitType::ONE_WIRE_THERMO: {
+			strcpy(middle, SUFFIX_PUT_1WIRETHERMO);
+			break;
+		}
+		}
+		sprintf(topic, "%s/%s/%c%02X", topicPrefix, middle, unit->Type, unit->Id);
+		char payload[PAYLOAD_LENGTH];
+		sprintf(payload, "%u", unit->status);
+		Debug_("Publish:[");
+		Debug_(topic);
+		Debug_("]:");
+		Debug(payload);
+		MqttClient.publish(topic, payload);
 	}
-	case UnitType::RELAY: {
-		strcpy(middle, SUFFIX_PUT_RELAYS);
-		break;
-	}
-	case UnitType::ONE_WIRE_BUS: {
-		strcpy(middle, SUFFIX_PUT_1WIREBUS);
-		break;
-	}
-	case UnitType::ONE_WIRE_THERMO: {
-		strcpy(middle, SUFFIX_PUT_1WIRETHERMO);
-		break;
-	}
-	}
-	sprintf(topic, "%s/%s/%c%02X", topicPrefix, middle, unit->Type, unit->Id);
-	char payload[PAYLOAD_LENGTH];
-	sprintf(payload, "%u", unit->status);
-	Debug_("Publish:[");
-	Debug_(topic);
-	Debug_("]:");
-	Debug(payload);
-	MqttClient.publish(topic, payload);
 }
 
 void Mqtt::GetActions() {
