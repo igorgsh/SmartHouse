@@ -3,6 +3,7 @@
 #include <Ethernet.h>
 #include "Unit.h"
 #include "Action.h"
+#include "DallasTemperature.h"
 #include <ArduinoJson.h>
 
 #define JSON_SIZE	200
@@ -53,6 +54,8 @@ public:
 	int numberUnits = 0;
 	int numberActions = 0;
 	int numberBusUnits = 0;
+	void ConvertStringToAddress(DeviceAddress address, const String addrStr);
+	String ConvertAddressToString(const DeviceAddress address);
 
 private:
 	int configCounter;

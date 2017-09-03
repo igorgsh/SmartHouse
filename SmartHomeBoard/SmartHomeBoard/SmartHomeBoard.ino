@@ -38,15 +38,11 @@ void setup() {
 	while (!Serial) {
 		delay(10); // wait for serial port to connect. Needed for native USB port only
 	}
-	Debug("Start");
 	
 	//init random generator
 	randomSeed(analogRead(0));
 	//initialization of config
 	Config.Init();
-	Debug_("Board Id: ");
-	Debug_(Config.BoardId);
-	Debug_("Build Configuration");
 	Loger::Info("Board is ready");
 	Loger::Info("Board Id:" + String(Config.BoardId));
 	Loger::Info("IP Address is:" + printIP(Ethernet.localIP()));

@@ -64,6 +64,7 @@ private:
 		
 		bool MqttReconnect();
 		void SetTopicNames();
+		bool firstConnect = true;
 
 };
 

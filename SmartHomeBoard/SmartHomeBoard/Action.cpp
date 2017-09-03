@@ -9,12 +9,6 @@
 
 bool Action::compare(Action* a) {
 	if (a == NULL) return false;
-	Debug2("id:", (Id == a->Id));
-	Debug2("event:", (event == a->event));
-	Debug2("originId:", (originId == a->originId));
-	Debug2("origintType:", (originType == a->originType));
-	Debug2("targetAction:", (targetAction == a->targetAction));
-	Debug2("Targetid:", (targetId == a->targetId));
 
 	return (
 		Id == a->Id &&
@@ -26,23 +20,26 @@ bool Action::compare(Action* a) {
 		);
 }
 
-void Action::print(const char* header,Stream& stream) {
+void Action::print(const char* header,DebugLevel level) {
+	String str0 = "";
+
 	if (header != NULL) {
-		stream.print(header);
+		str0 = header;
 	}
-	stream.print("Id:");
-	stream.print(Id, HEX);
-	stream.print(";event:");
-	stream.print(event, HEX);
-	stream.print(";originId:");
-	stream.print(originId, HEX);
-	stream.print(";originType:");
-	stream.print(originType,HEX);
-	stream.print(";targetAction:");
-	stream.print(targetAction,HEX);
-	stream.print(";targetId:");
-	stream.print(targetId,HEX);
-	stream.println(";;;");
+	str0+="Id:";
+	str0+=String(Id, HEX);
+	str0 += ";event:";
+	str0 += String(event, HEX);
+	str0 += ";originId:";
+	str0 += String(originId, HEX);
+	str0 += ";originType:";
+	str0 += String(originType,HEX);
+	str0 += ";targetAction:";
+	str0 += String(targetAction,HEX);
+	str0 += ";targetId:";
+	str0 += String(targetId,HEX);
+	str0 += " @ ";
+	Loger::Log(level, str0);
 }
 
 void Action::FillFrom(Action* a) {

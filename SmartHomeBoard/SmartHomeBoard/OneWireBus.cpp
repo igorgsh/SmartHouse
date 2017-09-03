@@ -4,6 +4,7 @@
 #include "ext_global.h"
 #include "Mqtt.h"
 #include "Unit.h"
+#include "Loger.h"
 #include <DallasTemperature.h>
 //#include <vector>
 //#include <StandardCplusplus-master\vector>
@@ -18,7 +19,8 @@ float OneWireBus::GetTemperature(const DeviceAddress address) {
 		return sensors->getTempC(address);
 	}
 	else {
-		Debug("Temp is failed");
+
+		Loger::Error("Temp is failed: " + Config.ConvertAddressToString(address));
 		return -999;
 	}
 }
@@ -28,7 +30,7 @@ bool OneWireBus::CheckAddress(const DeviceAddress address) {
 }
 
 void OneWireBus::InitUnit() {
-	Debug("1-Wire init");
+	Loger::Debug("1-Wire init");
 	oneWire = new OneWire(Pin);
 	sensors = new DallasTemperature(oneWire);
 	sensors->begin();

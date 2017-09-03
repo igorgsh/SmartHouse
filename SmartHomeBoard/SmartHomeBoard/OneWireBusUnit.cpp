@@ -4,8 +4,8 @@
 #include "ext_global.h"
 
 void OneWireBusUnit::InitUnit() {
-	Debug("Init OneWireBus Unit");
-	Debug2("Pin=", Pin);
+	Loger::Debug("Init OneWireBus Unit");
+	Loger::Debug("Pin=" + String(Pin));
 	parent = (OneWireBus*)Config.FindUnitByTypeAndPin(UnitType::ONE_WIRE_BUS, Pin);
 	if (parent == NULL) {
 		Loger::Error("Can't find bus for unit: " + String(Id));
@@ -29,7 +29,7 @@ bool OneWireBusUnit::IsAccessible() {
 
 void OneWireBusUnit::UnitLoop() {
 	if (prevCycle + OneWireBus::BUS_INTERVAL < millis()) {
-		Debug2("prevCycle=", prevCycle);
+		Loger::Debug("prevCycle=" + String(prevCycle));
 		parent->RequestTemperature();
 		HandleData();
 		prevCycle = millis();
@@ -49,25 +49,27 @@ void OneWireBusUnit::FillFrom(Unit* u) {
 }
 
 
-void OneWireBusUnit::print(const char* header, Stream& stream) {
+void OneWireBusUnit::print(const char* header, DebugLevel level) {
+	String str0 = "";
 	if (header != NULL) {
-		stream.print(header);
+		str0=header;
 	}
-	stream.print("Id:");
-	stream.print(Id, HEX);
-	stream.print(";Type:");
-	stream.print(Type, HEX);
-	stream.print(";Pin:");
-	stream.print(Pin, DEC);
-	stream.print(";lhOn:");
-	stream.print(lhOn, HEX);
-	stream.print(";status:");
-	stream.print((unsigned int)status, DEC);
-	stream.print(";address:");
+	str0 += "Id:";
+	str0 += String(Id, HEX);
+	str0 += ";Type:";
+	str0 += String(Type, HEX);
+	str0 += ";Pin:";
+	str0 += String(Pin, DEC);
+	str0 += ";lhOn:";
+	str0 += String(lhOn, HEX);
+	str0 += ";status:";
+	str0 += String((unsigned int)status, DEC);
+	str0 += ";address:";
 	for (int i = 0; i < 8; i++) {
-		stream.print(address[i], HEX);
+		str0 += String(address[i], HEX);
 	}
-	stream.println(" @");
+	str0 += " @ ";
+	Loger::Log(level, str0);
 }
 
 void OneWireBusUnit::FinalInitUnit() {

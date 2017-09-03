@@ -1,6 +1,8 @@
 #pragma once
 
 #include <Arduino.h>
+#include "definitions.h"
+#include "Loger.h"
 
 typedef enum {
 	BUTTON = 'B',
@@ -28,7 +30,7 @@ public:
 	virtual void FinalInitUnit() = 0;
 	virtual void ProcessUnit(int newStatus) = 0;
 	virtual ~Unit() {};
-	virtual void print(const char* header, Stream& stream);
+	virtual void print(const char* header, DebugLevel level);
 };
 
 class UnitProto : public Unit {

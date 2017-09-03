@@ -18,7 +18,8 @@ public:
 	static void Warn(String message) {
 		Log(D_WARN, message);
 	}
-
-
+	static void Debug(String message) {
+		Log(D_DEBUG, message);
+	}
 };
 

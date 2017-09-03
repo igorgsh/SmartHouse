@@ -27,7 +27,10 @@ bool Mqtt::MqttReconnect() {
 	char topic[TOPIC_LENGTH];
 
 	if (!connected()) {
-		Debug("MQTT Failed");
+		if (!firstConnect) {
+			Loger::Error("MQTT Failed");
+		}
+		firstConnect = false;
 		if (errorTime == 0 || errorTime + MQTT_RECONNECT_TIME < millis()) { //reconnect
 
 			//SerialLog(D_WARN, "Connect to MQTT-broker...  ");
@@ -37,18 +40,16 @@ bool Mqtt::MqttReconnect() {
 				//Подписываемся на все темы
 				//MqttClient.subscribe(TOPIC_CONFIG_LENGTH);
 				sprintf(topic, "%s/%s", topicPrefix, SUFFIX_CONFIG_RESPONSE);
-				Debug2("Subscribe:", topic);
+				Loger::Debug("Subscribe:" + String(topic));
 				subscribe(topic);
 				sprintf(topic, "%s/%s", topicPrefix, SUFFIX_ACTIONS_RESPONSE);
-				Debug2("Subscribe:", topic);
+				Loger::Debug("Subscribe:" + String(topic));
 				subscribe(topic);
 				loop();
 			}
 			else {
 				//Если не подключились, ждем 10 секунд и пытаемся снова
-				SerialLog(D_ERROR, "Failed, rc=");
-				SerialLog2_(D_ERROR, MqttClient.state(), DEC);
-				SerialLog(D_ERROR, " try again in 10 seconds");
+				Loger::Error("Failed, rc=" + String(MqttClient.state(), DEC));
 				errorTime = millis();
 			}
 		}
@@ -64,10 +65,7 @@ void Mqtt::Callback(char* topic, uint8_t* payload, unsigned int length) {
 	String strTopic = String(topic);
 	String strPayload = String((char*)payload);
 	//Исследуем что "прилетело" от сервера по подписке:
-	Debug_("[");
-	Debug_(strTopic);
-	Debug_("]:");
-	Debug(strPayload);
+	Loger::Debug("[" + strTopic + "]:" + strPayload);
 	//Debug2("Point6.4.4:", memoryFree());
 	if (strTopic.startsWith((String)(SUFFIX_CONFIG_RESPONSE), strlen(topicPrefix) + 1)) {
 		Config.UpdateConfig(strPayload.c_str());
@@ -129,8 +127,7 @@ void Mqtt::GetConfiguration() {
 	strcpy(topic, topicPrefix);
 	strcat(topic, "/");
 	strcat(topic, SUFFIX_CONFIG_REQUEST);
-	Debug2("Rnd=", rnd);
-	Debug2("Request:", topic);
+	Loger::Debug("Request:" + String(topic));
 	publish(topic, String(rnd).c_str());
 }
 
@@ -159,10 +156,7 @@ void Mqtt::PublishUnit(const Unit *unit) {
 		sprintf(topic, "%s/%s/%c%02X", topicPrefix, middle, unit->Type, unit->Id);
 		char payload[PAYLOAD_LENGTH];
 		sprintf(payload, "%u", unit->status);
-		Debug_("Publish:[");
-		Debug_(topic);
-		Debug_("]:");
-		Debug(payload);
+		Loger::Debug("Publish:[" + String(topic) + "]:" + String(payload));
 		MqttClient.publish(topic, payload);
 	}
 }
@@ -171,16 +165,16 @@ void Mqtt::GetActions() {
 	char buf[10];
 	sprintf(buf, "%lu", random(0, 1000));
 	char topic[TOPIC_LENGTH];
-	Debug2("Action:", buf);
+	//Debug2("Action:", buf);
 	Config.IsConfigReady = false;
 	sprintf(topic, "%s/%s", topicPrefix, SUFFIX_ACTIONS_REQUEST);
-	Debug2("Request:", topic);
+	Loger::Debug("Request:" + String(topic));
 	publish(topic, buf);
 }
 
 void Mqtt::SubscribeUnits() {
 	char topic[TOPIC_LENGTH];
-	Debug("Subscribing Units...");
+	Loger::Debug("Subscribing Units...");
 	for (int i = 0; i < Config.numberUnits; i++) {
 
 		switch (Config.units[i]->Type) {
@@ -202,8 +196,8 @@ void Mqtt::SubscribeUnits() {
 		}
 		}
 		sprintf(topic, "%s/%c%02X", topic, Config.units[i]->Type, Config.units[i]->Id);
-		Debug2("Subscription:", topic);
 		Subscribe(topic);
+		Loger::Debug("Subscribe:" + String(topic));
 	}
 }
 

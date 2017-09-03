@@ -2,6 +2,7 @@
 #include "process.h"
 #include "ext_global.h"
 #include "mqtt.h"
+#include "Loger.h"
 
 extern Mqtt MqttClient;
 
@@ -12,7 +13,6 @@ void Button::SetDefault() {
 }
 
 void Button::InitUnit() {
-	Debug("Button Init");
 	pinMode(Pin, INPUT);
 	digitalWrite(Pin, !lhOn);
 	//status = 99;
@@ -49,13 +49,13 @@ void Button::HandleButton() {
 		if (startPressing == 0) { // start pressing
 			startPressing = now;
 			btnValue = BTN_OFF;
-			Debug("Start pressing");
+			Loger::Debug("Start pressing");
 		}
 		else {
 			if (startPressing + BUTTON_EXTRA_LONG_PRESS <= now) { // Yes! Button is extra long pressed
 				btnValue = BTN_EXTRA_LONG;
-				Debug("Extra Long Detected");
 				if (!isExtraLongMode) {
+					Loger::Debug("Extra Long Detected");
 					ProcessUnit(btnValue);
 				}
 				isExtraLongMode = true;
@@ -65,7 +65,9 @@ void Button::HandleButton() {
 			else {
 				if (startPressing + BUTTON_LONG_PRESS <= now) { // Yes! Button is long pressed
 					btnValue = BTN_LONG;
-					Debug("Long Detected");
+					if (!isLongMode) {
+						Loger::Debug("Long Detected");
+					}
 					isShortMode = false;
 					isLongMode = true;
 					//startPressing = now;
@@ -74,7 +76,9 @@ void Button::HandleButton() {
 				else {
 					if (startPressing + BUTTON_SHORT_PRESS <= now) { // Yes! Button is already short pressed
 						btnValue = BTN_ON;// BTN_SHORT_LONG;
-						Debug("Short during Long");
+						if (!isShortMode) {
+							Loger::Debug("Short during Long");
+						}
 						isShortMode = true;
 					}
 					//else {
@@ -87,10 +91,10 @@ void Button::HandleButton() {
 	}
 	else { //Button is released
 		if (startPressing != 0) { // Yes! Button had been pressed before
-			Debug2("Button pressed(ms):", now - startPressing);
+			Loger::Debug("Button pressed(ms):" +String(now - startPressing));
 			if (startPressing + BUTTON_WRONG_PRESS > now) { // Button is pressed too short
 				btnValue = BTN_OFF;
-				Debug("Short Detected");
+				Loger::Debug("Too short Detected");
 				//	Debug(now - unit->startPressing);
 			}
 			else {

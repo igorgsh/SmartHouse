@@ -12,10 +12,10 @@ void OneWireThermo::SetDefault() {
 }
 
 void OneWireThermo::InitUnit() {
-	Debug("Init OneWireThermo Unit");
+	Loger::Debug("Init OneWireThermo Unit");
 
 	OneWireBusUnit::InitUnit();
-	Debug2("IsAccessible=", IsAccessible());
+	Loger::Debug("IsAccessible=" + String( IsAccessible()));
 	if (!IsAccessible()) {
 		Loger::Error("Unit: " + String(Id) + " Is unavailable on the bus");
 	}
@@ -33,17 +33,13 @@ void OneWireThermo::ProcessUnit(int newStatus) {
 	status = newStatus;
 	MqttClient.PublishUnit(this);
 }
-/*
-void OneWireThermo::FinalInitUnit() {
 
-};
-*/
 void OneWireThermo::HandleData() {
-	Debug("Get Temperature");
+	Loger::Debug("Get Temperature");
 	if (IsAccessible()) {
 		float t =  parent->GetTemperature(address);
-		Debug2("Temperature=", t);
-		Debug2("Int temp=", (int)(t * 10));
+		Loger::Debug("Temperature=" + String(t));
+		Loger::Debug("Int temp=" + String((int)(t * 10)));
 		ProcessUnit((int)(t*10));
 		Config.ProcessAction(Id, ACT_SENSOR_READY , status);
 	}

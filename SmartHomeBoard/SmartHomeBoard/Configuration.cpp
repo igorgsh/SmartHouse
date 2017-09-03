@@ -81,7 +81,7 @@ void Configuration::MainLoop() {
 void Configuration::InitializeServer() {
 
 	if (Ethernet.begin(Config.mac) == 0) {
-		SerialLog(D_ERROR, "Failed to configure Ethernet using DHCP");
+		Loger::Error("Failed to configure Ethernet using DHCP");
 		// no point in carrying on, so do nothing forevermore:
 		// try to congifure using IP address instead of DHCP:
 		//if (Ethernet.begin(Config.mac, Config.ip) == 0) {
@@ -89,8 +89,7 @@ void Configuration::InitializeServer() {
 		Config.IsEthernetConnection = false;
 	}
 	if (Config.IsEthernetConnection) {
-		SerialLog_(D_INFO, "Server is at ");
-		SerialLog(D_INFO, Ethernet.localIP());
+		Loger::Info("Server is at " + String(Ethernet.localIP()));
 	}
 }
 
@@ -98,10 +97,10 @@ void Configuration::InitializeServer() {
 void Configuration::Init() {
 	ReadBoardId();
 	if (IsEthernetConnection) {
-		SerialLog(D_INFO, "Init Ethernet");
+		Loger::Debug("Init Ethernet");
 		InitializeServer();
 		if (IsEthernetConnection) {
-			SerialLog(D_INFO, "Initialize MQTT");
+			Loger::Debug("Initialize MQTT");
 			MqttClient.InitMqtt();
 			MqttClient.SubscribeUnits();
 		}
@@ -118,7 +117,6 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::BUTTON;
-		Debug("Button");
 	}
 	else if (type == UnitType::RELAY) {
 		u = new Relay();
@@ -127,7 +125,6 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::RELAY;
-		Debug("Relay");
 	}
 	else if (type == UnitType::ONE_WIRE_BUS) {
 		u = new OneWireBus();
@@ -136,7 +133,6 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::ONE_WIRE_BUS;
-		Debug("1-Wire bus");
 	}
 	else if (type == UnitType::ONE_WIRE_THERMO) {
 		u = new OneWireThermo();
@@ -145,38 +141,32 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::ONE_WIRE_THERMO;
-		Debug("1-Wire Thermo");
 	}
 	return u;
 }
-void ConvertStringToAddress(DeviceAddress address, String addrStr) {
+
+void Configuration::ConvertStringToAddress(DeviceAddress address, const String addrStr) {
 	for (int i = 0, j=0; i < 16; i+=2, j++) {
 		unsigned long l = strtoul(addrStr.substring(i, i + 2).c_str(), NULL, 16);
-		//Debug2("l=", l);
 		address[j] = l;
-		//Debug3("address=", address[j], HEX);
-		/*
-		address[j] = addrStr[i] - '0';
-		address[j] <<= 4;
-		address[j] = address[j] & 0xF0;
-		address[j] = address[j] + (addrStr[i+1] - '0');
-		*/
 	}
 }
 
+String Configuration::ConvertAddressToString(const DeviceAddress address) {
+	String str0 = "";
+
+	for (int i = 0; i < 16; i ++) {
+		str0 += String(address[i], HEX);
+	}
+	return str0;
+}
+
 void Configuration::UpdateConfig(const char *jsonConfig) {
-	//return;
-	//Debug2("Memory1=", memoryFree());
 	static bool lenDetected = false;
-	//DynamicJsonBuffer jsonBuffer;
 	StaticJsonBuffer<JSON_SIZE> jsonBuffer;
 	JsonObject& root = jsonBuffer.parse(jsonConfig);
-	//Debug("Update Config");
-	//root.prettyPrintTo(Serial);
-	//Debug2("Memory2=", memoryFree());
 	if (root.containsKey("length")) {
-		//Debug2("Memory3=", memoryFree());
-		Debug2("Length:", (int)root["length"]);
+		Loger::Debug("Length:" +String((int)root["length"]));
 
 		int n = (int)root["length"];
 		if (n != numberUnits) {
@@ -189,9 +179,7 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 		lenDetected = true;
 	}
 	else if (lenDetected && root.containsKey("type") && root.containsKey("id")) {
-		//Debug2("Memory4=", memoryFree());
 		units[configCounter] = CreateTypedUnit(((const char*)root["type"])[0]);
-		//Debug2("Memory4.2=", memoryFree());
 		if (units[configCounter] != NULL) {
 			if (root.containsKey("id")) {
 				units[configCounter]->Id = root["id"];
@@ -212,13 +200,10 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 			}
 		}
 
-		units[configCounter]->print("Unit received", Serial);
+		units[configCounter]->print("Unit received", D_DEBUG);
 		configCounter++;
-		//Debug2("Memory5=", memoryFree());
-		//Debug2("NumberUnits=", numberUnits);
-		//Debug2("configCounter=", configCounter);
 		if (configCounter == numberUnits) {
-			Debug("Finish update configuration");
+			Loger::Debug("Finish update configuration");
 			StoreUnits();
 			IsConfigReady = true;
 			IsServerConfig = true;
@@ -231,7 +216,7 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 void Configuration::BuildConfig() {
 	IsConfigReady = false;
 	ReadNumberUnits();
-	Debug2("NumberOfunits=", numberUnits);
+	Loger::Debug("NumberOfunits=" + String(numberUnits));
 
 	if (IsEthernetConnection) {
 		MqttClient.GetConfiguration();
@@ -240,11 +225,11 @@ void Configuration::BuildConfig() {
 			MqttClient.MqttLoop();
 		}
 	}
-	Debug2("1IsConfigReady=", IsConfigReady);
-	Debug2("NumberOfunits=", numberUnits);
+	Loger::Debug("IsConfigReady=" +String(IsConfigReady));
+	Loger::Debug("NumberOfunits=" + String(numberUnits));
 	if (!IsConfigReady) { // We can't get config from server. Read from EEPROM
 		IsServerConfig = false;
-		Debug("Get From EEPROM");
+		Loger::Debug("Get From EEPROM");
 
 		CreateUnits();
 		for (int i = 0; i < numberUnits; i++) {
@@ -254,10 +239,10 @@ void Configuration::BuildConfig() {
 			units[i]->FillFrom(&u0);
 			units[i]->SetDefault();
 
-			units[i]->print("Unit From ROM:", Serial);
+			units[i]->print("Unit From ROM:", D_DEBUG);
 		}
 		//Debug2("2NumberOfunits=", numberUnits);
-		Debug("Done!");
+		Loger::Debug("Done!");
 
 	}
 	BuildActions();
@@ -269,7 +254,7 @@ void Configuration::BuildConfig() {
 
 
 void Configuration::InitializeUnits() {
-	Debug("Init Units");
+	Loger::Debug("Init Units");
 	for (int i = 0; i < numberUnits; i++) {
 		units[i]->InitUnit();
 	}
@@ -277,7 +262,7 @@ void Configuration::InitializeUnits() {
 }
 
 void Configuration::FinalizeInitUnits() {
-	Debug("Finalize Init Units");
+	Loger::Debug("Finalize Init Units");
 	for (int i = 0; i < numberUnits; i++) {
 		units[i]->FinalInitUnit();
 	}
@@ -285,7 +270,7 @@ void Configuration::FinalizeInitUnits() {
 
 
 void Configuration::InitializeActions() {
-	Debug("Init Actions");
+	Loger::Debug("Init Actions");
 	for (int i = 0; i < numberActions; i++) {
 		actions[i]->InitAction();
 	}
@@ -373,9 +358,8 @@ void Configuration::StoreUnits() {
 	for (int i = 0; i < numberUnits; i++) {
 		UnitProto uROM;
 		ReadUnit(i, &uROM);
-		Debug2("id=", uROM.Id);
 		if (!units[i]->compare(&uROM)) {
-			Debug2("Write I=", i);
+			Loger::Debug("Write I=" +String(i));
 			WriteUnit(i, units[i]);
 		}
 	}
@@ -390,7 +374,7 @@ void Configuration::UpdateActions(const char *jsonConfig) {
 	//Debug("Update Actions");
 	//root.prettyPrintTo(Serial);
 	if (root.containsKey("length")) {
-		Debug2("Length:", (int)root["length"]);
+		Loger::Debug("Length:" +String((int)root["length"]));
 
 		int n = (int)root["length"];
 		if (n != numberActions) {
@@ -402,7 +386,7 @@ void Configuration::UpdateActions(const char *jsonConfig) {
 		lenDetected = true;
 	}
 	else if (lenDetected && root.containsKey("id")) {
-		Debug("Action detected");
+		Loger::Debug("Action detected");
 		actions[actionCounter] = new Action();
 		//root.prettyPrintTo(Serial);
 		if (actions[actionCounter] != NULL) {
@@ -425,12 +409,12 @@ void Configuration::UpdateActions(const char *jsonConfig) {
 				actions[actionCounter]->targetAction = (ActionType)((byte)root["targetAction"]);
 			}
 
-			actions[actionCounter]->print("Action received:", Serial);
+			actions[actionCounter]->print("Action received:", D_DEBUG);
 		}
 
 		actionCounter++;
 		if (actionCounter == numberActions) {
-			Debug("Finish update actions configuration");
+			Loger::Debug("Finish update actions configuration");
 			StoreActions();
 			IsActionsReady = true;
 			IsServerActions = true;
@@ -454,14 +438,14 @@ void Configuration::BuildActions() {
 	//Debug2("1NumberOfActions=", numberActions);
 	if (!IsActionsReady) { // We can't get config from server. Read from EEPROM
 		IsServerActions = false;
-		Debug("Get Actions From EEPROM");
+		Loger::Debug("Get Actions From EEPROM");
 		CreateActions();
 		for (int i = 0; i < numberActions; i++) {
 			actions[i] = new Action();
 			ReadAction(i, actions[i]);
 		}
 		//Debug2("2NumberOfActions=", numberActions);
-		Debug("Actions Done!");
+		Loger::Debug("Actions Done!");
 	}
 	InitializeActions();
 	IsActionsReady = true;
@@ -480,12 +464,12 @@ void Configuration::ReadAction(int i, Action* a) {
 	a->event = EEPROM.read(addr+3);
 	a->targetId = EEPROM.read(addr+4);
 	a->targetAction = (ActionType)EEPROM.read(addr+5);
-	a->print("Action From ROM:", Serial);
+	a->print("Action From ROM:", D_DEBUG);
 }
 
 void Configuration::WriteAction(int i, const Action* a) {
 	int addr = GetActionsAddr(i);
-	a->print("Action To ROM:", Serial);
+	//a->print("Action To ROM:", Serial);
 	
 	EEPROM.write(addr, a->Id);
 	EEPROM.write(addr+1, a->originId);
@@ -507,12 +491,11 @@ void Configuration::ReadNumberActions() {
 void Configuration::StoreActions() {
 	for (int i = 0; i < numberActions; i++) {
 		Action aROM;
-		Debug2("Action i=", i);
 		ReadAction(i, &aROM);
 
-		Debug2("id=", aROM.Id);
+		Loger::Debug("id=" + String(aROM.Id));
 		if (!actions[i]->compare(&aROM)) {
-			Debug2("Write Actions I=", i);
+			Loger::Debug("Write Actions I=" + String(i));
 			WriteAction(i, actions[i]);
 			ReadAction(i, &aROM);
 
@@ -542,16 +525,15 @@ void Configuration::ProcessAction(byte id, byte event, unsigned long value) {
 	for (int i = 0; i < numberActions; i++) {
 		if (actions[i]->originId == id) {
 			if (actions[i]->event == event) {
-				Debug("Action Found!");
-				Debug3("ActionID=", actions[i]->Id, HEX);
-				actions[i]->print("ACTION:", Serial);
+				Loger::Debug("Action Found!" + String(actions[i]->Id));
+				actions[i]->print("ACTION:", D_DEBUG);
 				Unit* originU = FindUnit(id);
 
 				if (originU != NULL) {
-					originU->print("Origin:",Serial);
+					originU->print("Origin:",D_DEBUG);
 					Unit* targetU = FindUnit(actions[i]->targetId);
 					if (targetU != NULL) {
-						targetU->print("Target: ", Serial);
+						targetU->print("Target: ", D_DEBUG);
 			//			Debug2("Action target:", actions[i]->targetAction);
 						switch (actions[i]->targetAction)
 						{
@@ -559,7 +541,7 @@ void Configuration::ProcessAction(byte id, byte event, unsigned long value) {
 							break;
 						}
 						case ACT_RELAY_SWITCH: {
-							Debug("Relay Switch");
+							Loger::Debug("Relay Switch");
 							if (targetU->Type == UnitType::RELAY) {
 								((Relay*)targetU)->RelaySwitch();
 							}

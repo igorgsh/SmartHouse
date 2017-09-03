@@ -16,7 +16,7 @@ public:
 	void UnitLoop();
 	void FillFrom(Unit* u);
 	void FinalInitUnit();
-	void print(const char* header, Stream& stream) override;
+	void print(const char* header, DebugLevel level) override;
 protected:
 	unsigned long prevCycle = 0;
 
