@@ -49,23 +49,38 @@ void Button::HandleButton() {
 		if (startPressing == 0) { // start pressing
 			startPressing = now;
 			btnValue = BTN_OFF;
-		Debug("Start pressing");
+			Debug("Start pressing");
 		}
 		else {
-			if (startPressing + BUTTON_LONG_PRESS <= now) { // Yes! Button is long pressed
-				btnValue = BTN_LONG;
-				Debug("Long Detected");
-				isLongMode = true;
-				startPressing = now;
+			if (startPressing + BUTTON_EXTRA_LONG_PRESS <= now) { // Yes! Button is extra long pressed
+				btnValue = BTN_EXTRA_LONG;
+				Debug("Extra Long Detected");
+				if (!isExtraLongMode) {
+					ProcessUnit(btnValue);
+				}
+				isExtraLongMode = true;
+				isLongMode = false;
+				//startPressing = now;
 			}
 			else {
-				if (startPressing + BUTTON_SHORT_PRESS <= now) { // Yes! Button is already short pressed
-					btnValue = BTN_SHORT_LONG;
-					Debug("Short during Long")
+				if (startPressing + BUTTON_LONG_PRESS <= now) { // Yes! Button is long pressed
+					btnValue = BTN_LONG;
+					Debug("Long Detected");
+					isShortMode = false;
+					isLongMode = true;
+					//startPressing = now;
+					//ProcessUnit(btnValue);
 				}
 				else {
-					status = BTN_OFF; //Button pressed less than long press and not released yet
-					//Debug("Not Long time");
+					if (startPressing + BUTTON_SHORT_PRESS <= now) { // Yes! Button is already short pressed
+						btnValue = BTN_ON;// BTN_SHORT_LONG;
+						Debug("Short during Long");
+						isShortMode = true;
+					}
+					//else {
+					//	status = BTN_OFF; //Button pressed less than long press and not released yet
+					//	//Debug("Not Long time");
+					//}
 				}
 			}
 		}
@@ -76,38 +91,43 @@ void Button::HandleButton() {
 			if (startPressing + BUTTON_WRONG_PRESS > now) { // Button is pressed too short
 				btnValue = BTN_OFF;
 				Debug("Short Detected");
-			//	Debug(now - unit->startPressing);
+				//	Debug(now - unit->startPressing);
 			}
 			else {
-				if (isLongMode) { //end of Longmode
-					btnValue = BTN_OFF;
-					Debug("Long mode was over")
+				if (!isExtraLongMode) {
+					if (isLongMode) {
+						ProcessUnit(BTN_LONG);
+					}
+					else {
+						ProcessUnit(BTN_ON);
+					}
 				}
-				else {
-					btnValue = BTN_ON;
-					Debug("Single click");
-			//		Debug(now - unit->startPressing);
-				}
+				startPressing = 0;
+				isLongMode = false;
+				isShortMode = false;
+				isExtraLongMode = false;
+				ProcessUnit(BTN_OFF);
 			}
 			startPressing = 0;
-			isLongMode = false;
 		}
 		else { //Nothing to happens
 			btnValue = BTN_OFF;
+			//Debug("Button OFF");
 		}
 	}
 
-	if (btnValue != BTN_OFF) {
-		ProcessUnit(btnValue);
-	}
+//	if (btnValue != BTN_OFF ) {
+//		ProcessUnit(btnValue);
+//	}
 }
+
 void Button::ProcessUnit(int newStatus) {
 	status = newStatus;
 	MqttClient.PublishUnit(this);
 	Config.ProcessAction(Id, status, status);
 	// Reset button status
-	status = BTN_OFF;
-	MqttClient.PublishUnit(this);
+	//status = BTN_OFF;
+	//MqttClient.PublishUnit(this);
 
 }
 

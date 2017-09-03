@@ -541,9 +541,9 @@ void Configuration::ProcessAction(byte id, byte event, unsigned long value) {
 
 	for (int i = 0; i < numberActions; i++) {
 		if (actions[i]->originId == id) {
-			Debug3("ActionID=", actions[i]->Id, HEX);
 			if (actions[i]->event == event) {
 				Debug("Action Found!");
+				Debug3("ActionID=", actions[i]->Id, HEX);
 				actions[i]->print("ACTION:", Serial);
 				Unit* originU = FindUnit(id);
 
