@@ -39,6 +39,8 @@ var Actions = [
          '{"id":1,"originId":1,"originType":"B","event":1,"targetId":3,"targetAction":9}'
          ,'{"id":2,"originId":1,"originType":"B","event":2,"targetId":4,"targetAction":9}'
          ,'{"id":3,"originId":2,"originType":"B","event":1,"targetId":5,"targetAction":9}'
+         ,'{"id":4,"originId":1,"originType":"B","event":4,"targetId":3,"targetAction":8}'
+         ,'{"id":5,"originId":1,"originType":"B","event":4,"targetId":4,"targetAction":8}'
         ]
         ,[
          '{"id":1,"board":"00","originId":1,"originType":"B","event":1,"targetId":2,"targetAction":9}'
