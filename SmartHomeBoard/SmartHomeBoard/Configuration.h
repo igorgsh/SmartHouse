@@ -18,6 +18,7 @@ public:
 	bool IsConfigReady=false;
 	bool IsActionsReady = false;
 	static const int MqttPort = 1883;
+	static const int TRY_NUMBER_FOR_CONNECT = 5;
 	bool IsServerConfig = false;
 	bool IsServerActions = false;
 
@@ -38,16 +39,19 @@ public:
 	void StoreActions();
 	void ReadAction(int i, Action* u);
 	void WriteAction(int i, const Action* u);
-	void UpdateButton(String button, String value) { UpdateUnit(UnitType::BUTTON, button, value); };
-	void UpdateRelay(String button, String value) { UpdateUnit(UnitType::BUTTON, button, value); };
+	void UpdateButton(String unit, String value) { UpdateUnit(UnitType::BUTTON, unit, value); };
+	void UpdateRelay(String unit, String value) { UpdateUnit(UnitType::RELAY, unit, value); };
 	void UpdateOneWireBus(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_BUS, button, value); };
 	void UpdateOneWireThermo(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_THERMO, button, value); };
 	void UpdateUnit(UnitType type, String name, String value);
 	void ProcessAction(byte id, byte event, unsigned long value);
+	//bool CheckConfigReady();
+	//bool CheckActionReady();
+
 	void MainLoop();
 
 	static const char* MqttServer() {
-		return "192.168.0.32"; //IP-адрес сервера ioBroker
+		return "192.168.0.33"; //IP-адрес сервера ioBroker
 	}
 
 

@@ -13,9 +13,12 @@ void Button::SetDefault() {
 }
 
 void Button::InitUnit() {
+	Loger::Debug("Init Button:id=" + String(Id) + "; Pin=" + String(Pin));
 	pinMode(Pin, INPUT);
+	//Loger::Debug("PinMode Done");
 	digitalWrite(Pin, !lhOn);
 	//status = 99;
+	//Loger::Debug("Publish");
 	MqttClient.PublishUnit(this);
 }
 
@@ -49,13 +52,13 @@ void Button::HandleButton() {
 		if (startPressing == 0) { // start pressing
 			startPressing = now;
 			btnValue = BTN_OFF;
-			Loger::Debug("Start pressing");
+			Loger::Debug("Start pressing["+String(Id)+"]");
 		}
 		else {
 			if (startPressing + BUTTON_EXTRA_LONG_PRESS <= now) { // Yes! Button is extra long pressed
 				btnValue = BTN_EXTRA_LONG;
 				if (!isExtraLongMode) {
-					Loger::Debug("Extra Long Detected");
+					Loger::Debug("Extra Long Detected[" + String(Id) + "]");
 					ProcessUnit(btnValue);
 				}
 				isExtraLongMode = true;
@@ -66,7 +69,7 @@ void Button::HandleButton() {
 				if (startPressing + BUTTON_LONG_PRESS <= now) { // Yes! Button is long pressed
 					btnValue = BTN_LONG;
 					if (!isLongMode) {
-						Loger::Debug("Long Detected");
+						Loger::Debug("Long Detected[" + String(Id) + "]");
 					}
 					isShortMode = false;
 					isLongMode = true;
@@ -77,7 +80,7 @@ void Button::HandleButton() {
 					if (startPressing + BUTTON_SHORT_PRESS <= now) { // Yes! Button is already short pressed
 						btnValue = BTN_ON;// BTN_SHORT_LONG;
 						if (!isShortMode) {
-							Loger::Debug("Short during Long");
+							Loger::Debug("Short during Long[" + String(Id) + "]");
 						}
 						isShortMode = true;
 					}
@@ -91,7 +94,7 @@ void Button::HandleButton() {
 	}
 	else { //Button is released
 		if (startPressing != 0) { // Yes! Button had been pressed before
-			Loger::Debug("Button pressed(ms):" +String(now - startPressing));
+			Loger::Debug("Button [" + String(Id) + "] pressed(ms):" +String(now - startPressing));
 			if (startPressing + BUTTON_WRONG_PRESS > now) { // Button is pressed too short
 				btnValue = BTN_OFF;
 				Loger::Debug("Too short Detected");

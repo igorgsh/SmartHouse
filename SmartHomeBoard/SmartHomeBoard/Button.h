@@ -3,7 +3,7 @@
 #include "definitions.h"
 #include "Unit.h"
 
-#define BUTTON_EXTRA_LONG_PRESS	1500	//after milis button is extra long pressed
+#define BUTTON_EXTRA_LONG_PRESS	2000	//after milis button is extra long pressed
 #define BUTTON_LONG_PRESS	700	//after milis button is long pressed
 #define BUTTON_SHORT_PRESS	120	//after milis button is short pressed
 #define BUTTON_WRONG_PRESS	100		//ignore click less than this amount of millis 

@@ -7,7 +7,7 @@ void Board::Reset(unsigned long timeout) {
 	if (timeout > 4000) {
 		delay(timeout - 4000);
 	}
-	//wdt_enable(WDTO_4S);
+	wdt_enable(WDTO_4S);
 }
 
 

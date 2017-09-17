@@ -24,12 +24,12 @@
 
 //#include "initdata.h"
 #include "utils.h"
-
+/*
 String printIP(IPAddress ip) {
 	String s = String(ip[0]) + "." + String(ip[1]) + "." + String(ip[2]) + "." + String(ip[3]);
 	return s;
 }
-
+*/
 // the setup function runs once when you press reset or power the board
 void setup() {
 
@@ -45,7 +45,7 @@ void setup() {
 	Config.Init();
 	Loger::Info("Board is ready");
 	Loger::Info("Board Id:" + String(Config.BoardId));
-	Loger::Info("IP Address is:" + printIP(Ethernet.localIP()));
+	Loger::Info("IP Address is:" + PrintIP(Ethernet.localIP()));
 	pinMode(13, OUTPUT);
 	digitalWrite(13, HIGH);
 	//Loger::Info("Ethernet Status is:" + String(Ethernet._state));

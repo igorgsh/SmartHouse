@@ -19,7 +19,9 @@ extern Mqtt MqttClient;
 
 void Configuration::CreateUnits() {
 	if (units != NULL) {
+		Loger::Debug("Clean units:" + String(numberUnits));
 		for (int i = 0; i < numberUnits; i++) {
+			Loger::Debug("Unit:" + String(i));
 			if (units[i] != NULL) {
 				delete units[i];
 			}
@@ -27,6 +29,7 @@ void Configuration::CreateUnits() {
 		//free(units);
 		delete units;
 	}
+	Loger::Debug("Create Units:" + String(numberUnits));
 	units = new Unit*[numberUnits];
 	//units = (Unit**)malloc(numberUnits * sizeof(Unit*));
 
@@ -34,6 +37,7 @@ void Configuration::CreateUnits() {
 
 void Configuration::CreateActions() {
 	if (actions != NULL) {
+		Loger::Debug("Clean Actions: " + String(numberActions));
 		for (int i = 0; i < numberActions; i++) {
 			if (actions[i] != NULL) {
 				delete actions[i];
@@ -42,6 +46,7 @@ void Configuration::CreateActions() {
 		//free(actions);
 		delete actions;
 	}
+	Loger::Debug("Create Actions:" + String(numberActions));
 	//actions = (Action**)malloc(numberActions * sizeof(Action*));
 	actions = new Action*[numberActions];
 }
@@ -73,6 +78,7 @@ Unit* Configuration::FindUnitByTypeAndPin(UnitType type, byte pin) {
 
 void Configuration::MainLoop() {
 	//	Step 1. Listening a server requests
+	//Serial.println("MainLoop");
 	MqttClient.MqttLoop();
 	// Step 2. Read all buttons
 	Config.UnitsLoop();
@@ -89,7 +95,7 @@ void Configuration::InitializeServer() {
 		Config.IsEthernetConnection = false;
 	}
 	if (Config.IsEthernetConnection) {
-		Loger::Info("Server is at " + String(Ethernet.localIP()));
+		Loger::Info("Server is at " + PrintIP(Ethernet.localIP()));
 	}
 }
 
@@ -102,10 +108,13 @@ void Configuration::Init() {
 		if (IsEthernetConnection) {
 			Loger::Debug("Initialize MQTT");
 			MqttClient.InitMqtt();
-			MqttClient.SubscribeUnits();
+//			MqttClient.SubscribeUnits();
 		}
 	}
 	BuildConfig();
+	if (IsEthernetConnection) {
+		MqttClient.SubscribeUnits();
+	}
 }
 
 Unit* Configuration::CreateTypedUnit(byte type) {
@@ -200,7 +209,7 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 			}
 		}
 
-		units[configCounter]->print("Unit received", D_DEBUG);
+//		units[configCounter]->print("Unit received", D_DEBUG);
 		configCounter++;
 		if (configCounter == numberUnits) {
 			Loger::Debug("Finish update configuration");
@@ -211,17 +220,24 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 		}
 		//Debug2("Memory6=", memoryFree());
 	}
+	Loger::Debug("End of UpdateConfig");
+
+}
+
+bool CheckConfigReady() {
+	return Config.IsConfigReady;
 }
 
 void Configuration::BuildConfig() {
 	IsConfigReady = false;
 	ReadNumberUnits();
-	Loger::Debug("NumberOfunits=" + String(numberUnits));
+	Loger::Debug("NumberOfunits(ROM)=" + String(numberUnits));
 
 	if (IsEthernetConnection) {
 		MqttClient.GetConfiguration();
-		unsigned long startServerRead = millis();
-		while (!IsConfigReady && startServerRead + 10000 > millis()) { // we have a 10 seconds to get configuration
+		unsigned long startLoop = millis();
+		while (!IsConfigReady && millis() - startLoop < MQTT_WAITING_RESPONSE) {
+			//Loger::Debug("Listening configuration");
 			MqttClient.MqttLoop();
 		}
 	}
@@ -280,7 +296,8 @@ void Configuration::InitializeActions() {
 void Configuration::ReadBoardId() {
 
 	BoardId = EEPROM.read(addrBoardId);
-	mac[3] = BoardId;
+	Loger::Debug("BoardId=" + String(BoardId));
+	mac[5] = BoardId;
 }
 
 int Configuration::GetOneWireAddr(int ind) {
@@ -344,10 +361,13 @@ void Configuration::WriteNumberUnits() {
 
 void Configuration::ReadNumberUnits() {
 	numberUnits = EEPROM.read(addrNumberUnits);
+	numberUnits = (numberUnits == 255 ? 0 : numberUnits);
+	//Loger::Debug(String(numberUnits));
 }
 
 void Configuration::ReadNumberBusUnits() {
-	numberUnits = EEPROM.read(addrNumberBusUnits);
+	numberBusUnits = EEPROM.read(addrNumberBusUnits);
+	numberBusUnits = (numberBusUnits == 255 ? 0 : numberBusUnits);
 }
 void Configuration::WriteNumberBusUnits() {
 	EEPROM.write(addrNumberBusUnits, numberBusUnits);
@@ -373,6 +393,7 @@ void Configuration::UpdateActions(const char *jsonConfig) {
 	JsonObject& root = jsonBuffer.parse(jsonConfig);
 	//Debug("Update Actions");
 	//root.prettyPrintTo(Serial);
+	//Loger::Debug("Action Update:");
 	if (root.containsKey("length")) {
 		Loger::Debug("Length:" +String((int)root["length"]));
 
@@ -386,7 +407,7 @@ void Configuration::UpdateActions(const char *jsonConfig) {
 		lenDetected = true;
 	}
 	else if (lenDetected && root.containsKey("id")) {
-		Loger::Debug("Action detected");
+		//Loger::Debug("Action detected");
 		actions[actionCounter] = new Action();
 		//root.prettyPrintTo(Serial);
 		if (actions[actionCounter] != NULL) {
@@ -423,14 +444,20 @@ void Configuration::UpdateActions(const char *jsonConfig) {
 
 	}
 }
+
+bool CheckActions() {
+	return Config.IsActionsReady;
+}
+
 void Configuration::BuildActions() {
 	IsActionsReady = false;
 	ReadNumberActions();
-	//Debug2("NumberOfActions=", numberActions);
+	Loger::Debug("NumberOfActions(ROM)=" + String(numberActions));
 	if (IsEthernetConnection) {
 		MqttClient.GetActions();
-		unsigned long startServerRead = millis();
-		while (!IsActionsReady && startServerRead + 10000 > millis()) { // we have a 10 seconds to get actions
+		unsigned long startLoop = millis();
+		while (!IsActionsReady && millis() - startLoop < MQTT_WAITING_RESPONSE ) {
+			//Serial.println("Actions Loop");
 			MqttClient.MqttLoop();
 		}
 	}
@@ -485,6 +512,8 @@ void Configuration::WriteNumberActions() {
 
 void Configuration::ReadNumberActions() {
 	numberActions = EEPROM.read(addrNumberActions);
+	numberActions = (numberActions == 255 ? 0 : numberActions);
+
 }
 
 
@@ -504,7 +533,7 @@ void Configuration::StoreActions() {
 }
 
 void Configuration::UpdateUnit(UnitType type, String name, String value) {
-
+	Loger::Debug("Update Unit: " + name + "(" + String(name.toInt()) + ")");
 	Unit *u = FindUnit(name.toInt());
 	if (u != NULL) {
 		u->ProcessUnit(value.toInt());
@@ -523,6 +552,7 @@ void Configuration::ProcessAction(byte id, byte event, unsigned long value) {
 
 
 	for (int i = 0; i < numberActions; i++) {
+		//Loger::Debug("Action[" + String(actions[i]->Id) + "]=" + String(actions[i]->originId));
 		if (actions[i]->originId == id) {
 			if (actions[i]->event == event) {
 				Loger::Debug("Action Found!" + String(actions[i]->Id));

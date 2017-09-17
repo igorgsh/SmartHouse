@@ -7,12 +7,6 @@
 
 typedef enum {
 	ACT_NO_ACTION = 0,
-//	ACT_LIGHT_SWITCH = 1,
-//	ACT_SEND_POST = 2,
-//	ACT_SEND_LOG = 3,
-//	ACT_LIGHT_DIM = 4,
-//	ACT_LIGHT_ON = 5,
-//	ACT_LIGHT_OFF = 6,
 	ACT_RELAY_ON = 7,
 	ACT_RELAY_OFF = 8,
 	ACT_RELAY_SWITCH = 9,

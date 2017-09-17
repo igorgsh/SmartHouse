@@ -3,8 +3,11 @@
 
 
 void setup() {
-  // put your setup code here, to run once:
-  EEPROM.write(0,0x00);
+  // EEPROM.write(Address, ID)
+  EEPROM.write(0,0x01);
+  int res = EEPROM.read(0);
+  Serial.begin(115200);
+  Serial.println("Board Id=" + String(res));
 }
 
 void loop() {
