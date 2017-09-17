@@ -13,9 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ioBroker">
+      <UniqueIdentifier>{b73ff0c4-5b84-4c81-a05b-ce3d63f1aca9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="SmartHomeBoard.ino" />
+    <None Include="ioBroker\Scripts\Config.js">
+      <Filter>ioBroker</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.SmartHomeBoard.vsarduino.h">
