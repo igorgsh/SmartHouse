@@ -22,19 +22,19 @@ var Configurations = [
 
         ///////             '{"id":13, "type":"B","Pin":13,"lhOn":0,"status":0}' // 
         '{"id":12, "type":"B","Pin":12,"lhOn":0,"status":0}' // 
-        , '{"id":11, "type":"B","Pin":11,"lhOn":0,"status":0}' // 
+        , '{"id":11, "type":"B","Pin":11,"lhOn":0,"status":0}' // Галерея
         /////////            //,'{"id":10, "type":"B","Pin":10,"lhOn":0,"status":0}' // 
-        , '{"id":9, "type":"B","Pin":9,"lhOn":0,"status":0}' // 
+        //,'{"id":9, "type":"B","Pin":9,"lhOn":0,"status":0}' // 
         //,'{"id":8, "type":"B","Pin":8,"lhOn":0,"status":0}' // 
 
         , '{"id":7, "type":"B","Pin":7,"lhOn":0,"status":0}' // Коридор 
         , '{"id":6, "type":"B","Pin":6,"lhOn":0,"status":0}' // СУ 1
-        // ,'{"id":5, "type":"B","Pin":5,"lhOn":0,"status":0}' // 
+        , '{"id":5, "type":"B","Pin":5,"lhOn":0,"status":0}' // Крыльцо внешний
         /////            ,'{"id":4, "type":"B","Pin":4,"lhOn":0,"status":0}' // 
         , '{"id":3, "type":"B","Pin":3,"lhOn":0,"status":0}' // Кухня, возле мойки
         //,'{"id":2, "type":"B","Pin":3,"lhOn":0,"status":0}' // 
         //            ,'{"id":1, "type":"B","Pin":1,"lhOn":0,"status":0}' //
-        //            ,'{"id":99, "type":"B","Pin":0,"lhOn":0,"status":0}' //
+        , '{"id":46, "type":"B","Pin":46,"lhOn":0,"status":0}' // Котельная, входная дверь
 
         , '{"id":14, "type":"B","Pin":14,"lhOn":0,"status":0}' //
         , '{"id":15, "type":"B","Pin":15,"lhOn":0,"status":0}' // Красная спальня
@@ -43,21 +43,21 @@ var Configurations = [
         , '{"id":18, "type":"B","Pin":18,"lhOn":0,"status":0}' //
         , '{"id":19, "type":"B","Pin":19,"lhOn":0,"status":0}' // Кладовка запад
         , '{"id":20, "type":"B","Pin":20,"lhOn":0,"status":0}' // Кладовка восток
-        , '{"id":21, "type":"B","Pin":21,"lhOn":0,"status":0}' //
+        , '{"id":21, "type":"B","Pin":21,"lhOn":0,"status":0}'
 
 
         , '{"id":22, "type":"R","Pin":22,"lhOn":1,"status":0}' 	//L1.1 Коридор 1. Восток
-        , '{"id":23, "type":"R","Pin":23,"lhOn":1,"status":0}'   //L3.1
+        , '{"id":23, "type":"R","Pin":23,"lhOn":1,"status":0}'   //L2.1 
         , '{"id":24, "type":"R","Pin":24,"lhOn":1,"status":0}'	//L1.2 Коридор 1. Запад
         , '{"id":25, "type":"R","Pin":25,"lhOn":1,"status":0}'   //L2.2 Кухня, между мойкой и плитой
         , '{"id":26, "type":"R","Pin":26,"lhOn":1,"status":0}'	//L1.3 
-        , '{"id":27, "type":"R","Pin":27,"lhOn":1,"status":0}'   //L2.3
-        , '{"id":28, "type":"R","Pin":28,"lhOn":1,"status":0}'	//L1.4
+        , '{"id":27, "type":"R","Pin":27,"lhOn":1,"status":0}'   //L2.3 Кухня Север
+        , '{"id":28, "type":"R","Pin":28,"lhOn":1,"status":0}'	//L1.4 Кладовка
         , '{"id":29, "type":"R","Pin":29,"lhOn":1,"status":0}'   //L2.4
         , '{"id":30, "type":"R","Pin":30,"lhOn":1,"status":0}'	//L1.5
         , '{"id":31, "type":"R","Pin":31,"lhOn":1,"status":0}'   //L2.5
         , '{"id":32, "type":"R","Pin":32,"lhOn":1,"status":0}'	//L1.6
-        , '{"id":33, "type":"R","Pin":33,"lhOn":1,"status":0}'   //L2.6
+        , '{"id":33, "type":"R","Pin":33,"lhOn":1,"status":0}'   //L2.6 Красная спальня ????
         , '{"id":34, "type":"R","Pin":34,"lhOn":1,"status":0}'	//L1.7
         , '{"id":35, "type":"R","Pin":35,"lhOn":1,"status":0}'   //L2.7
         , '{"id":36, "type":"R","Pin":36,"lhOn":1,"status":0}'	//L1.8
@@ -65,10 +65,10 @@ var Configurations = [
         , '{"id":38, "type":"R","Pin":38,"lhOn":1,"status":0}'	//L3.5 СУ1 Душ
         , '{"id":39, "type":"R","Pin":39,"lhOn":1,"status":0}'   //L3.4 Чулан
         , '{"id":40, "type":"R","Pin":40,"lhOn":1,"status":0}'	//L3.6 СУ1 Вход
-        , '{"id":41, "type":"R","Pin":41,"lhOn":1,"status":0}'   //L3.3
-        , '{"id":42, "type":"R","Pin":42,"lhOn":1,"status":0}'	//L3.7
-        , '{"id":43, "type":"R","Pin":43,"lhOn":1,"status":0}'   //L3.2
-        , '{"id":44, "type":"R","Pin":44,"lhOn":1,"status":0}'	//L3.8 Кухня юг над мойкой
+        , '{"id":41, "type":"R","Pin":41,"lhOn":1,"status":0}'   //L3.3 Галерея Запад
+        , '{"id":42, "type":"R","Pin":42,"lhOn":1,"status":0}'	//L3.7 Кухня юг над мойкой
+        , '{"id":43, "type":"R","Pin":43,"lhOn":1,"status":0}'   //L3.2 Галерея Восток
+        , '{"id":44, "type":"R","Pin":44,"lhOn":1,"status":0}'	//L3.8 Кухня юг-восток
         , '{"id":45, "type":"R","Pin":45,"lhOn":1,"status":0}'   //L3.1
 
     ]
@@ -76,21 +76,25 @@ var Configurations = [
         '{"id":112, "type":"B","Pin":12,"lhOn":0,"status":0}' // Гостиная Север
         , '{"id":111, "type":"B","Pin":11,"lhOn":0,"status":0}' // Гостиная Юг
         , '{"id":109, "type":"B","Pin":9,"lhOn":0,"status":0}' // CУ2
+        , '{"id":108, "type":"B","Pin":8,"lhOn":0,"status":0}'// Желтая спальня
+        , '{"id":107, "type":"B","Pin":7,"lhOn":0,"status":0}'// Синяя спальня
+        , '{"id":106, "type":"B","Pin":6,"lhOn":0,"status":0}'// Зеленая спальня
+        , '{"id":105, "type":"B","Pin":5,"lhOn":0,"status":0}'// ?????
 
         , '{"id":122, "type":"R","Pin":22,"lhOn":1,"status":0}' 	//L4.1 СУ2 над раковиной
-        , '{"id":123, "type":"R","Pin":23,"lhOn":1,"status":0}'   //L6.1
+        , '{"id":123, "type":"R","Pin":23,"lhOn":1,"status":0}'   //L6.1 Гостиная запад
         , '{"id":124, "type":"R","Pin":24,"lhOn":1,"status":0}'	//L4.2
         , '{"id":125, "type":"R","Pin":25,"lhOn":1,"status":0}' //L6.2 Гостиная, восток
         , '{"id":126, "type":"R","Pin":26,"lhOn":1,"status":0}'	//L4.3
         , '{"id":127, "type":"R","Pin":27,"lhOn":1,"status":0}'  //L6.3 Камин Север
-        , '{"id":128, "type":"R","Pin":28,"lhOn":1,"status":0}'	//L4.4
+        , '{"id":128, "type":"R","Pin":28,"lhOn":1,"status":0}'	//L4.4 Спальня зеленая возле балкона
         , '{"id":129, "type":"R","Pin":29,"lhOn":1,"status":0}'  //L6.4
-        , '{"id":130, "type":"R","Pin":30,"lhOn":1,"status":0}'	//L4.5
+        , '{"id":130, "type":"R","Pin":30,"lhOn":1,"status":0}'	//L4.5 Спальня зеленая возле двери
         , '{"id":131, "type":"R","Pin":31,"lhOn":1,"status":0}'  //L6.5 Камин Восток
-        , '{"id":132, "type":"R","Pin":32,"lhOn":1,"status":0}'	//L4.6
+        , '{"id":132, "type":"R","Pin":32,"lhOn":1,"status":0}'	//L4.6 Синяя спальня Восток
         , '{"id":133, "type":"R","Pin":33,"lhOn":1,"status":0}'  //L6.6 СУ2 над ванной
         , '{"id":134, "type":"R","Pin":34,"lhOn":1,"status":0}'	//L4.7
-        , '{"id":135, "type":"R","Pin":35,"lhOn":1,"status":0}'  //L6.7
+        , '{"id":135, "type":"R","Pin":35,"lhOn":1,"status":0}'  //L6.7 желтая спальня над входом
         , '{"id":136, "type":"R","Pin":36,"lhOn":1,"status":0}'	//L4.8
         , '{"id":137, "type":"R","Pin":37,"lhOn":1,"status":0}'  //L6.8
         , '{"id":138, "type":"R","Pin":38,"lhOn":1,"status":0}'	//L5.2
@@ -134,16 +138,51 @@ var Actions = [
         //Коридор 1
         , '{"id":7,"originId":7,"originType":"B","event":1,"targetId":22,"targetAction":9}'
         , '{"id":8,"originId":7,"originType":"B","event":1,"targetId":24,"targetAction":9}'
-        , '{"id":9,"originId":7,"originType":"B","event":2,"targetId":24,"targetAction":9}'
-        , '{"id":10,"originId":7,"originType":"B","event":4,"targetId":22,"targetAction":8}'
-        , '{"id":11,"originId":7,"originType":"B","event":4,"targetId":24,"targetAction":8}'
+        //Второй этаж        
+        , '{"id":9,"originId":7,"originType":"B","event":2,"targetId":41,"targetAction":9}'
+        , '{"id":10,"originId":7,"originType":"B","event":2,"targetId":43,"targetAction":9}'
+        , '{"id":11,"originId":7,"originType":"B","event":4,"targetId":22,"targetAction":8}'
+        // Выключить все 
+        , '{"id":12,"originId":7,"originType":"B","event":4,"targetId":24,"targetAction":8}'
+        , '{"id":13,"originId":7,"originType":"B","event":4,"targetId":22,"targetAction":8}'
+        , '{"id":14,"originId":7,"originType":"B","event":4,"targetId":41,"targetAction":8}'
+        , '{"id":15,"originId":7,"originType":"B","event":4,"targetId":43,"targetAction":8}'
+
         // Кухня, возле мойки         
-        , '{"id":12,"originId":3,"originType":"B","event":1,"targetId":25,"targetAction":9}'
-        , '{"id":13,"originId":3,"originType":"B","event":2,"targetId":42,"targetAction":9}'
-        , '{"id":14,"originId":3,"originType":"B","event":4,"targetId":25,"targetAction":8}'
-        , '{"id":15,"originId":3,"originType":"B","event":4,"targetId":42,"targetAction":8}'
+        , '{"id":16,"originId":3,"originType":"B","event":1,"targetId":25,"targetAction":9}'
+        , '{"id":17,"originId":3,"originType":"B","event":2,"targetId":42,"targetAction":9}'
+
+        //Кухня настенные
+        , '{"id":30,"originId":20,"originType":"B","event":1,"targetId":27,"targetAction":9}'
+        , '{"id":35,"originId":20,"originType":"B","event":1,"targetId":44,"targetAction":9}'
+
+        // Кухня выключить все
+        , '{"id":18,"originId":3,"originType":"B","event":4,"targetId":25,"targetAction":8}'
+        , '{"id":19,"originId":3,"originType":"B","event":4,"targetId":42,"targetAction":8}'
+        , '{"id":31,"originId":3,"originType":"B","event":4,"targetId":27,"targetAction":8}'
+        , '{"id":36,"originId":3,"originType":"B","event":4,"targetId":44,"targetAction":8}'
+
+        , '{"id":32,"originId":20,"originType":"B","event":4,"targetId":25,"targetAction":8}'
+        , '{"id":33,"originId":20,"originType":"B","event":4,"targetId":42,"targetAction":8}'
+        , '{"id":34,"originId":20,"originType":"B","event":4,"targetId":27,"targetAction":8}'
+        , '{"id":37,"originId":20,"originType":"B","event":4,"targetId":44,"targetAction":8}'
+
         //Кладовка
-        , '{"id":16,"originId":19,"originType":"B","event":1,"targetId":28,"targetAction":9}'
+        , '{"id":20,"originId":19,"originType":"B","event":1,"targetId":28,"targetAction":9}'
+        // Галерея
+        , '{"id":21,"originId":11,"originType":"B","event":1,"targetId":41,"targetAction":9}'
+        , '{"id":22,"originId":11,"originType":"B","event":1,"targetId":43,"targetAction":9}'
+        // Первый этаж
+        , '{"id":23,"originId":11,"originType":"B","event":1,"targetId":22,"targetAction":9}'
+        , '{"id":24,"originId":11,"originType":"B","event":1,"targetId":24,"targetAction":9}'
+        // Выключить все 
+        , '{"id":25,"originId":11,"originType":"B","event":4,"targetId":24,"targetAction":8}'
+        , '{"id":26,"originId":11,"originType":"B","event":4,"targetId":22,"targetAction":8}'
+        , '{"id":27,"originId":11,"originType":"B","event":4,"targetId":41,"targetAction":8}'
+        , '{"id":28,"originId":11,"originType":"B","event":4,"targetId":43,"targetAction":8}'
+
+        //Красная спальня
+        , '{"id":29,"originId":15,"originType":"B","event":1,"targetId":33,"targetAction":9}'
 
     ]
     , [
@@ -152,24 +191,38 @@ var Actions = [
         '{"id":101,"originId":112,"originType":"B","event":1,"targetId":131,"targetAction":9}'
         , '{"id":102,"originId":112,"originType":"B","event":1,"targetId":127,"targetAction":9}'
         // левый
-        , '{"id":108,"originId":111,"originType":"B","event":1,"targetId":125,"targetAction":9}'
+        , '{"id":103,"originId":111,"originType":"B","event":1,"targetId":125,"targetAction":9}'
+        , '{"id":104,"originId":111,"originType":"B","event":1,"targetId":123,"targetAction":9}'
         // Выключить все
-        , '{"id":109,"originId":111,"originType":"B","event":4,"targetId":125,"targetAction":8}'
-        , '{"id":110,"originId":111,"originType":"B","event":4,"targetId":131,"targetAction":8}'
-        , '{"id":111,"originId":111,"originType":"B","event":4,"targetId":127,"targetAction":8}'
+        , '{"id":105,"originId":111,"originType":"B","event":4,"targetId":125,"targetAction":8}'
+        , '{"id":106,"originId":111,"originType":"B","event":4,"targetId":131,"targetAction":8}'
+        , '{"id":107,"originId":111,"originType":"B","event":4,"targetId":127,"targetAction":8}'
+        , '{"id":108,"originId":111,"originType":"B","event":4,"targetId":123,"targetAction":8}'
 
-        , '{"id":112,"originId":112,"originType":"B","event":4,"targetId":125,"targetAction":8}'
-        , '{"id":113,"originId":112,"originType":"B","event":4,"targetId":131,"targetAction":8}'
-        , '{"id":114,"originId":112,"originType":"B","event":4,"targetId":127,"targetAction":8}'
+        , '{"id":109,"originId":112,"originType":"B","event":4,"targetId":125,"targetAction":8}'
+        , '{"id":110,"originId":112,"originType":"B","event":4,"targetId":131,"targetAction":8}'
+        , '{"id":111,"originId":112,"originType":"B","event":4,"targetId":127,"targetAction":8}'
+        , '{"id":112,"originId":112,"originType":"B","event":4,"targetId":123,"targetAction":8}'
 
 
         //СУ2            
-        , '{"id":103,"originId":109,"originType":"B","event":1,"targetId":122,"targetAction":9}'
-        //,'{"id":104,"originId":109,"originType":"B","event":1,"targetId":133,"targetAction":9}'
-        , '{"id":105,"originId":109,"originType":"B","event":2,"targetId":122,"targetAction":9}'
-        , '{"id":106,"originId":109,"originType":"B","event":4,"targetId":122,"targetAction":8}'
-        //,'{"id":107,"originId":109,"originType":"B","event":4,"targetId":133,"targetAction":8}'
+        , '{"id":113,"originId":109,"originType":"B","event":1,"targetId":122,"targetAction":9}'
+        , '{"id":114,"originId":109,"originType":"B","event":1,"targetId":133,"targetAction":9}'
+        , '{"id":115,"originId":109,"originType":"B","event":2,"targetId":122,"targetAction":9}'
+        , '{"id":116,"originId":109,"originType":"B","event":4,"targetId":122,"targetAction":8}'
+        , '{"id":117,"originId":109,"originType":"B","event":4,"targetId":133,"targetAction":8}'
 
+        //Желтая спальня
+        , '{"id":118,"originId":108,"originType":"B","event":1,"targetId":135,"targetAction":9}'
+
+        //Зеленая спальня
+        , '{"id":119,"originId":106,"originType":"B","event":1,"targetId":128,"targetAction":9}'
+        , '{"id":120,"originId":106,"originType":"B","event":2,"targetId":130,"targetAction":9}'
+        , '{"id":121,"originId":106,"originType":"B","event":4,"targetId":128,"targetAction":8}'
+        , '{"id":122,"originId":106,"originType":"B","event":4,"targetId":130,"targetAction":8}'
+
+        //Желтая спальня
+        , '{"id":123,"originId":107,"originType":"B","event":1,"targetId":132,"targetAction":9}'
 
     ]
 ];
