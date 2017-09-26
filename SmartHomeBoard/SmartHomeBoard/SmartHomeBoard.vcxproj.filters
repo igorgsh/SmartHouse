@@ -16,11 +16,23 @@
     <Filter Include="ioBroker">
       <UniqueIdentifier>{b73ff0c4-5b84-4c81-a05b-ce3d63f1aca9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ioBroker\common">
+      <UniqueIdentifier>{7acca7bc-29cf-421d-8b28-e6eaf9897ac6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="SmartHomeBoard.ino" />
-    <None Include="ioBroker\Scripts\Config.js">
-      <Filter>ioBroker</Filter>
+    <None Include="ioBroker\Scripts\common\Config.json">
+      <Filter>ioBroker\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\PingCheck.json">
+      <Filter>ioBroker\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\TimerCheck.json">
+      <Filter>ioBroker\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\_dir.json">
+      <Filter>ioBroker\common</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,68 @@
+/* -- do not edit following lines - START --
+{
+  "debug": false,
+  "verbose": false
+}
+-- do not edit previous lines - END --*/
+    var pingGrp = "ping.0";
+    var relayOff = 0;
+
+    var DevConfig = [];
+    DevConfig.Board0=20;
+    DevConfig.Board1=21;
+    //DevConfig.Phone=19;
+
+    var gpioArray = [];
+
+    var gpio = require("gpio");
+
+
+
+function resetDevice(i, devName) {
+  log("Reset device:" + devName, 'error');
+  gpioArray[i].set(relayOff);
+  log("Delay for 10 sec");
+  setTimeout(function(){
+      log("Start device:"+devName, error);
+      gpioArray[i].set(1-relayOff);
+  }, 10000);
+}
+ 
+function initResetGPIO() {
+    //log("length=" + gpioArray.length);
+    if (gpioArray.length < 1) {
+        //log("Point 1");
+        //var i = 0;
+        for(var prop in DevConfig) {
+            var pin = DevConfig[prop];
+            //log("pin=" + pin);
+            gpioArray[pin] = gpio.export(pin,{ direction: 'out'}); 
+        }
+    }
+}
+
+function checkStates() {
+    $(pingGrp+'.*').each(function(id,i){
+ //       log("id="+id+";i="+i);
+        var state = getState(id).val;
+        if (state === false) {
+            var devName = getObject(id).common.name;
+            log("Device " + devName + " is down");
+            if (typeof DevConfig[devName] != 'undefined') {
+                log("Device " + devName +" on pin:" + DevConfig[devName] + " should be reset", 'error');
+                resetDevice(DevConfig[devName], devName);
+            }
+        }
+
+    });
+}
+
+
+schedule ("*/5 * * * *", function(){
+
+    initResetGPIO();
+    checkStates();
+
+});
+
+

@@ -1,0 +1,12 @@
+{
+  "common": {
+    "name": "common"
+  },
+  "type": "channel",
+  "_id": "script.js.common",
+  "acl": {
+    "object": 1636,
+    "owner": "system.user.admin",
+    "ownerGroup": "system.group.administrator"
+  }
+}
