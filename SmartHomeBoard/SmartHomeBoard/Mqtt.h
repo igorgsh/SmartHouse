@@ -18,32 +18,30 @@
 
 //#include "types.h"
 
-#define TOPIC_HEAD "Arduino_##"
-#define MQTT_SEPARATOR "/"
-#define TOPIC_TOSERVER "ToServer"
-#define TOPIC_TOCU "ToCU"
+
 #define MQTT_RECONNECT_TIME	10000
 #define TOPIC_LENGTH	100
 #define PAYLOAD_LENGTH	100
 #define MQTT_TRY_COUNT 5
 #define MQTT_WAITING_RESPONSE 10000
 
-#define SUFFIX_CONFIG_REQUEST "Config" MQTT_SEPARATOR TOPIC_TOSERVER MQTT_SEPARATOR "ConfigurationRequest"
-#define SUFFIX_CONFIG_RESPONSE "Config" MQTT_SEPARATOR TOPIC_TOCU MQTT_SEPARATOR "Configuration"
-#define SUFFIX_ACTIONS_REQUEST "Config" MQTT_SEPARATOR TOPIC_TOSERVER  MQTT_SEPARATOR "ActionRequest"
-#define SUFFIX_ACTIONS_RESPONSE "Config" MQTT_SEPARATOR TOPIC_TOCU  MQTT_SEPARATOR "Action"
-#define SUFFIX_RESET_BOARD "Config" MQTT_SEPARATOR TOPIC_TOCU  MQTT_SEPARATOR "Reset"
-#define SUFFIX_UNITS_TOCU "Units" MQTT_SEPARATOR TOPIC_TOCU
-#define SUFFIX_UNITS_TOSERVER "Units" MQTT_SEPARATOR TOPIC_TOSERVER 
-#define SUFFIX_LOG  "Log"
-#define SUFFIX_PUT_BUTTONS SUFFIX_UNITS_TOSERVER MQTT_SEPARATOR "Buttons"
-#define SUFFIX_PUT_RELAYS  SUFFIX_UNITS_TOSERVER MQTT_SEPARATOR "Relays"
-#define SUFFIX_PUT_1WIREBUS  SUFFIX_UNITS_TOSERVER MQTT_SEPARATOR "1-WireBuses"
-#define SUFFIX_PUT_1WIRETHERMO  SUFFIX_UNITS_TOSERVER MQTT_SEPARATOR "Thermo"
-#define SUFFIX_GET_BUTTONS SUFFIX_UNITS_TOCU MQTT_SEPARATOR "Buttons"
-#define SUFFIX_GET_RELAYS  SUFFIX_UNITS_TOCU MQTT_SEPARATOR "Relays"
-#define SUFFIX_GET_1WIREBUS  SUFFIX_UNITS_TOCU MQTT_SEPARATOR "1-WireBuses"
-#define SUFFIX_GET_1WIRETHERMO  SUFFIX_UNITS_TOCU MQTT_SEPARATOR "Thermo"
+
+#define BOARD_ID "Arduino_%02d"
+#define MQTT_SEPARATOR "/"
+
+#define CHECK_MQTT	"info"
+
+#define MQTT_CONFIG_REQUEST "Config" MQTT_SEPARATOR BOARD_ID MQTT_SEPARATOR "ConfigurationRequest"
+#define MQTT_CONFIG_RESPONSE "Config" MQTT_SEPARATOR BOARD_ID MQTT_SEPARATOR "Configuration"
+#define MQTT_ACTIONS_REQUEST "Config" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "ActionRequest"
+#define MQTT_ACTIONS_RESPONSE "Config" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "Action"
+#define MQTT_RESET_BOARD "Config" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "Reset"
+#define MQTT_UNITS "Units" 
+#define MQTT_LOG  "Logs" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "%s"
+#define MQTT_BUTTONS MQTT_UNITS MQTT_SEPARATOR "Buttons"
+#define MQTT_RELAYS  MQTT_UNITS MQTT_SEPARATOR "Relays"
+#define MQTT_1WIREBUS  MQTT_UNITS MQTT_SEPARATOR "1-WireBuses"
+#define MQTT_1WIRETHERMO  MQTT_UNITS MQTT_SEPARATOR "Thermo"
 
 void callbackFunc(char* topic, uint8_t* payload, unsigned int length);
 
@@ -58,17 +56,18 @@ class Mqtt : public PubSubClient
 		void PublishLog(DebugLevel level, String message);
 		void PublishUnit(const Unit* unit);
 		void SubscribeUnits();
-		void Subscribe(char* topic);
+		void Subscribe(const char* topic);
+		bool Publish(const char* topic, const char* payload);
 
 		Mqtt();
 		void Callback(char* topic, uint8_t* payload, unsigned int length);
 
 private:
-		char *topicPrefix = (char*)TOPIC_HEAD;
+		char *boardId = (char*)BOARD_ID;
 		const char *LOG_END[7] = { "OFF", "FATAL","ERROR","WARN","INFO","DEBUG","ALL" };
 		
 		bool MqttReconnect();
-		void SetTopicNames();
+//		void SetTopicNames();
 		bool firstConnect = true;
 
 };
