@@ -5,7 +5,7 @@
 }
 -- do not edit previous lines - END --*/
     var pingGrp = "ping.0";
-    var relayOff = 0;
+    var relayOff = 1;
 
     var DevConfig = [];
     DevConfig.Board0=20;
@@ -19,11 +19,11 @@
 
 
 function resetDevice(i, devName) {
-  log("Reset device:" + devName, 'error');
+  log("Reset device:" + devName +"("+relayOff+")", 'error');
   gpioArray[i].set(relayOff);
   log("Delay for 10 sec");
   setTimeout(function(){
-      log("Start device:"+devName, error);
+      log("Start device:"+devName+"("+(1-relayOff)+")", 'error');
       gpioArray[i].set(1-relayOff);
   }, 10000);
 }

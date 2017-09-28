@@ -202,11 +202,11 @@ var Actions = [
 // Гостиная             
     // правый (камин)
          '{"id":101,"originId":112,"originType":"B","event":1,"targetId":131,"targetAction":9}'
-         ,'{"id":102,"originId":112,"originType":"B","event":1,"targetId":127,"targetAction":9}'
+         ,'{"id":102,"originId":112,"originType":"B","event":2,"targetId":127,"targetAction":9}'
     // левый
          ,'{"id":103,"originId":111,"originType":"B","event":1,"targetId":125,"targetAction":9}'
-         ,'{"id":104,"originId":111,"originType":"B","event":1,"targetId":123,"targetAction":9}'
-         ,'{"id":124,"originId":111,"originType":"B","event":1,"targetId":129,"targetAction":9}'
+         ,'{"id":104,"originId":111,"originType":"B","event":2,"targetId":123,"targetAction":9}'
+         ,'{"id":124,"originId":111,"originType":"B","event":2,"targetId":129,"targetAction":9}'
     // Выключить все
          ,'{"id":105,"originId":111,"originType":"B","event":4,"targetId":125,"targetAction":8}'
          ,'{"id":106,"originId":111,"originType":"B","event":4,"targetId":131,"targetAction":8}'

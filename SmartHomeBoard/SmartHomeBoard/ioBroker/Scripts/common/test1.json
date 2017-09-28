@@ -1,0 +1,11 @@
+/* -- do not edit following lines - START --
+{
+  "debug": false,
+  "verbose": false
+}
+-- do not edit previous lines - END --*/
+var interestedObj = "mqtt.0.Arduino_01.Units.ToCU.Relays.R0123";/*Arduino_01/Units/ToCU/Relays/R0123*/
+
+on(interestedObj,function(obj){
+    log(obj.id);
+});
