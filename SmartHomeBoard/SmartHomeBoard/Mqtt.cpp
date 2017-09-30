@@ -66,44 +66,59 @@ bool Mqtt::MqttReconnect() {
 	return (errorTime == 0);
 }
 
-void Mqtt::Callback(char* topic, uint8_t* payload, unsigned int length) {
+void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 	//преобразуем тему(topic) и значение (payload) в строку
 	//Debug2("Point6.4.2:", memoryFree());
 
-	payload[length] = '\0';
+	//Loger::Debug("payload=" + String((char*)payload));
+
 	String strTopic = String(topic);
-	String strPayload = String((char*)payload);
+	String strPayload = String((char*)payLoad).substring(0,length);
 	char subscription[TOPIC_LENGTH];
 	//Исследуем что "прилетело" от сервера по подписке:
-	Loger::Debug("[" + String(topic) + "]:" + String((char*)payload));
+	Loger::Debug("[" + strTopic + "]:" + strPayload + "#");
 	sprintf(subscription, MQTT_CONFIG_RESPONSE, Config.BoardId);
+	//Loger::Debug("subscription=" + String(subscription));
+	//Loger::Debug("strcmp=" + String(strcmp(topic, subscription)));
 	if (strcmp(topic,subscription)==0) {
-		Config.UpdateConfig((char*)payload);
+		Loger::Debug("Update Config");
+		Config.UpdateConfig(strPayload);
+		//Loger::Debug("Point 1");
 	}
 	else { 
 		sprintf(subscription, MQTT_ACTIONS_RESPONSE, Config.BoardId);
 
 		if (strcmp(topic, subscription) == 0) {
-			Config.UpdateActions((char*)payload);
+			//Loger::Debug("Update Actions");
+			Config.UpdateActions(strPayload);
 		}
 		else {
 			if (strTopic.startsWith(MQTT_BUTTONS)) {
+				//Loger::Debug("Update Button");
+
 				Config.UpdateButton(strTopic.substring(strlen(MQTT_BUTTONS) + 2), strPayload);
 			}
 			else {
 				if (strTopic.startsWith(MQTT_RELAYS)) {
+					Loger::Debug("Update Relay");
+
 					Config.UpdateRelay(strTopic.substring(strlen(MQTT_RELAYS) + 2), strPayload);
 				}
 				else {
 					if (strTopic.startsWith(MQTT_1WIREBUS)) {
+						//Loger::Debug("Update 1-wire bus");
+
 						Config.UpdateOneWireBus(strTopic.substring(strlen(MQTT_1WIREBUS) + 2), strPayload);
 					}
 					else {
 						if (strTopic.startsWith(MQTT_1WIRETHERMO)) {
+							//Loger::Debug("Update 1-wire thermo");
+
 							Config.UpdateOneWireThermo(strTopic.substring(strlen(MQTT_1WIRETHERMO) + 2), strPayload);
 						}
 						else {
 							sprintf(subscription, MQTT_RESET_BOARD, Config.BoardId);
+							Loger::Debug("Reset");
 
 							if (strTopic.startsWith((String)subscription)) {
 								Board::Reset(10000);
@@ -130,6 +145,7 @@ void Mqtt::InitMqtt(void) {
 	MqttReconnect();
 }
 void Mqtt::MqttLoop() {
+	//Loger::Debug("Start Mqttloop");
 	if (Config.IsEthernetConnection) {
 		if (MqttReconnect()) {
 			
@@ -140,6 +156,7 @@ void Mqtt::MqttLoop() {
 
 		}
 	}
+	//Loger::Debug("End Mqttloop");
 }
 
 void Mqtt::PublishLog(DebugLevel level, String message) {
@@ -157,6 +174,15 @@ void Mqtt::GetConfiguration() {
 	sprintf(topic, MQTT_CONFIG_REQUEST, Config.BoardId);
 	Publish(topic, String(rnd).c_str());
 }
+
+void Mqtt::WatchDog() {
+
+	uint8_t rnd = random(0, 1000);
+	char topic[TOPIC_LENGTH];
+	sprintf(topic, MQTT_WATCH_DOG, Config.BoardId);
+	Publish(topic, String(rnd).c_str());
+}
+
 
 void Mqtt::PublishUnit(const Unit *unit) {
 	if (Config.IsEthernetConnection) {

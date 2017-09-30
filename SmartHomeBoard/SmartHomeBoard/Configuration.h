@@ -26,8 +26,8 @@ public:
 	Action** actions = NULL;
 
 	void Init();
-	void UpdateConfig(const char *jsonConfig);
-	void UpdateActions(const char *jsonConfig);
+	void UpdateConfig(String jsonConfig);
+	void UpdateActions(String jsonConfig);
 	void BuildActions();
 	Unit* FindUnit(byte id);
 	Unit* FindUnitByTypeAndPin(UnitType type, byte pin);
@@ -60,6 +60,19 @@ public:
 	int numberBusUnits = 0;
 	void ConvertStringToAddress(DeviceAddress address, const String addrStr);
 	String ConvertAddressToString(const DeviceAddress address);
+
+	//Timer 
+	unsigned long counter001 = 0;	//100ms
+	unsigned long counter005 = 0;	//500ms
+	unsigned long counter1 = 0;		//1 sec
+	unsigned long counter60 = 0;	//1min
+	unsigned long counter300 = 0;	//5min
+
+	void loop001();
+	void loop005();
+	void loop1();
+	void loop60();
+	void loop300();
 
 private:
 	int configCounter;

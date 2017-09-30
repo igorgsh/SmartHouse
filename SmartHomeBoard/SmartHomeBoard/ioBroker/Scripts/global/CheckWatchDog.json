@@ -1,0 +1,38 @@
+/* -- do not edit following lines - START --
+{
+  "debug": false,
+  "verbose": false
+}
+-- do not edit previous lines - END --*/
+var prefixTopic = 'mqtt.0';
+var prefixCfg = prefixTopic + '.Config';
+
+var watchDogPart = 'WatchDog';
+//var wdTopic = prefixCfg + '*.' + watchDogPart;
+
+function checkWatchDog(devName) {
+    var objName = prefixCfg + "." + devName + "." + watchDogPart;
+    //log("objname=" + objName);
+    var obj = $(objName);
+    if (obj!='undefined') {
+      //  for (var pr1 in obj) {
+    //        log("prop1="+pr1 + "; value=" + obj[pr1]);
+    //    }
+        var st = obj.getState();
+        if (st !== null) {
+        //log("st=" + st);
+        //for (var pr in st) {
+        //    log("prop="+pr + "; value=" + st[pr]);
+        //}
+            var now = Date.now();
+            var diff = now -st.ts;
+    //log("Now=" + now + "; ts=" + st.ts + "; diff=" + (now-st.ts));
+            return diff;
+        }
+    }
+    return 0;
+}
+
+//var wd2="mqtt.0.Config.Arduino_02.WatchDog";/*Config/Arduino_02/WatchDog*/
+
+//checkWatchDog($(wd2));

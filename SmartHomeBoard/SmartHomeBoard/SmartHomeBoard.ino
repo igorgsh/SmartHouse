@@ -3,6 +3,7 @@
  Created:	11.01.17 22:04:42
  Author:	Igor Shevchenko
 */
+#include <MsTimer2.h>
 #include <PubSubClient.h>
 #include <DallasTemperature.h>
 #include <OneWire.h>
@@ -24,12 +25,28 @@
 
 //#include "initdata.h"
 #include "utils.h"
-/*
-String printIP(IPAddress ip) {
-	String s = String(ip[0]) + "." + String(ip[1]) + "." + String(ip[2]) + "." + String(ip[3]);
-	return s;
+
+void Timer2() { //it is started every 100ms
+	Config.loop001(); //100ms
+	Config.counter001++;
+	if (Config.counter001 % 5 == 0) { //500ms
+		Config.loop005();
+		Config.counter005++;
+		if (Config.counter001 % 10 == 0) { //1sec
+			Config.loop1();
+			Config.counter1++;
+			if (Config.counter001 % 600 == 0) { //1min
+				Config.loop60();
+				Config.counter60++;
+				if (Config.counter001 % 3000 == 0) { //5min
+					Config.loop300();
+					Config.counter300++;
+				}
+			}
+		}
+	}
 }
-*/
+
 // the setup function runs once when you press reset or power the board
 void setup() {
 
@@ -46,23 +63,19 @@ void setup() {
 	Loger::Info("Board is ready");
 	Loger::Info("Board Id:" + String(Config.BoardId));
 	Loger::Info("IP Address is:" + PrintIP(Ethernet.localIP()));
+	//Set a timer 
+	MsTimer2::set(100, Timer2);
+	MsTimer2::start();
+
 	pinMode(13, OUTPUT);
 	digitalWrite(13, HIGH);
-	//Loger::Info("Ethernet Status is:" + String(Ethernet._state));
+	Loger::Debug("Enjoy!");
 	//Debug2("Ethernet Status is:", Ethernet._state);
 }
 
 // the loop function runs over and over again until power down or reset
 void loop() {
 	
-	//unsigned long startTime = millis();
-	//Debug2("Point10:", memoryFree());
-
 	Config.MainLoop();
 
-/*
-	Log_(D_INFO, "Working time:");
-	Log2(D_INFO, (millis() - startTime), DEC);
-	Log(D_INFO, "==================================================================");
-*/
 }

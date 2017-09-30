@@ -14,6 +14,8 @@ typedef enum {
 } DebugLevel;
 
 extern DebugLevel dLevel;
+#define MEMFREE Loger::Debug("Memory=" + String(memoryFree(),DEC));
+
 /*
 #define SerialLog2(LEVEL, X, Y) {if (LEVEL <= dLevel) {Serial.println((X),Y);}};
 #define SerialLog2_(LEVEL, X, Y) {if (LEVEL <= dLevel) {Serial.print((X),Y);}};

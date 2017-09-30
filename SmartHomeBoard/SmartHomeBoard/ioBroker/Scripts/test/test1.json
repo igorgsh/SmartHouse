@@ -1,0 +1,39 @@
+/* -- do not edit following lines - START --
+{
+  "debug": false,
+  "verbose": false
+}
+-- do not edit previous lines - END --*/
+//var interestedObj = "mqtt.0.Arduino_01.Units.ToCU.Relays.R0123";/*Arduino_01/Units/ToCU/Relays/R0123*/
+
+//on(interestedObj,function(obj){
+//    log(obj.id);
+//});
+
+//var wd2="mqtt.0.Config.Arduino_02.WatchDog";/*Config/Arduino_02/WatchDog*/
+
+//log("timeout=" + checkWatchDog("Board_02qq"));
+ //initResetGPIO();
+ //   checkStates();
+ resetDevice(21,'aaaa');
+ //f1();
+ /*
+ var g=require("gpio");
+ //gpio.export(pin,{ direction: 'out'})
+ var gp = g.export(21,{'direction':'out', 'ready': function(){gp.set(1);}});
+ log("Point 1");
+ //gp.set(0);
+ */
+ /*
+ var gpio = require('rpi-gpio');
+ 
+gpio.setup(21, gpio.DIR_OUT, write);
+ 
+function write() {
+    gpio.write(7, true, function(err) {
+        if (err) throw err;
+        console.log('Written to pin');
+    });
+}
+*/
+

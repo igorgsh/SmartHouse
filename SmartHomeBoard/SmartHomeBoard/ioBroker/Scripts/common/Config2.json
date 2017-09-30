@@ -1,18 +1,17 @@
 /* -- do not edit following lines - START --
 {
-  "enabled": false,
   "debug": false,
   "verbose": false
 }
 -- do not edit previous lines - END --*/
-var prefixTopic = 'mqtt.0.Arduino_';
-var prefixCfg = prefixTopic + '*.Config';
+var prefixTopic = 'mqtt.0';
+var prefixCfg = prefixTopic + '.Config.Board_';
 
-var reqConfPart = 'ToServer.ConfigurationRequest';
-var reqConf = prefixCfg + '.' + reqConfPart;
+var reqConfPart = 'ConfigurationRequest';
+var reqConf = prefixCfg + '*.' + reqConfPart;
 
-var reqActPart = 'ToServer.ActionRequest';
-var reqAct = prefixCfg + '.' + reqActPart;
+var reqActPart = 'ActionRequest';
+var reqAct = prefixCfg + '*.' + reqActPart;
 
 // Rules: 
 // 1. All buses units should be leaded Bus Definition first.
@@ -24,8 +23,9 @@ var reqAct = prefixCfg + '.' + reqActPart;
 //        ,'{"id":6,"type":"Z","Pin":24}'
 //        ,'{"id":7,"type":"D","Pin":25, "parent":6}'
 // 2. Pins 4, 10, 13, 50,51,52,53 should be skipped
+
 var Configurations = [
-        [
+        [ //Board 00
             
 ///////             '{"id":13, "type":"B","Pin":13,"lhOn":0,"status":0}' // 
             '{"id":12, "type":"B","Pin":12,"lhOn":0,"status":0}' // 
@@ -73,7 +73,7 @@ var Configurations = [
 			,'{"id":45, "type":"R","Pin":45,"lhOn":1,"status":0}'   //L3.1
 
         ]
-        ,[
+        ,[ //Board 01
             '{"id":112, "type":"B","Pin":12,"lhOn":0,"status":0}' // Гостиная Север
             ,'{"id":111, "type":"B","Pin":11,"lhOn":0,"status":0}' // Гостиная Юг
             ,'{"id":109, "type":"B","Pin":9,"lhOn":0,"status":0}' // CУ2
@@ -106,6 +106,13 @@ var Configurations = [
             ,'{"id":144, "type":"R","Pin":44,"lhOn":1,"status":0}'	//L5.4
 			,'{"id":145, "type":"R","Pin":45,"lhOn":1,"status":0}'   //L5.5
         ]
+        ,[ //Board 02
+            '{"id":212, "type":"B","Pin":12,"lhOn":0,"status":0}' // 
+            ,'{"id":211, "type":"B","Pin":11,"lhOn":0,"status":0}' // 
+
+			,'{"id":245, "type":"R","Pin":45,"lhOn":1,"status":0}'   //
+        
+        ]
     ];
 	
 /*
@@ -122,8 +129,9 @@ var Configurations = [
 	BTN_EXTRA_LONG = 4
 
 */	
+
 var Actions = [
-        [
+        [ //Board 00
 // Чулан
          '{"id":1,"originId":17,"originType":"B","event":1,"targetId":39,"targetAction":9}' 
          ,'{"id":2,"originId":17,"originType":"B","event":2,"targetId":32,"targetAction":9}'
@@ -199,7 +207,7 @@ var Actions = [
 
 
         ]
-        ,[
+        ,[ //Board 01
 // Гостиная             
     // правый (камин)
          '{"id":101,"originId":112,"originType":"B","event":1,"targetId":131,"targetAction":9}'
@@ -242,17 +250,27 @@ var Actions = [
          ,'{"id":123,"originId":107,"originType":"B","event":1,"targetId":132,"targetAction":9}'
         
          ]
-    ];
-//log("reqConf=" +reqConf);
+         ,[ //Board 02
+         '{"id":223,"originId":211,"originType":"B","event":1,"targetId":245,"targetAction":9}'
+         ,'{"id":224,"originId":212,"originType":"B","event":1,"targetId":245,"targetAction":9}'
+        ]
+    ]; 
 
+//log("reqConf=" +reqConf);
 var cacheConfigState = $(reqConf);
 cacheConfigState.on (function(obj) {
+    
    log("Request for config");
    var configTopic = obj.id;
-   var boardId = parseInt(configTopic.substr(prefixTopic.length, 2));
-   log("Board:" + boardId);
-   configTopic = configTopic.replace(reqConfPart, 'ToCU.Configuration');
-   log ("Config topic:" + configTopic);
+   log("Request:" + configTopic);
+   var boardIdStr = configTopic.substr(prefixCfg.length, 2);
+   var boardId = parseInt(boardIdStr);
+   
+   log("Board:" + boardIdStr);
+//   log("Board:" + boardId);
+   configTopic = prefixCfg + boardIdStr + ".Configuration";
+   //log ("Config topic:" + configTopic);
+   
     var configLength = Configurations[boardId].length;
     setState(configTopic, '{"length":' + configLength +'}');
     
@@ -265,14 +283,15 @@ cacheConfigState.on (function(obj) {
    log("End Config Request"); 
 });
 
+
 var cacheActState = $(reqAct);
 cacheActState.on (function(obj) {
-   log("Request for actions");
-   var actTopic = obj.id;
-   var boardId = parseInt(actTopic.substr(prefixTopic.length, 2));
-   log("Board:" + boardId);
-   actTopic = actTopic.replace(reqActPart, 'ToCU.Action');
-   //actTopic = actTopic.replace('.','/');
+    log("Request for actions");
+    var actTopic = obj.id;
+    var boardIdStr = actTopic.substr(prefixCfg.length, 2);
+    var boardId = parseInt(boardIdStr);
+    log("Board:" + boardIdStr);
+    actTopic = prefixCfg + boardIdStr + '.Action';
 //   log ("Action topic:" + actTopic);
     var actLength = Actions[boardId].length;
     
@@ -284,3 +303,4 @@ cacheActState.on (function(obj) {
     
    log("End Action Request"); 
 });
+

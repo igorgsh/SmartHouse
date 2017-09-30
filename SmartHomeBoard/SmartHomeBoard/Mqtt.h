@@ -26,22 +26,23 @@
 #define MQTT_WAITING_RESPONSE 10000
 
 
-#define BOARD_ID "Arduino_%02d"
+#define BOARD_ID "Board_%02d"
 #define MQTT_SEPARATOR "/"
 
 #define CHECK_MQTT	"info"
 
+#define MQTT_WATCH_DOG "Config" MQTT_SEPARATOR BOARD_ID MQTT_SEPARATOR "WatchDog"
 #define MQTT_CONFIG_REQUEST "Config" MQTT_SEPARATOR BOARD_ID MQTT_SEPARATOR "ConfigurationRequest"
 #define MQTT_CONFIG_RESPONSE "Config" MQTT_SEPARATOR BOARD_ID MQTT_SEPARATOR "Configuration"
 #define MQTT_ACTIONS_REQUEST "Config" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "ActionRequest"
 #define MQTT_ACTIONS_RESPONSE "Config" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "Action"
 #define MQTT_RESET_BOARD "Config" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "Reset"
-#define MQTT_UNITS "Units" 
+#define MQTT_EQUIPMENT "Equipment" 
 #define MQTT_LOG  "Logs" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "%s"
-#define MQTT_BUTTONS MQTT_UNITS MQTT_SEPARATOR "Buttons"
-#define MQTT_RELAYS  MQTT_UNITS MQTT_SEPARATOR "Relays"
-#define MQTT_1WIREBUS  MQTT_UNITS MQTT_SEPARATOR "1-WireBuses"
-#define MQTT_1WIRETHERMO  MQTT_UNITS MQTT_SEPARATOR "Thermo"
+#define MQTT_BUTTONS MQTT_EQUIPMENT MQTT_SEPARATOR "Buttons"
+#define MQTT_RELAYS  MQTT_EQUIPMENT MQTT_SEPARATOR "Relays"
+#define MQTT_1WIREBUS  MQTT_EQUIPMENT MQTT_SEPARATOR "1-WireBuses"
+#define MQTT_1WIRETHERMO  MQTT_EQUIPMENT MQTT_SEPARATOR "Thermo"
 
 void callbackFunc(char* topic, uint8_t* payload, unsigned int length);
 
@@ -61,6 +62,7 @@ class Mqtt : public PubSubClient
 
 		Mqtt();
 		void Callback(char* topic, uint8_t* payload, unsigned int length);
+		void WatchDog();
 
 private:
 		char *boardId = (char*)BOARD_ID;

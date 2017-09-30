@@ -34,6 +34,18 @@
     <None Include="ioBroker\Scripts\common\_dir.json">
       <Filter>ioBroker\common</Filter>
     </None>
+    <None Include="ioBroker\Scripts\common\Config2.json">
+      <Filter>ioBroker\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\test1.json">
+      <Filter>ioBroker\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\global\CheckWatchDog.json">
+      <Filter>ioBroker\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\global\resetDevice.json">
+      <Filter>ioBroker\common</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.SmartHomeBoard.vsarduino.h">

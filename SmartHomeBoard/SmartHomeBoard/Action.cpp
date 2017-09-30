@@ -27,17 +27,17 @@ void Action::print(const char* header,DebugLevel level) {
 		str0 = header;
 	}
 	str0+="Id:";
-	str0+=String(Id, HEX);
+	str0+=String(Id, DEC);
 	str0 += ";event:";
-	str0 += String(event, HEX);
+	str0 += String(event, DEC);
 	str0 += ";originId:";
-	str0 += String(originId, HEX);
+	str0 += String(originId, DEC);
 	str0 += ";originType:";
-	str0 += String(originType,HEX);
+	str0 += String((char)originType);
 	str0 += ";targetAction:";
-	str0 += String(targetAction,HEX);
+	str0 += String(targetAction,DEC);
 	str0 += ";targetId:";
-	str0 += String(targetId,HEX);
+	str0 += String(targetId,DEC);
 	str0 += " @ ";
 	Loger::Log(level, str0);
 }

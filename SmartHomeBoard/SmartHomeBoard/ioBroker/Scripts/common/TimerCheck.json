@@ -5,52 +5,41 @@
 }
 -- do not edit previous lines - END --*/
     var pingGrp = "ping.0";
-    var relayOff = 1;
 
-    var DevConfig = [];
-    DevConfig.Board0=20;
-    DevConfig.Board1=21;
+//    var DevConfig = [];
+//    DevConfig.Board0=20;
+//    DevConfig.Board1=21;
+    
     //DevConfig.Phone=19;
 
-    var gpioArray = [];
+//    var gpioArray = [];
 
-    var gpio = require("gpio");
+//    var gpio = require("gpio");
 
 
 
-function resetDevice(i, devName) {
-  log("Reset device:" + devName +"("+relayOff+")", 'error');
-  gpioArray[i].set(relayOff);
-  log("Delay for 10 sec");
-  setTimeout(function(){
-      log("Start device:"+devName+"("+(1-relayOff)+")", 'error');
-      gpioArray[i].set(1-relayOff);
-  }, 10000);
-}
+
  
-function initResetGPIO() {
-    //log("length=" + gpioArray.length);
-    if (gpioArray.length < 1) {
-        //log("Point 1");
-        //var i = 0;
-        for(var prop in DevConfig) {
-            var pin = DevConfig[prop];
-            //log("pin=" + pin);
-            gpioArray[pin] = gpio.export(pin,{ direction: 'out'}); 
-        }
-    }
-}
+
 
 function checkStates() {
     $(pingGrp+'.*').each(function(id,i){
  //       log("id="+id+";i="+i);
+        var devName = getObject(id).common.name;
         var state = getState(id).val;
         if (state === false) {
-            var devName = getObject(id).common.name;
             log("Device " + devName + " is down");
             if (typeof DevConfig[devName] != 'undefined') {
-                log("Device " + devName +" on pin:" + DevConfig[devName] + " should be reset", 'error');
+                log("Ping: Device " + devName +" on pin:" + DevConfig[devName] + " should be reset", 'error');
                 resetDevice(DevConfig[devName], devName);
+            }
+        } else { //check Watchdog
+            if (checkWatchDog(devName) > 300000) { //watchDog older than 5 minutes
+                if (typeof DevConfig[devName] != 'undefined') {
+                    log("WatchDog: Device " + devName +" on pin:" + DevConfig[devName] + " should be reset", 'error');
+                
+                    resetDevice(DevConfig[devName], devName);
+                }
             }
         }
 
@@ -59,10 +48,9 @@ function checkStates() {
 
 
 schedule ("*/5 * * * *", function(){
+    log("Timer Check 5 is started", 'info');
 
-    initResetGPIO();
+    //initResetGPIO();
     checkStates();
 
 });
-
-

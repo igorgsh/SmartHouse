@@ -139,5 +139,6 @@ void Button::ProcessUnit(int newStatus) {
 }
 
 void Button::UnitLoop() {
+	//Loger::Debug("Button:" + String(Id));
 	HandleButton();
 };

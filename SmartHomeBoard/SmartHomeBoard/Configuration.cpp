@@ -47,15 +47,16 @@ void Configuration::CreateActions() {
 		delete actions;
 	}
 	Loger::Debug("Create Actions:" + String(numberActions));
-	//actions = (Action**)malloc(numberActions * sizeof(Action*));
 	actions = new Action*[numberActions];
 }
 
 
 Unit* Configuration::FindUnit(byte id) {
-	
+	Loger::Debug("Units=" + String(units != NULL) + "; Conf=" + String(IsConfigReady));
 	if (units != NULL && IsConfigReady ) {
+		Loger::Debug("Point 1");
 		for (int i = 0; i < numberUnits; i++) {
+			Loger::Debug("Uid=" + String(units[i]->Id, DEC) + "; id=" + String(id, DEC));
 			if (units[i]->Id == id) {
 				return units[i];
 			}
@@ -81,6 +82,7 @@ void Configuration::MainLoop() {
 	//Serial.println("MainLoop");
 	MqttClient.MqttLoop();
 	// Step 2. Read all buttons
+	//Loger::Debug("Point 1");
 	Config.UnitsLoop();
 }
 
@@ -118,8 +120,14 @@ void Configuration::Init() {
 }
 
 Unit* Configuration::CreateTypedUnit(byte type) {
+	//Loger::Debug("Point 5");
+
 	Unit *u = NULL;
+	//Loger::Debug("Point 6");
+	Loger::Debug("CreateTyped=" + String((char)type));
+	//Loger::Debug("Point 7");
 	if (type == UnitType::BUTTON) {
+		//Loger::Debug("Point 8");
 		u = new Button();
 		if (u == NULL) {
 			Loger::Error("Can't create Button Unit");
@@ -128,6 +136,8 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 		u->Type = UnitType::BUTTON;
 	}
 	else if (type == UnitType::RELAY) {
+		//Loger::Debug("Point 9");
+
 		u = new Relay();
 		if (u == NULL) {
 			Loger::Error("Can't create Relay Unit");
@@ -170,14 +180,18 @@ String Configuration::ConvertAddressToString(const DeviceAddress address) {
 	return str0;
 }
 
-void Configuration::UpdateConfig(const char *jsonConfig) {
+void Configuration::UpdateConfig(String jsonConfig) {
 	static bool lenDetected = false;
 	StaticJsonBuffer<JSON_SIZE> jsonBuffer;
 	JsonObject& root = jsonBuffer.parse(jsonConfig);
+	//Loger::Debug("Point 2");
+	//Loger::Debug("root=" + String(root.size()));
+	//Loger::Debug("json=" + String(jsonConfig));
 	if (root.containsKey("length")) {
-		Loger::Debug("Length:" +String((int)root["length"]));
+		//Loger::Debug("Length:" +String((int)root["length"]));
 
 		int n = (int)root["length"];
+		Loger::Debug("Number of config Units=" + String(n));
 		if (n != numberUnits) {
 			numberUnits = n;
 			WriteNumberUnits();
@@ -188,7 +202,10 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 		lenDetected = true;
 	}
 	else if (lenDetected && root.containsKey("type") && root.containsKey("id")) {
+		//Loger::Debug("Point 3");
+
 		units[configCounter] = CreateTypedUnit(((const char*)root["type"])[0]);
+		//Loger::Debug("Point 4");
 		if (units[configCounter] != NULL) {
 			if (root.containsKey("id")) {
 				units[configCounter]->Id = root["id"];
@@ -220,7 +237,7 @@ void Configuration::UpdateConfig(const char *jsonConfig) {
 		}
 		//Debug2("Memory6=", memoryFree());
 	}
-	Loger::Debug("End of UpdateConfig");
+	//Loger::Debug("End of UpdateConfig");
 
 }
 
@@ -281,6 +298,7 @@ void Configuration::FinalizeInitUnits() {
 	Loger::Debug("Finalize Init Units");
 	for (int i = 0; i < numberUnits; i++) {
 		units[i]->FinalInitUnit();
+		//Loger::Debug("Unit: " + String(units[i]->Id) + ": type=" + (char)units[i]->Type + "##");
 	}
 }
 
@@ -375,18 +393,23 @@ void Configuration::WriteNumberBusUnits() {
 
 
 void Configuration::StoreUnits() {
+	bool isUpdated = false;
 	for (int i = 0; i < numberUnits; i++) {
 		UnitProto uROM;
 		ReadUnit(i, &uROM);
 		if (!units[i]->compare(&uROM)) {
 			Loger::Debug("Write I=" +String(i));
 			WriteUnit(i, units[i]);
+			isUpdated = true;
 		}
+	}
+	if (isUpdated) {
+		MqttClient.SubscribeUnits();
 	}
 }
 
 
-void Configuration::UpdateActions(const char *jsonConfig) {
+void Configuration::UpdateActions(String jsonConfig) {
 	//return;
 	static bool lenDetected = false;
 	StaticJsonBuffer<JSON_SIZE> jsonBuffer;
@@ -534,15 +557,20 @@ void Configuration::StoreActions() {
 
 void Configuration::UpdateUnit(UnitType type, String name, String value) {
 	Loger::Debug("Update Unit: " + name + "(" + String(name.toInt()) + ")");
+	MEMFREE;
 	Unit *u = FindUnit(name.toInt());
 	if (u != NULL) {
+		Loger::Debug("Unit found:" + String(u->Id));
 		u->ProcessUnit(value.toInt());
-	}
+	} 
+	Loger::Debug("End Update Unit");
+
 }
 
 void Configuration::UnitsLoop() {
+	//Loger::Debug("numbr:" + String(numberUnits));
 	for (int i = 0; i < numberUnits; i++) {
-
+		//Loger::Debug("i=" + String(i) + "; type=" + (char)units[i]->Type);
 		units[i]->UnitLoop();
 	}
 }
@@ -613,3 +641,22 @@ void Configuration::ProcessAction(byte id, byte event, unsigned long value) {
 		}
 	}
 }
+
+void Configuration::loop001() {
+	// start every 100 ms
+}
+
+void Configuration::loop005() {
+	// start every 500 ms
+}
+void Configuration::loop1() {
+	// start every 1s
+}
+void Configuration::loop60() {
+	// start every 1min
+	MqttClient.WatchDog();
+}
+void Configuration::loop300() {
+	// start every 5 min
+}
+
