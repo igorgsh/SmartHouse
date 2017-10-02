@@ -25,20 +25,20 @@
 
 //#include "initdata.h"
 #include "utils.h"
-
+/*
 void Timer2() { //it is started every 100ms
-	Config.loop001(); //100ms
-	Config.counter001++;
-	if (Config.counter001 % 5 == 0) { //500ms
-		Config.loop005();
-		Config.counter005++;
-		if (Config.counter001 % 10 == 0) { //1sec
+	Config.loop01(); //100ms
+	Config.counter01++;
+	if (Config.counter01 % 5 == 1) { //500ms
+		Config.loop05();
+		Config.counter05++;
+		if (Config.counter01 % 10 == 2) { //1sec
 			Config.loop1();
 			Config.counter1++;
-			if (Config.counter001 % 600 == 0) { //1min
+			if (Config.counter01 % 600 == 3) { //1min
 				Config.loop60();
 				Config.counter60++;
-				if (Config.counter001 % 3000 == 0) { //5min
+				if (Config.counter01 % 3000 == 4) { //5min
 					Config.loop300();
 					Config.counter300++;
 				}
@@ -46,7 +46,7 @@ void Timer2() { //it is started every 100ms
 		}
 	}
 }
-
+*/
 // the setup function runs once when you press reset or power the board
 void setup() {
 
@@ -64,8 +64,8 @@ void setup() {
 	Loger::Info("Board Id:" + String(Config.BoardId));
 	Loger::Info("IP Address is:" + PrintIP(Ethernet.localIP()));
 	//Set a timer 
-	MsTimer2::set(100, Timer2);
-	MsTimer2::start();
+	//MsTimer2::set(100, Timer2);
+	//MsTimer2::start();
 
 	pinMode(13, OUTPUT);
 	digitalWrite(13, HIGH);
@@ -75,7 +75,14 @@ void setup() {
 
 // the loop function runs over and over again until power down or reset
 void loop() {
-	
+	static unsigned long tp60 = 0;
+	unsigned long now = millis();
+
+	if ((now-tp60) > (unsigned long)1*60*1000) { //1 min 
+		Config.loop60();
+		Config.counter60++;
+		tp60 = now;
+	}
 	Config.MainLoop();
 
 }

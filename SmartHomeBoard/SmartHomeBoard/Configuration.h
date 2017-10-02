@@ -62,14 +62,14 @@ public:
 	String ConvertAddressToString(const DeviceAddress address);
 
 	//Timer 
-	unsigned long counter001 = 0;	//100ms
-	unsigned long counter005 = 0;	//500ms
+	unsigned long counter01 = 0;	//100ms
+	unsigned long counter05 = 0;	//500ms
 	unsigned long counter1 = 0;		//1 sec
 	unsigned long counter60 = 0;	//1min
 	unsigned long counter300 = 0;	//5min
 
-	void loop001();
-	void loop005();
+	void loop01();
+	void loop05();
 	void loop1();
 	void loop60();
 	void loop300();

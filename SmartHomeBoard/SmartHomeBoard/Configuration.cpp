@@ -54,9 +54,9 @@ void Configuration::CreateActions() {
 Unit* Configuration::FindUnit(byte id) {
 	Loger::Debug("Units=" + String(units != NULL) + "; Conf=" + String(IsConfigReady));
 	if (units != NULL && IsConfigReady ) {
-		Loger::Debug("Point 1");
+		//Loger::Debug("Point 1");
 		for (int i = 0; i < numberUnits; i++) {
-			Loger::Debug("Uid=" + String(units[i]->Id, DEC) + "; id=" + String(id, DEC));
+			//Loger::Debug("Uid=" + String(units[i]->Id, DEC) + "; id=" + String(id, DEC));
 			if (units[i]->Id == id) {
 				return units[i];
 			}
@@ -80,20 +80,25 @@ Unit* Configuration::FindUnitByTypeAndPin(UnitType type, byte pin) {
 void Configuration::MainLoop() {
 	//	Step 1. Listening a server requests
 	//Serial.println("MainLoop");
+	//static unsigned long cnt = 0;
+	
+	//if (cnt % 10000 == 0) {
+	//	Loger::Debug("Loop:" + String(cnt));
+	//}
 	MqttClient.MqttLoop();
 	// Step 2. Read all buttons
 	//Loger::Debug("Point 1");
+	//if (cnt % 10000 == 0) {
+	//	Loger::Debug("Units Loop:" + String(cnt));
+	//}
 	Config.UnitsLoop();
+	//cnt++;
 }
 
 void Configuration::InitializeServer() {
 
 	if (Ethernet.begin(Config.mac) == 0) {
 		Loger::Error("Failed to configure Ethernet using DHCP");
-		// no point in carrying on, so do nothing forevermore:
-		// try to congifure using IP address instead of DHCP:
-		//if (Ethernet.begin(Config.mac, Config.ip) == 0) {
-		//	SerialLog(D_ERROR, "Failed to configure Ethernet using DHCP");
 		Config.IsEthernetConnection = false;
 	}
 	if (Config.IsEthernetConnection) {
@@ -110,7 +115,6 @@ void Configuration::Init() {
 		if (IsEthernetConnection) {
 			Loger::Debug("Initialize MQTT");
 			MqttClient.InitMqtt();
-//			MqttClient.SubscribeUnits();
 		}
 	}
 	BuildConfig();
@@ -120,12 +124,9 @@ void Configuration::Init() {
 }
 
 Unit* Configuration::CreateTypedUnit(byte type) {
-	//Loger::Debug("Point 5");
 
 	Unit *u = NULL;
-	//Loger::Debug("Point 6");
 	Loger::Debug("CreateTyped=" + String((char)type));
-	//Loger::Debug("Point 7");
 	if (type == UnitType::BUTTON) {
 		//Loger::Debug("Point 8");
 		u = new Button();
@@ -514,7 +515,7 @@ void Configuration::ReadAction(int i, Action* a) {
 	a->event = EEPROM.read(addr+3);
 	a->targetId = EEPROM.read(addr+4);
 	a->targetAction = (ActionType)EEPROM.read(addr+5);
-	a->print("Action From ROM:", D_DEBUG);
+	//a->print("Action From ROM:", D_DEBUG);
 }
 
 void Configuration::WriteAction(int i, const Action* a) {
@@ -545,11 +546,11 @@ void Configuration::StoreActions() {
 		Action aROM;
 		ReadAction(i, &aROM);
 
-		Loger::Debug("id=" + String(aROM.Id));
+		//Loger::Debug("id=" + String(aROM.Id));
 		if (!actions[i]->compare(&aROM)) {
 			Loger::Debug("Write Actions I=" + String(i));
 			WriteAction(i, actions[i]);
-			ReadAction(i, &aROM);
+			//ReadAction(i, &aROM);
 
 		}
 	}
@@ -592,14 +593,13 @@ void Configuration::ProcessAction(byte id, byte event, unsigned long value) {
 					Unit* targetU = FindUnit(actions[i]->targetId);
 					if (targetU != NULL) {
 						targetU->print("Target: ", D_DEBUG);
-			//			Debug2("Action target:", actions[i]->targetAction);
 						switch (actions[i]->targetAction)
 						{
 						case ACT_NO_ACTION: {
 							break;
 						}
 						case ACT_RELAY_SWITCH: {
-							Loger::Debug("Relay Switch");
+							//Loger::Debug("Relay Switch");
 							if (targetU->Type == UnitType::RELAY) {
 								((Relay*)targetU)->RelaySwitch();
 							}
@@ -642,18 +642,22 @@ void Configuration::ProcessAction(byte id, byte event, unsigned long value) {
 	}
 }
 
-void Configuration::loop001() {
+void Configuration::loop01() {
 	// start every 100 ms
 }
 
-void Configuration::loop005() {
+void Configuration::loop05() {
 	// start every 500 ms
 }
 void Configuration::loop1() {
+	Loger::Debug("Loop1");
+	Loger::Debug("Counter01=" + String(Config.counter01,DEC));
+	MEMFREE
 	// start every 1s
 }
 void Configuration::loop60() {
 	// start every 1min
+	Loger::Debug("Loop60");
 	MqttClient.WatchDog();
 }
 void Configuration::loop300() {

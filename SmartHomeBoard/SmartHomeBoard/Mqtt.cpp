@@ -177,10 +177,10 @@ void Mqtt::GetConfiguration() {
 
 void Mqtt::WatchDog() {
 
-	uint8_t rnd = random(0, 1000);
+	//uint8_t rnd = random(0, 1000);
 	char topic[TOPIC_LENGTH];
 	sprintf(topic, MQTT_WATCH_DOG, Config.BoardId);
-	Publish(topic, String(rnd).c_str());
+	Publish(topic, String(Config.counter60).c_str());
 }
 
 

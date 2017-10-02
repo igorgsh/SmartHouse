@@ -1,0 +1,55 @@
+/* -- do not edit following lines - START --
+{
+  "debug": false,
+  "verbose": false
+}
+-- do not edit previous lines - END --*/
+
+//    var DevConfig = [];
+//    DevConfig.Board0=20;
+//    DevConfig.Board1=21;
+    
+    //DevConfig.Phone=19;
+
+//    var gpioArray = [];
+
+//    var gpio = require("gpio");
+
+
+
+
+ 
+
+
+function checkStates() {
+    $(pingGrp+'.*').each(function(id,i){
+ //       log("id="+id+";i="+i);
+        var devName = getObject(id).common.name;
+        var state = getState(id).val;
+        if (state === false) {
+            log("Device " + devName + " is down");
+            if (typeof DevConfig[devName] != 'undefined') {
+                log("Ping: Device " + devName +" on pin:" + DevConfig[devName] + " should be reset", 'error');
+                resetDevice(DevConfig[devName], devName);
+            }
+        } else { //check Watchdog
+            if (checkWatchDog(devName) > 300000) { //watchDog older than 5 minutes
+                if (typeof DevConfig[devName] != 'undefined') {
+                    log("WatchDog: Device " + devName +" on pin:" + DevConfig[devName] + " should be reset", 'error');
+                
+                    resetDevice(DevConfig[devName], devName);
+                }
+            }
+        }
+
+    });
+}
+
+
+schedule ("*/5 * * * *", function(){
+    log("Timer Check 5 is started", 'info');
+
+    //initResetGPIO();
+    checkStates();
+
+});
