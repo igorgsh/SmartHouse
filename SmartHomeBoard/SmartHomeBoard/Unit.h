@@ -14,7 +14,7 @@ typedef enum {
 class Unit
 {
 public:
-	byte Id;
+	uint16_t Id;
 	byte Type;
 	byte Pin;
 	bool lhOn;

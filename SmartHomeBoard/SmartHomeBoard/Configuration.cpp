@@ -19,31 +19,28 @@ extern Mqtt MqttClient;
 
 void Configuration::CreateUnits() {
 	if (units != NULL) {
-		Loger::Debug("Clean units:" + String(numberUnits));
+//		Loger::Debug("Clean units:" + String(numberUnits));
 		for (int i = 0; i < numberUnits; i++) {
-			Loger::Debug("Unit:" + String(i));
+//			Loger::Debug("Unit:" + String(i));
 			if (units[i] != NULL) {
 				delete units[i];
 			}
 		}
-		//free(units);
 		delete units;
 	}
 	Loger::Debug("Create Units:" + String(numberUnits));
 	units = new Unit*[numberUnits];
-	//units = (Unit**)malloc(numberUnits * sizeof(Unit*));
 
 }
 
 void Configuration::CreateActions() {
 	if (actions != NULL) {
-		Loger::Debug("Clean Actions: " + String(numberActions));
+//		Loger::Debug("Clean Actions: " + String(numberActions));
 		for (int i = 0; i < numberActions; i++) {
 			if (actions[i] != NULL) {
 				delete actions[i];
 			}
 		}
-		//free(actions);
 		delete actions;
 	}
 	Loger::Debug("Create Actions:" + String(numberActions));
@@ -51,12 +48,10 @@ void Configuration::CreateActions() {
 }
 
 
-Unit* Configuration::FindUnit(byte id) {
-	Loger::Debug("Units=" + String(units != NULL) + "; Conf=" + String(IsConfigReady));
+Unit* Configuration::FindUnit(uint16_t id) {
+//	Loger::Debug("Units=" + String(units != NULL) + "; Conf=" + String(IsConfigReady));
 	if (units != NULL && IsConfigReady ) {
-		//Loger::Debug("Point 1");
 		for (int i = 0; i < numberUnits; i++) {
-			//Loger::Debug("Uid=" + String(units[i]->Id, DEC) + "; id=" + String(id, DEC));
 			if (units[i]->Id == id) {
 				return units[i];
 			}
@@ -185,12 +180,7 @@ void Configuration::UpdateConfig(String jsonConfig) {
 	static bool lenDetected = false;
 	StaticJsonBuffer<JSON_SIZE> jsonBuffer;
 	JsonObject& root = jsonBuffer.parse(jsonConfig);
-	//Loger::Debug("Point 2");
-	//Loger::Debug("root=" + String(root.size()));
-	//Loger::Debug("json=" + String(jsonConfig));
 	if (root.containsKey("length")) {
-		//Loger::Debug("Length:" +String((int)root["length"]));
-
 		int n = (int)root["length"];
 		Loger::Debug("Number of config Units=" + String(n));
 		if (n != numberUnits) {
@@ -203,10 +193,8 @@ void Configuration::UpdateConfig(String jsonConfig) {
 		lenDetected = true;
 	}
 	else if (lenDetected && root.containsKey("type") && root.containsKey("id")) {
-		//Loger::Debug("Point 3");
 
 		units[configCounter] = CreateTypedUnit(((const char*)root["type"])[0]);
-		//Loger::Debug("Point 4");
 		if (units[configCounter] != NULL) {
 			if (root.containsKey("id")) {
 				units[configCounter]->Id = root["id"];
@@ -227,7 +215,6 @@ void Configuration::UpdateConfig(String jsonConfig) {
 			}
 		}
 
-//		units[configCounter]->print("Unit received", D_DEBUG);
 		configCounter++;
 		if (configCounter == numberUnits) {
 			Loger::Debug("Finish update configuration");
@@ -236,10 +223,7 @@ void Configuration::UpdateConfig(String jsonConfig) {
 			IsServerConfig = true;
 
 		}
-		//Debug2("Memory6=", memoryFree());
 	}
-	//Loger::Debug("End of UpdateConfig");
-
 }
 
 bool CheckConfigReady() {
@@ -255,7 +239,6 @@ void Configuration::BuildConfig() {
 		MqttClient.GetConfiguration();
 		unsigned long startLoop = millis();
 		while (!IsConfigReady && millis() - startLoop < MQTT_WAITING_RESPONSE) {
-			//Loger::Debug("Listening configuration");
 			MqttClient.MqttLoop();
 		}
 	}
@@ -299,7 +282,6 @@ void Configuration::FinalizeInitUnits() {
 	Loger::Debug("Finalize Init Units");
 	for (int i = 0; i < numberUnits; i++) {
 		units[i]->FinalInitUnit();
-		//Loger::Debug("Unit: " + String(units[i]->Id) + ": type=" + (char)units[i]->Type + "##");
 	}
 }
 
@@ -327,16 +309,16 @@ void Configuration::ReadUnit(int ind, Unit* u) {
 	/*
 		Byte | Object
 		-------------
-		0: id
+		0-1: id
 		1: type
 		2: pin
 		3: lhOn
 	*/
 	int addr = Configuration::addrUnits + ind * Configuration::sizeOfUnit;
-	u->Id = EEPROM.read(addr);
-	u->Type = EEPROM.read(addr + 1);
-	u->Pin = EEPROM.read(addr + 2);
-	u->lhOn = EEPROM.read(addr + 3);
+	u->Id = Read16(addr);
+	u->Type = EEPROM.read(addr + 2);
+	u->Pin = EEPROM.read(addr + 3);
+	u->lhOn = EEPROM.read(addr + 4);
 	if (u->Type == UnitType::ONE_WIRE_THERMO) {
 		OneWireBusUnit* owU = (OneWireBusUnit*)u;
 		for (int i = 0; i < 8; i++) {
@@ -356,16 +338,16 @@ void Configuration::WriteUnit(int ind, const Unit* u) {
 	/*
 	Byte | Object
 	-------------
-	0: id
-	1: type
-	2: pin
-	3: lhOn
+	0-1: id
+	2: type
+	3: pin
+	4: lhOn
 	*/
 	int addr = GetUnitsAddr(ind);
-	EEPROM.write(addr, u->Id);
-	EEPROM.write(addr + 1, u->Type);
-	EEPROM.write(addr + 2, u->Pin);
-	EEPROM.write(addr + 3, u->lhOn);
+	Write16(addr, u->Id);
+	EEPROM.write(addr + 2, u->Type);
+	EEPROM.write(addr + 3, u->Pin);
+	EEPROM.write(addr + 4, u->lhOn);
 	if (u->Type == UnitType::ONE_WIRE_THERMO) {
 		OneWireBusUnit* owU = (OneWireBusUnit*)u;
 		for (int i = 0; i < 8; i++) {
@@ -411,13 +393,9 @@ void Configuration::StoreUnits() {
 
 
 void Configuration::UpdateActions(String jsonConfig) {
-	//return;
 	static bool lenDetected = false;
 	StaticJsonBuffer<JSON_SIZE> jsonBuffer;
 	JsonObject& root = jsonBuffer.parse(jsonConfig);
-	//Debug("Update Actions");
-	//root.prettyPrintTo(Serial);
-	//Loger::Debug("Action Update:");
 	if (root.containsKey("length")) {
 		Loger::Debug("Length:" +String((int)root["length"]));
 
@@ -431,9 +409,7 @@ void Configuration::UpdateActions(String jsonConfig) {
 		lenDetected = true;
 	}
 	else if (lenDetected && root.containsKey("id")) {
-		//Loger::Debug("Action detected");
 		actions[actionCounter] = new Action();
-		//root.prettyPrintTo(Serial);
 		if (actions[actionCounter] != NULL) {
 			if (root.containsKey("id")) {
 				actions[actionCounter]->Id = root["id"];
@@ -481,12 +457,9 @@ void Configuration::BuildActions() {
 		MqttClient.GetActions();
 		unsigned long startLoop = millis();
 		while (!IsActionsReady && millis() - startLoop < MQTT_WAITING_RESPONSE ) {
-			//Serial.println("Actions Loop");
 			MqttClient.MqttLoop();
 		}
 	}
-	//Debug2("IsActionReady=", IsActionsReady);
-	//Debug2("1NumberOfActions=", numberActions);
 	if (!IsActionsReady) { // We can't get config from server. Read from EEPROM
 		IsServerActions = false;
 		Loger::Debug("Get Actions From EEPROM");
@@ -495,7 +468,6 @@ void Configuration::BuildActions() {
 			actions[i] = new Action();
 			ReadAction(i, actions[i]);
 		}
-		//Debug2("2NumberOfActions=", numberActions);
 		Loger::Debug("Actions Done!");
 	}
 	InitializeActions();
@@ -506,28 +478,39 @@ int Configuration::GetActionsAddr(int i) {
 	return GetOneWireAddr(0) + numberBusUnits * sizeOfBusUnit + i * sizeOfAction;
 }
 
+uint16_t Configuration::Read16(uint16_t addr) {
+	uint16_t res;
+	res = (((uint16_t)EEPROM.read(addr)) << 8 & 0xFF00) + EEPROM.read(addr + 1);
+	return res;
+}
+
+void Configuration::Write16(uint16_t addr, uint16_t val) {
+	EEPROM.write(addr, (byte)((val >> 8) & 0xFF00));
+	EEPROM.write(addr+1, (byte)((val & 0x00FF)));
+}
+
+
 void Configuration::ReadAction(int i, Action* a) {
 	int addr = GetActionsAddr(i);
-	//Debug2("Address Actions=", addr);
-	a->Id = EEPROM.read(addr);
-	a->originId = EEPROM.read(addr+1);
-	a->originType = EEPROM.read(addr+2);
-	a->event = EEPROM.read(addr+3);
-	a->targetId = EEPROM.read(addr+4);
-	a->targetAction = (ActionType)EEPROM.read(addr+5);
-	//a->print("Action From ROM:", D_DEBUG);
+	a->Id = Read16(addr);
+	a->originId = Read16(addr+2);
+	a->originType = EEPROM.read(addr+4);
+	a->event = EEPROM.read(addr+5);
+	a->targetId = Read16(addr+6);
+	a->targetAction = (ActionType)EEPROM.read(addr+8);
+	a->print("Action From ROM:", D_DEBUG);
 }
 
 void Configuration::WriteAction(int i, const Action* a) {
 	int addr = GetActionsAddr(i);
 	//a->print("Action To ROM:", Serial);
 	
-	EEPROM.write(addr, a->Id);
-	EEPROM.write(addr+1, a->originId);
-	EEPROM.write(addr+2, a->originType);
-	EEPROM.write(addr+3, a->event);
-	EEPROM.write(addr+4, a->targetId);
-	EEPROM.write(addr+5, a->targetAction);
+	Write16(addr, a->Id);
+	Write16(addr+2, a->originId);
+	EEPROM.write(addr+4, a->originType);
+	EEPROM.write(addr+5, a->event);
+	Write16(addr+6, a->targetId);
+	EEPROM.write(addr+8, a->targetAction);
 }
 
 void Configuration::WriteNumberActions() {
@@ -569,19 +552,16 @@ void Configuration::UpdateUnit(UnitType type, String name, String value) {
 }
 
 void Configuration::UnitsLoop() {
-	//Loger::Debug("numbr:" + String(numberUnits));
 	for (int i = 0; i < numberUnits; i++) {
-		//Loger::Debug("i=" + String(i) + "; type=" + (char)units[i]->Type);
 		units[i]->UnitLoop();
 	}
 }
 
 
-void Configuration::ProcessAction(byte id, byte event, unsigned long value) {
+void Configuration::ProcessAction(uint16_t id, byte event, unsigned long value) {
 
 
 	for (int i = 0; i < numberActions; i++) {
-		//Loger::Debug("Action[" + String(actions[i]->Id) + "]=" + String(actions[i]->originId));
 		if (actions[i]->originId == id) {
 			if (actions[i]->event == event) {
 				Loger::Debug("Action Found!" + String(actions[i]->Id));

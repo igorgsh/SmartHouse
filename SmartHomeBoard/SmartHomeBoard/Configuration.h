@@ -29,7 +29,7 @@ public:
 	void UpdateConfig(String jsonConfig);
 	void UpdateActions(String jsonConfig);
 	void BuildActions();
-	Unit* FindUnit(byte id);
+	Unit* FindUnit(uint16_t id);
 	Unit* FindUnitByTypeAndPin(UnitType type, byte pin);
 	//	void UpdateStorage(const Unit* u);
 	void StoreUnits();
@@ -44,7 +44,7 @@ public:
 	void UpdateOneWireBus(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_BUS, button, value); };
 	void UpdateOneWireThermo(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_THERMO, button, value); };
 	void UpdateUnit(UnitType type, String name, String value);
-	void ProcessAction(byte id, byte event, unsigned long value);
+	void ProcessAction(uint16_t id, byte event, unsigned long value);
 	//bool CheckConfigReady();
 	//bool CheckActionReady();
 
@@ -78,30 +78,33 @@ private:
 	int configCounter;
 	int actionCounter;
 
+	uint16_t Read16(uint16_t addr);
+	void Write16(uint16_t addr, uint16_t val);
+
 
 	// EEPROM structure
 	//	Byte | Object
 	//	-------------
 	//	0:	BoardId
-	static const int addrBoardId = 0;
+	static const byte addrBoardId = 0;
 	//	1: Number Of Units 
-	static const int addrNumberUnits = 1;
+	static const byte addrNumberUnits = 1;
 	//	2: Number of Actions
-	static const int addrNumberActions = 2;
+	static const byte addrNumberActions = 2;
 	//	3: Number of bus units
-	static const int addrNumberBusUnits = 3;
+	static const byte addrNumberBusUnits = 3;
 	//	4: Reserved
 	//	5: Start of Units
-	static const int addrUnits = 5;
+	static const byte addrUnits = 5;
 	int GetUnitsAddr(int i);
-	static const int sizeOfUnit = 4;
+	static const byte sizeOfUnit = 5;
 	// Unit structure
 	//	Byte | Object
 	//	-------------
-	//	0: id
-	//	1: type
-	//	2: pin
-	//	3: lhOn
+	//	0-1: id
+	//	2: type
+	//	3: pin
+	//	4: lhOn
 	int GetOneWireAddr(int i);
 	static const int sizeOfBusUnit = 8;
 	// Action structure
@@ -109,16 +112,16 @@ private:
 	//	-------------
 	//	0-7: address
 	int GetActionsAddr(int i);
-	static const int sizeOfAction = 6;
+	static const int sizeOfAction = 9;
 	// Action structure
 	//	Byte | Object
 	//	-------------
-	//	0: id
-	//	1: originId
-	//	2: originType
-	//	3: event
-	//	4: targetId
-	//	5: targetAction
+	//	0-1: id
+	//	2-3: originId
+	//	4: originType
+	//	5: event
+	//	6-7: targetId
+	//	8: targetAction
 
 
 	void WriteNumberUnits();

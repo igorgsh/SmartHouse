@@ -15,30 +15,10 @@ void Button::SetDefault() {
 void Button::InitUnit() {
 	Loger::Debug("Init Button:id=" + String(Id) + "; Pin=" + String(Pin));
 	pinMode(Pin, INPUT);
-	//Loger::Debug("PinMode Done");
 	digitalWrite(Pin, !lhOn);
-	//status = 99;
-	//Loger::Debug("Publish");
 	MqttClient.PublishUnit(this);
 }
 
-/*
-
-ButtonUnit * FindButton(const char* id) {
-
-	ButtonUnit *unit = NULL;
-
-	for (int i = 0; i < NUMBER_OF_BUTTONS && &(Buttons[i]) != NULL; i++) {
-		if (strcmp(Buttons[i].Id, id) == 0) {
-			unit = &(Buttons[i]);
-			break;
-		}
-		//if (Buttons[i].Id[0] == 0)
-		//	break;
-	}
-	return unit;
-}
-*/
 
 void Button::HandleButton() {
 
@@ -47,7 +27,6 @@ void Button::HandleButton() {
 	unsigned long now = millis();
 	btnValue = digitalRead(Pin);
 	
-	//btnValue = !btnValue; //The buttons are pulled up to HIGH. And switched to GND
 	if (btnValue == lhOn) {// button is pressed
 		if (startPressing == 0) { // start pressing
 			startPressing = now;

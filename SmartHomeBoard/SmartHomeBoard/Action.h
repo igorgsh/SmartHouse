@@ -17,11 +17,11 @@ typedef enum {
 
 class Action {
 public:
-	byte Id;
-	byte originId;
+	uint16_t Id;
+	uint16_t originId;
 	byte originType;
 	byte event;
-	byte targetId;
+	uint16_t targetId;
 	ActionType targetAction;
 
 	bool compare(Action* a);
