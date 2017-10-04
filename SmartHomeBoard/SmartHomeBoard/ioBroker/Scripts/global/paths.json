@@ -1,0 +1,19 @@
+/* -- do not edit following lines - START --
+{
+  "debug": false,
+  "verbose": false
+}
+-- do not edit previous lines - END --*/
+/* -- do not edit following lines - START --
+{
+  "debug": false,
+  "verbose": false
+}
+-- do not edit previous lines - END --*/
+var prefixTopic = 'mqtt.0';
+var prefixCfg = prefixTopic + '.Config.Board_';
+
+var prefixEquip = prefixTopic + '.Equipment';
+var prefixLog = prefixTopic + '.Log.Board_';
+
+var pingGrp = "ping.0";

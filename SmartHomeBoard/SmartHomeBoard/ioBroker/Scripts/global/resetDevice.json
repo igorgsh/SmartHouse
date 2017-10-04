@@ -4,6 +4,12 @@
   "verbose": false
 }
 -- do not edit previous lines - END --*/
+/* -- do not edit following lines - START --
+{
+  "debug": false,
+  "verbose": false
+}
+-- do not edit previous lines - END --*/
     var relayOff = 1;
 
 
@@ -34,6 +40,18 @@ function resetDevice(pin, devName) {
         }
     });
 }
+
+ 
+
+
+function resetBoard(boardIdstr) {
+
+    var boardName = "Board_"+boardIdstr;
+    if (DevConfig[boardName] !== null) {
+        resetDevice(DevConfig[boardName], boardName);
+    }
+}
+
 /*
 function initResetGPIO() {
     for(var prop in DevConfig) {

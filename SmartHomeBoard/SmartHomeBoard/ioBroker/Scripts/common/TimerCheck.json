@@ -4,27 +4,15 @@
   "verbose": false
 }
 -- do not edit previous lines - END --*/
-    var pingGrp = "ping.0";
-
-//    var DevConfig = [];
-//    DevConfig.Board0=20;
-//    DevConfig.Board1=21;
-    
-    //DevConfig.Phone=19;
-
-//    var gpioArray = [];
-
-//    var gpio = require("gpio");
-
-
-
-
- 
-
+/* -- do not edit following lines - START --
+{
+  "debug": false,
+  "verbose": false
+}
+-- do not edit previous lines - END --*/
 
 function checkStates() {
     $(pingGrp+'.*').each(function(id,i){
- //       log("id="+id+";i="+i);
         var devName = getObject(id).common.name;
         var state = getState(id).val;
         if (state === false) {
@@ -48,7 +36,7 @@ function checkStates() {
 
 
 schedule ("*/5 * * * *", function(){
-    log("Timer Check 5 is started", 'info');
+//    log("Timer Check 5 is started", 'info');
 
     //initResetGPIO();
     checkStates();

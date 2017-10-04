@@ -25,6 +25,12 @@
     <Filter Include="ioBroker\common">
       <UniqueIdentifier>{fa06e54f-b6cd-46ae-b895-4c5172057e78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ioBroker\vis.0">
+      <UniqueIdentifier>{24a65676-55cc-4454-9019-1eef19c8cf5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ioBroker\Objects">
+      <UniqueIdentifier>{ea01720e-3dd2-4860-b4f6-fb295d1ef725}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="SmartHomeBoard.ino" />
@@ -66,6 +72,12 @@
     </None>
     <None Include="..\iobroker\common\timercheck.json">
       <Filter>ioBroker\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\vis.0\vis-views.json">
+      <Filter>ioBroker\vis.0</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\objects\equipment.json">
+      <Filter>ioBroker\Objects</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -297,6 +297,7 @@ void Configuration::InitializeActions() {
 void Configuration::ReadBoardId() {
 
 	BoardId = EEPROM.read(addrBoardId);
+	BoardName = "Board_" + (String)(BoardId < 10 ? "0" : "") + String(BoardId, DEC);
 	Loger::Debug("BoardId=" + String(BoardId));
 	mac[5] = BoardId;
 }
@@ -544,10 +545,10 @@ void Configuration::UpdateUnit(UnitType type, String name, String value) {
 	MEMFREE;
 	Unit *u = FindUnit(name.toInt());
 	if (u != NULL) {
-		Loger::Debug("Unit found:" + String(u->Id));
+		//Loger::Debug("Unit found:" + String(u->Id));
 		u->ProcessUnit(value.toInt());
 	} 
-	Loger::Debug("End Update Unit");
+	//Loger::Debug("End Update Unit");
 
 }
 
@@ -564,7 +565,7 @@ void Configuration::ProcessAction(uint16_t id, byte event, unsigned long value) 
 	for (int i = 0; i < numberActions; i++) {
 		if (actions[i]->originId == id) {
 			if (actions[i]->event == event) {
-				Loger::Debug("Action Found!" + String(actions[i]->Id));
+				//Loger::Debug("Action Found!" + String(actions[i]->Id));
 				actions[i]->print("ACTION:", D_DEBUG);
 				Unit* originU = FindUnit(id);
 
@@ -637,7 +638,7 @@ void Configuration::loop1() {
 }
 void Configuration::loop60() {
 	// start every 1min
-	Loger::Debug("Loop60");
+	//Loger::Debug("Loop60");
 	MqttClient.WatchDog();
 }
 void Configuration::loop300() {

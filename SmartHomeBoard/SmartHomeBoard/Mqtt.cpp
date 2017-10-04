@@ -39,11 +39,11 @@ bool Mqtt::MqttReconnect() {
 			Loger::Debug("MqttReconnect:" + String(errorTime) + ":" + String(errorTime + mqttWaiting) + ":" + String(millis()));
 
 			//Подключаемся и подписываемся
-			if (connect(CHECK_MQTT)) {
+			if (connect(Config.BoardName.c_str())) {
 				mqttWaiting = MQTT_RECONNECT_TIME;
 				errorTime = 0;
 
-				if (firstConnect) {
+				//if (firstConnect) {
 					//Подписываемся на все темы
 					//MqttClient.subscribe(TOPIC_CONFIG_LENGTH);
 					sprintf(topic, MQTT_CONFIG_RESPONSE, Config.BoardId);
@@ -53,7 +53,10 @@ bool Mqtt::MqttReconnect() {
 					sprintf(topic, MQTT_RESET_BOARD, Config.BoardId);
 					Subscribe(topic);
 					firstConnect = false;
-				}
+					if (Config.IsConfigReady) {
+						SubscribeUnits();
+					}
+				//}
 				loop();
 			}
 			else {
@@ -153,7 +156,9 @@ void Mqtt::MqttLoop() {
 			if (!res) {
 				Loger::Error("Failed loop");
 			}
-
+		}
+		else {
+			Loger::Error("Can't reconnect MQTT");
 		}
 	}
 	//Loger::Debug("End Mqttloop");
