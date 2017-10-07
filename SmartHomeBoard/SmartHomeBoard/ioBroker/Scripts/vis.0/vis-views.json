@@ -2761,8 +2761,8 @@
           "noAnimate": true
         },
         "style": {
-          "left": "403px",
-          "top": "332px",
+          "left": "394px",
+          "top": "350px",
           "z-index": "0",
           "background-color": "#caddf6",
           "border-width": "1px",
@@ -3218,7 +3218,7 @@
           "signals-horz-2": 0,
           "signals-vert-2": 0,
           "signals-hide-edit-2": false,
-          "oid": "mqtt.0.Equipment.Buttons.B0000",
+          "oid": "mqtt.0.Equipment.Buttons.B0002",
           "descriptionLeft": "Equipment/Buttons/B0111",
           "visibility-cond": "==",
           "visibility-val": 1,
@@ -3227,7 +3227,7 @@
           "openValue": "1",
           "openDoorValue": "2",
           "descriptionLeftDisabled": true,
-          "oid-open": "mqtt.0.Equipment.Buttons.B0020",
+          "oid-open": "mqtt.0.Equipment.Buttons.B0002",
           "openDoorStyle": "glossy-button-orange",
           "closeStyle": "glossy-button-pink",
           "openStyle": "glossy-button-green",
@@ -3236,8 +3236,8 @@
           "noAnimate": true
         },
         "style": {
-          "left": "308px",
-          "top": "402px",
+          "left": "407px",
+          "top": "325px",
           "background-color": "#caddf6",
           "border-width": "1px",
           "border-style": "inherit",
@@ -3808,6 +3808,85 @@
           "height": "48px"
         },
         "widgetSet": "bars"
+      },
+      "w00083": {
+        "tpl": "tplHqLock",
+        "data": {
+          "g_fixed": true,
+          "g_visibility": false,
+          "g_css_font_text": false,
+          "g_css_background": false,
+          "g_css_shadow_padding": true,
+          "g_css_border": false,
+          "g_gestures": false,
+          "g_signals": false,
+          "closedIcon": "/vis/my/switch.png",
+          "openedIcon": "/vis/my/switch.png",
+          "popupRadius": "100",
+          "buttonRadius": "50",
+          "closeIcon": "/vis/my/lamp-light-bulb-outline.png",
+          "openIcon": "/vis/my/eco-lightbulb-symbol.png",
+          "openDoorIcon": "/vis/my/light-bulb.png",
+          "showTimeout": "8000",
+          "infoLeftFontSize": "12",
+          "infoFontRightSize": "12",
+          "infoLeftPaddingLeft": "15",
+          "infoLeftPaddingRight": "50",
+          "infoRightPaddingRight": "15",
+          "styleNormal": "glossy-button-blue",
+          "styleActive": "glossy-button-blue",
+          "signals-cond-0": "==",
+          "signals-val-0": true,
+          "signals-icon-0": "/vis/signals/lowbattery.png",
+          "signals-icon-size-0": 0,
+          "signals-blink-0": false,
+          "signals-horz-0": 0,
+          "signals-vert-0": 0,
+          "signals-hide-edit-0": false,
+          "signals-cond-1": "==",
+          "signals-val-1": true,
+          "signals-icon-1": "/vis/signals/lowbattery.png",
+          "signals-icon-size-1": 0,
+          "signals-blink-1": false,
+          "signals-horz-1": 0,
+          "signals-vert-1": 0,
+          "signals-hide-edit-1": false,
+          "signals-cond-2": "==",
+          "signals-val-2": true,
+          "signals-icon-2": "/vis/signals/lowbattery.png",
+          "signals-icon-size-2": 0,
+          "signals-blink-2": false,
+          "signals-horz-2": 0,
+          "signals-vert-2": 0,
+          "signals-hide-edit-2": false,
+          "oid": "mqtt.0.Equipment.Buttons.B0008",
+          "descriptionLeft": "Equipment/Buttons/B0112",
+          "visibility-cond": "==",
+          "visibility-val": 1,
+          "visibility-groups-action": "hide",
+          "closeValue": "4",
+          "openValue": "1",
+          "openDoorValue": "2",
+          "descriptionLeftDisabled": true,
+          "oid-open": "mqtt.0.Equipment.Buttons.B0008",
+          "openDoorStyle": "glossy-button-orange",
+          "closeStyle": "glossy-button-pink",
+          "openStyle": "glossy-button-green",
+          "filterkey": "Выключатель",
+          "waveColor": "",
+          "noAnimate": true
+        },
+        "style": {
+          "left": "238px",
+          "top": "381px",
+          "z-index": "0",
+          "background-color": "#caddf6",
+          "border-width": "1px",
+          "border-style": "inherit",
+          "border-radius": "10px",
+          "box-shadow": "0 0 30px 10px #4575b5"
+        },
+        "widgetSet": "hqwidgets"
       }
     },
     "name": "Floor_1",
@@ -3820,14 +3899,15 @@
   "Floor_2": {
     "settings": {
       "style": {
-        "background-image": "url(\"http://raspberrypi:8082/vis/img/house/2nd_fl_view2.png\"), radial-gradient(50% 105.41% at center 350px, rgb(66, 140, 189) 0px, rgb(39, 98, 134) 20%, rgb(34, 78, 114) 33%, rgb(0, 3, 41) 100%)",
-        "background-repeat": "no-repeat"
+        "background-image": "url(\"\")",
+        "background-repeat": "no-repeat",
+        "background": "url(\"/vis/img/house/2nd_fl_view2.png\") no-repeat scroll 0% 0% / auto padding-box border-box, rgba(0, 0, 0, 0) radial-gradient(50% 105.41% at center 350px, rgb(66, 140, 189) 0px, rgb(39, 98, 134) 20%, rgb(34, 78, 114) 33%, rgb(0, 3, 41) 100%) no-repeat scroll 0% 0% / auto padding-box border-box"
       },
       "theme": "redmond",
       "sizex": "",
       "sizey": "",
-      "gridSize": "",
-      "snapType": null
+      "gridSize": "10",
+      "snapType": 0
     },
     "widgets": {
       "w00037": {
@@ -4938,83 +5018,12 @@
       }
     },
     "name": "Floor_2",
-    "activeWidgets": [],
+    "activeWidgets": [
+      "w00055"
+    ],
     "filterList": [
       "Выключатель",
       "Свет"
     ]
-  },
-  "Дом": {
-    "settings": {
-      "style": {
-        "background_class": ""
-      },
-      "theme": "redmond",
-      "sizex": "1027",
-      "sizey": "768",
-      "gridSize": "",
-      "useAsDefault": true,
-      "alwaysRender": true
-    },
-    "widgets": {
-      "w00003": {
-        "tpl": "tplSTab",
-        "data": {
-          "g_fixed": false,
-          "g_visibility": false,
-          "g_css_font_text": false,
-          "g_css_background": false,
-          "g_css_shadow_padding": false,
-          "g_css_border": false,
-          "g_gestures": false,
-          "g_signals": false,
-          "height": "100",
-          "show_tabs": "3",
-          "title_tab_1": "Этаж 1",
-          "signals-cond-0": "==",
-          "signals-val-0": true,
-          "signals-icon-0": "/vis/signals/lowbattery.png",
-          "signals-icon-size-0": 0,
-          "signals-blink-0": false,
-          "signals-horz-0": 0,
-          "signals-vert-0": 0,
-          "signals-hide-edit-0": false,
-          "signals-cond-1": "==",
-          "signals-val-1": true,
-          "signals-icon-1": "/vis/signals/lowbattery.png",
-          "signals-icon-size-1": 0,
-          "signals-blink-1": false,
-          "signals-horz-1": 0,
-          "signals-vert-1": 0,
-          "signals-hide-edit-1": false,
-          "signals-cond-2": "==",
-          "signals-val-2": true,
-          "signals-icon-2": "/vis/signals/lowbattery.png",
-          "signals-icon-size-2": 0,
-          "signals-blink-2": false,
-          "signals-horz-2": 0,
-          "signals-vert-2": 0,
-          "signals-hide-edit-2": false,
-          "title_tab_2": "Этаж 2",
-          "title_tab_3": "Tab",
-          "visibility-cond": "==",
-          "visibility-val": 1,
-          "visibility-groups-action": "hide",
-          "contains_view_1": "Floor_1",
-          "contains_view_2": "Floor_2",
-          "contains_view_3": "DemoView"
-        },
-        "style": {
-          "left": "-3px",
-          "top": "3px",
-          "width": "1061px",
-          "height": "816px"
-        },
-        "widgetSet": "tabs"
-      }
-    },
-    "name": "Дом",
-    "activeWidgets": [],
-    "filterList": []
   }
 }
