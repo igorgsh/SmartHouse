@@ -311,9 +311,9 @@ void Configuration::ReadUnit(int ind, Unit* u) {
 		Byte | Object
 		-------------
 		0-1: id
-		1: type
-		2: pin
-		3: lhOn
+		2: type
+		3: pin
+		4: lhOn
 	*/
 	int addr = Configuration::addrUnits + ind * Configuration::sizeOfUnit;
 	u->Id = Read16(addr);
@@ -326,7 +326,7 @@ void Configuration::ReadUnit(int ind, Unit* u) {
 			owU->address[i] = EEPROM.read(GetOneWireAddr(ind) + i);
 		}
 	}
-
+	u->print("Unit from ROM:", D_DEBUG);
 }
 
 int Configuration::GetUnitsAddr(int i) {
@@ -355,6 +355,7 @@ void Configuration::WriteUnit(int ind, const Unit* u) {
 			EEPROM.write(GetOneWireAddr(ind) + i, owU->address[i]);
 		}
 	}
+	u->print("Unit TO ROM:", D_DEBUG);
 }
 
 void Configuration::WriteNumberUnits() {
@@ -430,6 +431,9 @@ void Configuration::UpdateActions(String jsonConfig) {
 			if (root.containsKey("targetAction")) {
 				actions[actionCounter]->targetAction = (ActionType)((byte)root["targetAction"]);
 			}
+			if (root.containsKey("targetType")) {
+				actions[actionCounter]->targetType = (byte)(((const char*)root["targetType"])[0]);
+			}
 
 			actions[actionCounter]->print("Action received:", D_DEBUG);
 		}
@@ -486,7 +490,7 @@ uint16_t Configuration::Read16(uint16_t addr) {
 }
 
 void Configuration::Write16(uint16_t addr, uint16_t val) {
-	EEPROM.write(addr, (byte)((val >> 8) & 0xFF00));
+	EEPROM.write(addr, (byte)((val >> 8) & 0x00FF));
 	EEPROM.write(addr+1, (byte)((val & 0x00FF)));
 }
 
@@ -499,6 +503,7 @@ void Configuration::ReadAction(int i, Action* a) {
 	a->event = EEPROM.read(addr+5);
 	a->targetId = Read16(addr+6);
 	a->targetAction = (ActionType)EEPROM.read(addr+8);
+	a->targetType = EEPROM.read(addr + 9);
 	a->print("Action From ROM:", D_DEBUG);
 }
 
@@ -512,6 +517,7 @@ void Configuration::WriteAction(int i, const Action* a) {
 	EEPROM.write(addr+5, a->event);
 	Write16(addr+6, a->targetId);
 	EEPROM.write(addr+8, a->targetAction);
+	EEPROM.write(addr + 9, a->targetType);
 }
 
 void Configuration::WriteNumberActions() {
@@ -545,8 +551,8 @@ void Configuration::UpdateUnit(UnitType type, String name, String value) {
 	MEMFREE;
 	Unit *u = FindUnit(name.toInt());
 	if (u != NULL) {
-		//Loger::Debug("Unit found:" + String(u->Id));
-		u->ProcessUnit(value.toInt());
+		Loger::Debug("Unit found:" + String(u->Id));
+		u->ProcessUnit((ActionType)(value.toInt()));
 	} 
 	//Loger::Debug("End Update Unit");
 
@@ -559,7 +565,7 @@ void Configuration::UnitsLoop() {
 }
 
 
-void Configuration::ProcessAction(uint16_t id, byte event, unsigned long value) {
+void Configuration::ProcessAction(uint16_t id, byte event) {
 
 
 	for (int i = 0; i < numberActions; i++) {
@@ -574,37 +580,10 @@ void Configuration::ProcessAction(uint16_t id, byte event, unsigned long value) 
 					Unit* targetU = FindUnit(actions[i]->targetId);
 					if (targetU != NULL) {
 						targetU->print("Target: ", D_DEBUG);
-						switch (actions[i]->targetAction)
-						{
-						case ACT_NO_ACTION: {
-							break;
-						}
-						case ACT_RELAY_SWITCH: {
-							//Loger::Debug("Relay Switch");
-							if (targetU->Type == UnitType::RELAY) {
-								((Relay*)targetU)->RelaySwitch();
-							}
-							else {
-								Loger::Error("Action:" + String(actions[i]->Id) + ". Wrong type of target");
-							}
-							break;
-						}
-						case ACT_RELAY_ON: {
-							if (targetU->Type == UnitType::RELAY) {
-								((Relay*)targetU)->RelayOn();
-							}
-							else {
-								Loger::Error("Action:" + String(actions[i]->Id) + ". Wrong type of target");
-							}
-							break;
-						}
-						case ACT_RELAY_OFF: {
-							if (targetU->Type == UnitType::RELAY) {
-								((Relay*)targetU)->RelayOff();
-							}
-							else {
-								Loger::Error("Action:" + String(actions[i]->Id) + ". Wrong type of target");
-							}
+
+						switch (actions[i]->targetType) {
+						case UnitType::RELAY: {
+							((Relay*)targetU)->ProcessUnit(actions[i]->targetAction);
 							break;
 						}
 						default:
@@ -613,6 +592,11 @@ void Configuration::ProcessAction(uint16_t id, byte event, unsigned long value) 
 					}
 					else {
 						Loger::Error("Action:" + String(actions[i]->Id) + ". Target not found");
+						Unit *u = new UnitProto();
+						u->Id = actions[i]->targetId;
+						u->Type = actions[i]->targetType;
+						u->status = actions[i]->targetAction;
+						MqttClient.PublishUnit(u);
 					}
 				}
 				else {

@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include "definitions.h"
 #include "Loger.h"
+#include "Action.h"
 
 typedef enum {
 	BUTTON = 'B',
@@ -28,16 +29,16 @@ public:
 	virtual void InitUnit() = 0;
 	// All units are initialized. Link Bus devices
 	virtual void FinalInitUnit() = 0;
-	virtual void ProcessUnit(int newStatus) = 0;
+	virtual void ProcessUnit(ActionType action) = 0;
 	virtual ~Unit() {};
-	virtual void print(const char* header, DebugLevel level);
+	virtual void const print(const char* header, DebugLevel level);
 };
 
 class UnitProto : public Unit {
 public:
 	void SetDefault() {};
 	void InitUnit() {};
-	void ProcessUnit(int newStatus) {};
+	void ProcessUnit(ActionType action) {};
 	void UnitLoop() {};
 	void FinalInitUnit() {};
 };

@@ -45,7 +45,7 @@ public:
 	void UpdateOneWireBus(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_BUS, button, value); };
 	void UpdateOneWireThermo(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_THERMO, button, value); };
 	void UpdateUnit(UnitType type, String name, String value);
-	void ProcessAction(uint16_t id, byte event, unsigned long value);
+	void ProcessAction(uint16_t id, byte event);
 	//bool CheckConfigReady();
 	//bool CheckActionReady();
 
@@ -113,7 +113,7 @@ private:
 	//	-------------
 	//	0-7: address
 	int GetActionsAddr(int i);
-	static const int sizeOfAction = 9;
+	static const int sizeOfAction = 10;
 	// Action structure
 	//	Byte | Object
 	//	-------------
@@ -123,6 +123,7 @@ private:
 	//	5: event
 	//	6-7: targetId
 	//	8: targetAction
+	//	9: targetAction
 
 
 	void WriteNumberUnits();

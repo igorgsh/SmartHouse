@@ -13,28 +13,40 @@ void Relay::InitUnit() {
 	Loger::Debug("Relay["+String(Id) +"] Init");
 
 	pinMode(Pin, OUTPUT);
-	//digitalWrite(Pin, !lhOn);
-	RelaySet(status);
+	ProcessUnit(status==lhOn ? ACT_ON : ACT_OFF);
 	
 };
 
-void Relay::RelaySet(bool highLow)
+void Relay::RelaySet(bool newStatus)
 {
-	ProcessUnit(highLow);
-
+	Loger::Debug("Relay[" + String(Id) + "]=" + (newStatus == HIGH ? "HIGH" : "LOW"));
+	digitalWrite(Pin, (newStatus == HIGH ? lhOn : !lhOn));
+	status = newStatus;
+	MqttClient.PublishUnit(this);
+	Config.ProcessAction(Id, newStatus);
 }
 
 void Relay::RelaySwitch() {
 	RelaySet(!status);
 }
 
-void Relay::ProcessUnit(int newStatus) {
-	Loger::Debug("Relay["+String(Id) + "]=" + (newStatus == HIGH ? "HIGH" : "LOW"));
-	digitalWrite(Pin, (newStatus == HIGH ? lhOn : !lhOn));
-	status = newStatus;
-	MqttClient.PublishUnit(this);
-	Config.ProcessAction(Id, newStatus, newStatus);
-
+void Relay::ProcessUnit(ActionType event) {
+	switch (event) {
+	case ACT_OFF: {
+		RelayOff();
+		break;
+	}
+	case ACT_ON: {
+		RelayOn();
+		break;
+	}
+	case ACT_SWITCH: {
+		RelaySwitch();
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void Relay::UnitLoop() {

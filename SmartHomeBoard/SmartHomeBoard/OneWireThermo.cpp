@@ -29,9 +29,8 @@ void OneWireThermo::UnitLoop() {
 	OneWireBusUnit::UnitLoop();
 }
 
-void OneWireThermo::ProcessUnit(int newStatus) {
-	status = newStatus;
-	MqttClient.PublishUnit(this);
+void OneWireThermo::ProcessUnit(ActionType action) {
+// Nothing to do for this kind of unit
 }
 
 void OneWireThermo::HandleData() {
@@ -40,8 +39,9 @@ void OneWireThermo::HandleData() {
 		float t =  parent->GetTemperature(address);
 		Loger::Debug("Temperature=" + String(t));
 		Loger::Debug("Int temp=" + String((int)(t * 10)));
-		ProcessUnit((int)(t*10));
-		Config.ProcessAction(Id, ACT_SENSOR_READY , status);
+		status = (int)(t*10);
+		MqttClient.PublishUnit(this);
+		Config.ProcessAction(Id, ACT_SENSOR_READY);
 	}
 }
 

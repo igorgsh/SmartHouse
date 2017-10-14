@@ -49,7 +49,7 @@ void OneWireBusUnit::FillFrom(Unit* u) {
 }
 
 
-void OneWireBusUnit::print(const char* header, DebugLevel level) {
+void const OneWireBusUnit::print(const char* header, DebugLevel level) {
 	String str0 = "";
 	if (header != NULL) {
 		str0=header;

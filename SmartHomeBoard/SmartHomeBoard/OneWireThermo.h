@@ -12,7 +12,7 @@ public:
 	void SetDefault();
 	void UnitLoop();
 	void InitUnit();
-	void ProcessUnit(int newStatus);
+	void ProcessUnit(ActionType action);
 	//void FinalInitUnit();
 	void HandleData();
 

@@ -7,7 +7,7 @@
 #define BUTTON_LONG_PRESS	700	//after milis button is long pressed
 #define BUTTON_SHORT_PRESS	120	//after milis button is short pressed
 #define BUTTON_WRONG_PRESS	100		//ignore click less than this amount of millis 
-
+/*
 typedef enum {
 	BTN_OFF = 0,
 	BTN_ON = 1,
@@ -15,7 +15,7 @@ typedef enum {
 	BTN_SHORT_LONG = 3,
 	BTN_EXTRA_LONG = 4
 } ButtonStatus;
-
+*/
 class Button : 
 	public Unit
 {
@@ -27,12 +27,13 @@ public:
 	
 	void SetDefault();
 	void InitUnit();
-	void HandleButton();
 
-	void ProcessUnit(int newStatus);
+	void ProcessUnit(ActionType event);
 	void UnitLoop();
 	void FinalInitUnit() {};
-
+private:
+	void HandleButton();
+	void HandleFinish(int newStatus);
 };
 
 

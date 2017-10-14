@@ -8,13 +8,14 @@ class Relay : public Unit
 public:
 	void SetDefault();
 	void InitUnit();
+	void ProcessUnit(ActionType event);
+	void UnitLoop();
+	void FinalInitUnit() {};
+private:
 	void RelaySet(bool highLow);
 	void RelaySwitch();
-	void ProcessUnit(int newStatus);
-	void UnitLoop();
 	void RelayOn() { RelaySet(lhOn); };
 	void RelayOff() { RelaySet(!lhOn); };
-	void FinalInitUnit() {};
 
 };
 

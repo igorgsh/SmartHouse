@@ -79,6 +79,9 @@
     <None Include="ioBroker\Scripts\objects\equipment.json">
       <Filter>ioBroker\Objects</Filter>
     </None>
+    <None Include="ioBroker\Scripts\objects\mqtt.json">
+      <Filter>ioBroker\Objects</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.SmartHomeBoard.vsarduino.h">

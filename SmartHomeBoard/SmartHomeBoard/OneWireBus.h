@@ -10,7 +10,7 @@ class OneWireBus :
 public:
 
 	void InitUnit();
-	void ProcessUnit(int newStatus);
+	void ProcessUnit(ActionType action);
 	void UnitLoop();
 	void SetDefault();
 	void FinalInitUnit();

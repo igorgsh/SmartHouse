@@ -35,12 +35,13 @@ void OneWireBus::InitUnit() {
 	sensors = new DallasTemperature(oneWire);
 	sensors->begin();
 	MqttClient.PublishUnit(this);
+	Config.ProcessAction(Id, status);
 
 }
-void OneWireBus::ProcessUnit(int newStatus) {
-	status = newStatus;
+void OneWireBus::ProcessUnit(ActionType action) {
+	status = action;
 	MqttClient.PublishUnit(this);
-	Config.ProcessAction(Id, newStatus, newStatus);
+	Config.ProcessAction(Id, action);
 }
 
 void OneWireBus::UnitLoop() {

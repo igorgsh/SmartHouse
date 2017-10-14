@@ -16,7 +16,8 @@ bool Action::compare(Action* a) {
 		originId == a->originId &&
 		originType == a->originType &&
 		targetAction == a->targetAction &&
-		targetId == a->targetId
+		targetId == a->targetId &&
+		targetType == a->targetType
 		);
 }
 
@@ -38,6 +39,9 @@ void Action::print(const char* header,DebugLevel level) {
 	str0 += String(targetAction,DEC);
 	str0 += ";targetId:";
 	str0 += String(targetId,DEC);
+	str0 += ";targetType:";
+	str0 += String((char)targetType);
+
 	str0 += " @ ";
 	Loger::Log(level, str0);
 }
@@ -49,6 +53,7 @@ void Action::FillFrom(Action* a) {
 	originType = a->originType;
 	targetAction = a->targetAction;
 	targetId = a->targetId;
+	targetType = a->targetType;
 }
 
 void Action::InitAction() {
