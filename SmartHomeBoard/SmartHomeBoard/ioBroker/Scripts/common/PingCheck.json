@@ -7,7 +7,7 @@
 var pingGrp = 'ping.0';
 var pingGrpAll = pingGrp + '.*';
 var relayOff = 0;
-
+   
 var PingConfig = [
     '{"id":1, "DeviceName": "Board0", "Pin":20}'
     ,'{"id":2, "DeviceName": "Board1", "Pin":21}'

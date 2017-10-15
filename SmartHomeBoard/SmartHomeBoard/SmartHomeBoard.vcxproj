@@ -87,13 +87,16 @@
     <None Include="..\iobroker\common\timercheck.json" />
     <None Include="..\iobroker\common\_dir.json" />
     <None Include="..\iobroker\global\checkwatchdog.json" />
-    <None Include="..\iobroker\global\configuration.json" />
     <None Include="..\iobroker\global\paths.json" />
     <None Include="..\iobroker\global\resetdevice.json" />
     <None Include="..\iobroker\global\_dir.json" />
     <None Include="..\iobroker\test\pingcheck.json" />
     <None Include="..\iobroker\test\test1.json" />
     <None Include="..\iobroker\test\_dir.json" />
+    <None Include="ioBroker\Scripts\common\AstroSchedule.json" />
+    <None Include="ioBroker\Scripts\common\PingCheck.json" />
+    <None Include="ioBroker\Scripts\common\SwitchOffAll.json" />
+    <None Include="ioBroker\Scripts\global\Configuration.json" />
     <None Include="ioBroker\Scripts\objects\equipment.json" />
     <None Include="ioBroker\Scripts\objects\mqtt.json" />
     <None Include="ioBroker\Scripts\vis.0\vis-views.json" />

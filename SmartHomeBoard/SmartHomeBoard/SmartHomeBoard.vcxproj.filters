@@ -49,9 +49,6 @@
     <None Include="..\iobroker\global\checkwatchdog.json">
       <Filter>ioBroker\global</Filter>
     </None>
-    <None Include="..\iobroker\global\configuration.json">
-      <Filter>ioBroker\global</Filter>
-    </None>
     <None Include="..\iobroker\global\paths.json">
       <Filter>ioBroker\global</Filter>
     </None>
@@ -81,6 +78,18 @@
     </None>
     <None Include="ioBroker\Scripts\objects\mqtt.json">
       <Filter>ioBroker\Objects</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\AstroSchedule.json">
+      <Filter>ioBroker\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\PingCheck.json">
+      <Filter>ioBroker\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\SwitchOffAll.json">
+      <Filter>ioBroker\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\global\Configuration.json">
+      <Filter>ioBroker\global</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
