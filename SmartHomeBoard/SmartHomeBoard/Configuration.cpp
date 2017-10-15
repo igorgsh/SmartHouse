@@ -121,7 +121,7 @@ void Configuration::Init() {
 Unit* Configuration::CreateTypedUnit(byte type) {
 
 	Unit *u = NULL;
-	Loger::Debug("CreateTyped=" + String((char)type));
+	//Loger::Debug("CreateTyped=" + String((char)type));
 	if (type == UnitType::BUTTON) {
 		//Loger::Debug("Point 8");
 		u = new Button();
@@ -256,7 +256,7 @@ void Configuration::BuildConfig() {
 			units[i]->FillFrom(&u0);
 			units[i]->SetDefault();
 
-			units[i]->print("Unit From ROM:", D_DEBUG);
+			//units[i]->print("Unit From ROM:", D_DEBUG);
 		}
 		//Debug2("2NumberOfunits=", numberUnits);
 		Loger::Debug("Done!");
@@ -326,7 +326,7 @@ void Configuration::ReadUnit(int ind, Unit* u) {
 			owU->address[i] = EEPROM.read(GetOneWireAddr(ind) + i);
 		}
 	}
-	u->print("Unit from ROM:", D_DEBUG);
+//	u->print("Unit from ROM:", D_DEBUG);
 }
 
 int Configuration::GetUnitsAddr(int i) {
@@ -355,7 +355,7 @@ void Configuration::WriteUnit(int ind, const Unit* u) {
 			EEPROM.write(GetOneWireAddr(ind) + i, owU->address[i]);
 		}
 	}
-	u->print("Unit TO ROM:", D_DEBUG);
+//	u->print("Unit TO ROM:", D_DEBUG);
 }
 
 void Configuration::WriteNumberUnits() {
@@ -435,7 +435,7 @@ void Configuration::UpdateActions(String jsonConfig) {
 				actions[actionCounter]->targetType = (byte)(((const char*)root["targetType"])[0]);
 			}
 
-			actions[actionCounter]->print("Action received:", D_DEBUG);
+			//actions[actionCounter]->print("Action received:", D_DEBUG);
 		}
 
 		actionCounter++;

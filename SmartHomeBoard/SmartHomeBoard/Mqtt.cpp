@@ -84,7 +84,7 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 	//Loger::Debug("subscription=" + String(subscription));
 	//Loger::Debug("strcmp=" + String(strcmp(topic, subscription)));
 	if (strcmp(topic,subscription)==0) {
-		Loger::Debug("Update Config");
+		//Loger::Debug("Update Config");
 		Config.UpdateConfig(strPayload);
 		//Loger::Debug("Point 1");
 	}
@@ -103,7 +103,7 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 			}
 			else {
 				if (strTopic.startsWith(MQTT_RELAYS)) {
-					Loger::Debug("Update Relay");
+					//Loger::Debug("Update Relay");
 
 					Config.UpdateRelay(strTopic.substring(strlen(MQTT_RELAYS) + 2), strPayload);
 				}

@@ -2,7 +2,7 @@
 {
   "debug": false,
   "verbose": false,
-  "mtime": 1507365620
+  "mtime": 1508077699
 }
 -- do not edit previous lines - END --*/
 /* -- do not edit following lines - START --
@@ -21,14 +21,12 @@ var reqAct = prefixCfg + '*.' + reqActPart;
 var cacheConfigState = $(reqConf);
 cacheConfigState.on (function(obj) {
     
-   log("Request for config");
+//   log("Request for config");
    var configTopic = obj.id;
    log("Request:" + configTopic);
    var boardIdStr = configTopic.substr(prefixCfg.length, 2);
    var boardId = parseInt(boardIdStr);
    
-   log("Board:" + boardIdStr);
-//   log("Board:" + boardId);
    configTopic = prefixCfg + boardIdStr + ".Configuration";
    //log ("Config topic:" + configTopic);
    
