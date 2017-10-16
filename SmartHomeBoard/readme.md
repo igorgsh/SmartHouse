@@ -1,5 +1,3 @@
-# SmartHouse
-Smart House development
 
 History.
 
