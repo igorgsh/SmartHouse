@@ -7,9 +7,9 @@
 extern Mqtt MqttClient;
 
 void Button::SetDefault() {
-		startPressing = 0;
-		isLongMode = false;
-		status = ActionType::ACT_OFF;
+	startPressing = 0;
+	isLongMode = false;
+	status = ActionType::ACT_OFF;
 }
 
 void Button::InitUnit() {
@@ -26,12 +26,12 @@ void Button::HandleButton() {
 
 	unsigned long now = millis();
 	btnValue = digitalRead(Pin);
-	
+
 	if (btnValue == lhOn) {// button is pressed
 		if (startPressing == 0) { // start pressing
 			startPressing = now;
 			btnValue = ACT_OFF;
-			Loger::Debug("Start pressing["+String(Id)+"]");
+			Loger::Debug("Start pressing[" + String(Id) + "]");
 		}
 		else {
 			if (startPressing + BUTTON_EXTRA_LONG_PRESS <= now) { // Yes! Button is extra long pressed
@@ -67,7 +67,7 @@ void Button::HandleButton() {
 	}
 	else { //Button is released
 		if (startPressing != 0) { // Yes! Button had been pressed before
-			Loger::Debug("Button [" + String(Id) + "] pressed(ms):" +String(now - startPressing));
+			Loger::Debug("Button [" + String(Id) + "] pressed(ms):" + String(now - startPressing));
 			if (startPressing + BUTTON_WRONG_PRESS > now) { // Button is pressed too short
 				btnValue = ACT_OFF;
 				Loger::Debug("Too short Detected");
@@ -95,9 +95,9 @@ void Button::HandleButton() {
 		}
 	}
 
-//	if (btnValue != ACT_OFF ) {
-//		ProcessUnit(btnValue);
-//	}
+	//	if (btnValue != ACT_OFF ) {
+	//		ProcessUnit(btnValue);
+	//	}
 }
 
 void Button::HandleFinish(int newStatus) {
@@ -108,7 +108,11 @@ void Button::HandleFinish(int newStatus) {
 }
 
 void Button::ProcessUnit(ActionType event) {
-	//Nothing to do. There is no any command to button
+
+	Config.ProcessAction(Id, event);
+	status = ACT_OFF;
+	MqttClient.PublishUnit(this);
+
 }
 
 void Button::UnitLoop() {
