@@ -41,8 +41,7 @@ var Configurations = [
     ,
     "{\"id\":8, \"type\":\"B\",\"Pin\":8,\"lhOn\":0,\"status\":0}" // Коридор(правый) - крыльцо
 
-    ,
-    "{\"id\":14, \"type\":\"B\",\"Pin\":14,\"lhOn\":0,\"status\":0}" // ???
+    //,'{"id":14, "type":"B","Pin":14,"lhOn":0,"status":0}' // ???
     ,
     "{\"id\":15, \"type\":\"B\",\"Pin\":15,\"lhOn\":0,\"status\":0}" // Красная спальня
     ,
@@ -50,15 +49,15 @@ var Configurations = [
     ,
     "{\"id\":17, \"type\":\"B\",\"Pin\":17,\"lhOn\":0,\"status\":0}" // Чулан
     ,
-    "{\"id\":19, \"type\":\"B\",\"Pin\":19,\"lhOn\":0,\"status\":0}" // Кладовка запад
+    "{\"id\":19, \"type\":\"B\",\"Pin\":19,\"lhOn\":0,\"status\":0}" // Стена Кладовка запад
     ,
-    "{\"id\":20, \"type\":\"B\",\"Pin\":20,\"lhOn\":0,\"status\":0}" // Кладовка восток
+    "{\"id\":20, \"type\":\"B\",\"Pin\":20,\"lhOn\":0,\"status\":0}" // Стена Кладовка восток
 
 
     ,
     "{\"id\":22, \"type\":\"R\",\"Pin\":22,\"lhOn\":1,\"status\":0,\"priority\":10}" //L1.1 Коридор 1. Восток
     ,
-    "{\"id\":23, \"type\":\"R\",\"Pin\":23,\"lhOn\":1,\"status\":0,\"priority\":10}" //L2.1
+    "{\"id\":23, \"type\":\"R\",\"Pin\":23,\"lhOn\":1,\"status\":0,\"priority\":10}" //L2.1 ????
     ,
     "{\"id\":24, \"type\":\"R\",\"Pin\":24,\"lhOn\":1,\"status\":0,\"priority\":10}" //L1.2 Коридор 1. Запад
     ,
@@ -70,11 +69,11 @@ var Configurations = [
     ,
     "{\"id\":28, \"type\":\"R\",\"Pin\":28,\"lhOn\":1,\"status\":0,\"priority\":10}" //L1.4 Кладовка
     ,
-    "{\"id\":29, \"type\":\"R\",\"Pin\":29,\"lhOn\":1,\"status\":0,\"priority\":10}" //L2.4
+    "{\"id\":29, \"type\":\"R\",\"Pin\":29,\"lhOn\":1,\"status\":0,\"priority\":10}" //L2.4 ????
     ,
     "{\"id\":30, \"type\":\"R\",\"Pin\":30,\"lhOn\":1,\"status\":0,\"priority\":10}" //L1.5 Тамбур
     ,
-    "{\"id\":31, \"type\":\"R\",\"Pin\":31,\"lhOn\":1,\"status\":0,\"priority\":10}" //L2.5
+    "{\"id\":31, \"type\":\"R\",\"Pin\":31,\"lhOn\":1,\"status\":0,\"priority\":10}" //L2.5 ????
     ,
     "{\"id\":32, \"type\":\"R\",\"Pin\":32,\"lhOn\":1,\"status\":0,\"priority\":10}" //L1.6 Топочная над входом
     ,
@@ -117,6 +116,8 @@ var Configurations = [
     "{\"id\":107, \"type\":\"B\",\"Pin\":7,\"lhOn\":0,\"status\":0,\"priority\":10}" // Синяя спальня
     ,
     "{\"id\":106, \"type\":\"B\",\"Pin\":6,\"lhOn\":0,\"status\":0,\"priority\":10}" // Зеленая спальня
+    ,
+    "{\"id\":105, \"type\":\"B\",\"Pin\":5,\"lhOn\":0,\"status\":0,\"priority\":10}" // Террасса
 
     ,
     "{\"id\":122, \"type\":\"R\",\"Pin\":22,\"lhOn\":1,\"status\":0,\"priority\":10}" //L4.1 СУ2 над раковиной
@@ -161,7 +162,7 @@ var Configurations = [
     ,
     "{\"id\":142, \"type\":\"R\",\"Pin\":42,\"lhOn\":1,\"status\":0,\"priority\":10}" //L5.3
     ,
-    "{\"id\":143, \"type\":\"R\",\"Pin\":43,\"lhOn\":1,\"status\":0,\"priority\":10}" //L5.6
+    "{\"id\":143, \"type\":\"R\",\"Pin\":43,\"lhOn\":1,\"status\":0,\"priority\":10}" //L5.6 Терраса 1
     ,
     "{\"id\":144, \"type\":\"R\",\"Pin\":44,\"lhOn\":1,\"status\":0,\"priority\":10}" //L5.4
     ,
@@ -275,9 +276,9 @@ var Actions = [
 
     //Кухня настенные
     ,
-    '{"id":55,"originId":20,"originType":"B","event":1,"targetId":27,"targetAction":3,"targetType":"R"}',
-    '{"id":56,"originId":20,"originType":"B","event":2,"targetId":44,"targetAction":3,"targetType":"R"}',
-    '{"id":57,"originId":20,"originType":"B","event":2,"targetId":26,"targetAction":3,"targetType":"R"}'
+    '{"id":55,"originId":20,"originType":"B","event":2,"targetId":27,"targetAction":3,"targetType":"R"}',
+    '{"id":56,"originId":20,"originType":"B","event":1,"targetId":44,"targetAction":3,"targetType":"R"}',
+    '{"id":57,"originId":20,"originType":"B","event":1,"targetId":26,"targetAction":3,"targetType":"R"}'
 
 
     // Кухня выключить все
@@ -369,6 +370,10 @@ var Actions = [
     '{"id":152,"originId":107,"originType":"B","event":2,"targetId":132,"targetAction":3,"targetType":"R"}',
     '{"id":153,"originId":107,"originType":"B","event":4,"targetId":132,"targetAction":0,"targetType":"R"}',
     '{"id":154,"originId":107,"originType":"B","event":4,"targetId":137,"targetAction":0,"targetType":"R"}'
+
+    //Терраса
+    ,
+    '{"id":160,"originId":105,"originType":"B","event":1,"targetId":143,"targetAction":3,"targetType":"R"}'
 
   ],
   [ //Board 02
