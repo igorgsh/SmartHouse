@@ -2,7 +2,7 @@
 {
   "debug": false,
   "verbose": false,
-  "mtime": 1508077699
+  "mtime": 1525548671
 }
 -- do not edit previous lines - END --*/
 /* -- do not edit following lines - START --
@@ -32,7 +32,7 @@ cacheConfigState.on (function(obj) {
    
     var configLength = Configurations[boardId].length;
     setState(configTopic, '{"length":' + configLength +'}');
-    
+    log("Config length=" + configLength);
     for (var i=0; i< configLength; i++) {
         //log(JSON.stringify(JSON.parse(Configurations[i])));
         
@@ -55,7 +55,7 @@ cacheActState.on (function(obj) {
     var actLength = Actions[boardId].length;
     
     setState(actTopic, '{"length":' + actLength +'}');
-    
+    log ("Action length = " + actLength);    
     for (var i=0; i< actLength; i++) {
         setState(actTopic,Actions[boardId][i]);
     }

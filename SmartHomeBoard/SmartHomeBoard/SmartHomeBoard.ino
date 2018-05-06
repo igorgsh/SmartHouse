@@ -66,8 +66,9 @@ void setup() {
 	//Set a timer 
 	//MsTimer2::set(100, Timer2);
 	//MsTimer2::start();
-
+	//Loger::Debug("Point 1");
 	pinMode(13, OUTPUT);
+	//Loger::Debug("Point 2");
 	digitalWrite(13, HIGH);
 	Loger::Debug("Enjoy!");
 	//Debug2("Ethernet Status is:", Ethernet._state);
@@ -77,6 +78,7 @@ void setup() {
 void loop() {
 	static unsigned long tp60 = 0;
 	unsigned long now = millis();
+	//Loger::Debug("Loop");
 
 	if ((now-tp60) > (unsigned long)1*60*1000) { //1 min 
 		Config.loop60();

@@ -123,7 +123,7 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 							sprintf(subscription, MQTT_RESET_BOARD, Config.BoardId);
 							Loger::Debug("Reset");
 
-							if (strTopic.startsWith((String)subscription)) {
+							if (strTopic.startsWith((String)subscription) && strPayload!=NULL && strPayload[0]>='0') {
 								Board::Reset(10000);
 							}
 						}

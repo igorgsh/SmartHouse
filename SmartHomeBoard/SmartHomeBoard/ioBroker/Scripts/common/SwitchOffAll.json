@@ -1,6 +1,6 @@
 /* -- do not edit following lines - START --
 {
-  "mtime": 1508080278,
+  "mtime": 1508081133,
   "debug": false,
   "verbose": true
 }
@@ -27,7 +27,7 @@ $("mqtt.0.Equipment.Virtual.Buttons.B9901").on(function(obj){
                             devName+="Relays.B";
                         }
                         devName += (b<10? "0": "")+(conf.id<100? "0"+conf.id : conf.id); 
-                        log("DevName=" + devName);
+                        //log("DevName=" + devName);
                         if (isApplicable) {
                            setState(devName,0); 
                         }
