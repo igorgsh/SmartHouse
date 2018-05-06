@@ -64,9 +64,6 @@
     <None Include="..\iobroker\common\config2.json">
       <Filter>ioBroker\common</Filter>
     </None>
-    <None Include="..\iobroker\common\hardreset.json">
-      <Filter>ioBroker\common</Filter>
-    </None>
     <None Include="ioBroker\Scripts\vis.0\vis-views.json">
       <Filter>ioBroker\vis.0</Filter>
     </None>
@@ -89,6 +86,9 @@
       <Filter>ioBroker\global</Filter>
     </None>
     <None Include="ioBroker\Scripts\common\TimerCheck.json">
+      <Filter>ioBroker\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\hardreset.json">
       <Filter>ioBroker\common</Filter>
     </None>
   </ItemGroup>

@@ -83,7 +83,6 @@
   <ItemGroup>
     <None Include="..\iobroker\common\config.json" />
     <None Include="..\iobroker\common\config2.json" />
-    <None Include="..\iobroker\common\hardreset.json" />
     <None Include="..\iobroker\common\_dir.json" />
     <None Include="..\iobroker\global\checkwatchdog.json" />
     <None Include="..\iobroker\global\paths.json" />
@@ -93,6 +92,7 @@
     <None Include="..\iobroker\test\test1.json" />
     <None Include="..\iobroker\test\_dir.json" />
     <None Include="ioBroker\Scripts\common\AstroSchedule.json" />
+    <None Include="ioBroker\Scripts\common\hardreset.json" />
     <None Include="ioBroker\Scripts\common\PingCheck.json" />
     <None Include="ioBroker\Scripts\common\SwitchOffAll.json" />
     <None Include="ioBroker\Scripts\common\TimerCheck.json" />
