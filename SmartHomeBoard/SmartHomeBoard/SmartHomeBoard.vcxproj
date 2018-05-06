@@ -84,7 +84,6 @@
     <None Include="..\iobroker\common\config.json" />
     <None Include="..\iobroker\common\config2.json" />
     <None Include="..\iobroker\common\hardreset.json" />
-    <None Include="..\iobroker\common\timercheck.json" />
     <None Include="..\iobroker\common\_dir.json" />
     <None Include="..\iobroker\global\checkwatchdog.json" />
     <None Include="..\iobroker\global\paths.json" />
@@ -96,6 +95,7 @@
     <None Include="ioBroker\Scripts\common\AstroSchedule.json" />
     <None Include="ioBroker\Scripts\common\PingCheck.json" />
     <None Include="ioBroker\Scripts\common\SwitchOffAll.json" />
+    <None Include="ioBroker\Scripts\common\TimerCheck.json" />
     <None Include="ioBroker\Scripts\global\Configuration.json" />
     <None Include="ioBroker\Scripts\objects\equipment.json" />
     <None Include="ioBroker\Scripts\objects\mqtt.json" />
