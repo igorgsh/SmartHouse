@@ -2,7 +2,7 @@
 {
   "debug": false,
   "verbose": false,
-  "mtime": 1525547585
+  "mtime": 1526147442
 }
 -- do not edit previous lines - END --*/
 /* -- do not edit following lines - START --
@@ -19,3 +19,7 @@ var prefixLog = prefixTopic + '.Log.Board_';
 
 var pingGrp = "ping.0";
 var RouterPing = pingGrp + '.192_168_0_1';
+
+var SunPrefix = prefixTopic + '.Config.Environment';
+var SunsetVar = SunPrefix + '.Sunset';
+var SunriseVar = SunPrefix + '.Sunrise';

@@ -2,7 +2,7 @@
 {
   "debug": false,
   "verbose": false,
-  "mtime": 1525607091
+  "mtime": 1534682357
 }
 -- do not edit previous lines - END --*/
 /* -- do not edit following lines - START --
@@ -40,7 +40,7 @@ var Configurations = [
             ,'{"id":3, "type":"B","Pin":3,"lhOn":0,"status":0}' // Кухня, возле мойки
             ,'{"id":8, "type":"B","Pin":8,"lhOn":0,"status":0}' // Коридор(правый) - крыльцо
 
-            //,'{"id":14, "type":"B","Pin":14,"lhOn":0,"status":0}' // ???
+            ,'{"id":14, "type":"B","Pin":14,"lhOn":0,"status":0}' // Сарай
             ,'{"id":15, "type":"B","Pin":15,"lhOn":0,"status":0}' // Красная спальня
             ,'{"id":16, "type":"B","Pin":16,"lhOn":0,"status":0}' // Кухня Возле холодильника
             ,'{"id":17, "type":"B","Pin":17,"lhOn":0,"status":0}' // Чулан
@@ -49,13 +49,14 @@ var Configurations = [
 
 			
             ,'{"id":22, "type":"R","Pin":22,"lhOn":1,"status":0,"priority":10}' 	//L1.1 Коридор 1. Восток
-            ,'{"id":23, "type":"R","Pin":23,"lhOn":1,"status":0,"priority":10}'   //L2.1 ????
+            ,'{"id":23, "type":"R","Pin":23,"lhOn":1,"status":0,"priority":10}'   //L2.1 Вытяжка
 		    ,'{"id":24, "type":"R","Pin":24,"lhOn":1,"status":0,"priority":10}'	//L1.2 Коридор 1. Запад
             ,'{"id":25, "type":"R","Pin":25,"lhOn":1,"status":0,"priority":10}'   //L2.2 Кухня, между мойкой и плитой
             ,'{"id":26, "type":"R","Pin":26,"lhOn":1,"status":0,"priority":10}'	//L1.3 Кухня Восток
             ,'{"id":27, "type":"R","Pin":27,"lhOn":1,"status":0,"priority":10}'   //L2.3 Кухня Север
 		    ,'{"id":28, "type":"R","Pin":28,"lhOn":1,"status":0,"priority":10}'	//L1.4 Кладовка
-		    ,'{"id":29, "type":"R","Pin":29,"lhOn":1,"status":0,"priority":10}'   //L2.4 ????
+		    ,'{"id":29, "type":"R","Pin":29,"lhOn":1,"status":0,"priority":10}'   //L2.4 Сарай
+            
             ,'{"id":30, "type":"R","Pin":30,"lhOn":1,"status":0,"priority":10}'	//L1.5 Тамбур 
 		    ,'{"id":31, "type":"R","Pin":31,"lhOn":1,"status":0,"priority":10}'   //L2.5 ????
             ,'{"id":32, "type":"R","Pin":32,"lhOn":1,"status":0,"priority":10}'	//L1.6 Топочная над входом
@@ -64,6 +65,7 @@ var Configurations = [
 	        ,'{"id":35, "type":"R","Pin":35,"lhOn":1,"status":0,"priority":10}'   //L2.7
             ,'{"id":36, "type":"R","Pin":36,"lhOn":1,"status":0,"priority":10}'	//L1.8
 		    ,'{"id":37, "type":"R","Pin":37,"lhOn":1,"status":0,"priority":10}'   //L2.8
+            
             ,'{"id":38, "type":"R","Pin":38,"lhOn":1,"status":0,"priority":10}'	//L3.5 СУ1 Душ
 		    ,'{"id":39, "type":"R","Pin":39,"lhOn":1,"status":0,"priority":10}'   //L3.4 Чулан
             ,'{"id":40, "type":"R","Pin":40,"lhOn":1,"status":0,"priority":10}'	//L3.6 СУ1 Вход
@@ -72,6 +74,7 @@ var Configurations = [
 		    ,'{"id":43, "type":"R","Pin":43,"lhOn":1,"status":0,"priority":10}'   //L3.2 Галерея Восток
             ,'{"id":44, "type":"R","Pin":44,"lhOn":1,"status":0,"priority":10}'	//L3.8 Кухня юг-восток
 		    ,'{"id":45, "type":"R","Pin":45,"lhOn":1,"status":0,"priority":10}'   //L3.1
+
 
         ]
         ,[ //Board 01
@@ -106,8 +109,19 @@ var Configurations = [
 		    ,'{"id":141, "type":"R","Pin":41,"lhOn":1,"status":0,"priority":10}'   //L5.7
             ,'{"id":142, "type":"R","Pin":42,"lhOn":1,"status":0,"priority":10}'	//L5.3
 		    ,'{"id":143, "type":"R","Pin":43,"lhOn":1,"status":0,"priority":10}'   //L5.6 Терраса 1
-            ,'{"id":144, "type":"R","Pin":44,"lhOn":1,"status":0,"priority":10}'	//L5.4
+            ,'{"id":144, "type":"R","Pin":44,"lhOn":1,"status":0,"priority":10}'	//L5.4 Периметр ССВ
 		    ,'{"id":145, "type":"R","Pin":45,"lhOn":1,"status":0,"priority":10}'   //L5.5
+
+    	    ,'{"id":114, "type":"R","Pin":14,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 4 клапан 1
+	        ,'{"id":115, "type":"R","Pin":15,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 5 клапан 2
+	        ,'{"id":116, "type":"R","Pin":16,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 3 резерв
+	        ,'{"id":117, "type":"R","Pin":17,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 2 насос 1 этажа 
+	        ,'{"id":118, "type":"R","Pin":18,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 8 насос сада
+	        ,'{"id":119, "type":"R","Pin":19,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 6 клапан 3
+	        ,'{"id":120, "type":"R","Pin":20,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 7 клапан 4
+	        ,'{"id":121, "type":"R","Pin":21,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 1 насос 2 этаж
+
+
         ]
         ,[ //Board 02
             '{"id":212, "type":"B","Pin":12,"lhOn":0,"status":0}' // 
@@ -197,6 +211,9 @@ var Actions = [
 // Кухня, возле мойки         
          ,'{"id":50,"originId":3,"originType":"B","event":1,"targetId":25,"targetAction":3,"targetType":"R"}'
          ,'{"id":51,"originId":3,"originType":"B","event":2,"targetId":42,"targetAction":3,"targetType":"R"}'
+
+// Кухня, вытяжка          
+         ,'{"id":53,"originId":16,"originType":"B","event":1,"targetId":23,"targetAction":3,"targetType":"R"}'
          
 //Кухня настенные
          ,'{"id":55,"originId":20,"originType":"B","event":2,"targetId":27,"targetAction":3,"targetType":"R"}'
@@ -216,6 +233,7 @@ var Actions = [
          ,'{"id":77,"originId":20,"originType":"B","event":4,"targetId":27,"targetAction":0,"targetType":"R"}'
          ,'{"id":78,"originId":20,"originType":"B","event":4,"targetId":44,"targetAction":0,"targetType":"R"}'
          ,'{"id":79,"originId":20,"originType":"B","event":4,"targetId":26,"targetAction":0,"targetType":"R"}'
+         ,'{"id":81,"originId":16,"originType":"B","event":4,"targetId":23,"targetAction":0,"targetType":"R"}'
 
 //Кладовка
          ,'{"id":80,"originId":19,"originType":"B","event":1,"targetId":28,"targetAction":3,"targetType":"R"}'
@@ -224,6 +242,12 @@ var Actions = [
          ,'{"id":82,"originId":15,"originType":"B","event":1,"targetId":33,"targetAction":3,"targetType":"R"}'
 // Топочная
          ,'{"id":84,"originId":9,"originType":"B","event":1,"targetId":32,"targetAction":3,"targetType":"R"}'
+
+// Сарай
+         ,'{"id":86,"originId":14,"originType":"B","event":1,"targetId":29,"targetAction":3,"targetType":"R"}'
+         ,'{"id":87,"originId":14,"originType":"B","event":4,"targetId":29,"targetAction":0,"targetType":"R"}'
+  
+
 
 // Крыльцо
          ,'{"id":90,"originId":5,"originType":"B","event":1,"targetId":34,"targetAction":3,"targetType":"R"}'

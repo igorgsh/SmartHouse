@@ -14,8 +14,8 @@ public:
 private:
 	void RelaySet(bool highLow);
 	void RelaySwitch();
-	void RelayOn() { RelaySet(lhOn); };
-	void RelayOff() { RelaySet(!lhOn); };
+	void RelayOn() { RelaySet(HIGH); };
+	void RelayOff() { RelaySet(LOW); };
 
 };
 

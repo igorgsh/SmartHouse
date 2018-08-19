@@ -19,7 +19,7 @@ void Relay::InitUnit() {
 
 void Relay::RelaySet(bool newStatus)
 {
-	Loger::Debug("Relay[" + String(Id) + "]=" + (newStatus == HIGH ? "HIGH" : "LOW"));
+	Loger::Debug("Relay[" + String(Id) + "]=" + (newStatus == HIGH ? "HIGH" : "LOW") );
 	digitalWrite(Pin, (newStatus == HIGH ? lhOn : !lhOn));
 	status = newStatus;
 	MqttClient.PublishUnit(this);

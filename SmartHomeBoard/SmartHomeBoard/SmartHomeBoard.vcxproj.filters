@@ -14,82 +14,61 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="ioBroker">
-      <UniqueIdentifier>{b73ff0c4-5b84-4c81-a05b-ce3d63f1aca9}</UniqueIdentifier>
+      <UniqueIdentifier>{9262c87f-9728-41e9-9a64-a139038caa93}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ioBroker\test">
-      <UniqueIdentifier>{3283fb0f-38cf-472e-82d4-b17f8b321886}</UniqueIdentifier>
+    <Filter Include="ioBroker\Scripts">
+      <UniqueIdentifier>{e6578ff7-e854-4433-948d-355715bbdaf9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ioBroker\global">
-      <UniqueIdentifier>{d4bf4492-5686-40a7-91d1-1a3752052ced}</UniqueIdentifier>
+    <Filter Include="ioBroker\Scripts\common">
+      <UniqueIdentifier>{f0d56b86-f941-4edf-a0f8-cb6877f76af3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ioBroker\common">
-      <UniqueIdentifier>{fa06e54f-b6cd-46ae-b895-4c5172057e78}</UniqueIdentifier>
+    <Filter Include="ioBroker\Scripts\global">
+      <UniqueIdentifier>{bda7170d-bf35-44d2-8d9c-8011b79c9cdc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ioBroker\vis.0">
-      <UniqueIdentifier>{24a65676-55cc-4454-9019-1eef19c8cf5f}</UniqueIdentifier>
+    <Filter Include="ioBroker\objects">
+      <UniqueIdentifier>{56818b70-c7d6-4cbd-8b58-7fbe95cca4be}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ioBroker\Objects">
-      <UniqueIdentifier>{ea01720e-3dd2-4860-b4f6-fb295d1ef725}</UniqueIdentifier>
+    <Filter Include="ioBroker\vis">
+      <UniqueIdentifier>{a2c0d17f-feb7-438c-b9e1-117b2cb55827}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="SmartHomeBoard.ino" />
-    <None Include="..\iobroker\test\_dir.json">
-      <Filter>ioBroker\test</Filter>
+    <None Include="ioBroker\Scripts\global\checkwatchdog.json">
+      <Filter>ioBroker\Scripts\global</Filter>
     </None>
-    <None Include="..\iobroker\test\pingcheck.json">
-      <Filter>ioBroker\test</Filter>
+    <None Include="ioBroker\Scripts\global\configuration.json">
+      <Filter>ioBroker\Scripts\global</Filter>
     </None>
-    <None Include="..\iobroker\test\test1.json">
-      <Filter>ioBroker\test</Filter>
+    <None Include="ioBroker\Scripts\global\paths.json">
+      <Filter>ioBroker\Scripts\global</Filter>
     </None>
-    <None Include="..\iobroker\global\_dir.json">
-      <Filter>ioBroker\global</Filter>
-    </None>
-    <None Include="..\iobroker\global\checkwatchdog.json">
-      <Filter>ioBroker\global</Filter>
-    </None>
-    <None Include="..\iobroker\global\paths.json">
-      <Filter>ioBroker\global</Filter>
-    </None>
-    <None Include="..\iobroker\global\resetdevice.json">
-      <Filter>ioBroker\global</Filter>
-    </None>
-    <None Include="..\iobroker\common\_dir.json">
-      <Filter>ioBroker\common</Filter>
-    </None>
-    <None Include="..\iobroker\common\config.json">
-      <Filter>ioBroker\common</Filter>
-    </None>
-    <None Include="..\iobroker\common\config2.json">
-      <Filter>ioBroker\common</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\vis.0\vis-views.json">
-      <Filter>ioBroker\vis.0</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\objects\equipment.json">
-      <Filter>ioBroker\Objects</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\objects\mqtt.json">
-      <Filter>ioBroker\Objects</Filter>
+    <None Include="ioBroker\Scripts\global\resetdevice.json">
+      <Filter>ioBroker\Scripts\global</Filter>
     </None>
     <None Include="ioBroker\Scripts\common\AstroSchedule.json">
-      <Filter>ioBroker\common</Filter>
+      <Filter>ioBroker\Scripts\common</Filter>
     </None>
-    <None Include="ioBroker\Scripts\common\PingCheck.json">
-      <Filter>ioBroker\common</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\common\SwitchOffAll.json">
-      <Filter>ioBroker\common</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\global\Configuration.json">
-      <Filter>ioBroker\global</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\common\TimerCheck.json">
-      <Filter>ioBroker\common</Filter>
+    <None Include="ioBroker\Scripts\common\config2.json">
+      <Filter>ioBroker\Scripts\common</Filter>
     </None>
     <None Include="ioBroker\Scripts\common\hardreset.json">
-      <Filter>ioBroker\common</Filter>
+      <Filter>ioBroker\Scripts\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\SetSun.json">
+      <Filter>ioBroker\Scripts\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\SwitchOffAll.json">
+      <Filter>ioBroker\Scripts\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\timercheck.json">
+      <Filter>ioBroker\Scripts\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\vis.0\vis-views.json">
+      <Filter>ioBroker\vis</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\objects\mqtt.json">
+      <Filter>ioBroker\objects</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
