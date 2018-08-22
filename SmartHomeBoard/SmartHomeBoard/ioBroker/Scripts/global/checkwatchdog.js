@@ -1,13 +1,6 @@
 /* -- do not edit following lines - START --
 {
   "debug": false,
-  "verbose": false,
-  "mtime": 1507365620
-}
--- do not edit previous lines - END --*/
-/* -- do not edit following lines - START --
-{
-  "debug": false,
   "verbose": false
 }
 -- do not edit previous lines - END --*/

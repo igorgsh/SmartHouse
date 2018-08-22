@@ -1,10 +1,3 @@
-/* -- do not edit following lines - START --
-{
-  "debug": false,
-  "verbose": false,
-  "mtime": 1526148419
-}
--- do not edit previous lines - END --*/
 schedule( "10 0 * * *", function(){
 
     log("Sunset today:" + formatDate(getAstroDate("sunset"),"hh:mm"));

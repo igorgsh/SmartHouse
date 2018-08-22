@@ -13,7 +13,7 @@ void Relay::InitUnit() {
 	Loger::Debug("Relay["+String(Id) +"] Init");
 
 	pinMode(Pin, OUTPUT);
-	ProcessUnit(status==lhOn ? ACT_ON : ACT_OFF);
+	ProcessUnit(status==HIGH ? ACT_ON : ACT_OFF);
 	
 };
 

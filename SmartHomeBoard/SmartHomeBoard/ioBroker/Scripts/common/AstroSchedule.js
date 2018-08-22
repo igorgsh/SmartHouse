@@ -1,10 +1,3 @@
-/* -- do not edit following lines - START --
-{
-  "mtime": 1526016096,
-  "debug": false,
-  "verbose": false
-}
--- do not edit previous lines - END --*/
 schedule({astro: "sunrise", shift:10}, function () {
     log("10 min after Sunrise!");
     setState("mqtt.0.Equipment.Relays.R0034", 0, false);

@@ -1,10 +1,3 @@
-/* -- do not edit following lines - START --
-{
-  "mtime": 1508081133,
-  "debug": false,
-  "verbose": true
-}
--- do not edit previous lines - END --*/
 $("mqtt.0.Equipment.Virtual.Buttons.B9901").on(function(obj){
     var boardNumber = Configurations.length;
     //log("Boards=" + boardNumber);

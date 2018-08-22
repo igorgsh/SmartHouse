@@ -34,41 +34,47 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SmartHomeBoard.ino" />
-    <None Include="ioBroker\Scripts\global\checkwatchdog.json">
-      <Filter>ioBroker\Scripts\global</Filter>
-    </None>
     <None Include="ioBroker\Scripts\global\configuration.json">
       <Filter>ioBroker\Scripts\global</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\global\paths.json">
-      <Filter>ioBroker\Scripts\global</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\global\resetdevice.json">
-      <Filter>ioBroker\Scripts\global</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\common\AstroSchedule.json">
-      <Filter>ioBroker\Scripts\common</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\common\config2.json">
-      <Filter>ioBroker\Scripts\common</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\common\hardreset.json">
-      <Filter>ioBroker\Scripts\common</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\common\SetSun.json">
-      <Filter>ioBroker\Scripts\common</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\common\SwitchOffAll.json">
-      <Filter>ioBroker\Scripts\common</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\common\timercheck.json">
-      <Filter>ioBroker\Scripts\common</Filter>
     </None>
     <None Include="ioBroker\Scripts\vis.0\vis-views.json">
       <Filter>ioBroker\vis</Filter>
     </None>
     <None Include="ioBroker\Scripts\objects\mqtt.json">
       <Filter>ioBroker\objects</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\AstroSchedule.js">
+      <Filter>ioBroker\Scripts\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\config2.js">
+      <Filter>ioBroker\Scripts\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\GardenSchedule.js">
+      <Filter>ioBroker\Scripts\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\hardreset.js">
+      <Filter>ioBroker\Scripts\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\SetSun.js">
+      <Filter>ioBroker\Scripts\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\SwitchOffAll.js">
+      <Filter>ioBroker\Scripts\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\common\timercheck.js">
+      <Filter>ioBroker\Scripts\common</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\global\checkwatchdog.js">
+      <Filter>ioBroker\Scripts\global</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\global\configuration.js">
+      <Filter>ioBroker\Scripts\global</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\global\paths.js">
+      <Filter>ioBroker\Scripts\global</Filter>
+    </None>
+    <None Include="ioBroker\Scripts\global\resetdevice.js">
+      <Filter>ioBroker\Scripts\global</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
