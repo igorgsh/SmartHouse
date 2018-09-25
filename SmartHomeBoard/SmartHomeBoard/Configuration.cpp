@@ -116,6 +116,7 @@ void Configuration::Init() {
 	if (IsEthernetConnection) {
 		MqttClient.SubscribeUnits();
 	}
+	Loger::Debug("Config init is finished");
 }
 
 Unit* Configuration::CreateTypedUnit(byte type) {
@@ -177,51 +178,53 @@ String Configuration::ConvertAddressToString(const DeviceAddress address) {
 }
 
 void Configuration::UpdateConfig(String jsonConfig) {
-	static bool lenDetected = false;
-	StaticJsonBuffer<JSON_SIZE> jsonBuffer;
-	JsonObject& root = jsonBuffer.parse(jsonConfig);
-	if (root.containsKey("length")) {
-		int n = (int)root["length"];
-		Loger::Debug("Number of config Units=" + String(n));
-		if (n != numberUnits) {
-			numberUnits = n;
-			WriteNumberUnits();
+	if (isConfigRequested) {
+		static bool lenDetected = false;
+		StaticJsonBuffer<JSON_SIZE> jsonBuffer;
+		JsonObject& root = jsonBuffer.parse(jsonConfig);
+		if (root.containsKey("length")) {
+			int n = (int)root["length"];
+			Loger::Debug("Number of config Units=" + String(n));
+			if (n != numberUnits) {
+				numberUnits = n;
+				WriteNumberUnits();
+			}
+
+			configCounter = 0;
+			CreateUnits();
+			lenDetected = true;
 		}
+		else if (lenDetected && root.containsKey("type") && root.containsKey("id")) {
 
-		configCounter = 0;
-		CreateUnits();
-		lenDetected = true;
-	}
-	else if (lenDetected && root.containsKey("type") && root.containsKey("id")) {
-
-		units[configCounter] = CreateTypedUnit(((const char*)root["type"])[0]);
-		if (units[configCounter] != NULL) {
-			if (root.containsKey("id")) {
-				units[configCounter]->Id = root["id"];
-			}
-			if (root.containsKey("Pin")) {
-				units[configCounter]->Pin = root["Pin"];
-			}
-			if (root.containsKey("lhOn")) {
-				units[configCounter]->lhOn = root["lhOn"];
-			}
-			if (root.containsKey("status")) {
-				units[configCounter]->status = root["status"];
-			}
-			if (root.containsKey("address")) {
-				if (units[configCounter]->Type == ONE_WIRE_THERMO) {
-					ConvertStringToAddress(((OneWireBusUnit*)units[configCounter])->address, root["address"]);
+			units[configCounter] = CreateTypedUnit(((const char*)root["type"])[0]);
+			if (units[configCounter] != NULL) {
+				if (root.containsKey("id")) {
+					units[configCounter]->Id = root["id"];
+				}
+				if (root.containsKey("Pin")) {
+					units[configCounter]->Pin = root["Pin"];
+				}
+				if (root.containsKey("lhOn")) {
+					units[configCounter]->lhOn = root["lhOn"];
+				}
+				if (root.containsKey("status")) {
+					units[configCounter]->status = root["status"];
+				}
+				if (root.containsKey("address")) {
+					if (units[configCounter]->Type == ONE_WIRE_THERMO) {
+						ConvertStringToAddress(((OneWireBusUnit*)units[configCounter])->address, root["address"]);
+					}
 				}
 			}
-		}
 
-		configCounter++;
-		if (configCounter == numberUnits) {
-			Loger::Debug("Finish update configuration");
-			StoreUnits();
-			IsConfigReady = true;
-			IsServerConfig = true;
+			configCounter++;
+			if (configCounter == numberUnits) {
+				Loger::Debug("Finish update configuration");
+				StoreUnits();
+				IsConfigReady = true;
+				IsServerConfig = true;
 
+			}
 		}
 	}
 }
@@ -395,58 +398,60 @@ void Configuration::StoreUnits() {
 
 
 void Configuration::UpdateActions(String jsonConfig) {
-	static bool lenDetected = false;
-	StaticJsonBuffer<JSON_SIZE> jsonBuffer;
-	JsonObject& root = jsonBuffer.parse(jsonConfig);
-	if (root.containsKey("length")) {
-		Loger::Debug("Length:" +String((int)root["length"]));
+	if (isActionRequested) {
+		static bool lenDetected = false;
+		StaticJsonBuffer<JSON_SIZE> jsonBuffer;
+		JsonObject& root = jsonBuffer.parse(jsonConfig);
+		if (root.containsKey("length")) {
+			Loger::Debug("Length:" + String((int)root["length"]));
 
-		int n = (int)root["length"];
-		if (n != numberActions) {
-			numberActions = n;
-			WriteNumberActions();
+			int n = (int)root["length"];
+			if (n != numberActions) {
+				numberActions = n;
+				WriteNumberActions();
+			}
+			actionCounter = 0;
+			CreateActions();
+			lenDetected = true;
 		}
-		actionCounter = 0;
-		CreateActions();
-		lenDetected = true;
-	}
-	else if (lenDetected && root.containsKey("id")) {
-		actions[actionCounter] = new Action();
-		if (actions[actionCounter] != NULL) {
-			if (root.containsKey("id")) {
-				actions[actionCounter]->Id = root["id"];
-			}
-			if (root.containsKey("originId")) {
-				actions[actionCounter]->originId = root["originId"];
-			}
-			if (root.containsKey("originType")) {
-				actions[actionCounter]->originType = (byte)(((const char*)root["originType"])[0]);
-			}
-			if (root.containsKey("event")) {
-				actions[actionCounter]->event = root["event"];
-			}
-			if (root.containsKey("targetId")) {
-				actions[actionCounter]->targetId = root["targetId"];
-			}
-			if (root.containsKey("targetAction")) {
-				actions[actionCounter]->targetAction = (ActionType)((byte)root["targetAction"]);
-			}
-			if (root.containsKey("targetType")) {
-				actions[actionCounter]->targetType = (byte)(((const char*)root["targetType"])[0]);
+		else if (lenDetected && root.containsKey("id")) {
+			actions[actionCounter] = new Action();
+			if (actions[actionCounter] != NULL) {
+				if (root.containsKey("id")) {
+					actions[actionCounter]->Id = root["id"];
+				}
+				if (root.containsKey("originId")) {
+					actions[actionCounter]->originId = root["originId"];
+				}
+				if (root.containsKey("originType")) {
+					actions[actionCounter]->originType = (byte)(((const char*)root["originType"])[0]);
+				}
+				if (root.containsKey("event")) {
+					actions[actionCounter]->event = root["event"];
+				}
+				if (root.containsKey("targetId")) {
+					actions[actionCounter]->targetId = root["targetId"];
+				}
+				if (root.containsKey("targetAction")) {
+					actions[actionCounter]->targetAction = (ActionType)((byte)root["targetAction"]);
+				}
+				if (root.containsKey("targetType")) {
+					actions[actionCounter]->targetType = (byte)(((const char*)root["targetType"])[0]);
+				}
+
+				//actions[actionCounter]->print("Action received:", D_DEBUG);
 			}
 
-			//actions[actionCounter]->print("Action received:", D_DEBUG);
-		}
+			actionCounter++;
+			if (actionCounter == numberActions) {
+				Loger::Debug("Finish update actions configuration");
+				StoreActions();
+				IsActionsReady = true;
+				IsServerActions = true;
 
-		actionCounter++;
-		if (actionCounter == numberActions) {
-			Loger::Debug("Finish update actions configuration");
-			StoreActions();
-			IsActionsReady = true;
-			IsServerActions = true;
+			}
 
 		}
-
 	}
 }
 
@@ -552,6 +557,10 @@ void Configuration::UpdateUnit(UnitType type, String name, String value) {
 	Unit *u = FindUnit(name.toInt());
 	if (u != NULL) {
 		Loger::Debug("Unit found:" + String(u->Id));
+		if (!u->isSubscribed) {
+			Loger::Debug("Unit's subscription activated");
+			u->isSubscribed = true;
+		}
 		u->ProcessUnit((ActionType)(value.toInt()));
 	} 
 	//Loger::Debug("End Update Unit");

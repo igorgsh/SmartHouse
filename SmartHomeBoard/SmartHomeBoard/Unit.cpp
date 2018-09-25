@@ -35,6 +35,8 @@ void const Unit::print(const char* header, DebugLevel level){
 	str0 += String(lhOn, DEC);
 	str0 += ";status:";
 	str0 += String((unsigned int)status, DEC);
+	str0 += ";subscription:";
+	str0 += (isSubscribed? "true" : "false");
 	str0 += " @";
 	Loger::Log(level, str0);
 }

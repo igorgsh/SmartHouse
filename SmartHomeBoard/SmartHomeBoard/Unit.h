@@ -20,6 +20,7 @@ public:
 	byte Pin;
 	bool lhOn;
 	int status;
+	bool isSubscribed = false;
 	//static const int sizeOfUnits = 4;
 
 	bool compare(Unit* u);

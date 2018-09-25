@@ -24,6 +24,8 @@
 #define PAYLOAD_LENGTH	100
 #define MQTT_TRY_COUNT 5
 #define MQTT_WAITING_RESPONSE 10000
+#define MQTT_RESUBSCRIBE_TRY_COUNT 5
+#define MQTT_RESUBSCRIPTION_DELAY	50
 
 
 #define BOARD_ID "Board_%02d"
@@ -57,6 +59,7 @@ class Mqtt : public PubSubClient
 		void PublishLog(DebugLevel level, String message);
 		void PublishUnit(const Unit* unit);
 		void SubscribeUnits();
+		void SubscribeUnit(int unitNumber);
 		void Subscribe(const char* topic);
 		bool Publish(const char* topic, const char* payload);
 

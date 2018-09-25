@@ -23,6 +23,11 @@ public:
 	bool IsServerConfig = false;
 	bool IsServerActions = false;
 
+
+	bool isConfigRequested = false;
+	bool isActionRequested = false;
+
+
 	Unit** units = NULL;
 	Action** actions = NULL;
 
@@ -78,6 +83,7 @@ public:
 private:
 	int configCounter;
 	int actionCounter;
+
 
 	uint16_t Read16(uint16_t addr);
 	void Write16(uint16_t addr, uint16_t val);

@@ -105,14 +105,14 @@ var Configurations = [
             ,'{"id":144, "type":"R","Pin":44,"lhOn":1,"status":0,"priority":10}'	//L5.4 Периметр ССВ
 		    ,'{"id":145, "type":"R","Pin":45,"lhOn":1,"status":0,"priority":10}'   //L5.5
 
-    	    ,'{"id":114, "type":"R","Pin":14,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 4 клапан 1
-	        ,'{"id":115, "type":"R","Pin":15,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 5 клапан 2
-	        ,'{"id":116, "type":"R","Pin":16,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 3 резерв
-	        ,'{"id":117, "type":"R","Pin":17,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 2 насос 1 этажа 
-	        ,'{"id":118, "type":"R","Pin":18,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 8 насос сада
-	        ,'{"id":119, "type":"R","Pin":19,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 6 клапан 3
-	        ,'{"id":120, "type":"R","Pin":20,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 7 клапан 4
-	        ,'{"id":121, "type":"R","Pin":21,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 1 насос 2 этаж
+    	    ,'{"id":114, "type":"R","Pin":14,"lhOn":0,"status":0,"priority":20}'   //1 Блок Реле 4 клапан 1
+	        ,'{"id":115, "type":"R","Pin":15,"lhOn":0,"status":0,"priority":20}'   //1 Блок Реле 5 клапан 2
+	        ,'{"id":116, "type":"R","Pin":16,"lhOn":0,"status":0,"priority":10}'   //1 Блок Реле 3 клапан 4
+	        ,'{"id":117, "type":"R","Pin":17,"lhOn":0,"status":0,"priority":20}'   //1 Блок Реле 2 насос 1 этажа 
+	        ,'{"id":118, "type":"R","Pin":18,"lhOn":0,"status":0,"priority":20}'   //1 Блок Реле 8 
+	        ,'{"id":119, "type":"R","Pin":19,"lhOn":0,"status":0,"priority":20}'   //1 Блок Реле 6 клапан 3
+	        ,'{"id":120, "type":"R","Pin":20,"lhOn":0,"status":0,"priority":20}'   //1 Блок Реле 7 насос сада
+	        ,'{"id":121, "type":"R","Pin":21,"lhOn":0,"status":0,"priority":20}'   //1 Блок Реле 1 насос 2 этаж
 
 
         ]
