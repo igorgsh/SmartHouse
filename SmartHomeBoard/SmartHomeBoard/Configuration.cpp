@@ -605,7 +605,9 @@ void Configuration::ProcessAction(uint16_t id, byte event) {
 						u->Id = actions[i]->targetId;
 						u->Type = actions[i]->targetType;
 						u->status = actions[i]->targetAction;
+						u->isSubscribed = true; //this fake activation is used just for publish
 						MqttClient.PublishUnit(u);
+						
 					}
 				}
 				else {
