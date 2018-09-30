@@ -50,6 +50,7 @@ public:
 	void UpdateOneWireBus(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_BUS, button, value); };
 	void UpdateOneWireThermo(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_THERMO, button, value); };
 	void UpdateUnit(UnitType type, String name, String value);
+	void UpdatePowerMeter(String unit, String value) { UpdateUnit(UnitType::POWER_METER, unit, value); };
 	void ProcessAction(uint16_t id, byte event);
 	//bool CheckConfigReady();
 	//bool CheckActionReady();
@@ -68,17 +69,19 @@ public:
 	String ConvertAddressToString(const DeviceAddress address);
 
 	//Timer 
-	unsigned long counter01 = 0;	//100ms
-	unsigned long counter05 = 0;	//500ms
-	unsigned long counter1 = 0;		//1 sec
+	//unsigned long counter01 = 0;	//100ms
+	//unsigned long counter05 = 0;	//500ms
+	//unsigned long counter1 = 0;		//1 sec
+	unsigned long counter30 = 0;	//30 sec
 	unsigned long counter60 = 0;	//1min
-	unsigned long counter300 = 0;	//5min
+	//unsigned long counter300 = 0;	//5min
 
-	void loop01();
-	void loop05();
-	void loop1();
+	//void loop01();
+	//void loop05();
+	//void loop1();
+	void loop30();
 	void loop60();
-	void loop300();
+	//void loop300();
 
 private:
 	int configCounter;

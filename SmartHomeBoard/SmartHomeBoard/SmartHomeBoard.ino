@@ -77,14 +77,22 @@ void setup() {
 // the loop function runs over and over again until power down or reset
 void loop() {
 	static unsigned long tp60 = 0;
+	static unsigned long tp30 = 0;
 	unsigned long now = millis();
 	//Loger::Debug("Loop");
 
-	if ((now-tp60) > (unsigned long)1*60*1000) { //1 min 
+	if ((now - tp30) > (unsigned long)30 *  1000) { //30 sec 
+		Config.loop30();
+		Config.counter30++;
+		tp30 = now;
+	}
+
+	if ((now-tp60) > (unsigned long)60*1000) { //1 min 
 		Config.loop60();
 		Config.counter60++;
 		tp60 = now;
 	}
+
 	Config.MainLoop();
 
 }

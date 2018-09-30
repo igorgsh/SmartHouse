@@ -45,6 +45,7 @@
 #define MQTT_RELAYS  MQTT_EQUIPMENT MQTT_SEPARATOR "Relays"
 #define MQTT_1WIREBUS  MQTT_EQUIPMENT MQTT_SEPARATOR "1-WireBuses"
 #define MQTT_1WIRETHERMO  MQTT_EQUIPMENT MQTT_SEPARATOR "Thermo"
+#define MQTT_POWERMETER  MQTT_EQUIPMENT MQTT_SEPARATOR "PowerMeter"
 
 void callbackFunc(char* topic, uint8_t* payload, unsigned int length);
 

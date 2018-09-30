@@ -9,7 +9,8 @@ typedef enum {
 	BUTTON = 'B',
 	RELAY = 'R',
 	ONE_WIRE_BUS = '1',
-	ONE_WIRE_THERMO = 'T'
+	ONE_WIRE_THERMO = 'T',
+	POWER_METER = 'P'
 } UnitType;
 
 class Unit

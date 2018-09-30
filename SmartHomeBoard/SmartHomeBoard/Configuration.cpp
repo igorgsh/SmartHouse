@@ -14,6 +14,7 @@
 #include "utils.h"
 #include "OneWireBus.h"
 #include "OneWireThermo.h"
+#include "PowerMeter.h"
 
 extern Mqtt MqttClient;
 
@@ -122,7 +123,7 @@ void Configuration::Init() {
 Unit* Configuration::CreateTypedUnit(byte type) {
 
 	Unit *u = NULL;
-	//Loger::Debug("CreateTyped=" + String((char)type));
+	Loger::Debug("CreateTyped=" + String((char)type));
 	if (type == UnitType::BUTTON) {
 		//Loger::Debug("Point 8");
 		u = new Button();
@@ -157,6 +158,14 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::ONE_WIRE_THERMO;
+	}
+	else if (type == UnitType::POWER_METER) {
+		u = new PowerMeter();
+		if (u == NULL) {
+			Loger::Error("Can't create OneWire Thermometer Unit");
+			Board::Reset(10000);
+		}
+		u->Type = UnitType::POWER_METER;
 	}
 	return u;
 }
@@ -617,26 +626,41 @@ void Configuration::ProcessAction(uint16_t id, byte event) {
 		}
 	}
 }
-
+/*
 void Configuration::loop01() {
 	// start every 100 ms
 }
-
+*/
+/*
 void Configuration::loop05() {
 	// start every 500 ms
 }
+*/
+/*
 void Configuration::loop1() {
 	Loger::Debug("Loop1");
 	Loger::Debug("Counter01=" + String(Config.counter01,DEC));
 	MEMFREE
 	// start every 1s
 }
+*/
+
+void Configuration::loop30() {
+	for (int i = 0; i < numberUnits; i++) {
+		if (units[i]->Type == UnitType::POWER_METER) {
+			Loger::Debug("Loop PowerMeter");
+			((PowerMeter*)units[i])->PublishAll();
+		}
+	}
+}
+
 void Configuration::loop60() {
 	// start every 1min
 	//Loger::Debug("Loop60");
 	MqttClient.WatchDog();
 }
+/*
 void Configuration::loop300() {
 	// start every 5 min
 }
-
+*/

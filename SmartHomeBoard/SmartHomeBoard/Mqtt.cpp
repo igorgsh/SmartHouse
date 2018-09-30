@@ -12,6 +12,7 @@ Author:	Igor Shevchenko
 #include "definitions.h"
 #include "utils.h"
 #include "Board.h"
+#include "PowerMeter.h"
 
 extern Mqtt MqttClient;
 
@@ -120,11 +121,17 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 								Config.UpdateOneWireThermo(strTopic.substring(strlen(MQTT_1WIRETHERMO) + 2), strPayload);
 							}
 							else {
-								sprintf(subscription, MQTT_RESET_BOARD, Config.BoardId);
-								Loger::Debug("Reset");
+								if (strTopic.startsWith(MQTT_POWERMETER)) {
+									//Nothing to do
+									Config.UpdatePowerMeter(strTopic.substring(strlen(MQTT_POWERMETER) + 2), strPayload);
+								}
+								else if (strTopic.startsWith(MQTT_RESET_BOARD)) {
+									sprintf(subscription, MQTT_RESET_BOARD, Config.BoardId);
+									Loger::Debug("Reset");
 
-								if (strTopic.startsWith((String)subscription) && strPayload != NULL && strPayload[0] >= '0') {
-									Board::Reset(10000);
+									if (strTopic.startsWith((String)subscription) && strPayload != NULL && strPayload[0] >= '0') {
+										Board::Reset(10000);
+									}
 								}
 							}
 						}
@@ -134,14 +141,6 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 		}
 	}
 }
-
-/*
-void Mqtt::SetTopicNames() {
-	int ind = strlen(topicPrefix) - 2;
-	topicPrefix[ind] = (int)'0' + (int)((Config.BoardId >> 4) & 0x0F);
-	topicPrefix[ind + 1] = (int)'0' + (int)(Config.BoardId & 0x0F);
-}
-*/
 
 void Mqtt::InitMqtt(void) {
 //	SetTopicNames();
@@ -195,29 +194,53 @@ void Mqtt::PublishUnit(const Unit *unit) {
 	if (unit->isSubscribed) {
 		if (Config.IsEthernetConnection) {
 			char topic[TOPIC_LENGTH];
-			const char *unitPrefix;
-			switch (unit->Type) {
-			case UnitType::BUTTON: {
-				unitPrefix = MQTT_BUTTONS;
-				break;
-			}
-			case UnitType::RELAY: {
-				unitPrefix = MQTT_RELAYS;
-				break;
-			}
-			case UnitType::ONE_WIRE_BUS: {
-				unitPrefix = MQTT_1WIREBUS;
-				break;
-			}
-			case UnitType::ONE_WIRE_THERMO: {
-				unitPrefix = MQTT_1WIRETHERMO;
-				break;
-			}
-			}
-			sprintf(topic, "%s%s%c%04d", unitPrefix, MQTT_SEPARATOR, unit->Type, unit->Id);
 			char payload[PAYLOAD_LENGTH];
-			sprintf(payload, "%u", unit->status);
-			Publish(topic, payload);
+			const char *unitPrefix;
+			if (UnitType::POWER_METER) {
+				PowerMeter *p = (PowerMeter*)unit;
+				p->PublishAll();
+				/*
+				char topic0[TOPIC_LENGTH];
+				sprintf(topic0, "%s%s%c%04d", MQTT_POWERMETER, MQTT_SEPARATOR, unit->Type, unit->Id);
+				PowerMeter *p = (PowerMeter*)unit;
+				sprintf(topic, "%s%sVoltage", topic0, MQTT_SEPARATOR);
+				sprintf(payload, "%02f", p->voltage());
+				Publish(topic, payload);
+				sprintf(topic, "%s%sCurrent", topic0, MQTT_SEPARATOR);
+				sprintf(payload, "%02f", p->current());
+				Publish(topic, payload);
+				sprintf(topic, "%s%sPower", topic0, MQTT_SEPARATOR);
+				sprintf(payload, "%02f", p->power());
+				Publish(topic, payload);
+				sprintf(topic, "%s%sEnergy", topic0, MQTT_SEPARATOR);
+				sprintf(payload, "%02f", p->energy());
+				Publish(topic, payload);
+				*/
+			}
+			else {
+				switch (unit->Type) {
+				case UnitType::BUTTON: {
+					unitPrefix = MQTT_BUTTONS;
+					break;
+				}
+				case UnitType::RELAY: {
+					unitPrefix = MQTT_RELAYS;
+					break;
+				}
+				case UnitType::ONE_WIRE_BUS: {
+					unitPrefix = MQTT_1WIREBUS;
+					break;
+				}
+				case UnitType::ONE_WIRE_THERMO: {
+					unitPrefix = MQTT_1WIRETHERMO;
+					break;
+				}
+				}
+				sprintf(topic, "%s%s%c%04d", unitPrefix, MQTT_SEPARATOR, unit->Type, unit->Id);
+				sprintf(payload, "%u", unit->status);
+				Publish(topic, payload);
+
+			}
 		}
 	}
 	else {
@@ -246,29 +269,48 @@ void Mqtt::GetActions() {
 
 void Mqtt::SubscribeUnit(int unitNumber) {
 	char topic[TOPIC_LENGTH];
-	const char* unitPrefix;
-
-	switch (Config.units[unitNumber]->Type) {
-	case UnitType::BUTTON: {
-		unitPrefix = MQTT_BUTTONS;
-		break;
+	const char* unitPrefix=NULL;
+	//Loger::Debug("Point 1");
+	//Loger::Debug("UnitType["+String(unitNumber,DEC) +"]=" + String(Config.units[unitNumber]->Type,DEC));
+	//Loger::Debug("Point 2");
+	if (Config.units[unitNumber]->Type == UnitType::POWER_METER) {
+		char topic0[TOPIC_LENGTH];
+		sprintf(topic0, "%s%s%c%04d", MQTT_POWERMETER, MQTT_SEPARATOR, Config.units[unitNumber]->Type, Config.units[unitNumber]->Id);
+		//Loger::Debug("topic0=" + String(topic0));
+		sprintf(topic, "%s%sVoltage", topic0, MQTT_SEPARATOR);
+		//Loger::Debug("topic=" + String(topic));
+		Subscribe(topic);
+		sprintf(topic, "%s%sCurrent", topic0, MQTT_SEPARATOR);
+		Subscribe(topic);
+		sprintf(topic, "%s%sPower", topic0, MQTT_SEPARATOR);
+		Subscribe(topic);
+		sprintf(topic, "%s%sEnergy", topic0, MQTT_SEPARATOR);
+		Subscribe(topic);
 	}
-	case UnitType::RELAY: {
-		unitPrefix = MQTT_RELAYS;
-		break;
+	else {
+		switch (Config.units[unitNumber]->Type) {
+		case UnitType::BUTTON: {
+			unitPrefix = MQTT_BUTTONS;
+			break;
+		}
+		case UnitType::RELAY: {
+			unitPrefix = MQTT_RELAYS;
+			break;
+		}
+		case UnitType::ONE_WIRE_BUS: {
+			unitPrefix = MQTT_1WIREBUS;
+			break;
+		}
+		case UnitType::ONE_WIRE_THERMO: {
+			unitPrefix = MQTT_1WIRETHERMO;
+			break;
+		}
+		}
+		if (unitPrefix != NULL) {
+			sprintf(topic, "%s%s%c%04d", unitPrefix, MQTT_SEPARATOR, Config.units[unitNumber]->Type, Config.units[unitNumber]->Id);
+			Subscribe(topic);
+		}
 	}
-	case UnitType::ONE_WIRE_BUS: {
-		unitPrefix = MQTT_1WIREBUS;
-		break;
-	}
-	case UnitType::ONE_WIRE_THERMO: {
-		unitPrefix = MQTT_1WIRETHERMO;
-		break;
-	}
-	}
-	sprintf(topic, "%s%s%c%04d", unitPrefix, MQTT_SEPARATOR, Config.units[unitNumber]->Type, Config.units[unitNumber]->Id);
-	Subscribe(topic);
-
 }
 
 
@@ -276,6 +318,7 @@ void Mqtt::SubscribeUnits() {
 	bool isSubscriptionSuccess = true;
 	Loger::Debug("Subscribing Units...");
 	for (int i = 0; i < Config.numberUnits; i++) {
+		//Loger::Debug("i=" + String(i, DEC));
 		SubscribeUnit(i);
 //		delay(MQTT_RESUBSCRIPTION_DELAY);
 		MqttClient.MqttLoop();
