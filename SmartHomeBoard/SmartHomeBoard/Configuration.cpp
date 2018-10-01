@@ -224,6 +224,16 @@ void Configuration::UpdateConfig(String jsonConfig) {
 						ConvertStringToAddress(((OneWireBusUnit*)units[configCounter])->address, root["address"]);
 					}
 				}
+				if (root.containsKey("Serial")) {
+					if (units[configCounter]->Type == POWER_METER) {
+						((PowerMeter*)units[configCounter])->serialNumber = root["Serial"];
+					}
+				}
+				if (root.containsKey("Factor")) {
+					if (units[configCounter]->Type == POWER_METER) {
+						((PowerMeter*)units[configCounter])->factor = root["Factor"];
+					}
+				}
 			}
 
 			configCounter++;
