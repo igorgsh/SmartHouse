@@ -36,27 +36,37 @@ void PowerMeter::InitUnit() {
 		break;
 	}
 */
-	switch (serialNumber) {
-	case 0:
-		port = &Serial;
-		break;
-	case 1:
-		port = &Serial1;
-		break;
-	case 2:
-		port = &Serial2;
-		break;
-	case 3:
-		port = &Serial3;
-		break;
-	default:
-		Loger::Debug("Port not found");
-		port = NULL;
-		break;
+	if (serialNumber != -1) {
+		HardwareSerial *port = NULL;
+		switch (serialNumber) {
+		case 0:
+			port = &Serial;
+			break;
+		case 1:
+			port = &Serial1;
+			break;
+		case 2:
+			port = &Serial2;
+			break;
+		case 3:
+			port = &Serial3;
+			break;
+		default:
+			Loger::Debug("Port not found");
+			port = NULL;
+			break;
+		}
+		if (port != NULL) {
+			pzem = new PZEM004T(port);
+		}
 	}
-	if (port!=NULL) {
-		pzem = new PZEM004T(port);
-		//IPAddress ip(10, 10, 10, 10);
+	else {
+		if (serialTX != -1 && serialRX != -1) {
+			pzem = new PZEM004T(serialRX, serialTX);
+		}
+	}
+	if (pzem!=NULL) {
+		//IPAddress ip = IPAddress(10, 10, 10, 10);
 		pzem->setAddress(ip);
 		MqttClient.PublishUnit(this);
 	}

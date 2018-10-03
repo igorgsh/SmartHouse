@@ -229,6 +229,16 @@ void Configuration::UpdateConfig(String jsonConfig) {
 						((PowerMeter*)units[configCounter])->serialNumber = root["Serial"];
 					}
 				}
+				if (root.containsKey("SerialRX")) {
+					if (units[configCounter]->Type == POWER_METER) {
+						((PowerMeter*)units[configCounter])->serialRX = root["SerialRX"];
+					}
+				}
+				if (root.containsKey("SerialTX")) {
+					if (units[configCounter]->Type == POWER_METER) {
+						((PowerMeter*)units[configCounter])->serialTX = root["SerialTX"];
+					}
+				}
 				if (root.containsKey("Factor")) {
 					if (units[configCounter]->Type == POWER_METER) {
 						((PowerMeter*)units[configCounter])->factor = root["Factor"];
