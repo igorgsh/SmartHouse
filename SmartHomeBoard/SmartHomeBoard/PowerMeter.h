@@ -28,15 +28,16 @@ public:
 	void SetDefault();
 	void FinalInitUnit();
 	void ProcessUnit(ActionType action);
+	//bool compare(Unit* u);
 
 	/*
 	virtual void FillFrom(Unit* u);
 	virtual void const print(const char* header, DebugLevel level);
 	*/
-	int serialNumber = -1;
-	int serialRX = -1;
-	int serialTX = -1;
-	double factor = 1.0;
+	byte serialNumber = 0;
+	byte serialRX = 0;
+	byte serialTX = 0;
+	byte factor = 1;
 
 	void static MqttTopic(uint16_t unitId, char *topic, PowerMeterValues val);
 

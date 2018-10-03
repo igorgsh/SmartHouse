@@ -20,8 +20,6 @@ public:
 	bool IsActionsReady = false;
 	static const int MqttPort = 1883;
 	static const int TRY_NUMBER_FOR_CONNECT = 5;
-	bool IsServerConfig = false;
-	bool IsServerActions = false;
 
 
 	bool isConfigRequested = false;
@@ -37,14 +35,6 @@ public:
 	void BuildActions();
 	Unit* FindUnit(uint16_t id);
 	Unit* FindUnitByTypeAndPin(UnitType type, byte pin);
-	//	void UpdateStorage(const Unit* u);
-	void StoreUnits();
-	void ReadUnit(int i, Unit* u);
-	void WriteUnit(int i, const Unit* u);
-
-	void StoreActions();
-	void ReadAction(int i, Action* u);
-	void WriteAction(int i, const Action* u);
 	void UpdateButton(String unit, String value) { UpdateUnit(UnitType::BUTTON, unit, value); };
 	void UpdateRelay(String unit, String value) { UpdateUnit(UnitType::RELAY, unit, value); };
 	void UpdateOneWireBus(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_BUS, button, value); };
@@ -52,8 +42,6 @@ public:
 	void UpdateUnit(UnitType type, String name, String value);
 	void UpdatePowerMeter(String unit, String value) { UpdateUnit(UnitType::POWER_METER, unit, value); };
 	void ProcessAction(uint16_t id, byte event);
-	//bool CheckConfigReady();
-	//bool CheckActionReady();
 
 	void MainLoop();
 
@@ -64,7 +52,6 @@ public:
 
 	int numberUnits = 0;
 	int numberActions = 0;
-	int numberBusUnits = 0;
 	void ConvertStringToAddress(DeviceAddress address, const String addrStr);
 	String ConvertAddressToString(const DeviceAddress address);
 
@@ -88,59 +75,9 @@ private:
 	int actionCounter;
 
 
-	uint16_t Read16(uint16_t addr);
-	void Write16(uint16_t addr, uint16_t val);
 
-
-	// EEPROM structure
-	//	Byte | Object
-	//	-------------
-	//	0:	BoardId
 	static const byte addrBoardId = 0;
-	//	1: Number Of Units 
-	static const byte addrNumberUnits = 1;
-	//	2: Number of Actions
-	static const byte addrNumberActions = 2;
-	//	3: Number of bus units
-	static const byte addrNumberBusUnits = 3;
-	//	4: Reserved
-	//	5: Start of Units
-	static const byte addrUnits = 5;
-	int GetUnitsAddr(int i);
-	static const byte sizeOfUnit = 5;
-	// Unit structure
-	//	Byte | Object
-	//	-------------
-	//	0-1: id
-	//	2: type
-	//	3: pin
-	//	4: lhOn
-	int GetOneWireAddr(int i);
-	static const int sizeOfBusUnit = 8;
-	// Action structure
-	//	Byte | Object
-	//	-------------
-	//	0-7: address
-	int GetActionsAddr(int i);
-	static const int sizeOfAction = 10;
-	// Action structure
-	//	Byte | Object
-	//	-------------
-	//	0-1: id
-	//	2-3: originId
-	//	4: originType
-	//	5: event
-	//	6-7: targetId
-	//	8: targetAction
-	//	9: targetAction
 
-
-	void WriteNumberUnits();
-	void ReadNumberUnits();
-	void WriteNumberActions();
-	void ReadNumberActions();
-	void WriteNumberBusUnits();
-	void ReadNumberBusUnits();
 	void CreateUnits();
 	void ReadBoardId();
 	void InitializeUnits();

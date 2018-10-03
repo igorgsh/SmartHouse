@@ -15,7 +15,8 @@ PowerMeter::~PowerMeter()
 }
 
 void PowerMeter::InitUnit() {
-	Loger::Debug("Init Power Meter id=" + String(Id) + "; Pin=" + String(Pin));
+
+	//Loger::Debug("Init Power Meter id=" + String(Id) + "; Pin=" + String(Pin));
 /*
 	switch (Pin) {
 	case 18: //Serial 1
@@ -36,7 +37,7 @@ void PowerMeter::InitUnit() {
 		break;
 	}
 */
-	if (serialNumber != -1) {
+	if (serialNumber != 0) {
 		HardwareSerial *port = NULL;
 		switch (serialNumber) {
 		case 0:
@@ -61,7 +62,7 @@ void PowerMeter::InitUnit() {
 		}
 	}
 	else {
-		if (serialTX != -1 && serialRX != -1) {
+		if (serialTX != 0 && serialRX != 0) {
 			pzem = new PZEM004T(serialRX, serialTX);
 		}
 	}
@@ -171,3 +172,6 @@ void PowerMeter::FinalInitUnit() {
 
 void PowerMeter::ProcessUnit(ActionType action) {
 }
+
+
+
