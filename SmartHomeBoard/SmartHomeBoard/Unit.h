@@ -24,7 +24,7 @@ public:
 	bool isSubscribed = false;
 	//static const int sizeOfUnits = 4;
 
-	bool compare(Unit* u);
+//	bool compare(Unit* u);
 	virtual void FillFrom(Unit* u);
 	virtual void SetDefault() =0;
 	virtual void UnitLoop() = 0;

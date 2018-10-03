@@ -274,17 +274,13 @@ void Mqtt::SubscribeUnit(int unitNumber) {
 	//Loger::Debug("UnitType["+String(unitNumber,DEC) +"]=" + String(Config.units[unitNumber]->Type,DEC));
 	//Loger::Debug("Point 2");
 	if (Config.units[unitNumber]->Type == UnitType::POWER_METER) {
-		char topic0[TOPIC_LENGTH];
-		sprintf(topic0, "%s%s%c%04d", MQTT_POWERMETER, MQTT_SEPARATOR, Config.units[unitNumber]->Type, Config.units[unitNumber]->Id);
-		//Loger::Debug("topic0=" + String(topic0));
-		sprintf(topic, "%s%sVoltage", topic0, MQTT_SEPARATOR);
-		//Loger::Debug("topic=" + String(topic));
+		PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_VOLTAGE);
 		Subscribe(topic);
-		sprintf(topic, "%s%sCurrent", topic0, MQTT_SEPARATOR);
+		PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_CURRENT);
 		Subscribe(topic);
-		sprintf(topic, "%s%sPower", topic0, MQTT_SEPARATOR);
+		PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_POWER);
 		Subscribe(topic);
-		sprintf(topic, "%s%sEnergy", topic0, MQTT_SEPARATOR);
+		PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_ENERGY);
 		Subscribe(topic);
 	}
 	else {

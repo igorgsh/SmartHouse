@@ -1,6 +1,7 @@
 #include "Unit.h"
 
 
+/*
 bool Unit::compare(Unit* u) {
 	if (u == NULL) return false;
 	//Loger::Debug("Compare Unit:" + String(Id == u->Id) + ":" +String(Type == u->Type) +":" + String(Pin == u->Pin) + ":" + String(lhOn == u->lhOn) + "#");
@@ -11,7 +12,7 @@ bool Unit::compare(Unit* u) {
 		lhOn == u->lhOn
 		);
 }
-
+*/
 void Unit::FillFrom(Unit* u) {
 	Id = u->Id;
 	Type = u->Type;
