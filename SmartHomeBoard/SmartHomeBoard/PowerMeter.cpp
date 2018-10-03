@@ -16,33 +16,12 @@ PowerMeter::~PowerMeter()
 
 void PowerMeter::InitUnit() {
 
-	//Loger::Debug("Init Power Meter id=" + String(Id) + "; Pin=" + String(Pin));
-/*
-	switch (Pin) {
-	case 18: //Serial 1
-	case 19:
-		port = &Serial1;
-		break;
-	case 16: //Serial 2
-	case 17:
-		port = &Serial2;
-		break;
-	case 14: //Serial 3
-	case 15:
-		port = &Serial3;
-		break;
-	default:
-		Loger::Debug("Port not found");
-		port = NULL;
-		break;
-	}
-*/
 	if (serialNumber != 0) {
 		HardwareSerial *port = NULL;
 		switch (serialNumber) {
-		case 0:
-			port = &Serial;
-			break;
+//		case 0:
+//			port = &Serial;
+//			break;
 		case 1:
 			port = &Serial1;
 			break;
