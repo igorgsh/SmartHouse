@@ -15,6 +15,7 @@ PowerMeter::~PowerMeter()
 }
 
 void PowerMeter::InitUnit() {
+
 	//Loger::Debug("Init Power Meter id=" + String(Id) + "; Pin=" + String(Pin));
 /*
 	switch (Pin) {
