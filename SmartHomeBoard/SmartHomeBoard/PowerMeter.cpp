@@ -118,11 +118,11 @@ void PowerMeter::PublishAll() {
 	MqttClient.Publish(topic, payload);
 
 	v = energy();
-	if (v <= 0) v = 0;
-	dtostrf(v, 6, 2, payload);
-	MqttTopic(Id, topic, PM_ENERGY);
-	MqttClient.Publish(topic, payload);
-
+	if (v > 0) {
+		dtostrf(v, 6, 2, payload);
+		MqttTopic(Id, topic, PM_ENERGY);
+		MqttClient.Publish(topic, payload);
+	}
 }
 
 
