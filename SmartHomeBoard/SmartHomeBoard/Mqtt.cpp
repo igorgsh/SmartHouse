@@ -72,9 +72,7 @@ bool Mqtt::MqttReconnect() {
 
 void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 	//преобразуем тему(topic) и значение (payload) в строку
-	//Debug2("Point6.4.2:", memoryFree());
 
-	//Loger::Debug("Topic:" + String(topic) + ";payload length=" + String(length, DEC));
 	if (length > 0) {
 		String strTopic = String(topic);
 		String strPayload = String((char*)payLoad).substring(0, length);
@@ -82,12 +80,8 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 		//Исследуем что "прилетело" от сервера по подписке:
 		Loger::Debug("[" + strTopic + "]:" + strPayload + "#");
 		sprintf(subscription, MQTT_CONFIG_RESPONSE, Config.BoardId);
-		//Loger::Debug("subscription=" + String(subscription));
-		//Loger::Debug("strcmp=" + String(strcmp(topic, subscription)));
 		if (strcmp(topic, subscription) == 0) {
-			//Loger::Debug("Update Config");
 			Config.UpdateConfig(strPayload);
-			//Loger::Debug("Point 1");
 		}
 		else {
 			sprintf(subscription, MQTT_ACTIONS_RESPONSE, Config.BoardId);
@@ -196,26 +190,9 @@ void Mqtt::PublishUnit(const Unit *unit) {
 			char topic[TOPIC_LENGTH];
 			char payload[PAYLOAD_LENGTH];
 			const char *unitPrefix;
-			if (UnitType::POWER_METER) {
+			if (unit->Type == ::POWER_METER) {
 				PowerMeter *p = (PowerMeter*)unit;
 				p->PublishAll();
-				/*
-				char topic0[TOPIC_LENGTH];
-				sprintf(topic0, "%s%s%c%04d", MQTT_POWERMETER, MQTT_SEPARATOR, unit->Type, unit->Id);
-				PowerMeter *p = (PowerMeter*)unit;
-				sprintf(topic, "%s%sVoltage", topic0, MQTT_SEPARATOR);
-				sprintf(payload, "%02f", p->voltage());
-				Publish(topic, payload);
-				sprintf(topic, "%s%sCurrent", topic0, MQTT_SEPARATOR);
-				sprintf(payload, "%02f", p->current());
-				Publish(topic, payload);
-				sprintf(topic, "%s%sPower", topic0, MQTT_SEPARATOR);
-				sprintf(payload, "%02f", p->power());
-				Publish(topic, payload);
-				sprintf(topic, "%s%sEnergy", topic0, MQTT_SEPARATOR);
-				sprintf(payload, "%02f", p->energy());
-				Publish(topic, payload);
-				*/
 			}
 			else {
 				switch (unit->Type) {
@@ -258,7 +235,6 @@ void Mqtt::GetActions() {
 	char buf[10];
 	sprintf(buf, "%lu", random(0, 1000));
 	char topic[TOPIC_LENGTH];
-	//Debug2("Action:", buf);
 	Config.IsConfigReady = false;
 	Config.IsActionsReady = false;
 
@@ -270,9 +246,6 @@ void Mqtt::GetActions() {
 void Mqtt::SubscribeUnit(int unitNumber) {
 	char topic[TOPIC_LENGTH];
 	const char* unitPrefix=NULL;
-	//Loger::Debug("Point 1");
-	//Loger::Debug("UnitType["+String(unitNumber,DEC) +"]=" + String(Config.units[unitNumber]->Type,DEC));
-	//Loger::Debug("Point 2");
 	if (Config.units[unitNumber]->Type == UnitType::POWER_METER) {
 		PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_VOLTAGE);
 		Subscribe(topic);
@@ -314,17 +287,14 @@ void Mqtt::SubscribeUnits() {
 	bool isSubscriptionSuccess = true;
 	Loger::Debug("Subscribing Units...");
 	for (int i = 0; i < Config.numberUnits; i++) {
-		//Loger::Debug("i=" + String(i, DEC));
 		SubscribeUnit(i);
 //		delay(MQTT_RESUBSCRIPTION_DELAY);
 		MqttClient.MqttLoop();
 	}
 	delay(MQTT_RESUBSCRIPTION_DELAY);
 	for (int i = 0; i < Config.numberUnits; i++) {
-		//Loger::Debug("Point 1");
 		MqttClient.MqttLoop();
 		for (int j = 0; j < MQTT_RESUBSCRIBE_TRY_COUNT && !Config.units[i]->isSubscribed; j++) {
-			//Loger::Debug("Point 2");
 			SubscribeUnit(i);
 			delay(MQTT_RESUBSCRIPTION_DELAY);
 			MqttClient.MqttLoop();

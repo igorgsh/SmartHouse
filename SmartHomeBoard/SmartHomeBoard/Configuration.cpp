@@ -47,7 +47,7 @@ void Configuration::CreateActions() {
 
 
 Unit* Configuration::FindUnit(uint16_t id) {
-	Loger::Debug("Units=" + String(units != NULL) + "; Conf=" + String(IsConfigReady));
+	//Loger::Debug("Units=" + String(units != NULL) + "; Conf=" + String(IsConfigReady));
 	if (units != NULL && IsConfigReady ) {
 		for (int i = 0; i < numberUnits; i++) {
 			if (units[i]->Id == id) {
@@ -361,10 +361,8 @@ void Configuration::UpdateUnit(UnitType type, String name, String value) {
 	Unit *u = FindUnit(name.toInt());
 	if (u != NULL) {
 		Loger::Debug("Unit found:" + String(u->Id));
-		if (!u->isSubscribed) {
-			Loger::Debug("Unit's subscription activated");
-			u->isSubscribed = true;
-		}
+		u->isSubscribed = true;
+		//Loger::Debug("Unit_type:" + String((char)u->Type));
 		u->ProcessUnit((ActionType)(value.toInt()));
 	} 
 }

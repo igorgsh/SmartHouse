@@ -108,7 +108,6 @@ void Button::HandleFinish(int newStatus) {
 }
 
 void Button::ProcessUnit(ActionType event) {
-
 	Config.ProcessAction(Id, event);
 	status = ACT_OFF;
 	MqttClient.PublishUnit(this);
@@ -116,6 +115,5 @@ void Button::ProcessUnit(ActionType event) {
 }
 
 void Button::UnitLoop() {
-	//Loger::Debug("Button:" + String(Id));
 	HandleButton();
 };

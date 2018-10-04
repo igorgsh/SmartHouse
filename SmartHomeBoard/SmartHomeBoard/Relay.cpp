@@ -10,7 +10,7 @@ void Relay::SetDefault() {
 	status = LOW;
 }
 void Relay::InitUnit() {
-	Loger::Debug("Relay["+String(Id) +"] Init");
+	//Loger::Debug("Relay["+String(Id) +"] Init");
 
 	pinMode(Pin, OUTPUT);
 	ProcessUnit(status==HIGH ? ACT_ON : ACT_OFF);
@@ -19,7 +19,7 @@ void Relay::InitUnit() {
 
 void Relay::RelaySet(bool newStatus)
 {
-	Loger::Debug("Relay[" + String(Id) + "]=" + (newStatus == HIGH ? "HIGH" : "LOW") );
+	//Loger::Debug("Relay[" + String(Id) + "]=" + (newStatus == HIGH ? "HIGH" : "LOW") );
 	digitalWrite(Pin, (newStatus == HIGH ? lhOn : !lhOn));
 	status = newStatus;
 	MqttClient.PublishUnit(this);
