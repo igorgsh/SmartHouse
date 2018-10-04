@@ -48,7 +48,7 @@ void PowerMeter::InitUnit() {
 	if (pzem!=NULL) {
 		//IPAddress ip = IPAddress(10, 10, 10, 10);
 		pzem->setAddress(ip);
-		MqttClient.PublishUnit(this);
+		//MqttClient.PublishUnit(this);
 	}
 }
 
@@ -95,29 +95,36 @@ void PowerMeter::UnitLoop() {
 void PowerMeter::PublishAll() {
 	char topic[TOPIC_LENGTH];
 	char payload[PAYLOAD_LENGTH];
-	
+
 	double v;
 
 	v = voltage();
+	if (v <= 0) v = 0;
+
 	dtostrf(v, 6, 2, payload);
 	MqttTopic(Id, topic, PM_VOLTAGE);
 	MqttClient.Publish(topic, payload);
 
 	v = current();
+	if (v <= 0) v = 0;
 	dtostrf(v, 6, 2, payload);
 	MqttTopic(Id, topic, PM_CURRENT);
 	MqttClient.Publish(topic, payload);
 
 	v = power();
+	if (v <= 0) v = 0;
 	dtostrf(v, 6, 2, payload);
 	MqttTopic(Id, topic, PM_POWER);
 	MqttClient.Publish(topic, payload);
 
 	v = energy();
+	if (v <= 0) v = 0;
 	dtostrf(v, 6, 2, payload);
 	MqttTopic(Id, topic, PM_ENERGY);
 	MqttClient.Publish(topic, payload);
+
 }
+
 
 void PowerMeter::MqttTopic(uint16_t unitId, char* topic,PowerMeterValues val) {
 	char topic0[TOPIC_LENGTH];
