@@ -37,7 +37,7 @@ public:
 	byte serialNumber = 0;
 	byte serialRX = 0;
 	byte serialTX = 0;
-	byte factor = 1;
+	int factor = 1;
 
 	void static MqttTopic(uint16_t unitId, char *topic, PowerMeterValues val);
 
