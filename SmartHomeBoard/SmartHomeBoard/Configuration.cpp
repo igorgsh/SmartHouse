@@ -76,13 +76,20 @@ void Configuration::MainLoop() {
 }
 
 void Configuration::InitializeServer() {
-
+/*
 	if (Ethernet.begin(Config.mac) == 0) {
 		Loger::Error("Failed to configure Ethernet using DHCP");
 		Config.IsEthernetConnection = false;
 	}
+*/
+	Ethernet.begin(Config.mac, Config.ip);
+
 	if (Config.IsEthernetConnection) {
 		Loger::Info("Server is at " + PrintIP(Ethernet.localIP()));
+	}
+	else {
+		Loger::Error("Failed to configure Ethernet using DHCP or static IP: " + PrintIP(Ethernet.localIP()));
+		Config.IsEthernetConnection = false;
 	}
 }
 
@@ -285,6 +292,7 @@ void Configuration::ReadBoardId() {
 	BoardName = "Board_" + (String)(BoardId < 10 ? "0" : "") + String(BoardId, DEC);
 	Loger::Debug("BoardId=" + String(BoardId));
 	mac[5] = BoardId;
+	ip[3] = ip[3] + BoardId;
 }
 
 

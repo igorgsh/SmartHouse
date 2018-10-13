@@ -14,8 +14,8 @@ public:
 	byte BoardId = 0;
 	String BoardName = "";
 	byte mac[6] = { 0x00, 0xAA, 0x22, 0x07, 0x69, 0x00 };
-	// IP address in case DHCP fails
-	IPAddress ip= IPAddress(192, 168, 0, 101);
+	IPAddress ip= IPAddress(192, 168, 0, 200);
+
 	bool IsConfigReady=false;
 	bool IsActionsReady = false;
 	static const int MqttPort = 1883;
