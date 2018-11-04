@@ -85,7 +85,7 @@ void Configuration::InitializeServer() {
 	Ethernet.begin(Config.mac, Config.ip);
 
 	if (Config.IsEthernetConnection) {
-		Loger::Info("Server is at " + PrintIP(Ethernet.localIP()));
+		Loger::Info("Board IP is: " + PrintIP(Ethernet.localIP()));
 	}
 	else {
 		Loger::Error("Failed to configure Ethernet using DHCP or static IP: " + PrintIP(Ethernet.localIP()));

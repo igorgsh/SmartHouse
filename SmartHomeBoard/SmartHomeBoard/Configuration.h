@@ -14,7 +14,7 @@ public:
 	byte BoardId = 0;
 	String BoardName = "";
 	byte mac[6] = { 0x00, 0xAA, 0x22, 0x07, 0x69, 0x00 };
-	IPAddress ip= IPAddress(192, 168, 0, 200);
+	IPAddress ip= IPAddress(192, 168, 0, 90);
 
 	bool IsConfigReady=false;
 	bool IsActionsReady = false;

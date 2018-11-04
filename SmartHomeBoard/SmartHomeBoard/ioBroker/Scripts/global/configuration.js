@@ -18,6 +18,17 @@ var SwitchOffPriority = 15;
 //        ,'{"id":6,"type":"Z","Pin":24}'
 //        ,'{"id":7,"type":"D","Pin":25, "parent":6}'
 // 2. Pins 4, 10, 13, 50,51,52,53 should be skipped
+// 3. Для SoftwareSerial
+//  На платах Arduino Mega и Mega2560 некоторые выводы не поддерживают прерывания, 
+//  возникающие при изменении уровня сигнала. В силу этого, на данных платах в качестве вывода RX 
+//  могут использоваться только следующие выводы: 
+// 10, 11, 12, 13, 14, 15, 50, 51, 52, 53, A8 (62), A9 (63), A10 (64), A11 (65), A12 (66), A13 (67), A14 (68), A15 (69).
+// 4. HardwarePort 
+//  The Arduino Mega has three additional serial ports: 
+//  Serial1 on pins 19 (RX) and 18 (TX), 
+//  Serial2 on pins 17 (RX) and 16 (TX), 
+//  Serial3 on pins 15 (RX) and 14 (TX).
+
 
 var Configurations = [
         [ //Board 00
@@ -37,6 +48,9 @@ var Configurations = [
             ,'{"id":15, "type":"B","Pin":15,"lhOn":0,"status":0}' // Красная спальня
             ,'{"id":16, "type":"B","Pin":16,"lhOn":0,"status":0}' // Кухня Возле холодильника
             ,'{"id":17, "type":"B","Pin":17,"lhOn":0,"status":0}' // Чулан
+
+            ,'{"id":18, "type":"R","Pin":18,"lhOn":1,"status":0}' // реле в кладовой
+
             ,'{"id":19, "type":"B","Pin":19,"lhOn":0,"status":0}' // Стена Кладовка запад
             ,'{"id":20, "type":"B","Pin":20,"lhOn":0,"status":0}' // Стена Кладовка восток
 
@@ -68,6 +82,8 @@ var Configurations = [
             ,'{"id":44, "type":"R","Pin":44,"lhOn":1,"status":0,"priority":10}'	//L3.8 Кухня юг-восток
 		    ,'{"id":45, "type":"R","Pin":45,"lhOn":1,"status":0,"priority":10}'   //L3.1
 
+
+           ,'{"id":62, "type":"P","SerialRX":62,"SerialTX":54,"Factor":3}' // Power meter 
 
         ]
         ,[ //Board 01
@@ -117,20 +133,26 @@ var Configurations = [
 
         ]
         ,[ //Board 02
-            '{"id":212, "type":"B","Pin":12,"lhOn":0,"status":0}' // 
-            ,'{"id":211, "type":"B","Pin":11,"lhOn":0,"status":0}' // 
-            ,'{"id":209, "type":"B","Pin":9,"lhOn":0,"status":0}' // 
 
-			 ,'{"id":245, "type":"R","Pin":45,"lhOn":1,"status":0}'   //
-        
+//            '{"id":218, "type":"P","Serial":1,"Factor":1}' // Power meter 
+//            '{"id":218, "type":"P","SerialRX":62,"SerialTX":54,"Factor":1}' // Power meter 
+            '{"id":201, "type":"B","Pin":12}'  
+
+
+           // ,'{"id":62, "type":"P","SerialRX":62,"SerialTX":54,"Factor":3}' // Power meter 
+
         ]
         ,[ //Board 03
+     /*
+            '{"id":318, "type":"P","Pin":18,"lhOn":0,"status":0}' // Power meter 
+        
+       
             '{"id":312, "type":"B","Pin":12,"lhOn":0,"status":0}' // 
             ,'{"id":311, "type":"B","Pin":11,"lhOn":0,"status":0}' // 
             ,'{"id":309, "type":"B","Pin":9,"lhOn":0,"status":0}' // 
 
 			 ,'{"id":345, "type":"R","Pin":45,"lhOn":1,"status":0}'   //
-        
+        */
         ]
     ];
 	
@@ -248,13 +270,15 @@ var Actions = [
          ,'{"id":91,"originId":8,"originType":"B","event":1,"targetId":30,"targetAction":3,"targetType":"R"}'
          
          ,'{"id":92,"originId":5,"originType":"B","event":2,"targetId":144,"targetAction":3,"targetType":"R"}'
-//         ,'{"id":92,"originId":5,"originType":"B","event":2,"targetId":30,"targetAction":3,"targetType":"R"}'
          ,'{"id":93,"originId":8,"originType":"B","event":2,"targetId":34,"targetAction":3,"targetType":"R"}'
 
+//Switch off everything
 
-         ,'{"id":94,"originId":5,"originType":"B","event":4,"targetId":34,"targetAction":0,"targetType":"R"}'
-//         ,'{"id":95,"originId":5,"originType":"B","event":4,"targetId":30,"targetAction":0,"targetType":"R"}'
-         ,'{"id":95,"originId":5,"originType":"B","event":4,"targetId":144,"targetAction":0,"targetType":"R"}'
+         ,'{"id":94,"originId":5,"originType":"B","event":4,"targetId":0001,"targetAction":4,"targetType":"b"}'
+
+//         ,'{"id":94,"originId":5,"originType":"B","event":4,"targetId":34,"targetAction":0,"targetType":"R"}'
+//         ,'{"id":95,"originId":5,"originType":"B","event":4,"targetId":144,"targetAction":0,"targetType":"R"}'
+
          ,'{"id":96,"originId":8,"originType":"B","event":4,"targetId":34,"targetAction":0,"targetType":"R"}'
          ,'{"id":97,"originId":8,"originType":"B","event":4,"targetId":30,"targetAction":0,"targetType":"R"}'
 
@@ -311,9 +335,7 @@ var Actions = [
          ,'{"id":160,"originId":105,"originType":"B","event":1,"targetId":143,"targetAction":3,"targetType":"R"}'
          ]
          ,[ //Board 02
-         '{"id":201,"originId":211,"originType":"B","event":1,"targetId":345,"targetAction":3,"targetType":"R"}'
-         ,'{"id":202,"originId":211,"originType":"B","event":1,"targetId":245,"targetAction":3,"targetType":"R"}'
-         ,'{"id":203,"originId":211,"originType":"B","event":2,"targetId":127,"targetAction":0,"targetType":"R"}'
+         '{"id":201,"originId":201,"originType":"B","event":4,"targetId":0211,"targetAction":1,"targetType":"V"}'
         ]
          ,[ //Board 03
          '{"id":301,"originId":311,"originType":"B","event":1,"targetId":245,"targetAction":3,"targetType":"R"}'

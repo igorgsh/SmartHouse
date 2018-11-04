@@ -190,6 +190,7 @@ void Mqtt::PublishUnit(const Unit *unit) {
 			char topic[TOPIC_LENGTH];
 			char payload[PAYLOAD_LENGTH];
 			const char *unitPrefix;
+			byte unitType = 0;
 			if (unit->Type == ::POWER_METER) {
 				PowerMeter *p = (PowerMeter*)unit;
 				p->PublishAll();
@@ -198,24 +199,35 @@ void Mqtt::PublishUnit(const Unit *unit) {
 				switch (unit->Type) {
 				case UnitType::BUTTON: {
 					unitPrefix = MQTT_BUTTONS;
+					unitType = unit->Type;
 					break;
 				}
 				case UnitType::RELAY: {
 					unitPrefix = MQTT_RELAYS;
+					unitType = unit->Type;
 					break;
 				}
 				case UnitType::ONE_WIRE_BUS: {
 					unitPrefix = MQTT_1WIREBUS;
+					unitType = unit->Type;
 					break;
 				}
 				case UnitType::ONE_WIRE_THERMO: {
 					unitPrefix = MQTT_1WIRETHERMO;
+					unitType = unit->Type;
+					break;
+				}
+				case UnitType::VIRTUAL_BUTTON: {
+					unitPrefix = MQTT_VIRTUAL_BUTTONS;
+					unitType = UnitType::BUTTON;
 					break;
 				}
 				}
-				sprintf(topic, "%s%s%c%04d", unitPrefix, MQTT_SEPARATOR, unit->Type, unit->Id);
-				sprintf(payload, "%u", unit->status);
-				Publish(topic, payload);
+				if (unitType != 0) {
+					sprintf(topic, "%s%s%c%04d", unitPrefix, MQTT_SEPARATOR, unit->Type, unit->Id);
+					sprintf(payload, "%u", unit->status);
+					Publish(topic, payload);
+				}
 
 			}
 		}
