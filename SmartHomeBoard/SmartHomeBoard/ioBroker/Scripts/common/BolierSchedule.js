@@ -1,9 +1,9 @@
 
-schedule ("05 00 * * *", function() {StartBolier(0);});
-schedule ("06 50 * * *", function() {StopBolier(0);});
+schedule ("00 05 * * *", function() {StartBoiler(0);});
+schedule ("50 06 * * *", function() {StopBoiler(0);});
 
 // Stop All at 6:55
-schedule ("06 55 * * *", function() {StopBolier(0);});
+schedule ("55 06 * * *", function() {StopBoiler(0);});
 
 
 function StartBoiler(boilerNumber) {

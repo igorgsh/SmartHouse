@@ -82,6 +82,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="ioBroker\Scripts\common\AstroSchedule.js" />
+    <None Include="ioBroker\Scripts\common\BolierSchedule.js" />
     <None Include="ioBroker\Scripts\common\config2.js" />
     <None Include="ioBroker\Scripts\common\GardenSchedule.js" />
     <None Include="ioBroker\Scripts\common\hardreset.js" />
@@ -138,7 +139,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties arduino.upload.port="COM5" />
+      <UserProperties arduino.upload.port="COM9" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

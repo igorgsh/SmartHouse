@@ -42,7 +42,7 @@ function StopWatering(zoneValve, nm) {
     setState(zoneValve,0, false);
 }
  
-
+/*
 schedule("00 7,23 * 6-9 *", function() { StartWatering(gardenZoneFar, "Far Zone")});
 schedule("19 7,23 * 6-9 *", function() {StopWatering(gardenZoneFar, "Far Zone")});
 
@@ -59,3 +59,4 @@ schedule("50 7,23 * 6-9 *", function() {StopWatering(gardenZoneNear, "Nearest Zo
 
 schedule("00 6,20 * 6-9 *", function() {StartWatering(gardenZoneGarden, "Garden Zone")});
 schedule("40 6,20 * 6-9 *", function() {StopWatering(gardenZoneGarden, "Garden Zone")});
+*/

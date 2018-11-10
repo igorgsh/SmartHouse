@@ -46,7 +46,7 @@ public:
 	void MainLoop();
 
 	static const char* MqttServer() {
-		return "192.168.0.33"; //IP-адрес сервера ioBroker
+		return "192.168.0.99"; //IP-адрес сервера ioBroker
 	}
 
 

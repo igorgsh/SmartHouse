@@ -76,6 +76,9 @@
     <None Include="ioBroker\Scripts\global\resetdevice.js">
       <Filter>ioBroker\Scripts\global</Filter>
     </None>
+    <None Include="ioBroker\Scripts\common\BolierSchedule.js">
+      <Filter>ioBroker\Scripts\common</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.SmartHomeBoard.vsarduino.h">
