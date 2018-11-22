@@ -57,7 +57,7 @@ Unit* Configuration::FindUnit(uint16_t id) {
 	}
 	return NULL;
 }
-
+/*
 Unit* Configuration::FindUnitByTypeAndPin(UnitType type, byte pin) {
 	if (units != NULL) {
 		for (int i = 0; i < numberUnits; i++) {
@@ -69,6 +69,8 @@ Unit* Configuration::FindUnitByTypeAndPin(UnitType type, byte pin) {
 	return NULL;
 
 }
+*/
+
 
 void Configuration::MainLoop() {
 	MqttClient.MqttLoop();
@@ -158,21 +160,6 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 	return u;
 }
 
-void Configuration::ConvertStringToAddress(DeviceAddress address, const String addrStr) {
-	for (int i = 0, j=0; i < 16; i+=2, j++) {
-		unsigned long l = strtoul(addrStr.substring(i, i + 2).c_str(), NULL, 16);
-		address[j] = l;
-	}
-}
-
-String Configuration::ConvertAddressToString(const DeviceAddress address) {
-	String str0 = "";
-
-	for (int i = 0; i < 16; i ++) {
-		str0 += String(address[i], HEX);
-	}
-	return str0;
-}
 
 void Configuration::UpdateConfig(String jsonConfig) {
 	if (isConfigRequested) {
@@ -190,10 +177,16 @@ void Configuration::UpdateConfig(String jsonConfig) {
 
 			units[configCounter] = CreateTypedUnit(((const char*)root["type"])[0]);
 			if (units[configCounter] != NULL) {
+				units[configCounter]->Id = root["id"];
+
+				units[configCounter]->ConfigField(root);
+				/*
 				if (root.containsKey("id")) {
 					units[configCounter]->Id = root["id"];
 				}
+				root.
 				if (root.containsKey("Pin")) {
+
 					units[configCounter]->Pin = root["Pin"];
 				}
 				if (root.containsKey("lhOn")) {
@@ -227,6 +220,7 @@ void Configuration::UpdateConfig(String jsonConfig) {
 						((PowerMeter*)units[configCounter])->factor = root["Factor"];
 					}
 				}
+				*/
 			}
 
 			configCounter++;
@@ -414,7 +408,7 @@ void Configuration::ProcessAction(uint16_t id, byte event) {
 						u->status = actions[i]->targetAction;
 						u->isSubscribed = true; //this fake activation is used just for publish
 						MqttClient.PublishUnit(u);
-						
+						delete u;
 					}
 				}
 				else {

@@ -20,6 +20,11 @@ class Button :
 	public Unit
 {
 public:
+
+	byte Pin;
+	bool lhOn;
+
+
 	bool isLongMode = false;
 	bool isExtraLongMode = false;
 	bool isShortMode = false;
@@ -31,6 +36,13 @@ public:
 	void ProcessUnit(ActionType event);
 	void UnitLoop();
 	void FinalInitUnit() {};
+	bool Compare(Unit* u);
+	byte UnitStoredSize() {return 5;}
+	void ReadFromEEPROM(uint16_t addr);
+	void WriteToEEPROM(uint16_t addr);
+	void ConfigField(JsonObject& jsonList);
+
+
 private:
 	void HandleButton();
 	void HandleFinish(int newStatus);

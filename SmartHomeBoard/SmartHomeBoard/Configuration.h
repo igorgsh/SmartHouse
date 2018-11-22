@@ -42,6 +42,7 @@ public:
 	void UpdateUnit(UnitType type, String name, String value);
 	void UpdatePowerMeter(String unit, String value) { UpdateUnit(UnitType::POWER_METER, unit, value); };
 	void ProcessAction(uint16_t id, byte event);
+	Unit* CreateTypedUnit(byte type);
 
 	void MainLoop();
 
@@ -52,8 +53,6 @@ public:
 
 	int numberUnits = 0;
 	int numberActions = 0;
-	void ConvertStringToAddress(DeviceAddress address, const String addrStr);
-	String ConvertAddressToString(const DeviceAddress address);
 
 	//Timer 
 	//unsigned long counter01 = 0;	//100ms
@@ -84,7 +83,6 @@ private:
 	void FinalizeInitUnits();
 	void CreateActions();
 	void InitializeActions();
-	Unit* CreateTypedUnit(byte type);
 	void BuildConfig();
 	void InitializeServer();
 	void UnitsLoop();

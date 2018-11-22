@@ -3,6 +3,7 @@
 #include "ext_global.h"
 #include "mqtt.h"
 #include "Loger.h"
+#include "SigmaEEPROM.h"
 
 extern Mqtt MqttClient;
 
@@ -117,3 +118,54 @@ void Button::ProcessUnit(ActionType event) {
 void Button::UnitLoop() {
 	HandleButton();
 };
+
+bool Button::Compare(Unit* u) {
+
+	if (u == NULL) return false;
+	if (u->Type != UnitType::BUTTON) return false;
+	Button *tu = (Button*)u;
+	Loger::Debug("Compare Buttons:" + String(Id == tu->Id) + ":" +String(Type == tu->Type) +":" + String(Pin == tu->Pin) + ":" + String(lhOn == tu->lhOn) + ":" + String(status == tu->status) + "#");
+	return (
+		Id == tu->Id &&
+		Type == tu->Type &&
+		Pin == tu->Pin &&
+		lhOn == tu->lhOn &&
+		status == tu->status
+		);
+}
+
+
+void Button::ReadFromEEPROM(uint16_t addr) {
+	bool res = true;
+
+	Id = SigmaEEPROM::Read8(addr);
+	Type = SigmaEEPROM::Read8(addr + 1);
+	Pin = SigmaEEPROM::Read8(addr + 2);
+	lhOn = SigmaEEPROM::Read8(addr + 3);
+	status = SigmaEEPROM::Read8(addr + 4);
+
+}
+
+void Button::WriteToEEPROM(uint16_t addr) {
+	bool res = true;
+
+	SigmaEEPROM::Write8(addr, Id);
+	SigmaEEPROM::Write8(addr + 1, Type);
+	SigmaEEPROM::Write8(addr + 2, Pin);
+	SigmaEEPROM::Write8(addr + 3, lhOn);
+	SigmaEEPROM::Write8(addr + 4, status);
+
+}
+
+void Button::ConfigField(JsonObject& jsonList) {
+	if (jsonList.containsKey("Pin")) {
+		Pin = jsonList["Pin"];
+	}
+	if (jsonList.containsKey("lhOn")) {
+		lhOn = jsonList["lhOn"];
+	}
+	if (jsonList.containsKey("status")) {
+		status = jsonList["status"];
+	}
+}
+

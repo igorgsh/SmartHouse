@@ -1,6 +1,7 @@
 #include "PowerMeter.h"
 #include "ext_global.h"
 #include "mqtt.h"
+#include "SigmaEEPROM.h"
 
 extern Mqtt MqttClient;
 
@@ -160,4 +161,66 @@ void PowerMeter::ProcessUnit(ActionType action) {
 }
 
 
+bool PowerMeter::Compare(Unit* u) {
 
+	if (u == NULL) return false;
+	if (u->Type != UnitType::POWER_METER) return false;
+	PowerMeter* tu = (PowerMeter*)u;
+	Loger::Debug("Compare PowerMeter:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":" 
+		+ String(serialRX == tu->serialRX) + ":"
+		+ String(serialTX == tu->serialTX) + ":"
+		+ String(serialNumber == tu->serialNumber) + ":"
+		+ String(factor == tu->factor)
+		+ "#");
+	return (
+		Id == tu->Id &&
+		Type == tu->Type &&
+		serialRX == tu->serialRX &&
+		serialTX == tu->serialTX &&
+		serialNumber == tu->serialNumber &&
+		factor == tu->factor
+		);
+}
+
+
+void PowerMeter::ReadFromEEPROM(uint16_t addr) {
+	bool res = true;
+
+	Id = SigmaEEPROM::Read8(addr);
+	Type = SigmaEEPROM::Read8(addr + 1);
+	serialNumber = SigmaEEPROM::Read8(addr + 2);
+	serialRX = SigmaEEPROM::Read8(addr + 3);
+	serialTX = SigmaEEPROM::Read8(addr + 4);
+	factor = SigmaEEPROM::Read16(addr + 5);
+}
+
+void PowerMeter::WriteToEEPROM(uint16_t addr) {
+	bool res = true;
+
+	SigmaEEPROM::Write8(addr, Id);
+	SigmaEEPROM::Write8(addr + 1, Type);
+	SigmaEEPROM::Write8(addr + 2, serialNumber);
+	SigmaEEPROM::Write8(addr + 3, serialRX);
+	SigmaEEPROM::Write8(addr + 4, serialTX);
+	SigmaEEPROM::Write16(addr + 5, factor);
+
+}
+
+void PowerMeter::ConfigField(JsonObject& jsonList) {
+
+	if (jsonList.containsKey("Serial")) {
+		serialNumber = jsonList["Serial"];
+	}
+
+	if (jsonList.containsKey("SerialRX")) {
+		serialRX = jsonList["SerialRX"];
+	}
+
+	if (jsonList.containsKey("SerialTX")) {
+		serialTX = jsonList["SerialTX"];
+	}
+
+	if (jsonList.containsKey("Factor")) {
+		factor = jsonList["Factor"];
+	}
+}

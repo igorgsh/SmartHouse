@@ -2,22 +2,24 @@
 
 
 /*
-bool Unit::compare(Unit* u) {
+bool Unit::Compare(Unit* u) {
 	if (u == NULL) return false;
-	//Loger::Debug("Compare Unit:" + String(Id == u->Id) + ":" +String(Type == u->Type) +":" + String(Pin == u->Pin) + ":" + String(lhOn == u->lhOn) + "#");
+	Loger::Debug("Compare Unit:" + String(Id == u->Id) + ":" +String(Type == u->Type) +":" + String(Pin == u->Pin) + ":" + String(lhOn == u->lhOn) + "#");
 	return (
 		Id == u->Id &&
 		Type == u->Type &&
 		Pin == u->Pin &&
-		lhOn == u->lhOn
+		lhOn == u->lhOn &&
+		status == u->status
 		);
 }
 */
+
 void Unit::FillFrom(Unit* u) {
 	Id = u->Id;
 	Type = u->Type;
-	Pin = u->Pin;
-	lhOn = u->lhOn;
+//	Pin = u->Pin;
+//	lhOn = u->lhOn;
 }
 
 void const Unit::print(const char* header, DebugLevel level){
@@ -30,10 +32,6 @@ void const Unit::print(const char* header, DebugLevel level){
 	str0+=String((unsigned int) Id, DEC);
 	str0+=";Type:";
 	str0 += String((char)Type);
-	str0 += ";Pin:";
-	str0 += String(Pin, DEC);
-	str0 += ";lhOn:";
-	str0 += String(lhOn, DEC);
 	str0 += ";status:";
 	str0 += String((unsigned int)status, DEC);
 	str0 += ";subscription:";

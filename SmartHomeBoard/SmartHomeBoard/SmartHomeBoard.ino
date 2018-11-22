@@ -3,7 +3,12 @@
  Created:	11.01.17 22:04:42
  Author:	Igor Shevchenko
 */
-#include <MsTimer2.h>
+#include <PZEM004T.h>
+#include <ArduinoJson.hpp>
+#include <ArduinoJson.h>
+#include <Keyboard.h>
+#include "SigmaEEPROM.h"
+//#include <MsTimer2.h>
 #include <PubSubClient.h>
 #include <DallasTemperature.h>
 #include <OneWire.h>

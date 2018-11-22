@@ -6,11 +6,23 @@
 class Relay : public Unit
 {
 public:
+
+
+	byte Pin;
+	bool lhOn;
+
+
 	void SetDefault();
 	void InitUnit();
 	void ProcessUnit(ActionType event);
 	void UnitLoop();
 	void FinalInitUnit() {};
+	bool Compare(Unit* u);
+	byte UnitStoredSize() { return 5; }
+	void ReadFromEEPROM(uint16_t addr);
+	void WriteToEEPROM(uint16_t addr);
+	void ConfigField(JsonObject& jsonList);
+
 private:
 	void RelaySet(bool highLow);
 	void RelaySwitch();
