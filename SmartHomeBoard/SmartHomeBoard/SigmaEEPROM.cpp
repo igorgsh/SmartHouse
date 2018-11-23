@@ -35,7 +35,6 @@ bool SigmaEEPROM::UpdateUnits(byte numberOfUnits, Unit** units) {
 	byte nUnits = Read8(addrNumberUnits);
 
 	if (nUnits != numberOfUnits) {
-		WriteUnits(numberOfUnits, units);
 		res = true;
 	}
 	else {
@@ -45,7 +44,6 @@ bool SigmaEEPROM::UpdateUnits(byte numberOfUnits, Unit** units) {
 			byte uId = Read8(currentPtr);
 			byte uType = Read8(currentPtr);
 			if (uId != units[i]->Id || uType != units[i]->Type) {
-				WriteUnits(numberOfUnits, units);
 				res = true;
 			}
 			else {
@@ -62,9 +60,9 @@ bool SigmaEEPROM::UpdateUnits(byte numberOfUnits, Unit** units) {
 
 			}
 		}
-		if (res) {
-			WriteUnits(numberOfUnits, units);
-		}
+	}
+	if (res) {
+		SigmaEEPROM::WriteUnits(numberOfUnits, units);
 	}
 	return res;
 }

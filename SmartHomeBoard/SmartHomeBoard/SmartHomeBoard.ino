@@ -6,7 +6,7 @@
 #include <PZEM004T.h>
 #include <ArduinoJson.hpp>
 #include <ArduinoJson.h>
-#include <Keyboard.h>
+//#include <Keyboard.h>
 #include "SigmaEEPROM.h"
 //#include <MsTimer2.h>
 #include <PubSubClient.h>
@@ -28,7 +28,6 @@
 #include "ext_global.h"
 
 
-//#include "initdata.h"
 #include "utils.h"
 /*
 void Timer2() { //it is started every 100ms

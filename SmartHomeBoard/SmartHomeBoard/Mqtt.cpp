@@ -28,7 +28,6 @@ Mqtt::Mqtt() : PubSubClient(Configuration::MqttServer(), Configuration::MqttPort
 
 bool Mqtt::MqttReconnect() {
 	
-	//Если соединение MQTT неактивно, то пытаемся установить его и опубликовать/подписаться
 	static unsigned long errorTime = 0;
 	char topic[TOPIC_LENGTH];
 
@@ -39,14 +38,11 @@ bool Mqtt::MqttReconnect() {
 		if (errorTime == 0 || errorTime + mqttWaiting < millis()) { //reconnect
 			Loger::Debug("MqttReconnect:" + String(errorTime) + ":" + String(errorTime + mqttWaiting) + ":" + String(millis()));
 
-			//Подключаемся и подписываемся
 			if (connect(Config.BoardName.c_str())) {
 				mqttWaiting = MQTT_RECONNECT_TIME;
 				errorTime = 0;
 
-				//if (firstConnect) {
-					//Подписываемся на все темы
-					//MqttClient.subscribe(TOPIC_CONFIG_LENGTH);
+				if (firstConnect) {
 					sprintf(topic, MQTT_CONFIG_RESPONSE, Config.BoardId);
 					Subscribe(topic);
 					sprintf(topic, MQTT_ACTIONS_RESPONSE, Config.BoardId);
@@ -54,11 +50,11 @@ bool Mqtt::MqttReconnect() {
 					//sprintf(topic, MQTT_RESET_BOARD, Config.BoardId);
 					//Subscribe(topic);
 					firstConnect = false;
-					if (Config.IsConfigReady) {
-						SubscribeUnits();
-					}
-				//}
-				loop();
+//					if (Config.IsConfigReady) {
+//						SubscribeUnits();
+//					}
+				}
+	//????			loop();
 			}
 			else {
 				mqttWaiting *= 2;
@@ -71,24 +67,26 @@ bool Mqtt::MqttReconnect() {
 }
 
 void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
-	//преобразуем тему(topic) и значение (payload) в строку
 
 	if (length > 0) {
 		String strTopic = String(topic);
 		String strPayload = String((char*)payLoad).substring(0, length);
 		char subscription[TOPIC_LENGTH];
-		//Исследуем что "прилетело" от сервера по подписке:
+
 		Loger::Debug("[" + strTopic + "]:" + strPayload + "#");
 		sprintf(subscription, MQTT_CONFIG_RESPONSE, Config.BoardId);
 		if (strcmp(topic, subscription) == 0) {
-			Config.UpdateConfig(strPayload);
+			if (Config.isConfigRequested) {
+				Config.UpdateConfig(strPayload);
+			}
 		}
 		else {
 			sprintf(subscription, MQTT_ACTIONS_RESPONSE, Config.BoardId);
 
 			if (strcmp(topic, subscription) == 0) {
-				//Loger::Debug("Update Actions");
-				Config.UpdateActions(strPayload);
+				if (Config.isActionRequested) {
+					Config.UpdateActions(strPayload);
+				}
 			}
 			else {
 				if (strTopic.startsWith(MQTT_BUTTONS)) {
@@ -126,6 +124,8 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 									if (strTopic.startsWith((String)subscription) && strPayload != NULL && strPayload[0] >= '0') {
 										Board::Reset(10000);
 									}
+								}
+								else { //placeholder for new commands
 								}
 							}
 						}
@@ -171,8 +171,8 @@ void Mqtt::GetConfiguration() {
 	char topic[TOPIC_LENGTH];
 	Config.IsConfigReady = false;
 	sprintf(topic, MQTT_CONFIG_REQUEST, Config.BoardId);
-	Config.isConfigRequested = true;
 	Publish(topic, String(rnd).c_str());
+	Config.isConfigRequested = true;
 }
 
 void Mqtt::WatchDog() {

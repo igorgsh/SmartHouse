@@ -116,3 +116,11 @@ String OneWireBus::ConvertAddressToString(const DeviceAddress address) {
 }
 
 
+bool OneWireBus::CompareDeviceAddress(DeviceAddress a0, DeviceAddress a1) {
+	bool res = false;
+
+	for (int i = 0; !res && i < 8; i++) {
+		res &= (a0[i] == a1[i]);
+	}
+	return res;
+}

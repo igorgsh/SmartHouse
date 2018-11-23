@@ -15,15 +15,15 @@ class SigmaEEPROM
 {
 
  public:
-	 byte ReadBoardId();
-	 bool UpdateUnits(byte numberOfUnits, Unit** units);
+	 static byte ReadBoardId();
+	 static bool UpdateUnits(byte numberOfUnits, Unit** units);
 	 static uint16_t Read16(uint16_t addr);
 	 static byte Read8(uint16_t addr);
 	 static void Write8(uint16_t addr, byte val);
 	 static void Write16(uint16_t addr, uint16_t val);
 
 private:
-	 void WriteUnits(byte numberOfUnits, Unit** units);
+	 static void WriteUnits(byte numberOfUnits, Unit** units);
 	 //void WriteUnit(Unit* unit);
 	 //Unit* ReadUnit(byte numberOfUnits, Unit* unit);
 

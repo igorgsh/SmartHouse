@@ -7,7 +7,7 @@
 #include <ArduinoJson.h>
 #include "button.h"
 #include "relay.h"
-#include "EEPROM.h"
+//#include "EEPROM.h"
 #include "Unit.h"
 #include "Board.h"
 #include "Loger.h"
@@ -78,21 +78,8 @@ void Configuration::MainLoop() {
 }
 
 void Configuration::InitializeServer() {
-/*
-	if (Ethernet.begin(Config.mac) == 0) {
-		Loger::Error("Failed to configure Ethernet using DHCP");
-		Config.IsEthernetConnection = false;
-	}
-*/
 	Ethernet.begin(Config.mac, Config.ip);
-
-	if (Config.IsEthernetConnection) {
-		Loger::Info("Board IP is: " + PrintIP(Ethernet.localIP()));
-	}
-	else {
-		Loger::Error("Failed to configure Ethernet using DHCP or static IP: " + PrintIP(Ethernet.localIP()));
-		Config.IsEthernetConnection = false;
-	}
+	Loger::Info("Board IP is: " + PrintIP(Ethernet.localIP()));
 }
 
 
@@ -101,15 +88,18 @@ void Configuration::Init() {
 	if (IsEthernetConnection) {
 		Loger::Debug("Init Ethernet");
 		InitializeServer();
-		if (IsEthernetConnection) {
-			Loger::Debug("Initialize MQTT");
-			MqttClient.InitMqtt();
-		}
+		Loger::Debug("Initialize MQTT");
+		MqttClient.InitMqtt();
 	}
 	BuildConfig();
+	BuildActions();
+
 	if (IsEthernetConnection) {
 		MqttClient.SubscribeUnits();
 	}
+	InitializeUnits();
+	FinalizeInitUnits();
+	IsConfigReady = true;
 	Loger::Debug("Config init is finished");
 }
 
@@ -248,10 +238,6 @@ void Configuration::BuildConfig() {
 	}
 	Loger::Debug("IsConfigReady=" +String(IsConfigReady));
 	Loger::Debug("NumberOfunits=" + String(numberUnits));
-	BuildActions();
-	InitializeUnits();
-	FinalizeInitUnits();
-	IsConfigReady = true;
 }
 
 
@@ -282,7 +268,7 @@ void Configuration::InitializeActions() {
 
 void Configuration::ReadBoardId() {
 
-	BoardId = EEPROM.read(addrBoardId);
+	BoardId = SigmaEEPROM::ReadBoardId();
 	BoardName = "Board_" + (String)(BoardId < 10 ? "0" : "") + String(BoardId, DEC);
 	Loger::Debug("BoardId=" + String(BoardId));
 	mac[5] = BoardId;
