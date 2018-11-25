@@ -68,6 +68,8 @@ public:
 	void loop30();
 	void loop60();
 	//void loop300();
+	Unit** CreateUnits(byte nUnits);
+	Action** CreateActions(byte nActions);
 
 private:
 	int configCounter;
@@ -77,11 +79,9 @@ private:
 
 	static const byte addrBoardId = 0;
 
-	void CreateUnits();
 	void ReadBoardId();
 	void InitializeUnits();
 	void FinalizeInitUnits();
-	void CreateActions();
 	void InitializeActions();
 	void BuildConfig();
 	void InitializeServer();

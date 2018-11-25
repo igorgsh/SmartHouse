@@ -19,13 +19,14 @@
 //#include "types.h"
 
 
-#define MQTT_RECONNECT_TIME	10000
+#define MQTT_RECONNECT_TIME	1000
 #define TOPIC_LENGTH	100
 #define PAYLOAD_LENGTH	100
 #define MQTT_TRY_COUNT 5
 #define MQTT_WAITING_RESPONSE 10000
-#define MQTT_RESUBSCRIBE_TRY_COUNT 5
+#define MQTT_RESUBSCRIBE_TRY_COUNT 1
 #define MQTT_RESUBSCRIPTION_DELAY	50
+#define MQTT_ETHERNET_TIME (5*1000)
 
 
 #define BOARD_ID "Board_%02d"
@@ -77,7 +78,7 @@ private:
 		
 		bool MqttReconnect();
 //		void SetTopicNames();
-		bool firstConnect = true;
+//		bool firstConnect = true;
 
 };
 

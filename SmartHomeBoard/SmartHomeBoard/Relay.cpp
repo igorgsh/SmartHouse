@@ -73,7 +73,6 @@ bool Relay::Compare(Unit* u) {
 
 
 void Relay::ReadFromEEPROM(uint16_t addr) {
-	bool res = true;
 
 	Id = SigmaEEPROM::Read8(addr);
 	Type = SigmaEEPROM::Read8(addr + 1);
@@ -84,7 +83,6 @@ void Relay::ReadFromEEPROM(uint16_t addr) {
 }
 
 void Relay::WriteToEEPROM(uint16_t addr) {
-	bool res = true;
 
 	SigmaEEPROM::Write8(addr, Id);
 	SigmaEEPROM::Write8(addr + 1, Type);
@@ -105,5 +103,28 @@ void Relay::ConfigField(JsonObject& jsonList) {
 	if (jsonList.containsKey("status")) {
 		status = jsonList["status"];
 	}
+}
+
+
+void const Relay::print(const char* header, DebugLevel level) {
+	String str0 = "";
+
+	if (header != NULL) {
+		str0 = header;
+	}
+	str0 += "Id:";
+	str0 += String((unsigned int)Id, DEC);
+	str0 += ";Type:";
+	str0 += String((char)Type);
+	str0 += ";Pin:";
+	str0 += String((unsigned int)Pin, DEC);
+	str0 += ";lhOn:";
+	str0 += String((unsigned int)lhOn, DEC);
+	str0 += ";status:";
+	str0 += String((unsigned int)status, DEC);
+	str0 += ";subscription:";
+	str0 += (isSubscribed ? "true" : "false");
+	str0 += " @";
+	Loger::Log(level, str0);
 }
 

@@ -184,7 +184,6 @@ bool PowerMeter::Compare(Unit* u) {
 
 
 void PowerMeter::ReadFromEEPROM(uint16_t addr) {
-	bool res = true;
 
 	Id = SigmaEEPROM::Read8(addr);
 	Type = SigmaEEPROM::Read8(addr + 1);
@@ -195,7 +194,6 @@ void PowerMeter::ReadFromEEPROM(uint16_t addr) {
 }
 
 void PowerMeter::WriteToEEPROM(uint16_t addr) {
-	bool res = true;
 
 	SigmaEEPROM::Write8(addr, Id);
 	SigmaEEPROM::Write8(addr + 1, Type);
@@ -223,4 +221,29 @@ void PowerMeter::ConfigField(JsonObject& jsonList) {
 	if (jsonList.containsKey("Factor")) {
 		factor = jsonList["Factor"];
 	}
+}
+
+
+void const PowerMeter::print(const char* header, DebugLevel level) {
+	String str0 = "";
+
+	if (header != NULL) {
+		str0 = header;
+	}
+	str0 += "Id:";
+	str0 += String((unsigned int)Id, DEC);
+	str0 += ";Type:";
+	str0 += String((char)Type);
+	str0 += ";Serial:";
+	str0 += String((unsigned int)Serial, DEC);
+	str0 += ";SerialRX:";
+	str0 += String((unsigned int)serialRX, DEC);
+	str0 += ";SerialTX:";
+	str0 += String((unsigned int)serialTX, DEC);
+	str0 += ";Factor:";
+	str0 += String((unsigned int)factor, DEC);
+	str0 += ";subscription:";
+	str0 += (isSubscribed ? "true" : "false");
+	str0 += " @";
+	Loger::Log(level, str0);
 }

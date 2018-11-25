@@ -136,7 +136,7 @@ bool Button::Compare(Unit* u) {
 
 
 void Button::ReadFromEEPROM(uint16_t addr) {
-	bool res = true;
+//	bool res = true;
 
 	Id = SigmaEEPROM::Read8(addr);
 	Type = SigmaEEPROM::Read8(addr + 1);
@@ -147,7 +147,7 @@ void Button::ReadFromEEPROM(uint16_t addr) {
 }
 
 void Button::WriteToEEPROM(uint16_t addr) {
-	bool res = true;
+	//bool res = true;
 
 	SigmaEEPROM::Write8(addr, Id);
 	SigmaEEPROM::Write8(addr + 1, Type);
@@ -169,3 +169,23 @@ void Button::ConfigField(JsonObject& jsonList) {
 	}
 }
 
+
+void const Button::print(const char* header, DebugLevel level) {
+	String str0 = "";
+
+	if (header != NULL) {
+		str0 = header;
+	}
+	str0 += "Id:";
+	str0 += String((unsigned int)Id, DEC);
+	str0 += ";Type:";
+	str0 += String((char)Type);
+	str0 += ";Pin:";
+	str0 += String((unsigned int)Pin, DEC);
+	str0 += ";lhOn:";
+	str0 += String((unsigned int)lhOn, DEC);
+	str0 += ";subscription:";
+	str0 += (isSubscribed ? "true" : "false");
+	str0 += " @";
+	Loger::Log(level, str0);
+}

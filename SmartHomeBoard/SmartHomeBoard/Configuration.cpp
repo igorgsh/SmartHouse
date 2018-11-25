@@ -18,31 +18,38 @@
 
 extern Mqtt MqttClient;
 
-void Configuration::CreateUnits() {
+Unit** Configuration::CreateUnits(byte nUnits) {
+
 	if (units != NULL) {
+		Loger::Debug("Point A1");
 		for (int i = 0; i < numberUnits; i++) {
+			Loger::Debug("Point A2");
 			if (units[i] != NULL) {
 				delete units[i];
 			}
 		}
 		delete units;
 	}
-	Loger::Debug("Create Units:" + String(numberUnits));
-	units = new Unit*[numberUnits];
-
+	Loger::Debug("Create Units:" + String(nUnits));
+	units = new Unit*[nUnits];
+	numberUnits = nUnits;
+	//Loger::Debug("Number:" + String(numberUnits));
+	return Config.units;
 }
 
-void Configuration::CreateActions() {
+Action** Configuration::CreateActions(byte nActions) {
 	if (actions != NULL) {
-		for (int i = 0; i < numberActions; i++) {
+		for (int i = 0; i < nActions; i++) {
 			if (actions[i] != NULL) {
 				delete actions[i];
 			}
 		}
 		delete actions;
 	}
-	Loger::Debug("Create Actions:" + String(numberActions));
-	actions = new Action*[numberActions];
+	Loger::Debug("Create Actions:" + String(nActions));
+	actions = new Action*[nActions];
+	numberActions = nActions;
+	return actions;
 }
 
 
@@ -73,7 +80,9 @@ Unit* Configuration::FindUnitByTypeAndPin(UnitType type, byte pin) {
 
 
 void Configuration::MainLoop() {
-	MqttClient.MqttLoop();
+	if (MqttClient.connected()) {
+		MqttClient.MqttLoop();
+	}
 	Config.UnitsLoop();
 }
 
@@ -94,12 +103,9 @@ void Configuration::Init() {
 	BuildConfig();
 	BuildActions();
 
-	if (IsEthernetConnection) {
+	if (MqttClient.connected()) {
 		MqttClient.SubscribeUnits();
 	}
-	InitializeUnits();
-	FinalizeInitUnits();
-	IsConfigReady = true;
 	Loger::Debug("Config init is finished");
 }
 
@@ -147,6 +153,9 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 		}
 		u->Type = UnitType::POWER_METER;
 	}
+	if (u == NULL) {
+		Loger::Debug("Can't create a typed unit:" + String((char)type));
+	}
 	return u;
 }
 
@@ -157,10 +166,10 @@ void Configuration::UpdateConfig(String jsonConfig) {
 		StaticJsonBuffer<JSON_SIZE> jsonBuffer;
 		JsonObject& root = jsonBuffer.parse(jsonConfig);
 		if (root.containsKey("length")) {
-			numberUnits = (int)root["length"];
+			byte nUnits = (byte)root["length"];
 			Loger::Debug("Number of config Units=" + String(numberUnits));
 			configCounter = 0;
-			CreateUnits();
+			CreateUnits(nUnits);
 			lenDetected = true;
 		}
 		else if (lenDetected && root.containsKey("type") && root.containsKey("id")) {
@@ -228,14 +237,32 @@ bool CheckConfigReady() {
 
 void Configuration::BuildConfig() {
 	IsConfigReady = false;
+	//Loger::Debug("Point 2.0");
 
-	if (IsEthernetConnection) {
+	if (MqttClient.connected()) {
+		//Loger::Debug("Point 2.0.5");
 		MqttClient.GetConfiguration();
 		unsigned long startLoop = millis();
-		while (!IsConfigReady && millis() - startLoop < MQTT_WAITING_RESPONSE) {
+		while (IsEthernetConnection && !IsConfigReady && millis() - startLoop < MQTT_WAITING_RESPONSE) {
+			//Loger::Debug("Point 2");
 			MqttClient.MqttLoop();
 		}
 	}
+
+	//Loger::Debug("Point 2.1");
+
+	if (!IsConfigReady) { //Mqtt failed for some reasons
+		Loger::Debug("Read Units from EEPROM");
+		SigmaEEPROM::ReadUnits();
+	}
+	else {
+		//Loger::Debug("Update Units");
+		SigmaEEPROM::UpdateUnits(numberUnits, units);
+	}
+	InitializeUnits();
+	FinalizeInitUnits();
+	IsConfigReady = true;
+
 	Loger::Debug("IsConfigReady=" +String(IsConfigReady));
 	Loger::Debug("NumberOfunits=" + String(numberUnits));
 }
@@ -285,9 +312,9 @@ void Configuration::UpdateActions(String jsonConfig) {
 		if (root.containsKey("length")) {
 			Loger::Debug("Length:" + String((int)root["length"]));
 
-			numberActions = (int)root["length"];
+			byte nActions = (byte)root["length"];
 			actionCounter = 0;
-			CreateActions();
+			CreateActions(nActions);
 			lenDetected = true;
 		}
 		else if (lenDetected && root.containsKey("id")) {
@@ -300,7 +327,7 @@ void Configuration::UpdateActions(String jsonConfig) {
 					actions[actionCounter]->originId = root["originId"];
 				}
 				if (root.containsKey("originType")) {
-					actions[actionCounter]->originType = (byte)(((const char*)root["originType"])[0]);
+					actions[actionCounter]->originType = (UnitType)(((const char*)root["originType"])[0]);
 				}
 				if (root.containsKey("event")) {
 					actions[actionCounter]->event = root["event"];
@@ -312,7 +339,7 @@ void Configuration::UpdateActions(String jsonConfig) {
 					actions[actionCounter]->targetAction = (ActionType)((byte)root["targetAction"]);
 				}
 				if (root.containsKey("targetType")) {
-					actions[actionCounter]->targetType = (byte)(((const char*)root["targetType"])[0]);
+					actions[actionCounter]->targetType = (UnitType)(((const char*)root["targetType"])[0]);
 				}
 
 			}
@@ -332,13 +359,31 @@ bool CheckActions() {
 	return Config.IsActionsReady;
 }
 
+
+
+
 void Configuration::BuildActions() {
 	IsActionsReady = false;
-	MqttClient.GetActions();
-	unsigned long startLoop = millis();
-	while (!IsActionsReady && millis() - startLoop < MQTT_WAITING_RESPONSE ) {
-		MqttClient.MqttLoop();
+	if (MqttClient.connected()) {
+		MqttClient.GetActions();
+		unsigned long startLoop = millis();
+		while (IsEthernetConnection && !IsActionsReady && millis() - startLoop < MQTT_WAITING_RESPONSE) {
+			//Loger::Debug("Point 3");
+
+			MqttClient.MqttLoop();
+		}
 	}
+
+	if (!IsActionsReady) { //Mqtt failed for some reasons
+		Loger::Debug("Read Actions from EEPROM");
+		SigmaEEPROM::ReadActions();
+	}
+	else {
+		Loger::Debug("Update Actions");
+		SigmaEEPROM::UpdateActions(numberActions, actions);
+	}
+
+
 	InitializeActions();
 	IsActionsReady = true;
 	Loger::Debug("Actions are ready");

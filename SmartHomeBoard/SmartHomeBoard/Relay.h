@@ -22,6 +22,7 @@ public:
 	void ReadFromEEPROM(uint16_t addr);
 	void WriteToEEPROM(uint16_t addr);
 	void ConfigField(JsonObject& jsonList);
+	void const print(const char* header, DebugLevel level);
 
 private:
 	void RelaySet(bool highLow);

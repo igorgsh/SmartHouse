@@ -64,7 +64,6 @@ bool OneWireThermo::Compare(Unit* u) {
 
 
 void OneWireThermo::ReadFromEEPROM(uint16_t addr) {
-	bool res = true;
 
 	Id = SigmaEEPROM::Read8(addr);
 	Type = SigmaEEPROM::Read8(addr + 1);
@@ -76,7 +75,6 @@ void OneWireThermo::ReadFromEEPROM(uint16_t addr) {
 }
 
 void OneWireThermo::WriteToEEPROM(uint16_t addr) {
-	bool res = true;
 
 	SigmaEEPROM::Write8(addr, Id);
 	SigmaEEPROM::Write8(addr + 1, Type);

@@ -25,7 +25,7 @@ public:
 
 protected:
 	unsigned long prevCycle = 0;
-	OneWireBus* OneWireBusUnit::FindOneWireBus(byte pin);
+	OneWireBus* FindOneWireBus(byte pin);
 
 
 };

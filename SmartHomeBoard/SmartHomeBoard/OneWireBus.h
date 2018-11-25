@@ -33,6 +33,7 @@ public:
 	void ConfigField(JsonObject& jsonList);
 	static void ConvertStringToAddress(DeviceAddress address, const String addrStr);
 	static String ConvertAddressToString(const DeviceAddress address);
+	void const print(const char* header, DebugLevel level);
 
 private:
 	OneWire* oneWire;

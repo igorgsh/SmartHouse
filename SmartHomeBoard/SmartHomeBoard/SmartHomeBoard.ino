@@ -70,12 +70,9 @@ void setup() {
 	//Set a timer 
 	//MsTimer2::set(100, Timer2);
 	//MsTimer2::start();
-	//Loger::Debug("Point 1");
 	pinMode(13, OUTPUT);
-	//Loger::Debug("Point 2");
 	digitalWrite(13, HIGH);
 	Loger::Debug("Enjoy!");
-	//Debug2("Ethernet Status is:", Ethernet._state);
 }
 
 // the loop function runs over and over again until power down or reset

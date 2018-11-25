@@ -5,31 +5,25 @@
 #include "definitions.h"
 #include "Loger.h"
 
-typedef enum {
-	ACT_OFF = 0, //Off for any device
-	ACT_ON = 1, //On for any device
-	ACT_SWITCH = 3, //Switch device
-	ACT_LONG = 2, //Long (for button)
-	ACT_SHORT_LONG = 5, //Button. Is pressed not released yet. And pressed time less than long
-	ACT_EXTRA_LONG = 4, //Button. Extra long
-	ACT_SENSOR_READY = 10 //Sensor ready
-
-} ActionType;
 
 
 class Action {
 public:
 	uint16_t Id;
 	uint16_t originId;
-	byte originType;
+	UnitType originType;
 	byte event;
 	uint16_t targetId;
 	ActionType targetAction;
-	byte targetType;
+	UnitType targetType;
 
-	bool compare(Action* a);
+	bool Compare(Action* a);
 	void FillFrom(Action* a);
 	void InitAction();
 	void print(const char* header, DebugLevel level);
+	void ReadFromEEPROM(uint16_t curPtr);
+	void WriteToEEPROM(uint16_t addr);
+	int ActionStoredSize() { return 7; };
+
 private:
 };

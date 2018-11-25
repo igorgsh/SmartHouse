@@ -74,7 +74,6 @@ bool OneWireBus::Compare(Unit* u) {
 
 
 void OneWireBus::ReadFromEEPROM(uint16_t addr) {
-	bool res = true;
 
 	Id = SigmaEEPROM::Read8(addr);
 	Type = SigmaEEPROM::Read8(addr + 1);
@@ -83,7 +82,6 @@ void OneWireBus::ReadFromEEPROM(uint16_t addr) {
 }
 
 void OneWireBus::WriteToEEPROM(uint16_t addr) {
-	bool res = true;
 
 	SigmaEEPROM::Write8(addr, Id);
 	SigmaEEPROM::Write8(addr + 1, Type);
@@ -123,4 +121,23 @@ bool OneWireBus::CompareDeviceAddress(DeviceAddress a0, DeviceAddress a1) {
 		res &= (a0[i] == a1[i]);
 	}
 	return res;
+}
+
+
+void const OneWireBus::print(const char* header, DebugLevel level) {
+	String str0 = "";
+
+	if (header != NULL) {
+		str0 = header;
+	}
+	str0 += "Id:";
+	str0 += String((unsigned int)Id, DEC);
+	str0 += ";Type:";
+	str0 += String((char)Type);
+	str0 += ";Pin:";
+	str0 += String((unsigned int)Pin, DEC);
+	str0 += ";subscription:";
+	str0 += (isSubscribed ? "true" : "false");
+	str0 += " @";
+	Loger::Log(level, str0);
 }

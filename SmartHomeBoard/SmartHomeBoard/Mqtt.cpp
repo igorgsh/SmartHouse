@@ -28,42 +28,28 @@ Mqtt::Mqtt() : PubSubClient(Configuration::MqttServer(), Configuration::MqttPort
 
 bool Mqtt::MqttReconnect() {
 	
-	static unsigned long errorTime = 0;
 	char topic[TOPIC_LENGTH];
+	bool res = false;
 
-	if (!connected()) {
-		if (!firstConnect) {
-			Loger::Error("MQTT Failed:" + String(errorTime));
-		}
-		if (errorTime == 0 || errorTime + mqttWaiting < millis()) { //reconnect
-			Loger::Debug("MqttReconnect:" + String(errorTime) + ":" + String(errorTime + mqttWaiting) + ":" + String(millis()));
-
+	if (Config.IsEthernetConnection) {
+		if (!connected()) {
+			Loger::Debug("MqttReconnect");
 			if (connect(Config.BoardName.c_str())) {
-				mqttWaiting = MQTT_RECONNECT_TIME;
-				errorTime = 0;
-
-				if (firstConnect) {
-					sprintf(topic, MQTT_CONFIG_RESPONSE, Config.BoardId);
-					Subscribe(topic);
-					sprintf(topic, MQTT_ACTIONS_RESPONSE, Config.BoardId);
-					Subscribe(topic);
-					//sprintf(topic, MQTT_RESET_BOARD, Config.BoardId);
-					//Subscribe(topic);
-					firstConnect = false;
-//					if (Config.IsConfigReady) {
-//						SubscribeUnits();
-//					}
-				}
-	//????			loop();
+				sprintf(topic, MQTT_CONFIG_RESPONSE, Config.BoardId);
+				Subscribe(topic);
+				sprintf(topic, MQTT_ACTIONS_RESPONSE, Config.BoardId);
+				Subscribe(topic);
+				//sprintf(topic, MQTT_RESET_BOARD, Config.BoardId);
+				//Subscribe(topic);
+				res = true;
 			}
 			else {
-				mqttWaiting *= 2;
 				Loger::Error("Failed, rc=" + String(MqttClient.state(), DEC));
-				errorTime = millis();
+				res = false;
 			}
 		}
 	}
-	return (errorTime == 0);
+	return res;
 }
 
 void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
@@ -139,22 +125,31 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 void Mqtt::InitMqtt(void) {
 //	SetTopicNames();
 	Loger::Debug("Init MQTT");
-	MqttReconnect();
+	long connectTry = 0;
+	bool res = false;
+	
+	while (!res && connectTry <= MQTT_TRY_COUNT) {
+		Loger::Debug("Mqtt connect attempt=" + String(connectTry));
+		res = MqttReconnect();
+		delay(MQTT_RECONNECT_TIME);
+		connectTry++;
+	}
+	
+	if (!res) {
+		Config.IsEthernetConnection = false;
+		Loger::Debug("Switch ethernet off");
+	}
 }
 void Mqtt::MqttLoop() {
 	//Loger::Debug("Start Mqttloop");
-	if (Config.IsEthernetConnection) {
-		if (MqttReconnect()) {
-			
-			bool res = loop();
-			if (!res) {
-				Loger::Error("Failed loop");
-			}
-		}
-		else {
-			Loger::Error("Can't reconnect MQTT");
+//	static unsigned long lastAttempt = millis();
+	if (connected()) {
+		bool res = loop();
+		if (!res) {
+			Loger::Error("Failed loop");
 		}
 	}
+
 	//Loger::Debug("End Mqttloop");
 }
 
@@ -301,10 +296,13 @@ void Mqtt::SubscribeUnits() {
 	for (int i = 0; i < Config.numberUnits; i++) {
 		SubscribeUnit(i);
 //		delay(MQTT_RESUBSCRIPTION_DELAY);
+
 		MqttClient.MqttLoop();
 	}
 	delay(MQTT_RESUBSCRIPTION_DELAY);
 	for (int i = 0; i < Config.numberUnits; i++) {
+		//Loger::Debug("Point 4");
+
 		MqttClient.MqttLoop();
 		for (int j = 0; j < MQTT_RESUBSCRIBE_TRY_COUNT && !Config.units[i]->isSubscribed; j++) {
 			SubscribeUnit(i);

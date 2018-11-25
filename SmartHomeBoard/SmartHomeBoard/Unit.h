@@ -7,15 +7,6 @@
 #include <ArduinoJson.h>
 
 
-typedef enum {
-	BUTTON = 'B',
-	RELAY = 'R',
-	ONE_WIRE_BUS = '1',
-	ONE_WIRE_THERMO = 'T',
-	POWER_METER = 'P',
-	VIRTUAL_BUTTON = 'b'
-} UnitType;
-
 class Unit
 {
 public:
