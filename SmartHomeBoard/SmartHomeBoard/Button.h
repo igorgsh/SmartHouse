@@ -25,10 +25,6 @@ public:
 	bool lhOn;
 
 
-	bool isLongMode = false;
-	bool isExtraLongMode = false;
-	bool isShortMode = false;
-	unsigned long startPressing;
 	
 	void SetDefault();
 	void InitUnit();
@@ -44,6 +40,11 @@ public:
 	void const print(const char* header, DebugLevel level);
 
 private:
+	bool isLongMode = false;
+	bool isExtraLongMode = false;
+	bool isShortMode = false;
+	unsigned long startPressing;
+
 	void HandleButton();
 	void HandleFinish(int newStatus);
 };

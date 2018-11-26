@@ -1,22 +1,13 @@
 // mqtt.h
 
 #pragma once 
-/*
-#ifdef MQTT_MAX_PACKET_SIZE
-#undef MQTT_MAX_PACKET_SIZE
-#endif
-#define MQTT_MAX_PACKET_SIZE 256
-*/
 
 #include <PubSubClient.h>
-//#include "Adafruit_MQTT.h"
-//#include "Adafruit_MQTT_Client.h"
 #include "definitions.h"
 #include "configuration.h"
 #include "ext_global.h"
 
 
-//#include "types.h"
 
 
 #define MQTT_RECONNECT_TIME	1000
@@ -77,8 +68,5 @@ private:
 		const char *LOG_END[7] = { "OFF", "FATAL","ERROR","WARN","INFO","DEBUG","ALL" };
 		
 		bool MqttReconnect();
-//		void SetTopicNames();
-//		bool firstConnect = true;
-
 };
 

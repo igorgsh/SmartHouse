@@ -1,5 +1,4 @@
 #include "button.h"
-//#include "process.h"
 #include "ext_global.h"
 #include "mqtt.h"
 #include "Loger.h"
@@ -14,7 +13,7 @@ void Button::SetDefault() {
 }
 
 void Button::InitUnit() {
-	Loger::Debug("Init Button:id=" + String(Id) + "; Pin=" + String(Pin));
+//	Loger::Debug("Init Button:id=" + String(Id) + "; Pin=" + String(Pin));
 	pinMode(Pin, INPUT);
 	digitalWrite(Pin, !lhOn);
 	MqttClient.PublishUnit(this);

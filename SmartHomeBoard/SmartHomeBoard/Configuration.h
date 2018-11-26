@@ -34,7 +34,7 @@ public:
 	void UpdateActions(String jsonConfig);
 	void BuildActions();
 	Unit* FindUnit(uint16_t id);
-	Unit* FindUnitByTypeAndPin(UnitType type, byte pin);
+	//Unit* FindUnitByTypeAndPin(UnitType type, byte pin);
 	void UpdateButton(String unit, String value) { UpdateUnit(UnitType::BUTTON, unit, value); };
 	void UpdateRelay(String unit, String value) { UpdateUnit(UnitType::RELAY, unit, value); };
 	void UpdateOneWireBus(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_BUS, button, value); };

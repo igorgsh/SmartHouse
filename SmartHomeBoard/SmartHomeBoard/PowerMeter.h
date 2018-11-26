@@ -30,7 +30,6 @@ public:
 	void SetDefault();
 	void FinalInitUnit();
 	void ProcessUnit(ActionType action);
-	//bool compare(Unit* u);
 
 	byte serialNumber = 0;
 	byte serialRX = 0;

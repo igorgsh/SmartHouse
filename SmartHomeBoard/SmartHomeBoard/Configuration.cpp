@@ -237,19 +237,15 @@ bool CheckConfigReady() {
 
 void Configuration::BuildConfig() {
 	IsConfigReady = false;
-	//Loger::Debug("Point 2.0");
 
 	if (MqttClient.connected()) {
-		//Loger::Debug("Point 2.0.5");
 		MqttClient.GetConfiguration();
 		unsigned long startLoop = millis();
-		while (IsEthernetConnection && !IsConfigReady && millis() - startLoop < MQTT_WAITING_RESPONSE) {
-			//Loger::Debug("Point 2");
+		while (!IsConfigReady && millis() - startLoop < MQTT_WAITING_RESPONSE) {
 			MqttClient.MqttLoop();
 		}
 	}
 
-	//Loger::Debug("Point 2.1");
 
 	if (!IsConfigReady) { //Mqtt failed for some reasons
 		Loger::Debug("Read Units from EEPROM");
@@ -367,9 +363,7 @@ void Configuration::BuildActions() {
 	if (MqttClient.connected()) {
 		MqttClient.GetActions();
 		unsigned long startLoop = millis();
-		while (IsEthernetConnection && !IsActionsReady && millis() - startLoop < MQTT_WAITING_RESPONSE) {
-			//Loger::Debug("Point 3");
-
+		while (!IsActionsReady && millis() - startLoop < MQTT_WAITING_RESPONSE) {
 			MqttClient.MqttLoop();
 		}
 	}

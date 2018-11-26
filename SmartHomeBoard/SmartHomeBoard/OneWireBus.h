@@ -21,9 +21,6 @@ public:
 	float GetTemperature(const DeviceAddress address);
 	bool CheckAddress(const DeviceAddress address);
 	void SetResolution(const DeviceAddress address);
-//	String AddressToString(const DeviceAddress address);
-	//static const byte BUS_RESOLUTION=9;
-	//static const int  BUS_INTERVAL = 2000;
 	void RequestTemperature();
 	bool Compare(Unit* u);
 	byte UnitStoredSize() { return 3; }

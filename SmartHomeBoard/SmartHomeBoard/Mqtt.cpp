@@ -123,7 +123,6 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 }
 
 void Mqtt::InitMqtt(void) {
-//	SetTopicNames();
 	Loger::Debug("Init MQTT");
 	long connectTry = 0;
 	bool res = false;
@@ -136,27 +135,24 @@ void Mqtt::InitMqtt(void) {
 	}
 	
 	if (!res) {
-		Config.IsEthernetConnection = false;
-		Loger::Debug("Switch ethernet off");
+		Loger::Debug("Too many attempt of MQTT reconnect");
 	}
 }
 void Mqtt::MqttLoop() {
-	//Loger::Debug("Start Mqttloop");
-//	static unsigned long lastAttempt = millis();
 	if (connected()) {
 		bool res = loop();
 		if (!res) {
 			Loger::Error("Failed loop");
 		}
 	}
-
-	//Loger::Debug("End Mqttloop");
 }
 
 void Mqtt::PublishLog(DebugLevel level, String message) {
-	char topic[TOPIC_LENGTH];
-	sprintf(topic, MQTT_LOG,Config.BoardId,  LOG_END[level]);
-	publish(topic, message.c_str());
+	if (connected()) {
+		char topic[TOPIC_LENGTH];
+		sprintf(topic, MQTT_LOG, Config.BoardId, LOG_END[level]);
+		publish(topic, message.c_str());
+	}
 }
 
 
@@ -165,9 +161,14 @@ void Mqtt::GetConfiguration() {
 	uint8_t rnd = random(0, 1000);
 	char topic[TOPIC_LENGTH];
 	Config.IsConfigReady = false;
-	sprintf(topic, MQTT_CONFIG_REQUEST, Config.BoardId);
-	Publish(topic, String(rnd).c_str());
-	Config.isConfigRequested = true;
+	if (connected()) {
+		sprintf(topic, MQTT_CONFIG_REQUEST, Config.BoardId);
+		Publish(topic, String(rnd).c_str());
+		Config.isConfigRequested = true;
+	}
+	else {
+		Config.isConfigRequested = false;
+	}
 }
 
 void Mqtt::WatchDog() {
@@ -180,8 +181,8 @@ void Mqtt::WatchDog() {
 
 
 void Mqtt::PublishUnit(const Unit *unit) {
-	if (unit->isSubscribed) {
-		if (Config.IsEthernetConnection) {
+	if (connected()) {
+		if (unit->isSubscribed) {
 			char topic[TOPIC_LENGTH];
 			char payload[PAYLOAD_LENGTH];
 			const char *unitPrefix;
@@ -226,16 +227,20 @@ void Mqtt::PublishUnit(const Unit *unit) {
 
 			}
 		}
-	}
-	else {
-		Loger::Debug("Publish Unit:" + String(unit->Id, DEC) + " is not subscribed!");
+		else {
+			Loger::Debug("Publish Unit:" + String(unit->Id, DEC) + " is not subscribed!");
+		}
 	}
 }
 
 bool Mqtt::Publish(const char* topic, const char* payload) {
-
-	Loger::Debug("Publish:[" + String(topic) + "]" + String(payload));
-	return publish(topic, payload);
+	if (connected()) {
+		Loger::Debug("Publish:[" + String(topic) + "]" + String(payload));
+		return publish(topic, payload);
+	}
+	else {
+		return false;
+	}
 }
 
 void Mqtt::GetActions() {
@@ -244,10 +249,14 @@ void Mqtt::GetActions() {
 	char topic[TOPIC_LENGTH];
 	Config.IsConfigReady = false;
 	Config.IsActionsReady = false;
-
-	sprintf(topic, MQTT_ACTIONS_REQUEST, Config.BoardId);
-	Config.isActionRequested = true;
-	Publish(topic, buf);
+	if (connected()) {
+		sprintf(topic, MQTT_ACTIONS_REQUEST, Config.BoardId);
+		Config.isActionRequested = true;
+		Publish(topic, buf);
+	}
+	else {
+		Config.isActionRequested = true;
+	}
 }
 
 void Mqtt::SubscribeUnit(int unitNumber) {
@@ -295,13 +304,10 @@ void Mqtt::SubscribeUnits() {
 	Loger::Debug("Subscribing Units...");
 	for (int i = 0; i < Config.numberUnits; i++) {
 		SubscribeUnit(i);
-//		delay(MQTT_RESUBSCRIPTION_DELAY);
-
 		MqttClient.MqttLoop();
 	}
 	delay(MQTT_RESUBSCRIPTION_DELAY);
 	for (int i = 0; i < Config.numberUnits; i++) {
-		//Loger::Debug("Point 4");
 
 		MqttClient.MqttLoop();
 		for (int j = 0; j < MQTT_RESUBSCRIBE_TRY_COUNT && !Config.units[i]->isSubscribed; j++) {
@@ -321,7 +327,7 @@ void Mqtt::SubscribeUnits() {
 
 void Mqtt::Subscribe(const char* topic) {
 	Loger::Debug("Subscribe [" + String(topic) + "]");
-	if (Config.IsEthernetConnection) {
+	if (connected()) {
 		subscribe(topic);
 	}
 }
