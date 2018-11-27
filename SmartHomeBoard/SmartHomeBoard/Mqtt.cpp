@@ -21,7 +21,7 @@ void callbackFunc(char* topic, uint8_t* payload, unsigned int length) {
 }
 
 Mqtt::Mqtt() : PubSubClient(Configuration::MqttServer(), Configuration::MqttPort, callbackFunc, EthClient) {
-	mqttWaiting = MQTT_RECONNECT_TIME;
+	mqttWaiting = MQTT_INITIAL_RETRY_DELAY;
 
 }
 
@@ -100,7 +100,7 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 							}
 							else {
 								if (strTopic.startsWith(MQTT_POWERMETER)) {
-									//Nothing to do
+									//Loger::Debug("Update Powermeter");
 									Config.UpdatePowerMeter(strTopic.substring(strlen(MQTT_POWERMETER) + 2), strPayload);
 								}
 								else if (strTopic.startsWith(MQTT_RESET_BOARD)) {
@@ -122,6 +122,8 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 	}
 }
 
+
+
 void Mqtt::InitMqtt(void) {
 	Loger::Debug("Init MQTT");
 	long connectTry = 0;
@@ -130,7 +132,7 @@ void Mqtt::InitMqtt(void) {
 	while (!res && connectTry <= MQTT_TRY_COUNT) {
 		Loger::Debug("Mqtt connect attempt=" + String(connectTry));
 		res = MqttReconnect();
-		delay(MQTT_RECONNECT_TIME);
+		delay(MQTT_INITIAL_RETRY_DELAY);
 		connectTry++;
 	}
 	
@@ -139,12 +141,26 @@ void Mqtt::InitMqtt(void) {
 	}
 }
 void Mqtt::MqttLoop() {
+
+	static long lastConnected = 0;
+
 	if (connected()) {
 		bool res = loop();
 		if (!res) {
 			Loger::Error("Failed loop");
 		}
+		lastConnected = millis();
 	}
+	else {
+		if (lastConnected + millis() <= MQTT_RETRY_TIME) {
+			Loger::Debug("Trying to reconnect MQTT");
+			bool res = MqttReconnect();
+			if (res) {
+				Config.Init();
+			}
+		}
+	}
+
 }
 
 void Mqtt::PublishLog(DebugLevel level, String message) {
@@ -260,69 +276,73 @@ void Mqtt::GetActions() {
 }
 
 void Mqtt::SubscribeUnit(int unitNumber) {
-	char topic[TOPIC_LENGTH];
-	const char* unitPrefix=NULL;
-	if (Config.units[unitNumber]->Type == UnitType::POWER_METER) {
-		PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_VOLTAGE);
-		Subscribe(topic);
-		PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_CURRENT);
-		Subscribe(topic);
-		PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_POWER);
-		Subscribe(topic);
-		PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_ENERGY);
-		Subscribe(topic);
-	}
-	else {
-		switch (Config.units[unitNumber]->Type) {
-		case UnitType::BUTTON: {
-			unitPrefix = MQTT_BUTTONS;
-			break;
-		}
-		case UnitType::RELAY: {
-			unitPrefix = MQTT_RELAYS;
-			break;
-		}
-		case UnitType::ONE_WIRE_BUS: {
-			unitPrefix = MQTT_1WIREBUS;
-			break;
-		}
-		case UnitType::ONE_WIRE_THERMO: {
-			unitPrefix = MQTT_1WIRETHERMO;
-			break;
-		}
-		}
-		if (unitPrefix != NULL) {
-			sprintf(topic, "%s%s%c%04d", unitPrefix, MQTT_SEPARATOR, Config.units[unitNumber]->Type, Config.units[unitNumber]->Id);
+	if (connected()) {
+		char topic[TOPIC_LENGTH];
+		const char* unitPrefix = NULL;
+		if (Config.units[unitNumber]->Type == UnitType::POWER_METER) {
+			PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_VOLTAGE);
 			Subscribe(topic);
+			PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_CURRENT);
+			Subscribe(topic);
+			PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_POWER);
+			Subscribe(topic);
+			PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_ENERGY);
+			Subscribe(topic);
+		}
+		else {
+			switch (Config.units[unitNumber]->Type) {
+			case UnitType::BUTTON: {
+				unitPrefix = MQTT_BUTTONS;
+				break;
+			}
+			case UnitType::RELAY: {
+				unitPrefix = MQTT_RELAYS;
+				break;
+			}
+			case UnitType::ONE_WIRE_BUS: {
+				unitPrefix = MQTT_1WIREBUS;
+				break;
+			}
+			case UnitType::ONE_WIRE_THERMO: {
+				unitPrefix = MQTT_1WIRETHERMO;
+				break;
+			}
+			}
+			if (unitPrefix != NULL) {
+				sprintf(topic, "%s%s%c%04d", unitPrefix, MQTT_SEPARATOR, Config.units[unitNumber]->Type, Config.units[unitNumber]->Id);
+				Subscribe(topic);
+			}
 		}
 	}
 }
 
 
 void Mqtt::SubscribeUnits() {
-	bool isSubscriptionSuccess = true;
-	Loger::Debug("Subscribing Units...");
-	for (int i = 0; i < Config.numberUnits; i++) {
-		SubscribeUnit(i);
-		MqttClient.MqttLoop();
-	}
-	delay(MQTT_RESUBSCRIPTION_DELAY);
-	for (int i = 0; i < Config.numberUnits; i++) {
-
-		MqttClient.MqttLoop();
-		for (int j = 0; j < MQTT_RESUBSCRIBE_TRY_COUNT && !Config.units[i]->isSubscribed; j++) {
+	if (connected()) {
+		bool isSubscriptionSuccess = true;
+		Loger::Debug("Subscribing Units...");
+		for (int i = 0; i < Config.numberUnits; i++) {
 			SubscribeUnit(i);
-			delay(MQTT_RESUBSCRIPTION_DELAY);
 			MqttClient.MqttLoop();
 		}
-		if (!Config.units[i]->isSubscribed) {
-			isSubscriptionSuccess = false;
+		delay(MQTT_RESUBSCRIPTION_DELAY);
+		for (int i = 0; i < Config.numberUnits; i++) {
+
+			MqttClient.MqttLoop();
+			for (int j = 0; j < MQTT_RESUBSCRIBE_TRY_COUNT && !Config.units[i]->isSubscribed; j++) {
+				SubscribeUnit(i);
+				delay(MQTT_RESUBSCRIPTION_DELAY);
+				MqttClient.MqttLoop();
+			}
+			if (!Config.units[i]->isSubscribed) {
+				isSubscriptionSuccess = false;
+			}
 		}
+		if (!isSubscriptionSuccess) {
+			Loger::Error("Some units are not subscribed");
+		}
+		Loger::Debug("End subscription");
 	}
-	if (!isSubscriptionSuccess) {
-		Loger::Error("Some units are not subscribed");
-	}
-	Loger::Debug("End subscription");
 }
 
 void Mqtt::Subscribe(const char* topic) {

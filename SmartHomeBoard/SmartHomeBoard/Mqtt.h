@@ -10,7 +10,8 @@
 
 
 
-#define MQTT_RECONNECT_TIME	1000
+#define MQTT_INITIAL_RETRY_DELAY	1000 //delay between INITIAL reconnection retry
+#define MQTT_RETRY_TIME				10000 //delay between mqtt reconnect in loop
 #define TOPIC_LENGTH	100
 #define PAYLOAD_LENGTH	100
 #define MQTT_TRY_COUNT 5
