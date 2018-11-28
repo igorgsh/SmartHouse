@@ -23,7 +23,8 @@ typedef enum {
 	ONE_WIRE_BUS	= '1',
 	ONE_WIRE_THERMO = 'T',
 	POWER_METER		= 'P',
-	VIRTUAL_BUTTON	= 'b'
+	VIRTUAL_BUTTON	= 'b',
+	CONTACTOR		= 'C'
 } UnitType;
 
 

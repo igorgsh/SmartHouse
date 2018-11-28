@@ -3,6 +3,7 @@
  Created:	11.01.17 22:04:42
  Author:	Igor Shevchenko
 */
+#include "Contactor.h"
 #include <PZEM004T.h>
 #include <ArduinoJson.hpp>
 #include <ArduinoJson.h>

@@ -15,6 +15,7 @@
 #include "OneWireBus.h"
 #include "OneWireThermo.h"
 #include "PowerMeter.h"
+#include "Contactor.h"
 
 extern Mqtt MqttClient;
 
@@ -64,19 +65,6 @@ Unit* Configuration::FindUnit(uint16_t id) {
 	}
 	return NULL;
 }
-/*
-Unit* Configuration::FindUnitByTypeAndPin(UnitType type, byte pin) {
-	if (units != NULL) {
-		for (int i = 0; i < numberUnits; i++) {
-			if (units[i]->Type == type && units[i]->Pin == pin ) {
-				return units[i];
-			}
-		}
-	}
-	return NULL;
-
-}
-*/
 
 
 void Configuration::MainLoop() {
@@ -153,6 +141,14 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 		}
 		u->Type = UnitType::POWER_METER;
 	}
+	else if (type == UnitType::CONTACTOR) {
+		u = new Contactor();
+		if (u == NULL) {
+			Loger::Error("Can't create Contactor");
+			Board::Reset(10000);
+		}
+		u->Type = UnitType::CONTACTOR;
+	}
 	if (u == NULL) {
 		Loger::Debug("Can't create a typed unit:" + String((char)type));
 	}
@@ -179,47 +175,7 @@ void Configuration::UpdateConfig(String jsonConfig) {
 				units[configCounter]->Id = root["id"];
 
 				units[configCounter]->ConfigField(root);
-				/*
-				if (root.containsKey("id")) {
-					units[configCounter]->Id = root["id"];
-				}
-				root.
-				if (root.containsKey("Pin")) {
-
-					units[configCounter]->Pin = root["Pin"];
-				}
-				if (root.containsKey("lhOn")) {
-					units[configCounter]->lhOn = root["lhOn"];
-				}
-				if (root.containsKey("status")) {
-					units[configCounter]->status = root["status"];
-				}
-				if (root.containsKey("address")) {
-					if (units[configCounter]->Type == ONE_WIRE_THERMO) {
-						ConvertStringToAddress(((OneWireBusUnit*)units[configCounter])->address, root["address"]);
-					}
-				}
-				if (root.containsKey("Serial")) {
-					if (units[configCounter]->Type == POWER_METER) {
-						((PowerMeter*)units[configCounter])->serialNumber = root["Serial"];
-					}
-				}
-				if (root.containsKey("SerialRX")) {
-					if (units[configCounter]->Type == POWER_METER) {
-						((PowerMeter*)units[configCounter])->serialRX = root["SerialRX"];
-					}
-				}
-				if (root.containsKey("SerialTX")) {
-					if (units[configCounter]->Type == POWER_METER) {
-						((PowerMeter*)units[configCounter])->serialTX = root["SerialTX"];
-					}
-				}
-				if (root.containsKey("Factor")) {
-					if (units[configCounter]->Type == POWER_METER) {
-						((PowerMeter*)units[configCounter])->factor = root["Factor"];
-					}
-				}
-				*/
+				
 			}
 
 			configCounter++;
