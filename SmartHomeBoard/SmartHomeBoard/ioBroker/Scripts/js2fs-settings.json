@@ -1,0 +1,8 @@
+{
+                    "config": {
+                         "useGlobalScriptAsPrefix": false,
+                         "restartScript": true,
+                         "disableWrite": false,
+                         "allowDeleteScriptInioBroker": true
+                    }
+                }

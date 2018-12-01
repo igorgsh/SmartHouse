@@ -1,31 +1,24 @@
 // mqtt.h
 
 #pragma once 
-/*
-#ifdef MQTT_MAX_PACKET_SIZE
-#undef MQTT_MAX_PACKET_SIZE
-#endif
-#define MQTT_MAX_PACKET_SIZE 256
-*/
 
 #include <PubSubClient.h>
-//#include "Adafruit_MQTT.h"
-//#include "Adafruit_MQTT_Client.h"
 #include "definitions.h"
 #include "configuration.h"
 #include "ext_global.h"
 
 
-//#include "types.h"
 
 
-#define MQTT_RECONNECT_TIME	10000
+#define MQTT_INITIAL_RETRY_DELAY	1000 //delay between INITIAL reconnection retry
+#define MQTT_RETRY_TIME				10000 //delay between mqtt reconnect in loop
 #define TOPIC_LENGTH	100
 #define PAYLOAD_LENGTH	100
 #define MQTT_TRY_COUNT 5
 #define MQTT_WAITING_RESPONSE 10000
-#define MQTT_RESUBSCRIBE_TRY_COUNT 5
+#define MQTT_RESUBSCRIBE_TRY_COUNT 1
 #define MQTT_RESUBSCRIPTION_DELAY	50
+#define MQTT_ETHERNET_TIME (5*1000)
 
 
 #define BOARD_ID "Board_%02d"
@@ -48,6 +41,7 @@
 #define MQTT_1WIRETHERMO  MQTT_EQUIPMENT MQTT_SEPARATOR "Thermo"
 #define MQTT_POWERMETER  MQTT_EQUIPMENT MQTT_SEPARATOR "PowerMeter"
 #define MQTT_VIRTUAL_BUTTONS  MQTT_VIRTUAL_EQUIPMENT MQTT_SEPARATOR "Buttons"
+#define MQTT_CONTACTOR  MQTT_EQUIPMENT MQTT_SEPARATOR "Contactors"
 
 
 void callbackFunc(char* topic, uint8_t* payload, unsigned int length);
@@ -76,8 +70,5 @@ private:
 		const char *LOG_END[7] = { "OFF", "FATAL","ERROR","WARN","INFO","DEBUG","ALL" };
 		
 		bool MqttReconnect();
-//		void SetTopicNames();
-		bool firstConnect = true;
-
 };
 

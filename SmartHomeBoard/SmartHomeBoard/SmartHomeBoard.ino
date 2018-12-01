@@ -3,7 +3,13 @@
  Created:	11.01.17 22:04:42
  Author:	Igor Shevchenko
 */
-#include <MsTimer2.h>
+#include "Contactor.h"
+#include <PZEM004T.h>
+#include <ArduinoJson.hpp>
+#include <ArduinoJson.h>
+//#include <Keyboard.h>
+#include "SigmaEEPROM.h"
+//#include <MsTimer2.h>
 #include <PubSubClient.h>
 #include <DallasTemperature.h>
 #include <OneWire.h>
@@ -23,7 +29,6 @@
 #include "ext_global.h"
 
 
-//#include "initdata.h"
 #include "utils.h"
 /*
 void Timer2() { //it is started every 100ms
@@ -66,12 +71,9 @@ void setup() {
 	//Set a timer 
 	//MsTimer2::set(100, Timer2);
 	//MsTimer2::start();
-	//Loger::Debug("Point 1");
 	pinMode(13, OUTPUT);
-	//Loger::Debug("Point 2");
 	digitalWrite(13, HIGH);
 	Loger::Debug("Enjoy!");
-	//Debug2("Ethernet Status is:", Ethernet._state);
 }
 
 // the loop function runs over and over again until power down or reset

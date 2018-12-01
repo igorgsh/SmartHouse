@@ -34,14 +34,16 @@ public:
 	void UpdateActions(String jsonConfig);
 	void BuildActions();
 	Unit* FindUnit(uint16_t id);
-	Unit* FindUnitByTypeAndPin(UnitType type, byte pin);
+	//Unit* FindUnitByTypeAndPin(UnitType type, byte pin);
 	void UpdateButton(String unit, String value) { UpdateUnit(UnitType::BUTTON, unit, value); };
 	void UpdateRelay(String unit, String value) { UpdateUnit(UnitType::RELAY, unit, value); };
 	void UpdateOneWireBus(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_BUS, button, value); };
 	void UpdateOneWireThermo(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_THERMO, button, value); };
 	void UpdateUnit(UnitType type, String name, String value);
 	void UpdatePowerMeter(String unit, String value) { UpdateUnit(UnitType::POWER_METER, unit, value); };
+	void UpdateContactor(String unit, String value) { UpdateUnit(UnitType::CONTACTOR, unit, value); };
 	void ProcessAction(uint16_t id, byte event);
+	Unit* CreateTypedUnit(byte type);
 
 	void MainLoop();
 
@@ -52,8 +54,6 @@ public:
 
 	int numberUnits = 0;
 	int numberActions = 0;
-	void ConvertStringToAddress(DeviceAddress address, const String addrStr);
-	String ConvertAddressToString(const DeviceAddress address);
 
 	//Timer 
 	//unsigned long counter01 = 0;	//100ms
@@ -69,6 +69,8 @@ public:
 	void loop30();
 	void loop60();
 	//void loop300();
+	Unit** CreateUnits(byte nUnits);
+	Action** CreateActions(byte nActions);
 
 private:
 	int configCounter;
@@ -78,13 +80,10 @@ private:
 
 	static const byte addrBoardId = 0;
 
-	void CreateUnits();
 	void ReadBoardId();
 	void InitializeUnits();
 	void FinalizeInitUnits();
-	void CreateActions();
 	void InitializeActions();
-	Unit* CreateTypedUnit(byte type);
 	void BuildConfig();
 	void InitializeServer();
 	void UnitsLoop();

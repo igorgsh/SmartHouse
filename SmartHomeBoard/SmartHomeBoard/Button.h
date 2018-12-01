@@ -20,10 +20,11 @@ class Button :
 	public Unit
 {
 public:
-	bool isLongMode = false;
-	bool isExtraLongMode = false;
-	bool isShortMode = false;
-	unsigned long startPressing;
+
+	byte Pin;
+	bool lhOn;
+
+
 	
 	void SetDefault();
 	void InitUnit();
@@ -31,7 +32,19 @@ public:
 	void ProcessUnit(ActionType event);
 	void UnitLoop();
 	void FinalInitUnit() {};
+	bool Compare(Unit* u);
+	byte UnitStoredSize() {return 4;}
+	void ReadFromEEPROM(uint16_t addr);
+	void WriteToEEPROM(uint16_t addr);
+	void ConfigField(JsonObject& jsonList);
+	void const print(const char* header, DebugLevel level);
+
 private:
+	bool isLongMode = false;
+	bool isExtraLongMode = false;
+	bool isShortMode = false;
+	unsigned long startPressing;
+
 	void HandleButton();
 	void HandleFinish(int newStatus);
 };

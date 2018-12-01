@@ -3,10 +3,27 @@
 #include "Configuration.h"
 #include "ext_global.h"
 
+
+OneWireBus* OneWireBusUnit::FindOneWireBus(byte pin) {
+	if (Config.units != NULL) {
+		for (int i = 0; i < Config.numberUnits; i++) {
+			if (Config.units[i]->Type == UnitType::ONE_WIRE_BUS) {
+				if (((OneWireBus*)Config.units[i])->Pin == pin) {
+					return (OneWireBus*)Config.units[i];
+				}
+			}
+		}
+	}
+	return NULL;
+
+}
+
+
 void OneWireBusUnit::InitUnit() {
 	Loger::Debug("Init OneWireBus Unit");
 	Loger::Debug("Pin=" + String(Pin));
-	parent = (OneWireBus*)Config.FindUnitByTypeAndPin(UnitType::ONE_WIRE_BUS, Pin);
+	//parent = (OneWireBus*)Config.FindUnitByTypeAndPin(UnitType::ONE_WIRE_BUS, Pin);
+	parent = (OneWireBus*)FindOneWireBus(Pin);
 	if (parent == NULL) {
 		Loger::Error("Can't find bus for unit: " + String(Id));
 	}
@@ -28,7 +45,7 @@ bool OneWireBusUnit::IsAccessible() {
 }
 
 void OneWireBusUnit::UnitLoop() {
-	if (prevCycle + OneWireBus::BUS_INTERVAL < millis()) {
+	if (prevCycle + BUS_INTERVAL < millis()) {
 		Loger::Debug("prevCycle=" + String(prevCycle));
 		parent->RequestTemperature();
 		HandleData();
@@ -60,10 +77,6 @@ void const OneWireBusUnit::print(const char* header, DebugLevel level) {
 	str0 += String(Type, HEX);
 	str0 += ";Pin:";
 	str0 += String(Pin, DEC);
-	str0 += ";lhOn:";
-	str0 += String(lhOn, HEX);
-	str0 += ";status:";
-	str0 += String((unsigned int)status, DEC);
 	str0 += ";address:";
 	for (int i = 0; i < 8; i++) {
 		str0 += String(address[i], HEX);
@@ -74,3 +87,14 @@ void const OneWireBusUnit::print(const char* header, DebugLevel level) {
 
 void OneWireBusUnit::FinalInitUnit() {
 }
+
+
+void OneWireBusUnit::ConfigField(JsonObject& jsonList) {
+	if (jsonList.containsKey("Pin")) {
+		Pin = jsonList["Pin"];
+	}
+	if (jsonList.containsKey("address")) {
+		OneWireBus::ConvertStringToAddress(address, jsonList["address"]);
+	}
+}
+

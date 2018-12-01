@@ -6,6 +6,9 @@ class OneWireBusUnit :
 	public Unit
 {
 public:
+	
+	byte Pin;
+
 	DeviceAddress address;
 	bool IsAvailable = false;
 	OneWireBus *parent;
@@ -17,8 +20,13 @@ public:
 	void FillFrom(Unit* u);
 	void FinalInitUnit();
 	void const print(const char* header, DebugLevel level) override;
+	void ConfigField(JsonObject& jsonList) override;
+
+
 protected:
 	unsigned long prevCycle = 0;
+	OneWireBus* FindOneWireBus(byte pin);
+
 
 };
 

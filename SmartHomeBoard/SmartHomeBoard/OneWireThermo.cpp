@@ -45,3 +45,49 @@ void OneWireThermo::HandleData() {
 	}
 }
 
+
+
+bool OneWireThermo::Compare(Unit* u) {
+
+	if (u == NULL) return false;
+	if (u->Type != UnitType::ONE_WIRE_THERMO) return false;
+	OneWireThermo* tu = (OneWireThermo*)u;
+	bool res = (
+		Id == tu->Id &&
+		Type == tu->Type &&
+		Pin == tu->Pin &&
+		OneWireBus::CompareDeviceAddress(address, tu->address)
+		);
+	if (!res) {
+		Loger::Debug("Compare OneWireThermo:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":" + String(Pin == tu->Pin) + ":"
+			+ String(OneWireBus::CompareDeviceAddress(address, tu->address)) + "#");
+	}
+	return res;
+}
+
+
+void OneWireThermo::ReadFromEEPROM(uint16_t addr) {
+
+	Id = SigmaEEPROM::Read8(addr);
+	Type = SigmaEEPROM::Read8(addr + 1);
+	Pin = SigmaEEPROM::Read8(addr + 2);
+	
+	for (int i = 0; i < 8; i++) {
+		address[i] = SigmaEEPROM::Read8(addr + 3 + i);
+	}
+}
+
+void OneWireThermo::WriteToEEPROM(uint16_t addr) {
+
+	SigmaEEPROM::Write8(addr, Id);
+	SigmaEEPROM::Write8(addr + 1, Type);
+	SigmaEEPROM::Write8(addr + 2, Pin);
+
+	for (int i = 0; i < 8; i++) {
+		SigmaEEPROM::Write8(addr + 3 + i, address[i]);
+	}
+}
+
+
+
+

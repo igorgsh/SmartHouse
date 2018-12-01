@@ -34,9 +34,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SmartHomeBoard.ino" />
-    <None Include="ioBroker\Scripts\global\configuration.json">
-      <Filter>ioBroker\Scripts\global</Filter>
-    </None>
     <None Include="ioBroker\Scripts\vis.0\vis-views.json">
       <Filter>ioBroker\vis</Filter>
     </None>
@@ -132,6 +129,12 @@
     <ClInclude Include="PowerMeter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SigmaEEPROM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Contactor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Action.cpp">
@@ -171,6 +174,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PowerMeter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SigmaEEPROM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Contactor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

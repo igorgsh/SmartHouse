@@ -14,6 +14,8 @@ class PowerMeter :
 	public Unit
 {
 public:
+	
+
 	PowerMeter();
 	~PowerMeter();
 	void InitUnit();
@@ -28,18 +30,21 @@ public:
 	void SetDefault();
 	void FinalInitUnit();
 	void ProcessUnit(ActionType action);
-	//bool compare(Unit* u);
 
-	/*
-	virtual void FillFrom(Unit* u);
-	virtual void const print(const char* header, DebugLevel level);
-	*/
 	byte serialNumber = 0;
 	byte serialRX = 0;
 	byte serialTX = 0;
 	int factor = 1;
 
 	void static MqttTopic(uint16_t unitId, char *topic, PowerMeterValues val);
+
+	bool Compare(Unit* u);
+	byte UnitStoredSize() { return 7; }
+	void ReadFromEEPROM(uint16_t addr);
+	void WriteToEEPROM(uint16_t addr);
+	void ConfigField(JsonObject& jsonList);
+	void const print(const char* header, DebugLevel level);
+
 
 private:
 	//HardwareSerial *port=NULL;

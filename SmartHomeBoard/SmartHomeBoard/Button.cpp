@@ -1,8 +1,8 @@
 #include "button.h"
-//#include "process.h"
 #include "ext_global.h"
 #include "mqtt.h"
 #include "Loger.h"
+#include "SigmaEEPROM.h"
 
 extern Mqtt MqttClient;
 
@@ -13,7 +13,7 @@ void Button::SetDefault() {
 }
 
 void Button::InitUnit() {
-	Loger::Debug("Init Button:id=" + String(Id) + "; Pin=" + String(Pin));
+//	Loger::Debug("Init Button:id=" + String(Id) + "; Pin=" + String(Pin));
 	pinMode(Pin, INPUT);
 	digitalWrite(Pin, !lhOn);
 	MqttClient.PublishUnit(this);
@@ -117,3 +117,75 @@ void Button::ProcessUnit(ActionType event) {
 void Button::UnitLoop() {
 	HandleButton();
 };
+
+bool Button::Compare(Unit* u) {
+
+	if (u == NULL) return false;
+	if (u->Type != UnitType::BUTTON) return false;
+	Button *tu = (Button*)u;
+	
+	bool res = 
+		Id == tu->Id &&
+		Type == tu->Type &&
+		Pin == tu->Pin &&
+		lhOn == tu->lhOn //&&
+		//status == tu->status
+		;
+	if (!res) {
+		Loger::Debug("Compare Buttons:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":" + String(Pin == tu->Pin) + ":" + String(lhOn == tu->lhOn) + ":" + String(status == tu->status) + "#");
+	}
+	return res;
+}
+
+
+void Button::ReadFromEEPROM(uint16_t addr) {
+//	bool res = true;
+
+	Id = SigmaEEPROM::Read8(addr);
+	Type = SigmaEEPROM::Read8(addr + 1);
+	Pin = SigmaEEPROM::Read8(addr + 2);
+	lhOn = SigmaEEPROM::Read8(addr + 3);
+
+}
+
+void Button::WriteToEEPROM(uint16_t addr) {
+	//bool res = true;
+
+	SigmaEEPROM::Write8(addr, Id);
+	SigmaEEPROM::Write8(addr + 1, Type);
+	SigmaEEPROM::Write8(addr + 2, Pin);
+	SigmaEEPROM::Write8(addr + 3, lhOn);
+}
+
+void Button::ConfigField(JsonObject& jsonList) {
+	if (jsonList.containsKey("Pin")) {
+		Pin = jsonList["Pin"];
+	}
+	if (jsonList.containsKey("lhOn")) {
+		lhOn = jsonList["lhOn"];
+	}
+	if (jsonList.containsKey("status")) {
+		status = jsonList["status"];
+	}
+}
+
+
+void const Button::print(const char* header, DebugLevel level) {
+	String str0 = "";
+
+	if (header != NULL) {
+		str0 = header;
+	}
+	str0 += "Id:";
+	str0 += String((unsigned int)Id, DEC);
+	str0 += ";Type:";
+	str0 += String((char)Type);
+	str0 += ";Pin:";
+	str0 += String((unsigned int)Pin, DEC);
+	str0 += ";lhOn:";
+	str0 += String((unsigned int)lhOn, DEC);
+	str0 += ";subscription:";
+	str0 += (isSubscribed ? "true" : "false");
+	str0 += " @";
+	Loger::Log(level, str0);
+}
