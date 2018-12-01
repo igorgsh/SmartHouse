@@ -56,7 +56,7 @@ Action** Configuration::CreateActions(byte nActions) {
 
 Unit* Configuration::FindUnit(uint16_t id) {
 	//Loger::Debug("Units=" + String(units != NULL) + "; Conf=" + String(IsConfigReady));
-	if (units != NULL && IsConfigReady ) {
+	if (units != NULL /*&& IsConfigReady*/ ) {
 		for (int i = 0; i < numberUnits; i++) {
 			if (units[i]->Id == id) {
 				return units[i];
@@ -68,9 +68,7 @@ Unit* Configuration::FindUnit(uint16_t id) {
 
 
 void Configuration::MainLoop() {
-	if (MqttClient.connected()) {
-		MqttClient.MqttLoop();
-	}
+	MqttClient.MqttLoop();
 	Config.UnitsLoop();
 }
 
@@ -91,9 +89,8 @@ void Configuration::Init() {
 	BuildConfig();
 	BuildActions();
 
-	if (MqttClient.connected()) {
-		MqttClient.SubscribeUnits();
-	}
+	Loger::Debug("Subscribe Units");
+	MqttClient.SubscribeUnits();
 	Loger::Debug("Config init is finished");
 }
 
@@ -211,9 +208,9 @@ void Configuration::BuildConfig() {
 		//Loger::Debug("Update Units");
 		SigmaEEPROM::UpdateUnits(numberUnits, units);
 	}
+	IsConfigReady = true;
 	InitializeUnits();
 	FinalizeInitUnits();
-	IsConfigReady = true;
 
 	Loger::Debug("IsConfigReady=" +String(IsConfigReady));
 	Loger::Debug("NumberOfunits=" + String(numberUnits));
@@ -329,7 +326,7 @@ void Configuration::BuildActions() {
 		SigmaEEPROM::ReadActions();
 	}
 	else {
-		Loger::Debug("Update Actions");
+		Loger::Debug("Update Actions(Build Actions)");
 		SigmaEEPROM::UpdateActions(numberActions, actions);
 	}
 
@@ -343,7 +340,7 @@ void Configuration::UpdateUnit(UnitType type, String name, String value) {
 	Loger::Debug("Update Unit: " + name + "(" + String(name.toInt()) + ")");
 	Unit *u = FindUnit(name.toInt());
 	if (u != NULL) {
-		Loger::Debug("Unit found:" + String(u->Id));
+		//Loger::Debug("Unit found:" + String(u->Id));
 		u->isSubscribed = true;
 		//Loger::Debug("Unit_type:" + String((char)u->Type));
 		u->ProcessUnit((ActionType)(value.toInt()));

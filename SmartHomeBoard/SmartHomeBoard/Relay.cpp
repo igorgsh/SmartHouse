@@ -60,15 +60,18 @@ bool Relay::Compare(Unit* u) {
 	if (u == NULL) return false;
 	if (u->Type != UnitType::RELAY) return false;
 	Relay* tu = (Relay*)u;
-	Loger::Debug("Compare Relay:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":" + String(Pin == tu->Pin) + ":" 
-		+ String(lhOn == tu->lhOn) + ":" + String(status == tu->status) + "#");
-	return (
+	bool res = (
 		Id == tu->Id &&
 		Type == tu->Type &&
 		Pin == tu->Pin &&
 		lhOn == tu->lhOn &&
 		status == tu->status
 		);
+	if (!res) {
+		Loger::Debug("Compare Relay:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":" + String(Pin == tu->Pin) + ":"
+			+ String(lhOn == tu->lhOn) + ":" + String(status == tu->status) + "#");
+	}
+	return res;
 }
 
 

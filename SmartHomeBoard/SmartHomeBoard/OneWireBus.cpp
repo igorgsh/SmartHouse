@@ -64,12 +64,15 @@ bool OneWireBus::Compare(Unit* u) {
 	if (u == NULL) return false;
 	if (u->Type != UnitType::ONE_WIRE_BUS) return false;
 	OneWireBus* tu = (OneWireBus*)u;
-	Loger::Debug("Compare 1-Wire bus:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":" + String(Pin == tu->Pin) + "#");
-	return (
+	bool res = (
 		Id == tu->Id &&
 		Type == tu->Type &&
 		Pin == tu->Pin
 		);
+	if (!res) {
+		Loger::Debug("Compare 1-Wire bus:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":" + String(Pin == tu->Pin) + "#");
+	}
+	return res;
 }
 
 

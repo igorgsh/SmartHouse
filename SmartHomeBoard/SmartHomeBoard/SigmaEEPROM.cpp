@@ -19,12 +19,15 @@ byte SigmaEEPROM::Read8(uint16_t addr) {
 	return EEPROM.read(addr);
 }
 
+
 void SigmaEEPROM::Write16(uint16_t addr, uint16_t val) {
+	Loger::Debug("Write16:" + String(addr) + ":" +String(val));
 	EEPROM.write(addr, (byte)((val >> 8) & 0x00FF));
 	EEPROM.write(addr + 1, (byte)((val & 0x00FF)));
 
 }
 void SigmaEEPROM::Write8(uint16_t addr, byte val) {
+	Loger::Debug("Write 8:" + String(addr) + "=" + String(val));
 	EEPROM.write(addr, val);
 }
 
@@ -36,7 +39,7 @@ bool SigmaEEPROM::UpdateUnits(byte numberOfUnits, Unit** units) {
 	bool res = false;
 	byte nUnits = Read8(addrNumberUnits);
 
-	Loger::Debug("Update units");
+	//Loger::Debug("Update units");
 	if (nUnits != numberOfUnits) {
 		res = true;
 		Loger::Debug("Update:Number=" + String(nUnits, DEC) );
@@ -47,8 +50,8 @@ bool SigmaEEPROM::UpdateUnits(byte numberOfUnits, Unit** units) {
 		for (int i = 0; !res && i < numberOfUnits; i++) {
 			byte uId = Read8(currentPtr);
 			byte uType = Read8(currentPtr+1);
-			Loger::Debug("Config unit: id=" + String(units[i]->Id) + " type=" + String((unsigned char)(units[i]->Type)));
-			Loger::Debug("Update Unit: unit id=" + String(uId, DEC) + " type=" + String((unsigned char)uType));
+			//Loger::Debug("Config unit: id=" + String(units[i]->Id) + " type=" + String((unsigned char)(units[i]->Type)));
+			//Loger::Debug("Update Unit(s):("+String(currentPtr)+") unit id=" + String(uId, DEC) + " type=" + String((unsigned char)uType));
 			if (uId != units[i]->Id || uType != units[i]->Type) {
 				Loger::Debug("Update:Id and type");
 				res = true;
@@ -57,7 +60,7 @@ bool SigmaEEPROM::UpdateUnits(byte numberOfUnits, Unit** units) {
 				Unit* u = Config.CreateTypedUnit(uType);
 				u->Id = uId;
 				u->ReadFromEEPROM(currentPtr);
-				u->print("Read unit:", D_DEBUG);
+				//u->print("Read unit:", D_DEBUG);
 				if (!u->Compare(units[i])) {
 					Loger::Debug("Update:Compare");
 					res = true;
@@ -70,7 +73,7 @@ bool SigmaEEPROM::UpdateUnits(byte numberOfUnits, Unit** units) {
 			}
 		}
 	}
-	Loger::Debug("Update:End");
+	//Loger::Debug("Update:End");
 
 	if (res) {
 		SigmaEEPROM::WriteUnits(numberOfUnits, units);
@@ -82,7 +85,16 @@ void SigmaEEPROM::WriteUnits(byte numberOfUnits, Unit** units) {
 	uint16_t currentPtr = addrStartUnits;
 	Loger::Debug("Write units to EEPROM");
 	for (int i = 0; i < numberOfUnits; i++) {
+		Loger::Debug("Write:" + String(currentPtr));
+		Loger::Debug("Write Unit:id=" + String(units[i]->Id) + ":type=" + String((unsigned char)units[i]->Type));
 		units[i]->WriteToEEPROM(currentPtr);
+
+		Loger::Debug("Check unit from EEPROM");
+		Unit* u = Config.CreateTypedUnit(units[i]->Type);
+		u->ReadFromEEPROM(currentPtr);
+		u->print("Reading unit:", D_DEBUG);
+		delete u;
+
 		currentPtr += units[i]->UnitStoredSize();
 	}
 
@@ -150,7 +162,7 @@ void SigmaEEPROM::ReadActions() {
 
 	Action** actions = Config.CreateActions(nActions);
 
-	int currPtr = addrStartActions;
+	int currPtr = Read16(addrStartActions);
 	Loger::Debug("Start reading actions");
 	Loger::Debug("Is ACTIONS null?" + String(actions == NULL));
 	for (int i = 0; i < nActions; i++) {
@@ -175,7 +187,7 @@ bool SigmaEEPROM::UpdateActions(byte numberOfActions, Action** actions) {
 		Loger::Debug("Update:Number=" + String(nActions, DEC));
 	}
 	else {
-		uint16_t currentPtr = addrStartActions;
+		uint16_t currentPtr = Read16(addrStartActions);
 
 		for (int i = 0; !res && i < numberOfActions; i++) {
 			Action* a = new Action;
@@ -201,8 +213,8 @@ bool SigmaEEPROM::UpdateActions(byte numberOfActions, Action** actions) {
 }
 
 void SigmaEEPROM::WriteActions(byte numberOfActions, Action** actions) {
-	uint16_t currentPtr = addrStartActions;
-	Loger::Debug("Write actions to EEPROM");
+	uint16_t currentPtr = Read16(addrStartActions);
+	Loger::Debug("Write actions to EEPROM:" + String(currentPtr));
 	for (int i = 0; i < numberOfActions; i++) {
 		actions[i]->WriteToEEPROM(currentPtr);
 		currentPtr += actions[i]->ActionStoredSize();

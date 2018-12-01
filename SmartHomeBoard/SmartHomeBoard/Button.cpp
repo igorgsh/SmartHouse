@@ -123,14 +123,18 @@ bool Button::Compare(Unit* u) {
 	if (u == NULL) return false;
 	if (u->Type != UnitType::BUTTON) return false;
 	Button *tu = (Button*)u;
-	Loger::Debug("Compare Buttons:" + String(Id == tu->Id) + ":" +String(Type == tu->Type) +":" + String(Pin == tu->Pin) + ":" + String(lhOn == tu->lhOn) + ":" + String(status == tu->status) + "#");
-	return (
+	
+	bool res = 
 		Id == tu->Id &&
 		Type == tu->Type &&
 		Pin == tu->Pin &&
 		lhOn == tu->lhOn //&&
 		//status == tu->status
-		);
+		;
+	if (!res) {
+		Loger::Debug("Compare Buttons:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":" + String(Pin == tu->Pin) + ":" + String(lhOn == tu->lhOn) + ":" + String(status == tu->status) + "#");
+	}
+	return res;
 }
 
 
@@ -141,7 +145,6 @@ void Button::ReadFromEEPROM(uint16_t addr) {
 	Type = SigmaEEPROM::Read8(addr + 1);
 	Pin = SigmaEEPROM::Read8(addr + 2);
 	lhOn = SigmaEEPROM::Read8(addr + 3);
-	//status = SigmaEEPROM::Read8(addr + 4);
 
 }
 
@@ -152,8 +155,6 @@ void Button::WriteToEEPROM(uint16_t addr) {
 	SigmaEEPROM::Write8(addr + 1, Type);
 	SigmaEEPROM::Write8(addr + 2, Pin);
 	SigmaEEPROM::Write8(addr + 3, lhOn);
-	//SigmaEEPROM::Write8(addr + 4, status);
-
 }
 
 void Button::ConfigField(JsonObject& jsonList) {

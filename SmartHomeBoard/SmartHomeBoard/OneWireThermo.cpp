@@ -52,14 +52,17 @@ bool OneWireThermo::Compare(Unit* u) {
 	if (u == NULL) return false;
 	if (u->Type != UnitType::ONE_WIRE_THERMO) return false;
 	OneWireThermo* tu = (OneWireThermo*)u;
-	Loger::Debug("Compare OneWireThermo:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":" + String(Pin == tu->Pin) + ":"
-		+ String(OneWireBus::CompareDeviceAddress(address, tu->address))  + "#");
-	return (
+	bool res = (
 		Id == tu->Id &&
 		Type == tu->Type &&
 		Pin == tu->Pin &&
 		OneWireBus::CompareDeviceAddress(address, tu->address)
 		);
+	if (!res) {
+		Loger::Debug("Compare OneWireThermo:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":" + String(Pin == tu->Pin) + ":"
+			+ String(OneWireBus::CompareDeviceAddress(address, tu->address)) + "#");
+	}
+	return res;
 }
 
 

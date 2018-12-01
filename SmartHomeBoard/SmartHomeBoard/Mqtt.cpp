@@ -76,7 +76,7 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 			}
 			else {
 				if (strTopic.startsWith(MQTT_BUTTONS)) {
-					//Loger::Debug("Update Button");
+					Loger::Debug("Update Button");
 
 					Config.UpdateButton(strTopic.substring(strlen(MQTT_BUTTONS) + 2), strPayload);
 				}
@@ -103,15 +103,21 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 									//Loger::Debug("Update Powermeter");
 									Config.UpdatePowerMeter(strTopic.substring(strlen(MQTT_POWERMETER) + 2), strPayload);
 								}
-								else if (strTopic.startsWith(MQTT_RESET_BOARD)) {
-									sprintf(subscription, MQTT_RESET_BOARD, Config.BoardId);
-									Loger::Debug("Reset");
-
-									if (strTopic.startsWith((String)subscription) && strPayload != NULL && strPayload[0] >= '0') {
-										Board::Reset(10000);
+								else {
+									if (strTopic.startsWith(MQTT_CONTACTOR)) {
+										//Loger::Debug("Update Contactor");
+										Config.UpdateContactor(strTopic.substring(strlen(MQTT_CONTACTOR) + 2), strPayload);
 									}
-								}
-								else { //placeholder for new commands
+									else {
+										if (strTopic.startsWith(MQTT_RESET_BOARD)) {
+											sprintf(subscription, MQTT_RESET_BOARD, Config.BoardId);
+											Loger::Debug("Reset");
+
+											if (strTopic.startsWith((String)subscription) && strPayload != NULL && strPayload[0] >= '0') {
+												Board::Reset(10000);
+											}
+										}
+									}
 								}
 							}
 						}
@@ -198,7 +204,7 @@ void Mqtt::WatchDog() {
 
 void Mqtt::PublishUnit(const Unit *unit) {
 	if (connected()) {
-		if (unit->isSubscribed) {
+		//if (unit->isSubscribed) {
 			char topic[TOPIC_LENGTH];
 			char payload[PAYLOAD_LENGTH];
 			const char *unitPrefix;
@@ -234,18 +240,22 @@ void Mqtt::PublishUnit(const Unit *unit) {
 					unitType = UnitType::BUTTON;
 					break;
 				}
+				case UnitType::CONTACTOR: {
+					unitPrefix = MQTT_CONTACTOR;
+					unitType = UnitType::CONTACTOR;
+					break;
+				}
 				}
 				if (unitType != 0) {
 					sprintf(topic, "%s%s%c%04d", unitPrefix, MQTT_SEPARATOR, unit->Type, unit->Id);
 					sprintf(payload, "%u", unit->status);
 					Publish(topic, payload);
 				}
-
 			}
-		}
-		else {
-			Loger::Debug("Publish Unit:" + String(unit->Id, DEC) + " is not subscribed!");
-		}
+//		}
+//		else {
+//			Loger::Debug("Publish Unit:" + String(unit->Id, DEC) + " is not subscribed!");
+//		}
 	}
 }
 
@@ -307,6 +317,10 @@ void Mqtt::SubscribeUnit(int unitNumber) {
 				unitPrefix = MQTT_1WIRETHERMO;
 				break;
 			}
+			case UnitType::CONTACTOR: {
+				unitPrefix = MQTT_CONTACTOR;
+				break;
+			}
 			}
 			if (unitPrefix != NULL) {
 				sprintf(topic, "%s%s%c%04d", unitPrefix, MQTT_SEPARATOR, Config.units[unitNumber]->Type, Config.units[unitNumber]->Id);
@@ -322,8 +336,9 @@ void Mqtt::SubscribeUnits() {
 		bool isSubscriptionSuccess = true;
 		Loger::Debug("Subscribing Units...");
 		for (int i = 0; i < Config.numberUnits; i++) {
+			Loger::Debug("Subscribe:" + String(i));
 			SubscribeUnit(i);
-			MqttClient.MqttLoop();
+			//MqttClient.MqttLoop();
 		}
 		delay(MQTT_RESUBSCRIPTION_DELAY);
 		for (int i = 0; i < Config.numberUnits; i++) {

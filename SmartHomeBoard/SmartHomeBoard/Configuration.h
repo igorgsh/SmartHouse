@@ -41,6 +41,7 @@ public:
 	void UpdateOneWireThermo(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_THERMO, button, value); };
 	void UpdateUnit(UnitType type, String name, String value);
 	void UpdatePowerMeter(String unit, String value) { UpdateUnit(UnitType::POWER_METER, unit, value); };
+	void UpdateContactor(String unit, String value) { UpdateUnit(UnitType::CONTACTOR, unit, value); };
 	void ProcessAction(uint16_t id, byte event);
 	Unit* CreateTypedUnit(byte type);
 

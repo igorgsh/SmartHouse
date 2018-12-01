@@ -166,13 +166,7 @@ bool PowerMeter::Compare(Unit* u) {
 	if (u == NULL) return false;
 	if (u->Type != UnitType::POWER_METER) return false;
 	PowerMeter* tu = (PowerMeter*)u;
-	Loger::Debug("Compare PowerMeter:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":" 
-		+ String(serialRX == tu->serialRX) + ":"
-		+ String(serialTX == tu->serialTX) + ":"
-		+ String(serialNumber == tu->serialNumber) + ":"
-		+ String(factor == tu->factor)
-		+ "#");
-	return (
+	bool res = (
 		Id == tu->Id &&
 		Type == tu->Type &&
 		serialRX == tu->serialRX &&
@@ -180,6 +174,15 @@ bool PowerMeter::Compare(Unit* u) {
 		serialNumber == tu->serialNumber &&
 		factor == tu->factor
 		);
+	if (!res) {
+		Loger::Debug("Compare PowerMeter:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":"
+			+ String(serialRX == tu->serialRX) + ":"
+			+ String(serialTX == tu->serialTX) + ":"
+			+ String(serialNumber == tu->serialNumber) + ":"
+			+ String(factor == tu->factor)
+			+ "#");
+	}
+	return res;
 }
 
 
