@@ -137,6 +137,9 @@ var Configurations = [
 //            '{"id":218, "type":"P","Serial":1,"Factor":1}' // Power meter 
 //            '{"id":218, "type":"P","SerialRX":62,"SerialTX":54,"Factor":1}' // Power meter 
             '{"id":201, "type":"B","Pin":12}'  
+            ,'{"id":202, "type":"R","Pin":22,"lhOn":0,"status":0,"priority":20}'  
+            ,'{"id":207, "type":"C","Pin":7,"lhOn":0}'  
+            
 
 
            // ,'{"id":62, "type":"P","SerialRX":62,"SerialTX":54,"Factor":3}' // Power meter 
@@ -335,7 +338,7 @@ var Actions = [
          ,'{"id":160,"originId":105,"originType":"B","event":1,"targetId":143,"targetAction":3,"targetType":"R"}'
          ]
          ,[ //Board 02
-         '{"id":201,"originId":201,"originType":"B","event":4,"targetId":0211,"targetAction":1,"targetType":"V"}'
+         '{"id":201,"originId":201,"originType":"B","event":4,"targetId":0211,"targetAction":1,"targetType":"b"}'
         ]
          ,[ //Board 03
          '{"id":301,"originId":311,"originType":"B","event":1,"targetId":245,"targetAction":3,"targetType":"R"}'

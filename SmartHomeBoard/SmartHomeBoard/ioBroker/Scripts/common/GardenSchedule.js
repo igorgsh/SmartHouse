@@ -1,14 +1,11 @@
 
 function CheckWateringDelay() {
-    //var nm = getObject(zoneValve);
-    //log ("Start check delay");
     var obj = getState(gardenWateringDelay);
     var delayVal = obj.val;
     log("delay=" + delayVal);
     if (delayVal === true) {
         var ts = obj.ts;
         var now = new Date().getTime();
-        //log ("Delta=" + (now-ts));
         if (now - ts >= 12*3600*1000) {
             log("Reset Delay");
             setState(gardenWateringDelay, false, true);

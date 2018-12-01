@@ -336,7 +336,7 @@ void Mqtt::SubscribeUnits() {
 		bool isSubscriptionSuccess = true;
 		Loger::Debug("Subscribing Units...");
 		for (int i = 0; i < Config.numberUnits; i++) {
-			Loger::Debug("Subscribe:" + String(i));
+			//Loger::Debug("Subscribe:" + String(i));
 			SubscribeUnit(i);
 			//MqttClient.MqttLoop();
 		}

@@ -17,10 +17,11 @@ void Contactor::SetDefault() {
 }
 
 void Contactor::InitUnit() {
-	//	Loger::Debug("Init Button:id=" + String(Id) + "; Pin=" + String(Pin));
+	//Loger::Debug("Init contactor:id=" + String(Id) + "; Pin=" + String(Pin));
 	pinMode(Pin, INPUT);
-	digitalWrite(Pin, !lhOn);
+	digitalWrite(Pin, lhOn? LOW : HIGH);
 	startContact = 0;
+	prevValue = digitalRead(Pin);
 	status = !lhOn;
 	MqttClient.PublishUnit(this);
 }
@@ -31,33 +32,34 @@ void Contactor::HandleContactor() {
 	byte cntValue;
 
 	cntValue = digitalRead(Pin);
-	Loger::Debug("Contactor state:" + String(status) + ":" + String(cntValue));
+	//Loger::Debug("Contactor state:" + String(status) + ":" + String(cntValue));
 
-	if (status != cntValue) { // contactor is starting switch
+	if (prevValue != cntValue) { // contactor is starting switch
 		//Loger::Debug("Contactor switch:" + String(status) + "->" + String(cntValue));
 		//Loger::Debug("Start=" + String(startContact));
 		if (startContact == 0) {
 			startContact = millis();
 		}
 		else {
-			//Loger::Debug("Point 2:" + String(millis()));
+			//Loger::Debug("Point 2:(" + String(startContact) + ":" + String(millis())+")::("+String(cntValue) + "^" + String(prevValue) + ")" );
 			if (startContact + CONTACTOR_SWITCHED_TIME <= millis()) {//contact is long enough
 				//Loger::Debug("Contactor should be switched");
 				HandleFinish(cntValue == lhOn ? ACT_ON : ACT_OFF);
 				startContact = 0;
+				prevValue = cntValue;
 			}
 		}
 	}
-	else {
+	//else {
 		//Loger::Debug("Point 1");
-		startContact = 0;
-	}
+		//startContact = 0;
+	//}
 }
 
 void Contactor::HandleFinish(int newStatus) {
 	status = newStatus;
 	MqttClient.PublishUnit(this);
-	Config.ProcessAction(Id, newStatus);
+	Config.ProcessAction(Id, status);
 
 }
 

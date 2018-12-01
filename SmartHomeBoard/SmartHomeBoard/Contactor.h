@@ -37,6 +37,7 @@ public:
 
 private:
 	unsigned long startContact;
+	byte prevValue;
 
 	void HandleContactor();
 	void HandleFinish(int newStatus);
