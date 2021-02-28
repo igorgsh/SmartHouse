@@ -156,8 +156,14 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 void Configuration::UpdateConfig(String jsonConfig) {
 	if (isConfigRequested) {
 		static bool lenDetected = false;
-		StaticJsonBuffer<JSON_SIZE> jsonBuffer;
-		JsonObject& root = jsonBuffer.parse(jsonConfig);
+//		StaticJsonBuffer<JSON_SIZE> jsonBuffer;
+//		JsonObject& root = jsonBuffer.parse(jsonConfig);
+		const size_t CAPACITY = JSON_OBJECT_SIZE(JSON_SIZE);
+		StaticJsonDocument<CAPACITY> doc;
+		deserializeJson(doc, jsonConfig);
+		// extract the data
+		JsonObject root = doc.as<JsonObject>();
+
 		if (root.containsKey("length")) {
 			byte nUnits = (byte)root["length"];
 			Loger::Debug("Number of config Units=" + String(numberUnits));
@@ -256,8 +262,14 @@ void Configuration::ReadBoardId() {
 void Configuration::UpdateActions(String jsonConfig) {
 	if (isActionRequested) {
 		static bool lenDetected = false;
-		StaticJsonBuffer<JSON_SIZE> jsonBuffer;
-		JsonObject& root = jsonBuffer.parse(jsonConfig);
+		//StaticJsonBuffer<JSON_SIZE> jsonBuffer;
+		//JsonObject& root = jsonBuffer.parse(jsonConfig);
+		// allocate the memory for the document
+		const size_t CAPACITY = JSON_OBJECT_SIZE(JSON_SIZE);
+		StaticJsonDocument<CAPACITY> doc;
+		deserializeJson(doc, jsonConfig);
+		// extract the data
+		JsonObject root = doc.as<JsonObject>();
 		if (root.containsKey("length")) {
 			Loger::Debug("Length:" + String((int)root["length"]));
 

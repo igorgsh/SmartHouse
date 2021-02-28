@@ -19,12 +19,6 @@
     <Filter Include="ioBroker\Scripts">
       <UniqueIdentifier>{e6578ff7-e854-4433-948d-355715bbdaf9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ioBroker\Scripts\common">
-      <UniqueIdentifier>{f0d56b86-f941-4edf-a0f8-cb6877f76af3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ioBroker\Scripts\global">
-      <UniqueIdentifier>{bda7170d-bf35-44d2-8d9c-8011b79c9cdc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ioBroker\objects">
       <UniqueIdentifier>{56818b70-c7d6-4cbd-8b58-7fbe95cca4be}</UniqueIdentifier>
     </Filter>
@@ -39,42 +33,6 @@
     </None>
     <None Include="ioBroker\Scripts\objects\mqtt.json">
       <Filter>ioBroker\objects</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\common\AstroSchedule.js">
-      <Filter>ioBroker\Scripts\common</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\common\config2.js">
-      <Filter>ioBroker\Scripts\common</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\common\GardenSchedule.js">
-      <Filter>ioBroker\Scripts\common</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\common\hardreset.js">
-      <Filter>ioBroker\Scripts\common</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\common\SetSun.js">
-      <Filter>ioBroker\Scripts\common</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\common\SwitchOffAll.js">
-      <Filter>ioBroker\Scripts\common</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\common\timercheck.js">
-      <Filter>ioBroker\Scripts\common</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\global\checkwatchdog.js">
-      <Filter>ioBroker\Scripts\global</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\global\configuration.js">
-      <Filter>ioBroker\Scripts\global</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\global\paths.js">
-      <Filter>ioBroker\Scripts\global</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\global\resetdevice.js">
-      <Filter>ioBroker\Scripts\global</Filter>
-    </None>
-    <None Include="ioBroker\Scripts\common\BolierSchedule.js">
-      <Filter>ioBroker\Scripts\common</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
