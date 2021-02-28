@@ -1,0 +1,57 @@
+/* -- do not edit following lines - START --
+{
+  "expert": true,
+  "debug": false,
+  "verbose": false
+}
+-- do not edit previous lines - END --*/
+
+/*
+schedule ("00 12 * * *", function(){ChangeCooling(1);});
+schedule ("30 12 * * *", function(){ChangeCooling(0);});
+schedule ("00 14 * * *", function(){ChangeCooling(1);});
+schedule ("30 14 * * *", function(){ChangeCooling(0);});
+schedule ("00 16 * * *", function(){ChangeCooling(1);});
+schedule ("30 16 * * *", function(){ChangeCooling(0);});
+schedule ("00 04 * * *", function(){ChangeCooling(1);});
+schedule ("00 06 * * *", function(){ChangeCooling(0);});
+*/
+/*
+schedule ('{"time":{"exactTime":true,"start":"12:00"},"period":{"days":1}}', function(){ChangeCooling(1);});
+schedule ('{"time":{"exactTime":true,"start":"12:30"},"period":{"days":1}}', function(){ChangeCooling(0);});
+
+schedule ('{"time":{"exactTime":true,"start":"14:00"},"period":{"days":1}}', function(){ChangeCooling(1);});
+schedule ('{"time":{"exactTime":true,"start":"14:30"},"period":{"days":1}}', function(){ChangeCooling(0);});
+
+schedule ('{"time":{"exactTime":true,"start":"16:00"},"period":{"days":1}}', function(){ChangeCooling(1);});
+schedule ('{"time":{"exactTime":true,"start":"16:30"},"period":{"days":1}}', function(){ChangeCooling(0);});
+
+schedule ('{"time":{"exactTime":true,"start":"05:00"},"period":{"days":1}}', function(){ChangeCooling(1);});
+schedule ('{"time":{"exactTime":true,"start":"06:30"},"period":{"days":1}}', function(){ChangeCooling(0);});
+*/
+
+function ChangeCooling(mode){
+    var isCooling = getState(vbSwitchCooling);
+    log ("Is cooling=" + isCooling.val + " mode=" + mode);
+    if (isCooling.val == 1) { //Allow
+        if (mode == 1) {//Switch On
+            setState(geoPump,true, false);
+            setState(hvacPump1,1, false);
+            setState(hvacPump2,1, false);
+        } else { //switch off
+            setState(geoPump,false, false);
+        }
+    } else {
+        setState(geoPump,false, false);
+    }
+}
+
+$(vbSwitchCooling).on(function(obj){
+    log ("Cooling!!!=" + obj.state.val);
+    ChangeCooling(obj.state.val);
+});
+
+//ChangeCooling(1);
+//ChangeCooling(0);
+
+

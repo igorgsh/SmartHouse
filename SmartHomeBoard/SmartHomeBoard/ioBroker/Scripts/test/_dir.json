@@ -1,0 +1,12 @@
+{
+  "common": {
+    "name": "test"
+  },
+  "type": "channel",
+  "_id": "script.js.test",
+  "acl": {
+    "object": 1636,
+    "owner": "system.user.admin",
+    "ownerGroup": "system.group.administrator"
+  }
+}

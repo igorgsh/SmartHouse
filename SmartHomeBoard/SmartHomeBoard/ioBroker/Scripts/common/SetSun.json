@@ -1,0 +1,18 @@
+/* -- do not edit following lines - START --
+{
+  "debug": false,
+  "verbose": false,
+  "mtime": 1560191618
+}
+-- do not edit previous lines - END --*/
+/*
+schedule( "10 0 * * *", function(){
+
+    log("Sunset today:" + formatDate(getAstroDate("sunset"),"hh:mm"));
+    log("Sunrise today:" + formatDate(getAstroDate("sunrise"),"hh:mm"));
+
+    setState(SunsetVar, formatDate(getAstroDate("sunset"),"hh:mm"), false);
+    setState(SunriseVar, formatDate(getAstroDate("sunrise"),"hh:mm"), false);
+
+});
+*/
