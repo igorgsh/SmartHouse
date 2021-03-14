@@ -103,6 +103,9 @@
     <ClInclude Include="OneWireThermo.h" />
     <ClInclude Include="PowerMeter.h" />
     <ClInclude Include="Relay.h" />
+    <ClInclude Include="ShiftRegister.h" />
+    <ClInclude Include="ShiftRegisterIn.h" />
+    <ClInclude Include="ShiftRegisterOut.h" />
     <ClInclude Include="SigmaEEPROM.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="utils.h" />
@@ -121,6 +124,9 @@
     <ClCompile Include="OneWireThermo.cpp" />
     <ClCompile Include="PowerMeter.cpp" />
     <ClCompile Include="Relay.cpp" />
+    <ClCompile Include="ShiftRegister.cpp" />
+    <ClCompile Include="ShiftRegisterIn.cpp" />
+    <ClCompile Include="ShiftRegisterOut.cpp" />
     <ClCompile Include="SigmaEEPROM.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="utils.cpp" />

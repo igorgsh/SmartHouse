@@ -1,25 +1,10 @@
 #include "Unit.h"
 
 
-/*
-bool Unit::Compare(Unit* u) {
-	if (u == NULL) return false;
-	Loger::Debug("Compare Unit:" + String(Id == u->Id) + ":" +String(Type == u->Type) +":" + String(Pin == u->Pin) + ":" + String(lhOn == u->lhOn) + "#");
-	return (
-		Id == u->Id &&
-		Type == u->Type &&
-		Pin == u->Pin &&
-		lhOn == u->lhOn &&
-		status == u->status
-		);
-}
-*/
 
 void Unit::FillFrom(Unit* u) {
 	Id = u->Id;
 	Type = u->Type;
-//	Pin = u->Pin;
-//	lhOn = u->lhOn;
 }
 
 void const Unit::print(const char* header, DebugLevel level){

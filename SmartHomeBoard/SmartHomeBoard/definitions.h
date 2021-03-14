@@ -24,7 +24,9 @@ typedef enum {
 	ONE_WIRE_THERMO = 'T',
 	POWER_METER		= 'P',
 	VIRTUAL_BUTTON	= 'b',
-	CONTACTOR		= 'C'
+	CONTACTOR		= 'C',
+	SHIFT_OUT		='H',
+	SHIFT_IN		='h'
 } UnitType;
 
 

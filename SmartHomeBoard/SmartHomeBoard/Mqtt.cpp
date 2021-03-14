@@ -109,12 +109,22 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 										Config.UpdateContactor(strTopic.substring(strlen(MQTT_CONTACTOR) + 2), strPayload);
 									}
 									else {
-										if (strTopic.startsWith(MQTT_RESET_BOARD)) {
-											sprintf(subscription, MQTT_RESET_BOARD, Config.BoardId);
-											Loger::Debug("Reset");
+										if (strTopic.startsWith(MQTT_SHIFT_REGISTER_OUT)) {
+											Config.UpdateShiftRegisterOut(strTopic.substring(strlen(MQTT_SHIFT_REGISTER_OUT) + 2), strPayload);
+										}
+										else {
+											if (strTopic.startsWith(MQTT_SHIFT_REGISTER_IN)) {
+												Config.UpdateShiftRegisterIn(strTopic.substring(strlen(MQTT_SHIFT_REGISTER_IN) + 2), strPayload);
+											}
+											else {
+												if (strTopic.startsWith(MQTT_RESET_BOARD)) {
+													sprintf(subscription, MQTT_RESET_BOARD, Config.BoardId);
+													Loger::Debug("Reset");
 
-											if (strTopic.startsWith((String)subscription) && strPayload != NULL && strPayload[0] >= '0') {
-												Board::Reset(10000);
+													if (strTopic.startsWith((String)subscription) && strPayload != NULL && strPayload[0] >= '0') {
+														Board::Reset(10000);
+													}
+												}
 											}
 										}
 									}
@@ -245,6 +255,16 @@ void Mqtt::PublishUnit(const Unit *unit) {
 					unitType = UnitType::CONTACTOR;
 					break;
 				}
+				case UnitType::SHIFT_OUT: {
+					unitPrefix = MQTT_SHIFT_REGISTER_OUT;
+					unitType = UnitType::SHIFT_OUT;
+					break;
+				}
+				case UnitType::SHIFT_IN: {
+					unitPrefix = MQTT_SHIFT_REGISTER_IN;
+					unitType = UnitType::SHIFT_IN;
+					break;
+				}
 				}
 				if (unitType != 0) {
 					sprintf(topic, "%s%s%c%04d", unitPrefix, MQTT_SEPARATOR, unit->Type, unit->Id);
@@ -321,6 +341,19 @@ void Mqtt::SubscribeUnit(int unitNumber) {
 				unitPrefix = MQTT_CONTACTOR;
 				break;
 			}
+			case UnitType::VIRTUAL_BUTTON: {
+				unitPrefix = MQTT_VIRTUAL_BUTTONS;
+				break;
+			}
+			case UnitType::SHIFT_OUT: {
+				unitPrefix = MQTT_SHIFT_REGISTER_OUT;
+				break;
+			}
+			case UnitType::SHIFT_IN: {
+				unitPrefix = MQTT_SHIFT_REGISTER_IN;
+				break;
+			}
+
 			}
 			if (unitPrefix != NULL) {
 				sprintf(topic, "%s%s%c%04d", unitPrefix, MQTT_SEPARATOR, Config.units[unitNumber]->Type, Config.units[unitNumber]->Id);
@@ -336,9 +369,7 @@ void Mqtt::SubscribeUnits() {
 		bool isSubscriptionSuccess = true;
 		Loger::Debug("Subscribing Units...");
 		for (int i = 0; i < Config.numberUnits; i++) {
-			//Loger::Debug("Subscribe:" + String(i));
 			SubscribeUnit(i);
-			//MqttClient.MqttLoop();
 		}
 		delay(MQTT_RESUBSCRIPTION_DELAY);
 		for (int i = 0; i < Config.numberUnits; i++) {

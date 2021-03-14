@@ -12,11 +12,8 @@ class Unit
 public:
 	uint16_t Id;
 	byte Type;
-//	byte Pin;
-//	bool lhOn;
 	byte status;
 	bool isSubscribed = false;
-	//static const int sizeOfUnits = 4;
 
 	virtual bool Compare(Unit* u) =0;
 	virtual void FillFrom(Unit* u);

@@ -16,15 +16,16 @@
 #include "OneWireThermo.h"
 #include "PowerMeter.h"
 #include "Contactor.h"
+#include "ShiftRegisterOut.h"
+#include "ShiftRegisterIn.h"
+
 
 extern Mqtt MqttClient;
 
 Unit** Configuration::CreateUnits(byte nUnits) {
 
 	if (units != NULL) {
-		Loger::Debug("Point A1");
 		for (int i = 0; i < numberUnits; i++) {
-			Loger::Debug("Point A2");
 			if (units[i] != NULL) {
 				delete units[i];
 			}
@@ -156,6 +157,23 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 		}
 		u->Type = UnitType::CONTACTOR;
 	}
+	else if (type == UnitType::SHIFT_OUT) {
+		u = new ShiftRegisterOut();
+		if (u == NULL) {
+			Loger::Error("Can't create ShiftRegister Out");
+			Board::Reset(10000);
+		}
+		u->Type = UnitType::SHIFT_OUT;
+	}
+	else if (type == UnitType::SHIFT_IN) {
+		u = new ShiftRegisterIn();
+		if (u == NULL) {
+			Loger::Error("Can't create ShiftRegister In");
+			Board::Reset(10000);
+		}
+		u->Type = UnitType::SHIFT_OUT;
+	}
+
 	if (u == NULL) {
 		Loger::Debug("Can't create a typed unit:" + String((char)type));
 	}
@@ -183,7 +201,6 @@ void Configuration::UpdateConfig(String jsonConfig) {
 			if (nUnits == 0) {
 				IsConfigReady = true;
 			}
-
 		}
 		else if (lenDetected && root.containsKey("type") && root.containsKey("id")) {
 			if (units != NULL) {
