@@ -32,7 +32,12 @@ Unit** Configuration::CreateUnits(byte nUnits) {
 		delete units;
 	}
 	Loger::Debug("Create Units:" + String(nUnits));
-	units = new Unit*[nUnits];
+	if (nUnits == 0) {
+		units = NULL;
+	}
+	else {
+		units = new Unit * [nUnits];
+	}
 	numberUnits = nUnits;
 	//Loger::Debug("Number:" + String(numberUnits));
 	return Config.units;
@@ -48,7 +53,12 @@ Action** Configuration::CreateActions(byte nActions) {
 		delete actions;
 	}
 	Loger::Debug("Create Actions:" + String(nActions));
-	actions = new Action*[nActions];
+	if (nActions == 0) {
+		actions = NULL;
+	}
+	else {
+		actions = new Action * [nActions];
+	}
 	numberActions = nActions;
 	return actions;
 }
@@ -170,21 +180,27 @@ void Configuration::UpdateConfig(String jsonConfig) {
 			configCounter = 0;
 			CreateUnits(nUnits);
 			lenDetected = true;
-		}
-		else if (lenDetected && root.containsKey("type") && root.containsKey("id")) {
-
-			units[configCounter] = CreateTypedUnit(((const char*)root["type"])[0]);
-			if (units[configCounter] != NULL) {
-				units[configCounter]->Id = root["id"];
-
-				units[configCounter]->ConfigField(root);
-				
+			if (nUnits == 0) {
+				IsConfigReady = true;
 			}
 
-			configCounter++;
-			if (configCounter == numberUnits) {
-				Loger::Debug("Finish update configuration");
-				IsConfigReady = true;
+		}
+		else if (lenDetected && root.containsKey("type") && root.containsKey("id")) {
+			if (units != NULL) {
+
+				units[configCounter] = CreateTypedUnit(((const char*)root["type"])[0]);
+				if (units[configCounter] != NULL) {
+					units[configCounter]->Id = root["id"];
+
+					units[configCounter]->ConfigField(root);
+
+				}
+
+				configCounter++;
+				if (configCounter == numberUnits) {
+					Loger::Debug("Finish update configuration");
+					IsConfigReady = true;
+				}
 			}
 		}
 	}
@@ -205,14 +221,15 @@ void Configuration::BuildConfig() {
 		}
 	}
 
-
-	if (!IsConfigReady) { //Mqtt failed for some reasons
-		Loger::Debug("Read Units from EEPROM");
-		SigmaEEPROM::ReadUnits();
-	}
-	else {
-		//Loger::Debug("Update Units");
-		SigmaEEPROM::UpdateUnits(numberUnits, units);
+	if (numberUnits != 0) {
+		if (!IsConfigReady) { //Mqtt failed for some reasons
+			Loger::Debug("Read Units from EEPROM");
+			SigmaEEPROM::ReadUnits();
+		}
+		else {
+			//Loger::Debug("Update Units");
+			SigmaEEPROM::UpdateUnits(numberUnits, units);
+		}
 	}
 	IsConfigReady = true;
 	InitializeUnits();
@@ -332,16 +349,16 @@ void Configuration::BuildActions() {
 			MqttClient.MqttLoop();
 		}
 	}
-
-	if (!IsActionsReady) { //Mqtt failed for some reasons
-		Loger::Debug("Read Actions from EEPROM");
-		SigmaEEPROM::ReadActions();
+	if (numberActions != 0) {
+		if (!IsActionsReady) { //Mqtt failed for some reasons
+			Loger::Debug("Read Actions from EEPROM");
+			SigmaEEPROM::ReadActions();
+		}
+		else {
+			Loger::Debug("Update Actions(Build Actions)");
+			SigmaEEPROM::UpdateActions(numberActions, actions);
+		}
 	}
-	else {
-		Loger::Debug("Update Actions(Build Actions)");
-		SigmaEEPROM::UpdateActions(numberActions, actions);
-	}
-
 
 	InitializeActions();
 	IsActionsReady = true;

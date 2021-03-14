@@ -63,10 +63,11 @@ void setup() {
 	
 	//init random generator
 	randomSeed(analogRead(0));
+	
 	//initialization of config
 	Config.Init();
 	Loger::Info("Board is ready");
-	Loger::Info("Board Id:" + String(Config.BoardId));
+	Loger::Info("Board Id#:" + String(Config.BoardId));
 	Loger::Info("IP Address is:" + PrintIP(Ethernet.localIP()));
 	//Set a timer 
 	//MsTimer2::set(100, Timer2);
