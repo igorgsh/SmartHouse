@@ -5,10 +5,12 @@
 
 
 void Board::Reset(unsigned long timeout) {
-	Loger::Debug("RESET!!!!");
+	Loger::LogMessage = F("RESET!!!!");
+	Loger::Debug();
 	if (timeout > 4000) {
 		delay(timeout - 4000);
 	}
+	
 	wdt_enable(WDTO_4S);
 }
 

@@ -38,11 +38,11 @@ public:
 
 	void static MqttTopic(uint16_t unitId, char *topic, PowerMeterValues val);
 
-	bool Compare(Unit* u);
+	bool Compare(const Unit* u);
 	byte UnitStoredSize() { return 7; }
 	void ReadFromEEPROM(uint16_t addr);
 	void WriteToEEPROM(uint16_t addr);
-	void ConfigField(JsonObject& jsonList);
+	void ConfigField(const JsonObject& jsonList);
 	void const print(const char* header, DebugLevel level);
 
 

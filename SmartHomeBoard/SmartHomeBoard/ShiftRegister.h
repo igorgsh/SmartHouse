@@ -9,7 +9,7 @@ public:
     byte Clock;
     byte Steps;
 
-	virtual bool Compare(Unit* u);
+	virtual bool Compare(const Unit* u);
 	virtual void SetDefault() {};
 	virtual void UnitLoop() = 0;
 	virtual void InitUnit() = 0;
@@ -19,7 +19,7 @@ public:
 	virtual void FinalInitUnit() {};
 	virtual void ProcessUnit(ActionType action) {};
 	virtual void const print(const char* header, DebugLevel level);
-	virtual void ConfigField(JsonObject& jsonList) ;
+	virtual void ConfigField(const JsonObject& jsonList) ;
 
 
 };

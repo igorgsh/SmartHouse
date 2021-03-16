@@ -4,4 +4,4 @@
 #include "IPAddress.h"
 
 extern int memoryFree();
-String PrintIP(IPAddress addr);
+void PrintIP(IPAddress addr, String &dest);

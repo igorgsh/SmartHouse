@@ -47,9 +47,7 @@ void PowerMeter::InitUnit() {
 		}
 	}
 	if (pzem!=NULL) {
-		//IPAddress ip = IPAddress(10, 10, 10, 10);
 		pzem->setAddress(ip);
-		//MqttClient.PublishUnit(this);
 	}
 }
 
@@ -94,8 +92,8 @@ void PowerMeter::UnitLoop() {
 }
 
 void PowerMeter::PublishAll() {
-	char topic[TOPIC_LENGTH];
-	char payload[PAYLOAD_LENGTH];
+	char topic[MQTT_TOPIC_LENGTH];
+	char payload[MQTT_PAYLOAD_LENGTH];
 
 	double v;
 
@@ -128,7 +126,7 @@ void PowerMeter::PublishAll() {
 
 
 void PowerMeter::MqttTopic(uint16_t unitId, char* topic,PowerMeterValues val) {
-	char topic0[TOPIC_LENGTH];
+	char topic0[MQTT_TOPIC_LENGTH];
 	sprintf(topic0, "%s%s%c%04d", MQTT_POWERMETER, MQTT_SEPARATOR, UnitType::POWER_METER, unitId);
 
 	switch (val) {
@@ -161,7 +159,7 @@ void PowerMeter::ProcessUnit(ActionType action) {
 }
 
 
-bool PowerMeter::Compare(Unit* u) {
+bool PowerMeter::Compare(const Unit* u) {
 
 	if (u == NULL) return false;
 	if (u->Type != UnitType::POWER_METER) return false;
@@ -174,14 +172,6 @@ bool PowerMeter::Compare(Unit* u) {
 		serialNumber == tu->serialNumber &&
 		factor == tu->factor
 		);
-	if (!res) {
-		Loger::Debug("Compare PowerMeter:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":"
-			+ String(serialRX == tu->serialRX) + ":"
-			+ String(serialTX == tu->serialTX) + ":"
-			+ String(serialNumber == tu->serialNumber) + ":"
-			+ String(factor == tu->factor)
-			+ "#");
-	}
 	return res;
 }
 
@@ -207,22 +197,22 @@ void PowerMeter::WriteToEEPROM(uint16_t addr) {
 
 }
 
-void PowerMeter::ConfigField(JsonObject& jsonList) {
+void PowerMeter::ConfigField(const JsonObject& jsonList) {
 
-	if (jsonList.containsKey("Serial")) {
-		serialNumber = jsonList["Serial"];
+	if (jsonList.containsKey(F("Serial"))) {
+		serialNumber = jsonList[F("Serial")];
 	}
 
-	if (jsonList.containsKey("SerialRX")) {
-		serialRX = jsonList["SerialRX"];
+	if (jsonList.containsKey(F("SerialRX"))) {
+		serialRX = jsonList[F("SerialRX")];
 	}
 
-	if (jsonList.containsKey("SerialTX")) {
-		serialTX = jsonList["SerialTX"];
+	if (jsonList.containsKey(F("SerialTX"))) {
+		serialTX = jsonList[F("SerialTX")];
 	}
 
-	if (jsonList.containsKey("Factor")) {
-		factor = jsonList["Factor"];
+	if (jsonList.containsKey(F("Factor"))) {
+		factor = jsonList[F("Factor")];
 	}
 }
 
@@ -233,20 +223,20 @@ void const PowerMeter::print(const char* header, DebugLevel level) {
 	if (header != NULL) {
 		str0 = header;
 	}
-	str0 += "Id:";
-	str0 += String((unsigned int)Id, DEC);
-	str0 += ";Type:";
-	str0 += String((char)Type);
-	str0 += ";Serial:";
-	str0 += String((unsigned int)Serial, DEC);
-	str0 += ";SerialRX:";
-	str0 += String((unsigned int)serialRX, DEC);
-	str0 += ";SerialTX:";
-	str0 += String((unsigned int)serialTX, DEC);
-	str0 += ";Factor:";
-	str0 += String((unsigned int)factor, DEC);
-	str0 += ";subscription:";
-	str0 += (isSubscribed ? "true" : "false");
-	str0 += " @";
+	str0 += F("Id:");
+	str0 += (unsigned int)Id;
+	str0 += F(";Type:");
+	str0 += (char)Type;
+	str0 += F(";Serial:");
+	str0 += (unsigned int)Serial;
+	str0 += F(";SerialRX:");
+	str0 += (unsigned int)serialRX;
+	str0 += F(";SerialTX:");
+	str0 += (unsigned int)serialTX;
+	str0 += F(";Factor:");
+	str0 += (unsigned int)factor;
+	str0 += F(";subscription:");
+	str0 += (isSubscribed ? F("true") : F("false"));
+	str0 += F("@");
 	Loger::Log(level, str0);
 }

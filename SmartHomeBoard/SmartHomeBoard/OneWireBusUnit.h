@@ -17,10 +17,10 @@ public:
 	bool IsAccessible();
 	virtual void HandleData()=0;
 	void UnitLoop();
-	void FillFrom(Unit* u);
+	void FillFrom(const Unit* u);
 	void FinalInitUnit();
 	void const print(const char* header, DebugLevel level) override;
-	void ConfigField(JsonObject& jsonList) override;
+	void ConfigField(const JsonObject& jsonList) override;
 
 
 protected:

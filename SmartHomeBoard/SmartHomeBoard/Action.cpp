@@ -7,7 +7,7 @@
 
 
 
-bool Action::Compare(Action* a) {
+bool Action::Compare(const Action* a) {
 	if (a == NULL) return false;
 
 	return (
@@ -21,34 +21,34 @@ bool Action::Compare(Action* a) {
 		);
 }
 
-void Action::print(const char* header,DebugLevel level) {
-	String str0 = "";
+void Action::print(const char* header, DebugLevel level) {
 
+	String str0;
+	str0.reserve(100);
+	str0 = "";
 	if (header != NULL) {
 		str0 = header;
 	}
-	str0+="Id:";
-	str0+=String(Id, DEC);
-	str0 += ";event:";
-	str0 += String(event, DEC);
-	str0 += ";originId:";
-	str0 += String(originId, DEC);
-	str0 += ";originType:";
-	str0 += String((char)originType);
-	str0 += ";targetAction:";
-	str0 += String(targetAction,DEC);
-	str0 += ";targetId:";
-	str0 += String(targetId,DEC);
-	str0 += ";targetType:";
-	str0 += String((char)targetType);
-	str0 += ";targetTypeHEX:";
-	str0 += String(targetType,HEX);
+	str0 += F("Id:");
+	str0 += Id;
+	str0 += F(";event:");
+	str0 += event;
+	str0 += F(";originId:");
+	str0 += originId;
+	str0 += F(";originType:");
+	str0 += ((char)originType);
+	str0 += F(";targetAction:");
+	str0 += targetAction;
+	str0 += F(";targetId:");
+	str0 += targetId;
+	str0 += F(";targetType:");
+	str0 += (char)targetType;
 
-	str0 += " @ ";
+	str0 += F("@");
 	Loger::Log(level, str0);
 }
 
-void Action::FillFrom(Action* a) {
+void Action::FillFrom(const Action* a) {
 	Id = a->Id;
 	event = a->event;
 	originId = a->originId;

@@ -8,49 +8,50 @@ void const ShiftRegister::print(const char* header, DebugLevel level)
 	if (header != NULL) {
 		str0 = header;
 	}
-	str0 += "Id:";
-	str0 += String((unsigned int)Id, DEC);
-	str0 += ";Type:";
-	str0 += String((char)Type);
-	str0 += ";Pin:";
-	str0 += String((unsigned int)Pin, DEC);
-	str0 += ";Latch:";
-	str0 += String((unsigned int)Latch, DEC);
-	str0 += ";Clock:";
-	str0 += String((unsigned int)Clock, DEC);
-	str0 += ";Steps:";
-	str0 += String((unsigned int)Steps, DEC);
-	str0 += ";status:";
-	str0 += String((unsigned int)status, DEC);
-	str0 += ";subscription:";
-	str0 += (isSubscribed ? "true" : "false");
-	str0 += " @";
+	str0 += F("Id:");
+	str0 += (unsigned int)Id;
+	str0 += F(";Type:");
+	str0 += (char)Type;
+	str0 += F(";Pin:");
+	str0 += (unsigned int)Pin;
+	str0 += F(";Latch:");
+	str0 += (unsigned int)Latch;
+	str0 += F(";Clock:");
+	str0 += (unsigned int)Clock;
+	str0 += F(";Steps:");
+	str0 += (unsigned int)Steps;
+	str0 += F(";status:");
+	str0 += (unsigned int)status;
+	str0 += F(";subscription:");
+	str0 += (isSubscribed ? F("true") : F("false"));
+	str0 += F(" @");
 	Loger::Log(level, str0);
 
 }
 
-void ShiftRegister::ConfigField(JsonObject& jsonList)
+void ShiftRegister::ConfigField(const JsonObject& jsonList)
 {
-	if (jsonList.containsKey("Pin")) {
-		Pin = jsonList["Pin"];
+	if (jsonList.containsKey(F("Pin"))) {
+		Pin = jsonList[F("Pin")];
 	}
-	if (jsonList.containsKey("latch")) {
-		Latch = jsonList["latch"];
+	if (jsonList.containsKey(F("latch"))) {
+		Latch = jsonList[F("latch")];
 	}
-	if (jsonList.containsKey("clock")) {
-		Clock = jsonList["clock"];
+	if (jsonList.containsKey(F("clock"))) {
+		Clock = jsonList[F("clock")];
 	}
-	if (jsonList.containsKey("steps")) {
-		Steps = jsonList["steps"];
+	if (jsonList.containsKey(F("steps"))) {
+		Steps = jsonList[F("steps")];
 	}
-	if (jsonList.containsKey("status")) {
-		status = jsonList["status"];
+	if (jsonList.containsKey(F("status"))) {
+		status = jsonList[F("status")];
 	}
+	print("ShiftRegister:", DebugLevel::D_DEBUG);
 }
 
 
 
-bool ShiftRegister::Compare(Unit* u)
+bool ShiftRegister::Compare(const Unit* u)
 {
 	if (u == NULL) return false;
 	if (u->Type != UnitType::SHIFT_OUT && u->Type != UnitType::SHIFT_IN) return false;
@@ -64,10 +65,6 @@ bool ShiftRegister::Compare(Unit* u)
 		Steps == tu->Steps &&
 		status == tu->status
 		);
-	if (!res) {
-		Loger::Debug("Compare Shift Register:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":" + String(Pin == tu->Pin) + ":"
-			+ String(Latch == tu->Latch) + ":" + String(Clock == tu->Clock) + ":" + String(Steps == tu->Steps) + ":" + String(status == tu->status) + "#");
-	}
 	return res;
 }
 

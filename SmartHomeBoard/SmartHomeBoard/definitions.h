@@ -14,7 +14,7 @@ typedef enum {
 } DebugLevel;
 
 extern DebugLevel dLevel;
-#define MEMFREE Loger::Debug("Memory=" + String(memoryFree(),DEC));
+//#define MEMFREE Loger::Debug("Memory=" + String(memoryFree(),DEC));
 
 
 typedef enum {

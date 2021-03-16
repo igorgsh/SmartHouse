@@ -2,24 +2,45 @@
 #include <Arduino.h>
 #include "definitions.h"
 
+
 class Loger
 {
 public:
-	static void Log(DebugLevel level, String message);
-	static void Error(String message) {
+
+	static String LogMessage;
+
+	static void Log(DebugLevel level) { Log(level, LogMessage); LogMessage = ""; }
+
+	static void Log(DebugLevel level, const String &message);
+	static void Error(const String &message) {
 		Log(D_ERROR, message);
 	}
-	static void Fatal(String message) {
+	static void Error() {
+		Log(D_ERROR);
+	}
+	static void Fatal(const String &message) {
 		Log(D_FATAL, message);
 	}
-	static void Info(String message) {
+	static void Fatal() {
+		Log(D_FATAL);
+	}
+	static void Info(const String &message) {
 		Log(D_INFO, message);
 	}
-	static void Warn(String message) {
+	static void Info() {
+		Log(D_INFO);
+	}
+	static void Warn(const String &message) {
 		Log(D_WARN, message);
 	}
-	static void Debug(String message) {
+	static void Warn() {
+		Log(D_WARN);
+	}
+	static void Debug(const String &message) {
 		Log(D_DEBUG, message);
+	}
+	static void Debug() {
+		Log(D_DEBUG);
 	}
 };
 

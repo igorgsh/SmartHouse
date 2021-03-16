@@ -4,7 +4,7 @@
 
 extern Mqtt MqttClient;
 
-void Loger::Log(DebugLevel level, String message) {
+void Loger::Log(DebugLevel level, const String &message) {
 	if (level <= dLevel) {
 		MqttClient.PublishLog(level, message);
 		Serial.println(message);

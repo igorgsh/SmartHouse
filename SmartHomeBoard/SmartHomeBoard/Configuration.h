@@ -6,17 +6,18 @@
 #include "DallasTemperature.h"
 #include <ArduinoJson.h>
 
+
 #define JSON_SIZE	200
 class Configuration {
 public:
-	bool IsEthernetConnection=true;
+	bool IsEthernetConnection = true;
 
 	byte BoardId = 0;
-	String BoardName = "";
+	static String BoardName;
 	byte mac[6] = { 0x00, 0xAA, 0x22, 0x07, 0x69, 0x00 };
-	IPAddress ip= IPAddress(192, 168, 0, 90);
+	IPAddress ip = IPAddress(192, 168, 0, 90);
 
-	bool IsConfigReady=false;
+	bool IsConfigReady = false;
 	bool IsActionsReady = false;
 	static const int MqttPort = 1883;
 	static const int TRY_NUMBER_FOR_CONNECT = 5;
@@ -29,21 +30,21 @@ public:
 	Unit** units = NULL;
 	Action** actions = NULL;
 
+	Configuration();
 	void Init();
-	void UpdateConfig(String jsonConfig);
-	void UpdateActions(String jsonConfig);
+	void UpdateConfig(const String& jsonConfig);
+	void UpdateActions(const String& jsonConfig);
 	void BuildActions();
 	Unit* FindUnit(uint16_t id);
-	//Unit* FindUnitByTypeAndPin(UnitType type, byte pin);
-	void UpdateButton(String unit, String value) { UpdateUnit(UnitType::BUTTON, unit, value); };
-	void UpdateRelay(String unit, String value) { UpdateUnit(UnitType::RELAY, unit, value); };
-	void UpdateOneWireBus(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_BUS, button, value); };
-	void UpdateOneWireThermo(String button, String value) { UpdateUnit(UnitType::ONE_WIRE_THERMO, button, value); };
-	void UpdateUnit(UnitType type, String name, String value);
-	void UpdatePowerMeter(String unit, String value) { UpdateUnit(UnitType::POWER_METER, unit, value); };
-	void UpdateContactor(String unit, String value) { UpdateUnit(UnitType::CONTACTOR, unit, value); };
-	void UpdateShiftRegisterIn(String unit, String value) { UpdateUnit(UnitType::SHIFT_IN, unit, value); };
-	void UpdateShiftRegisterOut(String unit, String value) { UpdateUnit(UnitType::SHIFT_OUT, unit, value); };
+	void UpdateButton(int id, const String& value) { UpdateUnit(UnitType::BUTTON, id, value); };
+	void UpdateRelay(int id, const String& value) { UpdateUnit(UnitType::RELAY, id, value); };
+	void UpdateOneWireBus(int id, const String& value) { UpdateUnit(UnitType::ONE_WIRE_BUS, id, value); };
+	void UpdateOneWireThermo(int id, const String& value) { UpdateUnit(UnitType::ONE_WIRE_THERMO, id, value); };
+	void UpdateUnit(UnitType type, int id, const String& value);
+	void UpdatePowerMeter(int id, const String& value) { UpdateUnit(UnitType::POWER_METER, id, value); };
+	void UpdateContactor(int id, const String& value) { UpdateUnit(UnitType::CONTACTOR, id, value); };
+	void UpdateShiftRegisterIn(int id, const String& value) { UpdateUnit(UnitType::SHIFT_IN, id, value); };
+	void UpdateShiftRegisterOut(int id, const String& value) { UpdateUnit(UnitType::SHIFT_OUT, id, value); };
 	void ProcessAction(uint16_t id, byte event);
 	Unit* CreateTypedUnit(byte type);
 
@@ -89,7 +90,5 @@ private:
 	void BuildConfig();
 	void InitializeServer();
 	void UnitsLoop();
-
-//	StaticJsonBuffer<200> jsonBuffer;
 
 };
