@@ -10,7 +10,7 @@
 //#include "EEPROM.h"
 #include "Unit.h"
 #include "Board.h"
-#include "Loger.h"
+//#include "Loger.h"
 #include "utils.h"
 #include "OneWireBus.h"
 #include "OneWireThermo.h"
@@ -117,8 +117,8 @@ void Configuration::Init() {
 
 Configuration::Configuration()
 {
-	BoardName.reserve(9);
-	BoardName = "";
+//	BoardName.reserve(9);
+// 	BoardName = "";
 }
 
 Unit* Configuration::CreateTypedUnit(byte type) {
@@ -272,7 +272,7 @@ void Configuration::BuildConfig() {
 		else {
 			SigmaEEPROM::UpdateUnits(numberUnits, units);
 		}
-	}
+	} 
 	IsConfigReady = true;
 	InitializeUnits();
 	FinalizeInitUnits();

@@ -26,10 +26,9 @@
 #include <Arduino.h>
 #include "Button.h"
 #include "Loger.h"
-
-
-
 #include "utils.h"
+
+String Loger::LogMessage;
 
 // the setup function runs once when you press reset or power the board
 void setup() {

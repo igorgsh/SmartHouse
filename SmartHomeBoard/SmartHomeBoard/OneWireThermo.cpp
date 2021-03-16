@@ -1,7 +1,6 @@
 #include "OneWireThermo.h"
-#include "Loger.h"
+//#include "Loger.h"
 #include "OneWireBus.h"
-#include "Loger.h"
 #include "ext_global.h"
 #include "Mqtt.h"
 

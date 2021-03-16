@@ -8,7 +8,7 @@ Author:	Igor Shevchenko
 */
 
 #include "Mqtt.h"
-#include "Loger.h"
+//#include "Loger.h"
 #include "definitions.h"
 #include "utils.h"
 #include "Board.h"

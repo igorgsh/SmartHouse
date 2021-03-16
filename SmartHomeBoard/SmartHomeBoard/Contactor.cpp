@@ -6,7 +6,7 @@
 
 #include "ext_global.h"
 #include "mqtt.h"
-#include "Loger.h"
+//#include "Loger.h"
 #include "SigmaEEPROM.h"
 
 extern Mqtt MqttClient;

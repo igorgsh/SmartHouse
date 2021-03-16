@@ -13,7 +13,7 @@ public:
 	bool IsEthernetConnection = true;
 
 	byte BoardId = 0;
-	static String BoardName;
+	String BoardName;
 	byte mac[6] = { 0x00, 0xAA, 0x22, 0x07, 0x69, 0x00 };
 	IPAddress ip = IPAddress(192, 168, 0, 90);
 
@@ -21,7 +21,7 @@ public:
 	bool IsActionsReady = false;
 	static const int MqttPort = 1883;
 	static const int TRY_NUMBER_FOR_CONNECT = 5;
-
+	 
 
 	bool isConfigRequested = false;
 	bool isActionRequested = false;
