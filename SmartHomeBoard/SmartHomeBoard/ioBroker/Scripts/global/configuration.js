@@ -40,8 +40,6 @@ var SwitchOffPriority = 15;
 //	SHIFT_IN		='h'
 
 
-
-
 var Configurations = [
         [ //Board 00
             
