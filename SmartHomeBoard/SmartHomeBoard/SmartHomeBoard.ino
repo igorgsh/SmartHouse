@@ -3,6 +3,21 @@
  Created:	11.01.17 22:04:42
  Author:	Igor Shevchenko
 */
+
+/*
+#include <SerialComs.h>
+#include <SafeStringStream.h>
+#include <SafeStringReader.h>
+#include <SafeStringNameSpaceStart.h>
+#include <SafeStringNameSpaceEnd.h>
+#include <SafeStringNameSpace.h>
+#include <SafeString.h>
+#include <millisDelay.h>
+#include <loopTimer.h>
+#include <BufferedOutput.h>
+#include <BufferedInput.h>
+*/
+
 #include "Contactor.h"
 #include <PZEM004T.h>
 #include <ArduinoJson.hpp>

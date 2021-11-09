@@ -15,7 +15,7 @@ Author:	Igor Shevchenko
 #include "PowerMeter.h"
 
 extern Mqtt MqttClient;
-
+/**/
 void callbackFunc(char* topic, uint8_t* payload, unsigned int length) {
 	MqttClient.Callback(topic, payload, length);
 }
