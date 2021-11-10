@@ -9,3 +9,4 @@ extern DebugLevel dLevel;
 extern Configuration Config;
 
 extern EthernetClient EthClient;
+extern Loger Log;

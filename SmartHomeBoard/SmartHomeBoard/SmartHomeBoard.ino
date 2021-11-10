@@ -4,7 +4,7 @@
  Author:	Igor Shevchenko
 */
 
-/*
+
 #include <SerialComs.h>
 #include <SafeStringStream.h>
 #include <SafeStringReader.h>
@@ -16,15 +16,12 @@
 #include <loopTimer.h>
 #include <BufferedOutput.h>
 #include <BufferedInput.h>
-*/
 
 #include "Contactor.h"
 #include <PZEM004T.h>
 #include <ArduinoJson.hpp>
 #include <ArduinoJson.h>
-//#include <Keyboard.h>
 #include "SigmaEEPROM.h"
-//#include <MsTimer2.h>
 #include <PubSubClient.h>
 #include <DallasTemperature.h>
 #include <OneWire.h>
@@ -45,28 +42,7 @@
 
 
 #include "utils.h"
-/*
-void Timer2() { //it is started every 100ms
-	Config.loop01(); //100ms
-	Config.counter01++;
-	if (Config.counter01 % 5 == 1) { //500ms
-		Config.loop05();
-		Config.counter05++;
-		if (Config.counter01 % 10 == 2) { //1sec
-			Config.loop1();
-			Config.counter1++;
-			if (Config.counter01 % 600 == 3) { //1min
-				Config.loop60();
-				Config.counter60++;
-				if (Config.counter01 % 3000 == 4) { //5min
-					Config.loop300();
-					Config.counter300++;
-				}
-			}
-		}
-	}
-}
-*/
+
 // the setup function runs once when you press reset or power the board
 void setup() {
 
@@ -81,15 +57,15 @@ void setup() {
 	
 	//initialization of config
 	Config.Init();
-	Loger::Info("Board is ready");
-	Loger::Info("Board Id#:" + String(Config.BoardId));
-	Loger::Info("IP Address is:" + PrintIP(Ethernet.localIP()));
+	Log.Info(F("Board is ready"));
+	Log.append(F("Board Id#:")).append(Config.BoardId).Info();
+	Log.append(F("IP Address is:")).append(Config.strIP).Info();
 	//Set a timer 
 	//MsTimer2::set(100, Timer2);
 	//MsTimer2::start();
 	pinMode(13, OUTPUT);
 	digitalWrite(13, HIGH);
-	Loger::Debug("Enjoy!");
+	Log.Info("Enjoy!");
 }
 
 // the loop function runs over and over again until power down or reset

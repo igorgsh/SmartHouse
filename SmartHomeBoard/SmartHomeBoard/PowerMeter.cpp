@@ -94,8 +94,8 @@ void PowerMeter::UnitLoop() {
 }
 
 void PowerMeter::PublishAll() {
-	char topic[TOPIC_LENGTH];
-	char payload[PAYLOAD_LENGTH];
+	char topic[MQTT_TOPIC_LENGTH];
+	char payload[MQTT_PAYLOAD_LENGTH];
 
 	double v;
 
@@ -128,7 +128,7 @@ void PowerMeter::PublishAll() {
 
 
 void PowerMeter::MqttTopic(uint16_t unitId, char* topic,PowerMeterValues val) {
-	char topic0[TOPIC_LENGTH];
+	char topic0[MQTT_TOPIC_LENGTH];
 	sprintf(topic0, "%s%s%c%04d", MQTT_POWERMETER, MQTT_SEPARATOR, UnitType::POWER_METER, unitId);
 
 	switch (val) {

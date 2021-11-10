@@ -2,6 +2,7 @@
 
 #pragma once 
 
+#include <SafeString.h>
 #include <PubSubClient.h>
 #include "definitions.h"
 #include "configuration.h"
@@ -12,8 +13,8 @@
 
 #define MQTT_INITIAL_RETRY_DELAY	1000 //delay between INITIAL reconnection retry
 #define MQTT_RETRY_TIME				10000 //delay between mqtt reconnect in loop
-#define TOPIC_LENGTH	100
-#define PAYLOAD_LENGTH	100
+#define MQTT_TOPIC_LENGTH	100
+#define MQTT_PAYLOAD_LENGTH	100
 #define MQTT_TRY_COUNT 5
 #define MQTT_WAITING_RESPONSE 10000
 #define MQTT_RESUBSCRIBE_TRY_COUNT 1
@@ -54,7 +55,7 @@ class Mqtt : public PubSubClient
 		void MqttLoop();
 		void GetConfiguration();
 		void GetActions();
-		void PublishLog(DebugLevel level, String message);
+		void PublishLog(DebugLevel level, const char* message);
 		void PublishUnit(const Unit* unit);
 		void SubscribeUnits();
 		void SubscribeUnit(int unitNumber);
@@ -68,7 +69,8 @@ class Mqtt : public PubSubClient
 private:
 		char *boardId = (char*)BOARD_ID;
 		const char *LOG_END[7] = { "OFF", "FATAL","ERROR","WARN","INFO","DEBUG","ALL" };
-		
+		uint16_t GetUnitId(const char* str, int offset);
+
 		bool MqttReconnect();
 };
 
