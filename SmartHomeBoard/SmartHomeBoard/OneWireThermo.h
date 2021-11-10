@@ -16,7 +16,7 @@ public:
 	void ProcessUnit(ActionType action);
 	//void FinalInitUnit();
 	void HandleData();
-	bool Compare(Unit* u);
+	bool Compare(const Unit* u);
 	byte UnitStoredSize() { return 11; }
 	void ReadFromEEPROM(uint16_t addr);
 	void WriteToEEPROM(uint16_t addr);

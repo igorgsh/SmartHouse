@@ -5,7 +5,7 @@
 
 
 void Board::Reset(unsigned long timeout) {
-	Loger::Debug("RESET!!!");
+	Log.Info(F("RESET!!!"));
 	if (timeout > 4000) {
 		delay(timeout - 4000);
 	}
