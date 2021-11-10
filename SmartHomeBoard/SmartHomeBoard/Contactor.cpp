@@ -17,7 +17,6 @@ void Contactor::SetDefault() {
 }
 
 void Contactor::InitUnit() {
-	//Loger::Debug("Init contactor:id=" + String(Id) + "; Pin=" + String(Pin));
 	pinMode(Pin, INPUT);
 	digitalWrite(Pin, lhOn? LOW : HIGH);
 	startContact = 0;
@@ -32,28 +31,19 @@ void Contactor::HandleContactor() {
 	byte cntValue;
 
 	cntValue = digitalRead(Pin);
-	//Loger::Debug("Contactor state:" + String(status) + ":" + String(cntValue));
 
 	if (prevValue != cntValue) { // contactor is starting switch
-		//Loger::Debug("Contactor switch:" + String(status) + "->" + String(cntValue));
-		//Loger::Debug("Start=" + String(startContact));
 		if (startContact == 0) {
 			startContact = millis();
 		}
 		else {
-			//Loger::Debug("Point 2:(" + String(startContact) + ":" + String(millis())+")::("+String(cntValue) + "^" + String(prevValue) + ")" );
 			if (startContact + CONTACTOR_SWITCHED_TIME <= millis()) {//contact is long enough
-				//Loger::Debug("Contactor should be switched");
 				HandleFinish(cntValue == lhOn ? ACT_ON : ACT_OFF);
 				startContact = 0;
 				prevValue = cntValue;
 			}
 		}
 	}
-	//else {
-		//Loger::Debug("Point 1");
-		//startContact = 0;
-	//}
 }
 
 void Contactor::HandleFinish(int newStatus) {
@@ -73,7 +63,7 @@ void Contactor::UnitLoop() {
 	HandleContactor();
 };
 
-bool Contactor::Compare(Unit* u) {
+bool Contactor::Compare(const Unit* u) {
 
 	if (u == NULL) return false;
 	if (u->Type != UnitType::CONTACTOR) return false;
@@ -84,15 +74,11 @@ bool Contactor::Compare(Unit* u) {
 		Pin == tu->Pin &&
 		lhOn == tu->lhOn 
 		;
-	if (!res) {
-		Loger::Debug("Compare Contactor:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":" + String(Pin == tu->Pin) + ":" + String(lhOn == tu->lhOn) + ":" + String(status == tu->status) + "#");
-	}
 	return res;
 }
 
 
 void Contactor::ReadFromEEPROM(uint16_t addr) {
-	//	bool res = true;
 
 	Id = SigmaEEPROM::Read8(addr);
 	Type = SigmaEEPROM::Read8(addr + 1);
@@ -102,7 +88,6 @@ void Contactor::ReadFromEEPROM(uint16_t addr) {
 }
 
 void Contactor::WriteToEEPROM(uint16_t addr) {
-	//bool res = true;
 
 	SigmaEEPROM::Write8(addr, Id);
 	SigmaEEPROM::Write8(addr + 1, Type);
@@ -110,7 +95,7 @@ void Contactor::WriteToEEPROM(uint16_t addr) {
 	SigmaEEPROM::Write8(addr + 3, lhOn);
 }
 
-void Contactor::ConfigField(JsonObject& jsonList) {
+void Contactor::ConfigField(const JsonObject& jsonList) {
 	if (jsonList.containsKey("Pin")) {
 		Pin = jsonList["Pin"];
 	}
@@ -121,21 +106,14 @@ void Contactor::ConfigField(JsonObject& jsonList) {
 
 
 void const Contactor::print(const char* header, DebugLevel level) {
-	String str0 = "";
-
 	if (header != NULL) {
-		str0 = header;
+		Log.append(header);
 	}
-	str0 += "Id:";
-	str0 += String((unsigned int)Id, DEC);
-	str0 += ";Type:";
-	str0 += String((char)Type);
-	str0 += ";Pin:";
-	str0 += String((unsigned int)Pin, DEC);
-	str0 += ";lhOn:";
-	str0 += String((unsigned int)lhOn, DEC);
-	str0 += ";subscription:";
-	str0 += (isSubscribed ? "true" : "false");
-	str0 += " @";
-	Loger::Log(level, str0);
+	Log.append(F("Id:")).append((unsigned int)Id);
+	Log.append(F(";Type:")).append((char)Type);
+	Log.append(F(";Pin:")).append((unsigned int)Pin);
+	Log.append(F(";lhOn:")).append((unsigned int)lhOn);
+	Log.append(F(";subscription:")).append(isSubscribed ? "true" : "false");
+	Log.append(F(" @"));
+	Log.Log(level);
 }

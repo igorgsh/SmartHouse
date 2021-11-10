@@ -20,8 +20,8 @@ int memoryFree()
 	return freeValue;
 }
 
-String PrintIP(IPAddress addr) {
-	return String(addr[0]) + "." + String(addr[1]) + "." + String(addr[2]) + "." + String(addr[3]);
-}
+//String PrintIP(IPAddress addr) {
+//	return String(addr[0]) + "." + String(addr[1]) + "." + String(addr[2]) + "." + String(addr[3]);
+//}
 
 

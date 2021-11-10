@@ -89,12 +89,12 @@ void OneWireBusUnit::FinalInitUnit() {
 }
 
 
-void OneWireBusUnit::ConfigField(JsonObject& jsonList) {
+void OneWireBusUnit::ConfigField(const JsonObject& jsonList) {
 	if (jsonList.containsKey("Pin")) {
 		Pin = jsonList["Pin"];
 	}
 	if (jsonList.containsKey("address")) {
-		OneWireBus::ConvertStringToAddress(address, jsonList["address"]);
+		OneWireBus::ConvertStringToAddress(address, jsonList["address"].);
 	}
 }
 

@@ -15,27 +15,20 @@ bool Unit::Compare(Unit* u) {
 }
 */
 
-void Unit::FillFrom(Unit* u) {
+void Unit::FillFrom(const Unit* u) {
 	Id = u->Id;
 	Type = u->Type;
-//	Pin = u->Pin;
-//	lhOn = u->lhOn;
 }
 
 void const Unit::print(const char* header, DebugLevel level){
-	String str0="";
 	
 	if (header != NULL) {
-		str0 = header;
+		Log.append(header);
 	}
-	str0+="Id:";
-	str0+=String((unsigned int) Id, DEC);
-	str0+=";Type:";
-	str0 += String((char)Type);
-	str0 += ";status:";
-	str0 += String((unsigned int)status, DEC);
-	str0 += ";subscription:";
-	str0 += (isSubscribed? "true" : "false");
-	str0 += " @";
-	Loger::Log(level, str0);
+	Log.append(F("Id:")).append((unsigned int) Id);
+	Log.append(F(";Type:")).append((char)Type);
+	Log.append(F(";status:")).append((unsigned int)status);
+	Log.append(F(";subscription:")).append(isSubscribed? "true" : "false");
+	Log.append(F(" @"));
+	Log.Log(level);
 }

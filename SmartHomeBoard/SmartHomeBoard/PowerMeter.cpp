@@ -33,7 +33,7 @@ void PowerMeter::InitUnit() {
 			port = &Serial3;
 			break;
 		default:
-			Loger::Debug("Port not found");
+			Log.Error(F("Port not found"));
 			port = NULL;
 			break;
 		}
@@ -161,7 +161,7 @@ void PowerMeter::ProcessUnit(ActionType action) {
 }
 
 
-bool PowerMeter::Compare(Unit* u) {
+bool PowerMeter::Compare(const Unit* u) {
 
 	if (u == NULL) return false;
 	if (u->Type != UnitType::POWER_METER) return false;
@@ -174,14 +174,6 @@ bool PowerMeter::Compare(Unit* u) {
 		serialNumber == tu->serialNumber &&
 		factor == tu->factor
 		);
-	if (!res) {
-		Loger::Debug("Compare PowerMeter:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":"
-			+ String(serialRX == tu->serialRX) + ":"
-			+ String(serialTX == tu->serialTX) + ":"
-			+ String(serialNumber == tu->serialNumber) + ":"
-			+ String(factor == tu->factor)
-			+ "#");
-	}
 	return res;
 }
 
@@ -207,7 +199,7 @@ void PowerMeter::WriteToEEPROM(uint16_t addr) {
 
 }
 
-void PowerMeter::ConfigField(JsonObject& jsonList) {
+void PowerMeter::ConfigField(const JsonObject& jsonList) {
 
 	if (jsonList.containsKey("Serial")) {
 		serialNumber = jsonList["Serial"];
@@ -228,25 +220,17 @@ void PowerMeter::ConfigField(JsonObject& jsonList) {
 
 
 void const PowerMeter::print(const char* header, DebugLevel level) {
-	String str0 = "";
 
 	if (header != NULL) {
-		str0 = header;
+		Log.append(header);
 	}
-	str0 += "Id:";
-	str0 += String((unsigned int)Id, DEC);
-	str0 += ";Type:";
-	str0 += String((char)Type);
-	str0 += ";Serial:";
-	str0 += String((unsigned int)Serial, DEC);
-	str0 += ";SerialRX:";
-	str0 += String((unsigned int)serialRX, DEC);
-	str0 += ";SerialTX:";
-	str0 += String((unsigned int)serialTX, DEC);
-	str0 += ";Factor:";
-	str0 += String((unsigned int)factor, DEC);
-	str0 += ";subscription:";
-	str0 += (isSubscribed ? "true" : "false");
-	str0 += " @";
-	Loger::Log(level, str0);
+	Log.append(F("Id:")).append((unsigned int)Id);
+	Log.append(F(";Type:")).append((char)Type);
+	Log.append(F(";Serial:")).append((unsigned int)Serial);
+	Log.append(F(";SerialRX:")).append((unsigned int)serialRX);
+	Log.append(F(";SerialTX:")).append((unsigned int)serialTX);
+	Log.append(F(";Factor:")).append((unsigned int)factor);
+	Log.append(F(";subscription:")).append(isSubscribed ? "true" : "false");
+	Log.append(F(" @"));
+	Log.Log(level);
 }

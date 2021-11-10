@@ -12,8 +12,6 @@ void Relay::SetDefault() {
 	status = LOW;
 }
 void Relay::InitUnit() {
-	//Loger::Debug("Relay["+String(Id) +"] Init");
-
 	pinMode(Pin, OUTPUT);
 	ProcessUnit(status==HIGH ? ACT_ON : ACT_OFF);
 	
@@ -21,7 +19,6 @@ void Relay::InitUnit() {
 
 void Relay::RelaySet(bool newStatus)
 {
-	//Loger::Debug("Relay[" + String(Id) + "]=" + (newStatus == HIGH ? "HIGH" : "LOW") );
 	digitalWrite(Pin, (newStatus == HIGH ? lhOn : !lhOn));
 	status = newStatus;
 	MqttClient.PublishUnit(this);
@@ -55,7 +52,7 @@ void Relay::UnitLoop() {
 //nothing todo
 };
 
-bool Relay::Compare(Unit* u) {
+bool Relay::Compare(const Unit* u) {
 
 	if (u == NULL) return false;
 	if (u->Type != UnitType::RELAY) return false;
@@ -67,10 +64,6 @@ bool Relay::Compare(Unit* u) {
 		lhOn == tu->lhOn &&
 		status == tu->status
 		);
-	if (!res) {
-		Loger::Debug("Compare Relay:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":" + String(Pin == tu->Pin) + ":"
-			+ String(lhOn == tu->lhOn) + ":" + String(status == tu->status) + "#");
-	}
 	return res;
 }
 
@@ -96,7 +89,7 @@ void Relay::WriteToEEPROM(uint16_t addr) {
 }
 
 
-void Relay::ConfigField(JsonObject& jsonList) {
+void Relay::ConfigField(const JsonObject& jsonList) {
 	if (jsonList.containsKey("Pin")) {
 		Pin = jsonList["Pin"];
 	}
@@ -110,24 +103,16 @@ void Relay::ConfigField(JsonObject& jsonList) {
 
 
 void const Relay::print(const char* header, DebugLevel level) {
-	String str0 = "";
-
 	if (header != NULL) {
-		str0 = header;
+		Log.append(header);
 	}
-	str0 += "Id:";
-	str0 += String((unsigned int)Id, DEC);
-	str0 += ";Type:";
-	str0 += String((char)Type);
-	str0 += ";Pin:";
-	str0 += String((unsigned int)Pin, DEC);
-	str0 += ";lhOn:";
-	str0 += String((unsigned int)lhOn, DEC);
-	str0 += ";status:";
-	str0 += String((unsigned int)status, DEC);
-	str0 += ";subscription:";
-	str0 += (isSubscribed ? "true" : "false");
-	str0 += " @";
-	Loger::Log(level, str0);
+	Log.append(F("Id:")).append((unsigned int)Id);
+	Log.append(F(";Type:")).append((char)Type);
+	Log.append(F(";Pin:")).append((unsigned int)Pin);
+	Log.append(F(";lhOn:")).append((unsigned int)lhOn);
+	Log.append(F(";status:")).append((unsigned int)status);
+	Log.append(F(";subscription:")).append(isSubscribed ? "true" : "false");
+	Log.append(F(" @"));
+	Log.Log(level);
 }
 

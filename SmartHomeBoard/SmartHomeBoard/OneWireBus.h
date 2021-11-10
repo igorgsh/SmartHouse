@@ -28,7 +28,7 @@ public:
 	void WriteToEEPROM(uint16_t addr);
 	static bool CompareDeviceAddress(DeviceAddress a0, DeviceAddress a1);
 	void ConfigField(const JsonObject& jsonList);
-	static void ConvertStringToAddress(DeviceAddress address, const char* addrStr);
+	static void ConvertStringToAddress(DeviceAddress address, String addrStr);
 	//static String ConvertAddressToString(const DeviceAddress address);
 	void const print(const char* header, DebugLevel level);
 
