@@ -31,15 +31,15 @@ public:
 	Action** actions = NULL;
 
 	void Init();
-	void UpdateConfig(const SafeString& jsonConfig);
-	void UpdateActions(const SafeString& jsonConfig);
+	void UpdateConfig(const char* jsonConfig);
+	void UpdateActions(const char* jsonConfig);
 	void BuildActions();
 	Unit* FindUnit(uint16_t id);
 	void UpdateButton(uint16_t unitId, uint16_t value) { UpdateUnit(UnitType::BUTTON, unitId, value); };
 	void UpdateRelay(uint16_t unitId, uint16_t value) { UpdateUnit(UnitType::RELAY, unitId, value); };
 	void UpdateOneWireBus(uint16_t unitId, uint16_t value) { UpdateUnit(UnitType::ONE_WIRE_BUS, unitId, value); };
 	void UpdateOneWireThermo(uint16_t unitId, uint16_t value) { UpdateUnit(UnitType::ONE_WIRE_THERMO, unitId, value); };
-	void UpdateUnit(UnitType type, uint16_t unitId, uint16_t value);
+	void UpdateUnit(UnitType type, uint16_t id, uint16_t value);
 	void UpdatePowerMeter(uint16_t unitId, uint16_t value) { UpdateUnit(UnitType::POWER_METER, unitId, value); };
 	void UpdateContactor(uint16_t unitId, uint16_t value) { UpdateUnit(UnitType::CONTACTOR, unitId, value); };
 	void ProcessAction(uint16_t id, byte event);

@@ -17,7 +17,7 @@ Author:	Igor Shevchenko
 extern Mqtt MqttClient;
 
 void callbackFunc(char* topic, uint8_t* payload, unsigned int length) {
-	MqttClient.Callback(topic, payload, length);
+	MqttClient.Callback(topic, (char*) payload, length);
 }
 
 Mqtt::Mqtt() : PubSubClient(Configuration::MqttServer(), Configuration::MqttPort, callbackFunc, EthClient) {
@@ -56,7 +56,7 @@ uint16_t Mqtt::GetUnitId(const char* str, int offset) {
 
 }
 
-void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
+void Mqtt::Callback(const char* topic, const char* payLoad, unsigned int length) {
 
 	if (length > 0) {
 		createSafeStringFromCharPtr(strTopic, topic);
@@ -67,7 +67,7 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 		sprintf(subscription, MQTT_CONFIG_RESPONSE, Config.BoardId);
 		if (strcmp(topic, subscription) == 0) {
 			if (Config.isConfigRequested) {
-				Config.UpdateConfig(strPayload);
+				Config.UpdateConfig(payLoad);
 			}
 		}
 		else {
@@ -75,7 +75,7 @@ void Mqtt::Callback(char* topic, uint8_t* payLoad, unsigned int length) {
 
 			if (strcmp(topic, subscription) == 0) {
 				if (Config.isActionRequested) {
-					Config.UpdateActions(strPayload);
+					Config.UpdateActions(payLoad);
 				}
 			}
 			else {

@@ -1,5 +1,5 @@
 #include "Unit.h"
-
+#include "ext_global.h"
 
 /*
 bool Unit::Compare(Unit* u) {

@@ -2,7 +2,7 @@
 #include <avr\wdt.h>
 #include "Board.h"
 #include "Loger.h"
-
+#include "ext_global.h"
 
 void Board::Reset(unsigned long timeout) {
 	Log.Info(F("RESET!!!"));

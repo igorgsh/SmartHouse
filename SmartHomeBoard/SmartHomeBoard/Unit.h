@@ -41,7 +41,7 @@ public:
 	byte UnitStoredSize() {return 0;};
 	void ReadFromEEPROM(uint16_t addr) {};
 	void WriteToEEPROM(uint16_t addr) {};
-	void ConfigField(JsonObject& jsonList) {};
+	void ConfigField(const JsonObject& jsonList) {};
 	bool Compare(const Unit* u) { return false; };
 
 };

@@ -156,7 +156,7 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 }
 
 
-void Configuration::UpdateConfig(const SafeString& jsonConfig) {
+void Configuration::UpdateConfig(const char* jsonConfig) {
 	if (isConfigRequested) {
 		static bool lenDetected = false;
 		const size_t CAPACITY = JSON_OBJECT_SIZE(JSON_SIZE);
@@ -260,7 +260,7 @@ void Configuration::ReadBoardId() {
 
 
 
-void Configuration::UpdateActions(const SafeString& jsonConfig) {
+void Configuration::UpdateActions(const char* jsonConfig) {
 	if (isActionRequested) {
 		static bool lenDetected = false;
 		// allocate the memory for the document

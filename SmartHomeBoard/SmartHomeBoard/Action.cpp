@@ -4,7 +4,7 @@
 
 #include "action.h"
 #include "SigmaEEPROM.h"
-
+#include"ext_global.h"
 
 
 bool Action::Compare(const Action* a) {

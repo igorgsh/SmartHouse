@@ -61,9 +61,9 @@ class Mqtt : public PubSubClient
 		void SubscribeUnit(int unitNumber);
 		void Subscribe(const char* topic);
 		bool Publish(const char* topic, const char* payload);
+		void Callback(const char* topic, const char* payload, unsigned int length);
 
 		Mqtt();
-		void Callback(char* topic, uint8_t* payload, unsigned int length);
 		void WatchDog();
 
 private:

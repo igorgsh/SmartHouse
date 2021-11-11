@@ -20,16 +20,14 @@ OneWireBus* OneWireBusUnit::FindOneWireBus(byte pin) {
 
 
 void OneWireBusUnit::InitUnit() {
-	Loger::Debug("Init OneWireBus Unit");
-	Loger::Debug("Pin=" + String(Pin));
 	//parent = (OneWireBus*)Config.FindUnitByTypeAndPin(UnitType::ONE_WIRE_BUS, Pin);
 	parent = (OneWireBus*)FindOneWireBus(Pin);
 	if (parent == NULL) {
-		Loger::Error("Can't find bus for unit: " + String(Id));
+		Log.append(F("Can't find bus for unit: ")).append(Id).Error();
 	}
 	else {
 		if (!parent->CheckAddress(address)) {
-			Loger::Error("Unit:" + String(Id) + " is absent on the bus");
+			Log.append(F("Unit:")).append(Id).append(F(" is absent on the bus")).Error();
 			IsAvailable = false;
 		}
 		else {
@@ -46,14 +44,13 @@ bool OneWireBusUnit::IsAccessible() {
 
 void OneWireBusUnit::UnitLoop() {
 	if (prevCycle + BUS_INTERVAL < millis()) {
-		Loger::Debug("prevCycle=" + String(prevCycle));
 		parent->RequestTemperature();
 		HandleData();
 		prevCycle = millis();
 	}
 }
 
-void OneWireBusUnit::FillFrom(Unit* u) {
+void OneWireBusUnit::FillFrom(const Unit* u) {
 	Unit::FillFrom(u);
 	if (u->Type == UnitType::ONE_WIRE_THERMO) {
 		for (int i = 0; i < 8; i++) {
@@ -61,28 +58,20 @@ void OneWireBusUnit::FillFrom(Unit* u) {
 		}
 	}
 	else {
-		Loger::Error("Bad conversion type for unit " + String(Id));
+		Log.append(F("Bad conversion type for unit ")).append(Id).Error();
 	}
 }
 
 
 void const OneWireBusUnit::print(const char* header, DebugLevel level) {
-	String str0 = "";
 	if (header != NULL) {
-		str0=header;
+		Log.append(header);
 	}
-	str0 += "Id:";
-	str0 += String(Id, HEX);
-	str0 += ";Type:";
-	str0 += String(Type, HEX);
-	str0 += ";Pin:";
-	str0 += String(Pin, DEC);
-	str0 += ";address:";
-	for (int i = 0; i < 8; i++) {
-		str0 += String(address[i], HEX);
-	}
-	str0 += " @ ";
-	Loger::Log(level, str0);
+	Log.append(F("Id:")).append(Id);
+	Log.append(F(";Type:")).append(Type);
+	Log.append(F(";Pin:")).append(Pin);
+	Log.append(F(" @ "));
+	Log.Log(level);
 }
 
 void OneWireBusUnit::FinalInitUnit() {
@@ -94,7 +83,7 @@ void OneWireBusUnit::ConfigField(const JsonObject& jsonList) {
 		Pin = jsonList["Pin"];
 	}
 	if (jsonList.containsKey("address")) {
-		OneWireBus::ConvertStringToAddress(address, jsonList["address"].);
+		OneWireBus::ConvertStringToAddress(address, jsonList["address"]);
 	}
 }
 
