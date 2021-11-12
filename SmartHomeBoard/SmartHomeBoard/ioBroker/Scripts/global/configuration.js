@@ -155,12 +155,12 @@ var Configurations = [
 
         ]
         ,[ //Board 02
-            '{"id":238, "type":"R","Pin":38,"lhOn":0,"status":0,"priority":10}'  
-            ,'{"id":240, "type":"R","Pin":40,"lhOn":0,"status":0,"priority":10}'  
-            ,'{"id":242, "type":"R","Pin":42,"lhOn":0,"status":0,"priority":10}'  
-            ,'{"id":244, "type":"R","Pin":44,"lhOn":0,"status":0,"priority":10}'  
-            ,'{"id":246, "type":"R","Pin":46,"lhOn":0,"status":0,"priority":10}'  
-            ,'{"id":248, "type":"R","Pin":48,"lhOn":0,"status":0,"priority":10}'  
+            '{"id":238, "type":"R","Pin":38,"lhOn":1,"status":0,"priority":10}'  
+            ,'{"id":240, "type":"R","Pin":40,"lhOn":1,"status":0,"priority":10}'  
+            ,'{"id":242, "type":"R","Pin":42,"lhOn":1,"status":0,"priority":10}'  
+            ,'{"id":244, "type":"R","Pin":44,"lhOn":1,"status":0,"priority":10}'  
+            ,'{"id":246, "type":"R","Pin":46,"lhOn":1,"status":0,"priority":10}'  
+            ,'{"id":248, "type":"R","Pin":48,"lhOn":1,"status":0,"priority":10}'  
             //,'{"id":250, "type":"R","Pin":50,"lhOn":0,"status":0,"priority":10}'  
             //,'{"id":252, "type":"R","Pin":52,"lhOn":0,"status":0,"priority":10}'  
             
