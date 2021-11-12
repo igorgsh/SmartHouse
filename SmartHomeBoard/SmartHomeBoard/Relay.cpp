@@ -32,7 +32,7 @@ void Relay::RelaySwitch() {
 void Relay::ProcessUnit(ActionType event) {
 	switch (event) {
 	case ACT_OFF: {
-		RelayOff();
+		RelayOfF1();
 		break;
 	}
 	case ACT_ON: {
@@ -106,13 +106,13 @@ void const Relay::print(const char* header, DebugLevel level) {
 	if (header != NULL) {
 		Log.append(header);
 	}
-	Log.append(F("Id:")).append((unsigned int)Id);
-	Log.append(F(";Type:")).append((char)Type);
-	Log.append(F(";Pin:")).append((unsigned int)Pin);
-	Log.append(F(";lhOn:")).append((unsigned int)lhOn);
-	Log.append(F(";status:")).append((unsigned int)status);
-	Log.append(F(";subscription:")).append(isSubscribed ? "true" : "false");
-	Log.append(F(" @"));
+	Log.append(F1("Id:")).append((unsigned int)Id);
+	Log.append(F1(";Type:")).append((char)Type);
+	Log.append(F1(";Pin:")).append((unsigned int)Pin);
+	Log.append(F1(";lhOn:")).append((unsigned int)lhOn);
+	Log.append(F1(";status:")).append((unsigned int)status);
+	Log.append(F1(";subscription:")).append(isSubscribed ? "true" : "false");
+	Log.append(F1(" @"));
 	Log.Log(level);
 }
 

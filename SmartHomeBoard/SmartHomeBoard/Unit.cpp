@@ -25,10 +25,10 @@ void const Unit::print(const char* header, DebugLevel level){
 	if (header != NULL) {
 		Log.append(header);
 	}
-	Log.append(F("Id:")).append((unsigned int) Id);
-	Log.append(F(";Type:")).append((char)Type);
-	Log.append(F(";status:")).append((unsigned int)status);
-	Log.append(F(";subscription:")).append(isSubscribed? "true" : "false");
-	Log.append(F(" @"));
+	Log.append(F1("Id:")).append((unsigned int) Id);
+	Log.append(F1(";Type:")).append((char)Type);
+	Log.append(F1(";status:")).append((unsigned int)status);
+	Log.append(F1(";subscription:")).append(isSubscribed? "true" : "false");
+	Log.append(F1(" @"));
 	Log.Log(level);
 }

@@ -15,7 +15,7 @@ void OneWireThermo::InitUnit() {
 
 	OneWireBusUnit::InitUnit();
 	if (!IsAccessible()) {
-		Log.append(F("Unit: ")).append(Id).append(F(" Is unavailable on the bus")).Error();
+		Log.append(F1("Unit: ")).append(Id).append(F1(" Is unavailable on the bus")).Error();
 	}
 
 }

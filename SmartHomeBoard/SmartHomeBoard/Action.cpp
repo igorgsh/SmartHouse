@@ -25,15 +25,15 @@ void Action::print(const char* header,DebugLevel level) {
 	if (header != NULL) {
 		Log.append(header);
 	}
-	Log.append(F("Id:")).append(Id);
-	Log.append(F(";event:")).append(event);
-	Log.append(F(";originId:")).append(originId);
-	Log.append(F(";originType:")).append((char)originType);
-	Log.append(F(";targetAction:")).append(targetAction);
-	Log.append(F(";targetId:")).append(targetId);
-	Log.append(F(";targetType:")).append((char)targetType);
+	Log.append(F1("Id:")).append(Id);
+	Log.append(F1(";event:")).append(event);
+	Log.append(F1(";originId:")).append(originId);
+	Log.append(F1(";originType:")).append((char)originType);
+	Log.append(F1(";targetAction:")).append(targetAction);
+	Log.append(F1(";targetId:")).append(targetId);
+	Log.append(F1(";targetType:")).append((char)targetType);
 	
-	Log.append(F(" @ "));
+	Log.append(F1(" @ "));
 	Log.Log(level);
 }
 

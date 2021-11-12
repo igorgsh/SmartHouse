@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
+#include <MemoryFree.h>
 
 
 typedef enum {
@@ -14,7 +15,7 @@ typedef enum {
 } DebugLevel;
 
 extern DebugLevel dLevel;
-#define MEMFREE Log.append(F("Memory=")).append(memoryFree()).Debug();
+#define MEMFREE(N) Log.append(("Memory_")).append(N).append("=").append(freeMemory()).Debug();
 
 
 typedef enum {
@@ -38,3 +39,5 @@ typedef enum {
 	ACT_SENSOR_READY = 10 //Sensor ready
 
 } ActionType;
+
+#define F1	F

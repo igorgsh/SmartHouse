@@ -5,7 +5,7 @@
 #include "ext_global.h"
 
 void Board::Reset(unsigned long timeout) {
-	Log.Info(F("RESET!!!"));
+	Log.Info(F1("RESET!!!"));
 	if (timeout > 4000) {
 		delay(timeout - 4000);
 	}

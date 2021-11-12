@@ -5,6 +5,7 @@
 */
 
 
+#include <MemoryFree.h>
 #include <SerialComs.h>
 #include <SafeStringStream.h>
 #include <SafeStringReader.h>
@@ -37,7 +38,7 @@
 #include "global.h"
 #include "Button.h"
 #include "Loger.h"
-
+#include "definitions.h"
 #include "ext_global.h"
 
 
@@ -45,31 +46,33 @@
 
 // the setup function runs once when you press reset or power the board
 void setup() {
-
 	wdt_disable();
 	Serial.begin(115200);
 	while (!Serial) {
 		delay(10); // wait for serial port to connect. Needed for native USB port only
 	}
-	
+	MEMFREE("Start Init");
+	SafeString::setOutput(Serial);
 	//init random generator
 	randomSeed(analogRead(0));
-	
+
 	//initialization of config
 	Config.Init();
-	Log.Info(F("Board is ready"));
-	Log.append(F("Board Id#:")).append(Config.BoardId).Info();
-	Log.append(F("IP Address is:")).append(Config.strIP).Info();
+	Log.Info(F1("Board is ready"));
+	Log.append(F1("Board Id#:")).append(Config.BoardId).Info();
+	Log.append(F1("IP Address is:")).append(Config.strIP).Info();
 	//Set a timer 
 	//MsTimer2::set(100, Timer2);
 	//MsTimer2::start();
 	pinMode(13, OUTPUT);
 	digitalWrite(13, HIGH);
 	Log.Info("Enjoy!");
+	MEMFREE("End init);
 }
 
 // the loop function runs over and over again until power down or reset
 void loop() {
+	//while (1);
 	static unsigned long tp60 = 0;
 	static unsigned long tp30 = 0;
 	unsigned long now = millis();
@@ -82,6 +85,7 @@ void loop() {
 	}
 
 	if ((now-tp60) > (unsigned long)60*1000) { //1 min 
+		MEMFREE("StartLoop1m");
 		Config.loop60();
 		Config.counter60++;
 		tp60 = now;
