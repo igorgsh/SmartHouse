@@ -2,10 +2,10 @@
 #include "Loger.h"
 #include "OneWireBus.h"
 #include "Loger.h"
-#include "ext_global.h"
-#include "Mqtt.h"
+#include "Configuration.h"
+//#include "Mqtt.h"
 
-extern Mqtt MqttClient;
+extern Configuration Config;
 
 void OneWireThermo::SetDefault() {
 	//nothing todo
@@ -15,7 +15,7 @@ void OneWireThermo::InitUnit() {
 
 	OneWireBusUnit::InitUnit();
 	if (!IsAccessible()) {
-		Log.append(F1("Unit: ")).append(Id).append(F1(" Is unavailable on the bus")).Error();
+		Config.Log->append(F1("Unit: ")).append(Id).append(F1(" Is unavailable on the bus")).Error();
 	}
 
 }
@@ -34,7 +34,7 @@ void OneWireThermo::HandleData() {
 	if (IsAccessible()) {
 		float t =  parent->GetTemperature(address);
 		status = (int)(t*10);
-		MqttClient.PublishUnit(this);
+		Config.MqttClient->PublishUnit(this);
 		Config.ProcessAction(Id, ACT_SENSOR_READY);
 	}
 }

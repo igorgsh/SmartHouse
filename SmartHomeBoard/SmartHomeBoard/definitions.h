@@ -15,7 +15,7 @@ typedef enum {
 } DebugLevel;
 
 extern DebugLevel dLevel;
-#define MEMFREE(N) Log.append(("Memory_")).append(N).append("=").append(freeMemory()).Debug();
+#define MEMFREE(N) Config.Log->append(("Memory_")).append(N).append("=").append(freeMemory()).Debug();
 
 
 typedef enum {

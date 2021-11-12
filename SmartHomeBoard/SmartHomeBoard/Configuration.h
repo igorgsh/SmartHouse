@@ -5,12 +5,17 @@
 #include "Action.h"
 #include "DallasTemperature.h"
 #include <ArduinoJson.h>
+#include "Mqtt.h"
 
 #define JSON_SIZE	200
 class Configuration {
 public:
+	Mqtt* MqttClient; 
 	bool IsEthernetConnection=true;
+	EthernetClient* EthClient;
+	Loger* Log;
 
+	//Mqtt MqttClient;
 	byte BoardId = 0;
 	char BoardName[10];
 	byte mac[6] = { 0x00, 0xAA, 0x22, 0x07, 0x69, 0x00 };

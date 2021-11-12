@@ -14,12 +14,12 @@ Author:	Igor Shevchenko
 #include "Board.h"
 #include "PowerMeter.h"
 #include "Board.h"
+#include "Configuration.h"
 
-extern Mqtt MqttClient;
+extern Configuration Config;
+
 
 void callbackFunc(char* topic, uint8_t* payload, unsigned int length) {
-	//char tp[MQTT_TOPIC_LENGTH];
-	//strcpy(tp, topic);
 	//Log.append("Point1:").append("topic=").append(topic).append(" length=").append((int)strlen(topic)).append(" payload=").append((int)strlen((char*)payload)).Debug();
 	//Log.append("Point3:").append("topic=").append(topic).append(" length=").append((int)strlen(topic)).append(" payload=").append((int)strlen((char*)payload)).Debug();
 	char* pl = (char*)payload;
@@ -28,14 +28,12 @@ void callbackFunc(char* topic, uint8_t* payload, unsigned int length) {
 	
 	//Log.append("Topic=").append(topic).Debug();
 	//Log.append("PayLoad=").append(pl).Debug();
-	MqttClient.Callback(topic, pl, length);
+	Config.MqttClient->Callback(topic, pl, length);
 }
 
-Mqtt::Mqtt() : PubSubClient(Configuration::MqttServer(), Configuration::MqttPort, callbackFunc, EthClient) {
+Mqtt::Mqtt() : PubSubClient(Configuration::MqttServer(), Configuration::MqttPort, callbackFunc, *(Config.EthClient)) {
+	Serial.println("MQTT!");
 	mqttWaiting = MQTT_INITIAL_RETRY_DELAY;
-	for (int i = 0; i < 7; i++) {
-		sprintf(topicLog[i], MQTT_LOG, Config.BoardId, LOG_END[i]);
-	}
 }
 
 
@@ -45,7 +43,7 @@ bool Mqtt::MqttReconnect() {
 
 	if (Config.IsEthernetConnection) {
 		if (!connected()) {
-			Log.Debug(F1("MqttReconnect"));
+			Config.Log->Debug(F1("MqttReconnect"));
 			if (connect(Config.BoardName)) {
 				sprintf(topicBuff, MQTT_CONFIG_RESPONSE, Config.BoardId);
 				Subscribe(topicBuff);
@@ -56,7 +54,7 @@ bool Mqtt::MqttReconnect() {
 				res = true;
 			}
 			else {
-				Log.Error(F1("MQTT connection Failed"));
+				Config.Log->Error(F1("MQTT connection Failed"));
 				res = false;
 			}
 		}
@@ -65,24 +63,14 @@ bool Mqtt::MqttReconnect() {
 }
 uint16_t Mqtt::GetUnitId(const char* str, int offset) {
 	return atoi(str + offset);
-	//return (str[offset] - '0') * 10 + str[offset + 1];
-
 }
 
 void Mqtt::Callback(const char* topic, const char* payLoad, unsigned int length) {
-//	Log.append("Point2:").append("topic=").append(topic).append(" length=").append(length).Debug();
 
 	if (length > 0) {
-		//Log.append("topic1 = ").append(topic).Debug();
-		//Log.append("topic1_1 = ").append(topic).Debug();
-		//createSafeStringFromCharPtr(strTopic, (char*) topic);
-		//createSafeStringFromCharPtr(strPayload, (char*)payLoad);
 		
-		Log.append(F1("[")).append(topic).append(F1("]:")).append(payLoad).append(F1("#")).Debug();
+		Config.Log->append(F1("[")).append(topic).append(F1("]:")).append(payLoad).append(F1("#")).Debug();
 		sprintf(topicBuff, MQTT_CONFIG_RESPONSE, Config.BoardId);
-		//Log.append("Subscription=").Debug(subscription);
-		//Log.append("cmp=").append(strcmp(topic, subscription)).Debug();
-		//Log.append("topic = ").append(topic).Debug();
 		if (strcmp(topic, topicBuff) == 0) {
 			if (Config.isConfigRequested) {
 				Config.UpdateConfig(payLoad);
@@ -124,7 +112,7 @@ void Mqtt::Callback(const char* topic, const char* payLoad, unsigned int length)
 									}
 									else {
 										if (strncmp(topic, MQTT_RESET_BOARD, strlen(MQTT_RESET_BOARD))) {
-											Log.Info(F1("Reset"));
+											Config.Log->Info(F1("Reset"));
 
 											if (v > 0) {
 												Board::Reset(10000);
@@ -146,7 +134,10 @@ void Mqtt::Callback(const char* topic, const char* payLoad, unsigned int length)
 void Mqtt::InitMqtt(void) {
 	long connectTry = 0;
 	bool res = false;
-	
+	for (int i = 0; i < 7; i++) {
+		sprintf(topicLog[i], MQTT_LOG, Config.BoardId, LOG_END[i]);
+	}
+
 	while (!res && connectTry <= MQTT_TRY_COUNT) {
 		res = MqttReconnect();
 		delay(MQTT_INITIAL_RETRY_DELAY);
@@ -154,7 +145,7 @@ void Mqtt::InitMqtt(void) {
 	}
 	
 	if (!res) {
-		Log.Error(F1("Too many attempt of MQTT reconnect"));
+		Config.Log->Error(F1("Too many attempt of MQTT reconnect"));
 	}
 }
 void Mqtt::MqttLoop() {
@@ -164,13 +155,13 @@ void Mqtt::MqttLoop() {
 	if (connected()) {
 		bool res = loop();
 		if (!res) {
-			Log.Error(F1("Failed loop"));
+			Config.Log->Error(F1("Failed loop"));
 		}
 		lastConnected = millis();
 	}
 	else {
 		if (lastConnected + millis() <= MQTT_RETRY_TIME) {
-			Log.Debug(F1("Trying to reconnect MQTT"));
+			Config.Log->Debug(F1("Trying to reconnect MQTT"));
 			bool res = MqttReconnect();
 			if (res) {
 				Config.Init();
@@ -180,6 +171,7 @@ void Mqtt::MqttLoop() {
 }
 
 void Mqtt::PublishLog(DebugLevel level, const char* message) {
+
 	if (connected()) {
 		publish(topicLog[level], message);
 	}
@@ -262,6 +254,7 @@ void Mqtt::PublishUnit(const Unit* unit) {
 }
 
 bool Mqtt::Publish(const char* topic, const char* payload) {
+	Config.Log->append(F1("Publish [")).append(topic).append(F1("]:")).append(payload).Debug();
 	if (connected()) {
 		return publish(topic, payload);
 	}
@@ -335,7 +328,7 @@ void Mqtt::SubscribeUnit(int unitNumber) {
 void Mqtt::SubscribeUnits() {
 	if (connected()) {
 //		bool isSubscriptionSuccess = true;
-		Log.Debug(F1("Subscribing Units..."));
+		Config.Log->Debug(F1("Subscribing Units..."));
 		for (int i = 0; i < Config.numberUnits; i++) {
 			SubscribeUnit(i);
 		}
@@ -358,7 +351,7 @@ void Mqtt::SubscribeUnits() {
 			Log.Error(F1("Some units are not subscribed"));
 		}
 		*/
-		Log.append(F1("End subscription")).append(Config.numberUnits).Debug();
+		Config.Log->append(F1("End subscription:")).append(Config.numberUnits).Debug();
 	}
 }
 

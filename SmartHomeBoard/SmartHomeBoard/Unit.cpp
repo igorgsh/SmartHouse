@@ -1,5 +1,7 @@
 #include "Unit.h"
-#include "ext_global.h"
+#include "Configuration.h"
+
+extern Configuration Config;
 
 /*
 bool Unit::Compare(Unit* u) {
@@ -23,12 +25,11 @@ void Unit::FillFrom(const Unit* u) {
 void const Unit::print(const char* header, DebugLevel level){
 	
 	if (header != NULL) {
-		Log.append(header);
+		Config.Log->append(header);
 	}
-	Log.append(F1("Id:")).append((unsigned int) Id);
-	Log.append(F1(";Type:")).append((char)Type);
-	Log.append(F1(";status:")).append((unsigned int)status);
-	//Log.append(F1(";subscription:")).append(isSubscribed? "true" : "false");
-	Log.append(F1(" @"));
-	Log.Log(level);
+	Config.Log->append(F1("Id:")).append((unsigned int) Id);
+	Config.Log->append(F1(";Type:")).append((char)Type);
+	Config.Log->append(F1(";status:")).append((unsigned int)status);
+	Config.Log->append(F1(" @"));
+	Config.Log->Log(level);
 }

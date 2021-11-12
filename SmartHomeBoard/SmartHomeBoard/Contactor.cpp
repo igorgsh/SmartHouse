@@ -4,12 +4,11 @@
 
 #include "Contactor.h"
 
-#include "ext_global.h"
-#include "mqtt.h"
+#include "Configuration.h"
+//#include "mqtt.h"
 #include "Loger.h"
 #include "SigmaEEPROM.h"
-
-extern Mqtt MqttClient;
+extern Configuration Config;
 
 void Contactor::SetDefault() {
 	startContact = 0;
@@ -22,7 +21,7 @@ void Contactor::InitUnit() {
 	startContact = 0;
 	prevValue = digitalRead(Pin);
 	status = !lhOn;
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 }
 
 
@@ -48,14 +47,14 @@ void Contactor::HandleContactor() {
 
 void Contactor::HandleFinish(int newStatus) {
 	status = newStatus;
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 	Config.ProcessAction(Id, status);
 
 }
 
 void Contactor::ProcessUnit(ActionType event) {
 	Config.ProcessAction(Id, event);
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 
 }
 
@@ -107,13 +106,12 @@ void Contactor::ConfigField(const JsonObject& jsonList) {
 
 void const Contactor::print(const char* header, DebugLevel level) {
 	if (header != NULL) {
-		Log.append(header);
+		Config.Log->append(header);
 	}
-	Log.append(F1("Id:")).append((unsigned int)Id);
-	Log.append(F1(";Type:")).append((char)Type);
-	Log.append(F1(";Pin:")).append((unsigned int)Pin);
-	Log.append(F1(";lhOn:")).append((unsigned int)lhOn);
-//	Log.append(F1(";subscription:")).append(isSubscribed ? "true" : "false");
-	Log.append(F1(" @"));
-	Log.Log(level);
+	Config.Log->append(F1("Id:")).append((unsigned int)Id);
+	Config.Log->append(F1(";Type:")).append((char)Type);
+	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
+	Config.Log->append(F1(";lhOn:")).append((unsigned int)lhOn);
+	Config.Log->append(F1(" @"));
+	Config.Log->Log(level);
 }

@@ -2,10 +2,12 @@
 #include <avr\wdt.h>
 #include "Board.h"
 #include "Loger.h"
-#include "ext_global.h"
+#include "Configuration.h"
+
+extern Configuration Config;
 
 void Board::Reset(unsigned long timeout) {
-	Log.Info(F1("RESET!!!"));
+	Config.Log->Info(F1("RESET!!!"));
 	if (timeout > 4000) {
 		delay(timeout - 4000);
 	}

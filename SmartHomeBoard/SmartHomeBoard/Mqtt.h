@@ -5,8 +5,9 @@
 #include <SafeString.h>
 #include <PubSubClient.h>
 #include "definitions.h"
-#include "configuration.h"
-#include "ext_global.h"
+#include "Unit.h"
+//#include "configuration.h"
+//#include "ext_global.h"
 
 
 

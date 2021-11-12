@@ -1,10 +1,10 @@
 #include "button.h"
-#include "ext_global.h"
-#include "mqtt.h"
+//#include "mqtt.h"
 #include "Loger.h"
 #include "SigmaEEPROM.h"
+#include "Configuration.h"
 
-extern Mqtt MqttClient;
+extern Configuration Config;
 
 void Button::SetDefault() {
 	startPressing = 0;
@@ -15,7 +15,7 @@ void Button::SetDefault() {
 void Button::InitUnit() {
 	pinMode(Pin, INPUT);
 	digitalWrite(Pin, !lhOn);
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 }
 
 
@@ -86,7 +86,7 @@ void Button::HandleButton() {
 
 void Button::HandleFinish(int newStatus) {
 	status = newStatus;
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 	Config.ProcessAction(Id, newStatus);
 
 }
@@ -94,7 +94,7 @@ void Button::HandleFinish(int newStatus) {
 void Button::ProcessUnit(ActionType event) {
 	Config.ProcessAction(Id, event);
 	status = ACT_OFF;
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 
 }
 
@@ -151,14 +151,13 @@ void Button::ConfigField(const JsonObject& jsonList) {
 
 void const Button::print(const char* header, DebugLevel level) {
 	if (header != NULL) {
-		Log.append(header);
+		Config.Log->append(header);
 	}
-	Log.append(F1("Id:")).append((unsigned int)Id);
-	Log.append(F1(";Type:")).append((char)Type);
-	Log.append(F1(";Pin:")).append((unsigned int)Pin);
-	Log.append(F1(";lhOn:")).append((unsigned int)lhOn);
-	//Log.append(F1(";subscription:")).append(isSubscribed ? "true" : "false");
-	Log.append(F1(" @"));
+	Config.Log->append(F1("Id:")).append((unsigned int)Id);
+	Config.Log->append(F1(";Type:")).append((char)Type);
+	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
+	Config.Log->append(F1(";lhOn:")).append((unsigned int)lhOn);
+	Config.Log->append(F1(" @"));
 
-	Log.Log(level);
+	Config.Log->Log(level);
 }

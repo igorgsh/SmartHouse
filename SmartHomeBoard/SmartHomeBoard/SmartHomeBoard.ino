@@ -29,8 +29,8 @@
 #include "utils.h"
 //#include <Ethernet.h>
 #include "avr\wdt.h"
-#include "Mqtt.h"
-#include "configuration.h"
+//#include "Mqtt.h"
+#include "Configuration.h"
 #include "Action.h"
 #include "Relay.h"
 #include <Arduino.h>
@@ -39,7 +39,7 @@
 #include "Button.h"
 #include "Loger.h"
 #include "definitions.h"
-#include "ext_global.h"
+//#include "ext_global.h"
 
 
 #include "utils.h"
@@ -51,22 +51,23 @@ void setup() {
 	while (!Serial) {
 		delay(10); // wait for serial port to connect. Needed for native USB port only
 	}
-	MEMFREE("Start Init");
+	Serial.println("Serial!");
+	//MEMFREE("Start Init");
 	SafeString::setOutput(Serial);
 	//init random generator
 	randomSeed(analogRead(0));
 
 	//initialization of config
 	Config.Init();
-	Log.Info(F1("Board is ready"));
-	Log.append(F1("Board Id#:")).append(Config.BoardId).Info();
-	Log.append(F1("IP Address is:")).append(Config.strIP).Info();
+	Config.Log->Info(F1("Board is ready"));
+	Config.Log->append(F1("Board Id#:")).append(Config.BoardId).Info();
+	Config.Log->append(F1("IP Address is:")).append(Config.strIP).Info();
 	//Set a timer 
 	//MsTimer2::set(100, Timer2);
 	//MsTimer2::start();
 	pinMode(13, OUTPUT);
 	digitalWrite(13, HIGH);
-	Log.Info("Enjoy!");
+	Config.Log->Info("Enjoy!");
 	MEMFREE("End init");
 }
 

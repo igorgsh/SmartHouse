@@ -1,14 +1,14 @@
 #include "OneWireBus.h"
 #include <OneWire.h>
 #include "definitions.h"
-#include "ext_global.h"
-#include "Mqtt.h"
+//#include "ext_global.h"
+//#include "Mqtt.h"
 #include "Unit.h"
 #include "Loger.h"
 #include <DallasTemperature.h>
-//#include <vector>
-//#include <StandardCplusplus-master\vector>
-extern Mqtt MqttClient;
+#include "Configuration.h"
+
+extern Configuration Config;
 
 void OneWireBus::SetDefault() {
 
@@ -20,7 +20,7 @@ float OneWireBus::GetTemperature(const DeviceAddress address) {
 	}
 	else {
 
-		Log.append(F1("Temp is failed: ")).append(Id).Error();
+		Config.Log->append(F1("Temp is failed: ")).append(Id).Error();
 		return -999;
 	}
 }
@@ -33,13 +33,13 @@ void OneWireBus::InitUnit() {
 	oneWire = new OneWire(Pin);
 	sensors = new DallasTemperature(oneWire);
 	sensors->begin();
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 	Config.ProcessAction(Id, status);
 
 }
 void OneWireBus::ProcessUnit(ActionType action) {
 	status = action;
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 	Config.ProcessAction(Id, action);
 }
 
@@ -127,12 +127,11 @@ bool OneWireBus::CompareDeviceAddress(DeviceAddress a0, DeviceAddress a1) {
 void const OneWireBus::print(const char* header, DebugLevel level) {
 	
 	if (header != NULL) {
-		Log.append(header);
+		Config.Log->append(header);
 	}
-	Log.append(F1("Id:")).append((unsigned int)Id);
-	Log.append(F1(";Type:")).append((char)Type);
-	Log.append(F1(";Pin:")).append((unsigned int)Pin);
-//	Log.append(F1(";subscription:")).append(isSubscribed ? "true" : "false");
-	Log.append(F1(" @"));
-	Log.Log(level);
+	Config.Log->append(F1("Id:")).append((unsigned int)Id);
+	Config.Log->append(F1(";Type:")).append((char)Type);
+	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
+	Config.Log->append(F1(" @"));
+	Config.Log->Log(level);
 }
