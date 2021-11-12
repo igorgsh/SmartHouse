@@ -68,7 +68,7 @@ void setup() {
 	pinMode(13, OUTPUT);
 	digitalWrite(13, HIGH);
 	Config.Log->Info("Enjoy!");
-	MEMFREE("End init");
+	//MEMFREE("End init");
 }
 
 // the loop function runs over and over again until power down or reset
@@ -76,20 +76,33 @@ void loop() {
 	//while (1);
 	static unsigned long tp60 = 0;
 	static unsigned long tp30 = 0;
+	static unsigned long tp10 = 0;
+	static unsigned long tp1 = 0;
 	unsigned long now = millis();
 	//Loger::Debug("Loop");
 
-	if ((now - tp30) > (unsigned long)30 *  1000) { //30 sec 
+
+	if ((now-tp60) > (unsigned long)60*1000) { //1 min 
+		//MEMFREE("StartLoop1m");
+		Config.loop60();
+		Config.counter60++;
+		tp60 = now;
+	}
+
+	if ((now - tp30) > (unsigned long)30 * 1000) { //30 sec 
 		Config.loop30();
 		Config.counter30++;
 		tp30 = now;
 	}
-
-	if ((now-tp60) > (unsigned long)60*1000) { //1 min 
-		MEMFREE("StartLoop1m");
-		Config.loop60();
-		Config.counter60++;
-		tp60 = now;
+	if ((now - tp10) > (unsigned long)10 * 1000) { //10 sec 
+		Config.loop10();
+		Config.counter10++;
+		tp10 = now;
+	}
+	if ((now - tp1) > (unsigned long)1 * 1000) { //1 sec 
+		Config.loop1();
+		Config.counter1++;
+		tp1 = now;
 	}
 
 	Config.MainLoop();

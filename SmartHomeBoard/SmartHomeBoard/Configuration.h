@@ -63,15 +63,15 @@ public:
 
 	//Timer 
 	//unsigned long counter01 = 0;	//100ms
-	//unsigned long counter05 = 0;	//500ms
-	//unsigned long counter1 = 0;		//1 sec
+	unsigned long counter10 = 0;	//10ms
+	unsigned long counter1 = 0;		//1 sec
 	unsigned long counter30 = 0;	//30 sec
 	unsigned long counter60 = 0;	//1min
 	//unsigned long counter300 = 0;	//5min
 
 	//void loop01();
-	//void loop05();
-	//void loop1();
+	void loop10();
+	void loop1();
 	void loop30();
 	void loop60();
 	//void loop300();

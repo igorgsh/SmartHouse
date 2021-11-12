@@ -93,7 +93,6 @@
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="Contactor.h" />
     <ClInclude Include="definitions.h" />
-    <ClInclude Include="ext_global.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="Loger.h" />
     <ClInclude Include="Mqtt.h" />

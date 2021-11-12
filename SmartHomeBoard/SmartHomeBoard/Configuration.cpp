@@ -353,7 +353,9 @@ void Configuration::UpdateUnit(UnitType type, uint16_t id, uint16_t value) {
 
 void Configuration::UnitsLoop() {
 	for (int i = 0; i < numberUnits; i++) {
-		units[i]->UnitLoop();
+		if (units[i]->Type != UnitType::POWER_METER) {
+			units[i]->UnitLoop();
+		}
 	}
 }
 
@@ -401,7 +403,14 @@ void Configuration::ProcessAction(uint16_t id, byte event) {
 	}
 }
 
+void Configuration::loop1() {
+};
+
 void Configuration::loop30() {
+};
+
+
+void Configuration::loop10() {
 	for (int i = 0; i < numberUnits; i++) {
 		if (units[i]->Type == UnitType::POWER_METER) {
 			((PowerMeter*)units[i])->PublishAll();
