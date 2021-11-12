@@ -111,7 +111,7 @@ void const Relay::print(const char* header, DebugLevel level) {
 	Log.append(F1(";Pin:")).append((unsigned int)Pin);
 	Log.append(F1(";lhOn:")).append((unsigned int)lhOn);
 	Log.append(F1(";status:")).append((unsigned int)status);
-	Log.append(F1(";subscription:")).append(isSubscribed ? "true" : "false");
+	//Log.append(F1(";subscription:")).append(isSubscribed ? "true" : "false");
 	Log.append(F1(" @"));
 	Log.Log(level);
 }

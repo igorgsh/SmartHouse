@@ -342,7 +342,7 @@ void Configuration::BuildActions() {
 void Configuration::UpdateUnit(UnitType type, uint16_t id, uint16_t value) {
 	Unit *u = FindUnit(id);
 	if (u != NULL) {
-		u->isSubscribed = true;
+		//u->isSubscribed = true;
 		u->ProcessUnit((ActionType)(value));
 	} 
 }
@@ -384,7 +384,7 @@ void Configuration::ProcessAction(uint16_t id, byte event) {
 						u->Id = actions[i]->targetId;
 						u->Type = actions[i]->targetType;
 						u->status = actions[i]->targetAction;
-						u->isSubscribed = true; //this fake activation is used just for publish
+						//u->isSubscribed = true; //this fake activation is used just for publish
 						MqttClient.PublishUnit(u);
 						delete u;
 					}

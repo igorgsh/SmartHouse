@@ -132,7 +132,7 @@ void const OneWireBus::print(const char* header, DebugLevel level) {
 	Log.append(F1("Id:")).append((unsigned int)Id);
 	Log.append(F1(";Type:")).append((char)Type);
 	Log.append(F1(";Pin:")).append((unsigned int)Pin);
-	Log.append(F1(";subscription:")).append(isSubscribed ? "true" : "false");
+//	Log.append(F1(";subscription:")).append(isSubscribed ? "true" : "false");
 	Log.append(F1(" @"));
 	Log.Log(level);
 }

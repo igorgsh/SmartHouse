@@ -70,7 +70,8 @@ private:
 		char *boardId = (char*)BOARD_ID;
 		const char *LOG_END[7] = { "OFF", "FATAL","ERROR","WARN","INFO","DEBUG","ALL" };
 		uint16_t GetUnitId(const char* str, int offset);
-
+		char topicBuff[MQTT_TOPIC_LENGTH];
+		char topicLog[7][MQTT_TOPIC_LENGTH];
 		bool MqttReconnect();
 };
 

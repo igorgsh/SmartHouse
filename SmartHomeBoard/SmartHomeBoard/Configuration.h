@@ -46,11 +46,12 @@ public:
 	Unit* CreateTypedUnit(byte type);
 
 	void MainLoop();
-
+	/*
 	static const char* MqttServer() {
 		return "192.168.0.99"; //IP-адрес сервера ioBroker
 	}
-
+	*/
+	static const char* MqttServer() { return "192.168.0.99"; };
 
 	int numberUnits = 0;
 	int numberActions = 0;

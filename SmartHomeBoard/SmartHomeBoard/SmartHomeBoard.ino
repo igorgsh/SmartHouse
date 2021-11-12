@@ -67,7 +67,7 @@ void setup() {
 	pinMode(13, OUTPUT);
 	digitalWrite(13, HIGH);
 	Log.Info("Enjoy!");
-	MEMFREE("End init);
+	MEMFREE("End init");
 }
 
 // the loop function runs over and over again until power down or reset

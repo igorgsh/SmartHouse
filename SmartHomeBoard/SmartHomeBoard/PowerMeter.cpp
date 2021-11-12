@@ -230,7 +230,7 @@ void const PowerMeter::print(const char* header, DebugLevel level) {
 	Log.append(F1(";SerialRX:")).append((unsigned int)serialRX);
 	Log.append(F1(";SerialTX:")).append((unsigned int)serialTX);
 	Log.append(F1(";Factor:")).append((unsigned int)factor);
-	Log.append(F1(";subscription:")).append(isSubscribed ? "true" : "false");
+//	Log.append(F1(";subscription:")).append(isSubscribed ? "true" : "false");
 	Log.append(F1(" @"));
 	Log.Log(level);
 }

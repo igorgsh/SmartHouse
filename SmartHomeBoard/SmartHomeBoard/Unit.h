@@ -13,7 +13,7 @@ public:
 	uint16_t Id;
 	byte Type;
 	byte status;
-	bool isSubscribed = false;
+	//bool isSubscribed = false;
 
 	virtual bool Compare(const Unit* u) =0;
 	virtual void FillFrom(const Unit* u);
