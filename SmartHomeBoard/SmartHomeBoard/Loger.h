@@ -7,8 +7,8 @@ class Loger
 {
 public:
 	Loger& clear() { loger->clear(); return *this; };
-	Loger& append(const SafeString& str) { loger->concat((SafeString&)str); return *this; };
 	Loger& append(const char* str) { loger->concat(str);  return *this; };
+	Loger& append(const SafeString& str) { loger->concat((SafeString&)str); return *this; };
 	Loger& append(byte str) { loger->concat(str);  return *this; };
 	Loger& append(uint16_t str) { loger->concat(str);  return *this; };
 	Loger& append(int str) { loger->concat(str);  return *this; };

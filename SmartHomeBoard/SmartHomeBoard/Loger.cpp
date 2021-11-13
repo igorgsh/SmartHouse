@@ -8,7 +8,7 @@ extern Configuration Config;
 void Loger::Log(DebugLevel level) {
 	if (level <= dLevel) {
 		Serial.println(loger->c_str());
-		//Config.MqttClient->PublishLog(level, loger->c_str());
+		Config.MqttClient->PublishLog(level, loger->c_str());
 	}
 
 	loger->clear();
