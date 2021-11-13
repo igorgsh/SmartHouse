@@ -17,8 +17,8 @@ public:
 	ActionType targetAction;
 	UnitType targetType;
 
-	bool Compare(Action* a);
-	void FillFrom(Action* a);
+	bool Compare(const Action* a);
+	void FillFrom(const Action* a);
 	void InitAction();
 	void print(const char* header, DebugLevel level);
 	void ReadFromEEPROM(uint16_t curPtr);

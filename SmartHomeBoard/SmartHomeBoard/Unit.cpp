@@ -1,5 +1,7 @@
 #include "Unit.h"
+#include "Configuration.h"
 
+extern Configuration Config;
 
 /*
 bool Unit::Compare(Unit* u) {
@@ -15,27 +17,19 @@ bool Unit::Compare(Unit* u) {
 }
 */
 
-void Unit::FillFrom(Unit* u) {
+void Unit::FillFrom(const Unit* u) {
 	Id = u->Id;
 	Type = u->Type;
-//	Pin = u->Pin;
-//	lhOn = u->lhOn;
 }
 
 void const Unit::print(const char* header, DebugLevel level){
-	String str0="";
 	
 	if (header != NULL) {
-		str0 = header;
+		Config.Log->append(header);
 	}
-	str0+="Id:";
-	str0+=String((unsigned int) Id, DEC);
-	str0+=";Type:";
-	str0 += String((char)Type);
-	str0 += ";status:";
-	str0 += String((unsigned int)status, DEC);
-	str0 += ";subscription:";
-	str0 += (isSubscribed? "true" : "false");
-	str0 += " @";
-	Loger::Log(level, str0);
+	Config.Log->append(F1("Id:")).append((unsigned int) Id);
+	Config.Log->append(F1(";Type:")).append((char)Type);
+	Config.Log->append(F1(";status:")).append((unsigned int)status);
+	Config.Log->append(F1(" @"));
+	Config.Log->Log(level);
 }

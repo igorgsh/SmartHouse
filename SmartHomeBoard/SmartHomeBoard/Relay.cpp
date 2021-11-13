@@ -1,19 +1,16 @@
 
 #include "Relay.h"
-#include "process.h"
-#include "ext_global.h"
-#include "mqtt.h"
+//#include "process.h"
+#include "Configuration.h"
 #include "SigmaEEPROM.h"
 
-extern Mqtt MqttClient;
+extern Configuration Config;
 
 void Relay::SetDefault() {
 
 	status = LOW;
 }
 void Relay::InitUnit() {
-	//Loger::Debug("Relay["+String(Id) +"] Init");
-
 	pinMode(Pin, OUTPUT);
 	ProcessUnit(status==HIGH ? ACT_ON : ACT_OFF);
 	
@@ -21,10 +18,9 @@ void Relay::InitUnit() {
 
 void Relay::RelaySet(bool newStatus)
 {
-	//Loger::Debug("Relay[" + String(Id) + "]=" + (newStatus == HIGH ? "HIGH" : "LOW") );
 	digitalWrite(Pin, (newStatus == HIGH ? lhOn : !lhOn));
 	status = newStatus;
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 	Config.ProcessAction(Id, newStatus);
 }
 
@@ -35,7 +31,7 @@ void Relay::RelaySwitch() {
 void Relay::ProcessUnit(ActionType event) {
 	switch (event) {
 	case ACT_OFF: {
-		RelayOff();
+		RelayOfF1();
 		break;
 	}
 	case ACT_ON: {
@@ -55,7 +51,7 @@ void Relay::UnitLoop() {
 //nothing todo
 };
 
-bool Relay::Compare(Unit* u) {
+bool Relay::Compare(const Unit* u) {
 
 	if (u == NULL) return false;
 	if (u->Type != UnitType::RELAY) return false;
@@ -67,10 +63,6 @@ bool Relay::Compare(Unit* u) {
 		lhOn == tu->lhOn &&
 		status == tu->status
 		);
-	if (!res) {
-		Loger::Debug("Compare Relay:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":" + String(Pin == tu->Pin) + ":"
-			+ String(lhOn == tu->lhOn) + ":" + String(status == tu->status) + "#");
-	}
 	return res;
 }
 
@@ -96,7 +88,7 @@ void Relay::WriteToEEPROM(uint16_t addr) {
 }
 
 
-void Relay::ConfigField(JsonObject& jsonList) {
+void Relay::ConfigField(const JsonObject& jsonList) {
 	if (jsonList.containsKey("Pin")) {
 		Pin = jsonList["Pin"];
 	}
@@ -110,24 +102,15 @@ void Relay::ConfigField(JsonObject& jsonList) {
 
 
 void const Relay::print(const char* header, DebugLevel level) {
-	String str0 = "";
-
 	if (header != NULL) {
-		str0 = header;
+		Config.Log->append(header);
 	}
-	str0 += "Id:";
-	str0 += String((unsigned int)Id, DEC);
-	str0 += ";Type:";
-	str0 += String((char)Type);
-	str0 += ";Pin:";
-	str0 += String((unsigned int)Pin, DEC);
-	str0 += ";lhOn:";
-	str0 += String((unsigned int)lhOn, DEC);
-	str0 += ";status:";
-	str0 += String((unsigned int)status, DEC);
-	str0 += ";subscription:";
-	str0 += (isSubscribed ? "true" : "false");
-	str0 += " @";
-	Loger::Log(level, str0);
+	Config.Log->append(F1("Id:")).append((unsigned int)Id);
+	Config.Log->append(F1(";Type:")).append((char)Type);
+	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
+	Config.Log->append(F1(";lhOn:")).append((unsigned int)lhOn);
+	Config.Log->append(F1(";status:")).append((unsigned int)status);
+	Config.Log->append(F1(" @"));
+	Config.Log->Log(level);
 }
 

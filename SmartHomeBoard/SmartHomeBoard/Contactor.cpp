@@ -4,12 +4,11 @@
 
 #include "Contactor.h"
 
-#include "ext_global.h"
-#include "mqtt.h"
+#include "Configuration.h"
+//#include "mqtt.h"
 #include "Loger.h"
 #include "SigmaEEPROM.h"
-
-extern Mqtt MqttClient;
+extern Configuration Config;
 
 void Contactor::SetDefault() {
 	startContact = 0;
@@ -17,13 +16,12 @@ void Contactor::SetDefault() {
 }
 
 void Contactor::InitUnit() {
-	//Loger::Debug("Init contactor:id=" + String(Id) + "; Pin=" + String(Pin));
 	pinMode(Pin, INPUT);
 	digitalWrite(Pin, lhOn? LOW : HIGH);
 	startContact = 0;
 	prevValue = digitalRead(Pin);
 	status = !lhOn;
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 }
 
 
@@ -32,40 +30,31 @@ void Contactor::HandleContactor() {
 	byte cntValue;
 
 	cntValue = digitalRead(Pin);
-	//Loger::Debug("Contactor state:" + String(status) + ":" + String(cntValue));
 
 	if (prevValue != cntValue) { // contactor is starting switch
-		//Loger::Debug("Contactor switch:" + String(status) + "->" + String(cntValue));
-		//Loger::Debug("Start=" + String(startContact));
 		if (startContact == 0) {
 			startContact = millis();
 		}
 		else {
-			//Loger::Debug("Point 2:(" + String(startContact) + ":" + String(millis())+")::("+String(cntValue) + "^" + String(prevValue) + ")" );
 			if (startContact + CONTACTOR_SWITCHED_TIME <= millis()) {//contact is long enough
-				//Loger::Debug("Contactor should be switched");
 				HandleFinish(cntValue == lhOn ? ACT_ON : ACT_OFF);
 				startContact = 0;
 				prevValue = cntValue;
 			}
 		}
 	}
-	//else {
-		//Loger::Debug("Point 1");
-		//startContact = 0;
-	//}
 }
 
 void Contactor::HandleFinish(int newStatus) {
 	status = newStatus;
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 	Config.ProcessAction(Id, status);
 
 }
 
 void Contactor::ProcessUnit(ActionType event) {
 	Config.ProcessAction(Id, event);
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 
 }
 
@@ -73,7 +62,7 @@ void Contactor::UnitLoop() {
 	HandleContactor();
 };
 
-bool Contactor::Compare(Unit* u) {
+bool Contactor::Compare(const Unit* u) {
 
 	if (u == NULL) return false;
 	if (u->Type != UnitType::CONTACTOR) return false;
@@ -84,15 +73,11 @@ bool Contactor::Compare(Unit* u) {
 		Pin == tu->Pin &&
 		lhOn == tu->lhOn 
 		;
-	if (!res) {
-		Loger::Debug("Compare Contactor:" + String(Id == tu->Id) + ":" + String(Type == tu->Type) + ":" + String(Pin == tu->Pin) + ":" + String(lhOn == tu->lhOn) + ":" + String(status == tu->status) + "#");
-	}
 	return res;
 }
 
 
 void Contactor::ReadFromEEPROM(uint16_t addr) {
-	//	bool res = true;
 
 	Id = SigmaEEPROM::Read8(addr);
 	Type = SigmaEEPROM::Read8(addr + 1);
@@ -102,7 +87,6 @@ void Contactor::ReadFromEEPROM(uint16_t addr) {
 }
 
 void Contactor::WriteToEEPROM(uint16_t addr) {
-	//bool res = true;
 
 	SigmaEEPROM::Write8(addr, Id);
 	SigmaEEPROM::Write8(addr + 1, Type);
@@ -110,7 +94,7 @@ void Contactor::WriteToEEPROM(uint16_t addr) {
 	SigmaEEPROM::Write8(addr + 3, lhOn);
 }
 
-void Contactor::ConfigField(JsonObject& jsonList) {
+void Contactor::ConfigField(const JsonObject& jsonList) {
 	if (jsonList.containsKey("Pin")) {
 		Pin = jsonList["Pin"];
 	}
@@ -121,21 +105,13 @@ void Contactor::ConfigField(JsonObject& jsonList) {
 
 
 void const Contactor::print(const char* header, DebugLevel level) {
-	String str0 = "";
-
 	if (header != NULL) {
-		str0 = header;
+		Config.Log->append(header);
 	}
-	str0 += "Id:";
-	str0 += String((unsigned int)Id, DEC);
-	str0 += ";Type:";
-	str0 += String((char)Type);
-	str0 += ";Pin:";
-	str0 += String((unsigned int)Pin, DEC);
-	str0 += ";lhOn:";
-	str0 += String((unsigned int)lhOn, DEC);
-	str0 += ";subscription:";
-	str0 += (isSubscribed ? "true" : "false");
-	str0 += " @";
-	Loger::Log(level, str0);
+	Config.Log->append(F1("Id:")).append((unsigned int)Id);
+	Config.Log->append(F1(";Type:")).append((char)Type);
+	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
+	Config.Log->append(F1(";lhOn:")).append((unsigned int)lhOn);
+	Config.Log->append(F1(" @"));
+	Config.Log->Log(level);
 }

@@ -7,19 +7,17 @@
 #include <ArduinoJson.h>
 
 
+
 class Unit
 {
 public:
 	uint16_t Id;
 	byte Type;
-//	byte Pin;
-//	bool lhOn;
 	byte status;
-	bool isSubscribed = false;
-	//static const int sizeOfUnits = 4;
+	//bool isSubscribed = false;
 
-	virtual bool Compare(Unit* u) =0;
-	virtual void FillFrom(Unit* u);
+	virtual bool Compare(const Unit* u) =0;
+	virtual void FillFrom(const Unit* u);
 	virtual void SetDefault() =0;
 	virtual void UnitLoop() = 0;
 	virtual void InitUnit() = 0;
@@ -31,7 +29,7 @@ public:
 	virtual void ProcessUnit(ActionType action) = 0;
 	virtual ~Unit() {};
 	virtual void const print(const char* header, DebugLevel level);
-	virtual void ConfigField(JsonObject& jsonList) = 0;
+	virtual void ConfigField(const JsonObject& jsonList) = 0;
 };
 
 class UnitProto : public Unit {
@@ -44,7 +42,7 @@ public:
 	byte UnitStoredSize() {return 0;};
 	void ReadFromEEPROM(uint16_t addr) {};
 	void WriteToEEPROM(uint16_t addr) {};
-	void ConfigField(JsonObject& jsonList) {};
-	bool Compare(Unit* u) { return false; };
+	void ConfigField(const JsonObject& jsonList) {};
+	bool Compare(const Unit* u) { return false; };
 
 };

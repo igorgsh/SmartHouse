@@ -1,7 +1,8 @@
 #include "OneWireBusUnit.h"
 #include "Loger.h"
 #include "Configuration.h"
-#include "ext_global.h"
+
+extern Configuration Config;
 
 
 OneWireBus* OneWireBusUnit::FindOneWireBus(byte pin) {
@@ -20,16 +21,14 @@ OneWireBus* OneWireBusUnit::FindOneWireBus(byte pin) {
 
 
 void OneWireBusUnit::InitUnit() {
-	Loger::Debug("Init OneWireBus Unit");
-	Loger::Debug("Pin=" + String(Pin));
 	//parent = (OneWireBus*)Config.FindUnitByTypeAndPin(UnitType::ONE_WIRE_BUS, Pin);
 	parent = (OneWireBus*)FindOneWireBus(Pin);
 	if (parent == NULL) {
-		Loger::Error("Can't find bus for unit: " + String(Id));
+		Config.Log->append(F1("Can't find bus for unit: ")).append(Id).Error();
 	}
 	else {
 		if (!parent->CheckAddress(address)) {
-			Loger::Error("Unit:" + String(Id) + " is absent on the bus");
+			Config.Log->append(F1("Unit:")).append(Id).append(F1(" is absent on the bus")).Error();
 			IsAvailable = false;
 		}
 		else {
@@ -46,14 +45,13 @@ bool OneWireBusUnit::IsAccessible() {
 
 void OneWireBusUnit::UnitLoop() {
 	if (prevCycle + BUS_INTERVAL < millis()) {
-		Loger::Debug("prevCycle=" + String(prevCycle));
 		parent->RequestTemperature();
 		HandleData();
 		prevCycle = millis();
 	}
 }
 
-void OneWireBusUnit::FillFrom(Unit* u) {
+void OneWireBusUnit::FillFrom(const Unit* u) {
 	Unit::FillFrom(u);
 	if (u->Type == UnitType::ONE_WIRE_THERMO) {
 		for (int i = 0; i < 8; i++) {
@@ -61,35 +59,27 @@ void OneWireBusUnit::FillFrom(Unit* u) {
 		}
 	}
 	else {
-		Loger::Error("Bad conversion type for unit " + String(Id));
+		Config.Log->append(F1("Bad conversion type for unit ")).append(Id).Error();
 	}
 }
 
 
 void const OneWireBusUnit::print(const char* header, DebugLevel level) {
-	String str0 = "";
 	if (header != NULL) {
-		str0=header;
+		Config.Log->append(header);
 	}
-	str0 += "Id:";
-	str0 += String(Id, HEX);
-	str0 += ";Type:";
-	str0 += String(Type, HEX);
-	str0 += ";Pin:";
-	str0 += String(Pin, DEC);
-	str0 += ";address:";
-	for (int i = 0; i < 8; i++) {
-		str0 += String(address[i], HEX);
-	}
-	str0 += " @ ";
-	Loger::Log(level, str0);
+	Config.Log->append(F1("Id:")).append(Id);
+	Config.Log->append(F1(";Type:")).append(Type);
+	Config.Log->append(F1(";Pin:")).append(Pin);
+	Config.Log->append(F1(" @ "));
+	Config.Log->Log(level);
 }
 
 void OneWireBusUnit::FinalInitUnit() {
 }
 
 
-void OneWireBusUnit::ConfigField(JsonObject& jsonList) {
+void OneWireBusUnit::ConfigField(const JsonObject& jsonList) {
 	if (jsonList.containsKey("Pin")) {
 		Pin = jsonList["Pin"];
 	}
