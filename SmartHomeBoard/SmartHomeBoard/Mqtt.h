@@ -15,7 +15,7 @@
 #define MQTT_INITIAL_RETRY_DELAY	1000 //delay between INITIAL reconnection retry
 #define MQTT_RETRY_TIME				10000 //delay between mqtt reconnect in loop
 #define MQTT_TOPIC_LENGTH	100
-#define MQTT_PAYLOAD_LENGTH	100
+#define MQTT_PAYLOAD_LENGTH	200
 #define MQTT_TRY_COUNT 5
 #define MQTT_WAITING_RESPONSE 10000
 #define MQTT_RESUBSCRIBE_TRY_COUNT 1
@@ -62,10 +62,12 @@ class Mqtt : public PubSubClient
 		void SubscribeUnit(int unitNumber);
 		void Subscribe(const char* topic);
 		bool Publish(const char* topic, const char* payload);
-		void Callback(const char* topic, const char* payload, unsigned int length);
+		//void Callback(const char* topic, const char* payload, unsigned int length);
+		void Callback();
 
 		Mqtt();
 		void WatchDog();
+		void PutBuffer(const char* topic, const char* payload, unsigned int len);
 
 private:
 		char *boardId = (char*)BOARD_ID;
@@ -74,5 +76,8 @@ private:
 		char topicBuff[MQTT_TOPIC_LENGTH];
 		char topicLog[7][MQTT_TOPIC_LENGTH];
 		bool MqttReconnect();
+		char topicCB[MQTT_TOPIC_LENGTH];
+		char payLoadCB[MQTT_PAYLOAD_LENGTH];
+		unsigned int lenCB;
 };
 

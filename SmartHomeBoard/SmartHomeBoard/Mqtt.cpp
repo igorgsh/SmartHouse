@@ -20,15 +20,10 @@ extern Configuration Config;
 
 
 void callbackFunc(char* topic, uint8_t* payload, unsigned int length) {
-	//Log.append("Point1:").append("topic=").append(topic).append(" length=").append((int)strlen(topic)).append(" payload=").append((int)strlen((char*)payload)).Debug();
-	//Log.append("Point3:").append("topic=").append(topic).append(" length=").append((int)strlen(topic)).append(" payload=").append((int)strlen((char*)payload)).Debug();
 	char* pl = (char*)payload;
 	pl[length] = 0;
-
-	
-	//Log.append("Topic=").append(topic).Debug();
-	//Log.append("PayLoad=").append(pl).Debug();
-	Config.MqttClient->Callback(topic, pl, length);
+	//Config.MqttClient->Callback(topic, pl, length);
+	Config.MqttClient->PutBuffer(topic, pl, length);
 }
 
 Mqtt::Mqtt() : PubSubClient(Configuration::MqttServer(), Configuration::MqttPort, callbackFunc, *(Config.EthClient)) {
@@ -65,53 +60,53 @@ uint16_t Mqtt::GetUnitId(const char* str, int offset) {
 	return atoi(str + offset);
 }
 
-void Mqtt::Callback(const char* topic, const char* payLoad, unsigned int length) {
+void Mqtt::Callback() {
 
-	if (length > 0) {
+	if (lenCB > 0) {
 		
-		Config.Log->append(F1("[")).append(topic).append(F1("]:")).append(payLoad).append(F1("#")).Debug();
+		Config.Log->append(F1("[")).append(topicCB).append(F1("]:")).append(payLoadCB).append(F1("#")).Debug();
 		sprintf(topicBuff, MQTT_CONFIG_RESPONSE, Config.BoardId);
-		if (strcmp(topic, topicBuff) == 0) {
+		if (strcmp(topicCB, topicBuff) == 0) {
 			if (Config.isConfigRequested) {
-				Config.UpdateConfig(payLoad);
+				Config.UpdateConfig(payLoadCB);
 			}
 		}
 		else {
 			sprintf(topicBuff, MQTT_ACTIONS_RESPONSE, Config.BoardId);
 
-			if (strcmp(topic, topicBuff) == 0) {
+			if (strcmp(topicCB, topicBuff) == 0) {
 				if (Config.isActionRequested) {
-					Config.UpdateActions(payLoad);
+					Config.UpdateActions(payLoadCB);
 				}
 			}
 			else {
-				int v = atoi(payLoad);
+				int v = atoi(payLoadCB);
 				
 
-				if (strncmp(topic,MQTT_BUTTONS,strlen(MQTT_BUTTONS))) {
-					Config.UpdateButton(GetUnitId(topic, strlen(MQTT_BUTTONS) + 2), v) ;
+				if (strncmp(topicCB,MQTT_BUTTONS,strlen(MQTT_BUTTONS))) {
+					Config.UpdateButton(GetUnitId(topicCB, strlen(MQTT_BUTTONS) + 2), v) ;
 				}
 				else {
-					if (strncmp(topic,MQTT_RELAYS,strlen(MQTT_RELAYS))) {
-						Config.UpdateRelay(GetUnitId(topic, strlen(MQTT_RELAYS) + 2), v);					}
+					if (strncmp(topicCB,MQTT_RELAYS,strlen(MQTT_RELAYS))) {
+						Config.UpdateRelay(GetUnitId(topicCB, strlen(MQTT_RELAYS) + 2), v);					}
 					else {
-						if (strncmp(topic,MQTT_1WIREBUS,strlen(MQTT_1WIREBUS))) {
-							Config.UpdateOneWireBus(GetUnitId(topic, strlen(MQTT_1WIREBUS) + 2), v);
+						if (strncmp(topicCB,MQTT_1WIREBUS,strlen(MQTT_1WIREBUS))) {
+							Config.UpdateOneWireBus(GetUnitId(topicCB, strlen(MQTT_1WIREBUS) + 2), v);
 						}
 						else {
-							if (strncmp(topic,MQTT_1WIRETHERMO,strlen(MQTT_1WIRETHERMO))) {
-								Config.UpdateOneWireThermo(GetUnitId(topic, strlen(MQTT_1WIRETHERMO) + 2), v);
+							if (strncmp(topicCB,MQTT_1WIRETHERMO,strlen(MQTT_1WIRETHERMO))) {
+								Config.UpdateOneWireThermo(GetUnitId(topicCB, strlen(MQTT_1WIRETHERMO) + 2), v);
 							}
 							else {
-								if (strncmp(topic,MQTT_POWERMETER, strlen(MQTT_POWERMETER))) {
-									Config.UpdatePowerMeter(GetUnitId(topic, strlen(MQTT_POWERMETER) + 2), v);
+								if (strncmp(topicCB,MQTT_POWERMETER, strlen(MQTT_POWERMETER))) {
+									Config.UpdatePowerMeter(GetUnitId(topicCB, strlen(MQTT_POWERMETER) + 2), v);
 								}
 								else {
-									if (strncmp(topic,MQTT_CONTACTOR, strlen(MQTT_CONTACTOR))) {
-										Config.UpdateContactor(GetUnitId(topic, strlen(MQTT_CONTACTOR) + 2), v);
+									if (strncmp(topicCB,MQTT_CONTACTOR, strlen(MQTT_CONTACTOR))) {
+										Config.UpdateContactor(GetUnitId(topicCB, strlen(MQTT_CONTACTOR) + 2), v);
 									}
 									else {
-										if (strncmp(topic, MQTT_RESET_BOARD, strlen(MQTT_RESET_BOARD))) {
+										if (strncmp(topicCB, MQTT_RESET_BOARD, strlen(MQTT_RESET_BOARD))) {
 											Config.Log->Info(F1("Reset"));
 
 											if (v > 0) {
@@ -153,11 +148,17 @@ void Mqtt::MqttLoop() {
 	static long lastConnected = 0;
 
 	if (connected()) {
+		//Config.Log->Debug("Point1");
 		bool res = loop();
 		if (!res) {
 			Config.Log->Error(F1("Failed loop"));
 		}
 		lastConnected = millis();
+		//Config.Log->Debug("Point2");
+		if (lenCB != 0) {
+			Callback();
+			lenCB = 0;
+		}
 	}
 	else {
 		if (lastConnected + millis() <= MQTT_RETRY_TIME) {
@@ -199,6 +200,14 @@ void Mqtt::WatchDog() {
 	//uint8_t rnd = random(0, 1000);
 	sprintf(topicBuff, MQTT_WATCH_DOG, Config.BoardId);
 	Publish(topicBuff, String(Config.counter60).c_str());
+}
+
+void Mqtt::PutBuffer(const char* topic, const char* payload, unsigned int length)
+{
+	strcpy(topicCB, topic);
+	strcpy(payLoadCB, payload);
+	lenCB = length;
+	//Config.Log->append("Buffer:(").append(lenCB).append(")[").append(topicCB).append("]:").append(payLoadCB).Debug();
 }
 
 
@@ -281,17 +290,17 @@ void Mqtt::GetActions() {
 
 void Mqtt::SubscribeUnit(int unitNumber) {
 	if (connected()) {
-		char topic[MQTT_TOPIC_LENGTH];
+		//char topic[MQTT_TOPIC_LENGTH];
 		const char* unitPrefix = NULL;
 		if (Config.units[unitNumber]->Type == UnitType::POWER_METER) {
-			PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_VOLTAGE);
-			Subscribe(topic);
-			PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_CURRENT);
-			Subscribe(topic);
-			PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_POWER);
-			Subscribe(topic);
-			PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topic, PM_ENERGY);
-			Subscribe(topic);
+			PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topicBuff, PM_VOLTAGE);
+			Subscribe(topicBuff);
+			PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topicBuff, PM_CURRENT);
+			Subscribe(topicBuff);
+			PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topicBuff, PM_POWER);
+			Subscribe(topicBuff);
+			PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topicBuff, PM_ENERGY);
+			Subscribe(topicBuff);
 		}
 		else {
 			switch (Config.units[unitNumber]->Type) {
@@ -317,8 +326,8 @@ void Mqtt::SubscribeUnit(int unitNumber) {
 			}
 			}
 			if (unitPrefix != NULL) {
-				sprintf(topic, "%s%s%c%04d", unitPrefix, MQTT_SEPARATOR, Config.units[unitNumber]->Type, Config.units[unitNumber]->Id);
-				Subscribe(topic);
+				sprintf(topicBuff, "%s%s%c%04d", unitPrefix, MQTT_SEPARATOR, Config.units[unitNumber]->Type, Config.units[unitNumber]->Id);
+				Subscribe(topicBuff);
 			}
 		}
 	}
@@ -356,6 +365,7 @@ void Mqtt::SubscribeUnits() {
 }
 
 void Mqtt::Subscribe(const char* topic) {
+	Config.Log->append(F1("Subscription:")).append(topic).Debug();
 	if (connected()) {
 		subscribe(topic);
 	}

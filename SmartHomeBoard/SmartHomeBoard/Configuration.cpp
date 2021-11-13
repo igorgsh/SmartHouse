@@ -171,7 +171,7 @@ void Configuration::UpdateConfig(const char* jsonConfig) {
 
 		if (root.containsKey("length")) {
 			byte nUnits = (byte)root["length"];
-			Log->append(F1("Number of config Units=")).append(numberUnits).Debug();
+			Log->append(F1("Number of config Units=")).append(nUnits).Debug();
 			configCounter = 0;
 			CreateUnits(nUnits);
 			lenDetected = true;
@@ -193,7 +193,7 @@ void Configuration::UpdateConfig(const char* jsonConfig) {
 
 				configCounter++;
 				if (configCounter == numberUnits) {
-					Log->Debug(F1("Finish update configuration"));
+					Log->append(F1("Finish update configuration(")).append(numberUnits).append(")").Debug();
 					IsConfigReady = true;
 				}
 			}
