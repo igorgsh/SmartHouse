@@ -48,6 +48,8 @@ public:
 	void UpdatePowerMeter(uint16_t unitId, uint16_t value) { UpdateUnit(UnitType::POWER_METER, unitId, value); };
 	void UpdateContactor(uint16_t unitId, uint16_t value) { UpdateUnit(UnitType::CONTACTOR, unitId, value); };
 	void ProcessAction(uint16_t id, byte event);
+	void Pass2Parent(uint16_t parentId, byte parentPin, bool status);
+
 	Unit* CreateTypedUnit(byte type);
 
 	void MainLoop();

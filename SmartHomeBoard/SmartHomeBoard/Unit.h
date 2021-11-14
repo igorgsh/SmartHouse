@@ -14,11 +14,12 @@ public:
 	uint16_t Id;
 	byte Type;
 	byte status;
+	uint16_t parentId=0;
+	
 	//bool isSubscribed = false;
 
 	virtual bool Compare(const Unit* u) =0;
 	virtual void FillFrom(const Unit* u);
-	virtual void SetDefault() =0;
 	virtual void UnitLoop() = 0;
 	virtual void InitUnit() = 0;
 	virtual byte UnitStoredSize() = 0;
@@ -34,7 +35,6 @@ public:
 
 class UnitProto : public Unit {
 public:
-	void SetDefault() {};
 	void InitUnit() {};
 	void ProcessUnit(ActionType action) {};
 	void UnitLoop() {};

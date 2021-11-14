@@ -31,7 +31,7 @@ public:
 	void UnitLoop();
 	void FinalInitUnit() {};
 	bool Compare(const Unit* u);
-	byte UnitStoredSize() {return 4;}
+	byte UnitStoredSize() {return 7;}
 	void ReadFromEEPROM(uint16_t addr);
 	void WriteToEEPROM(uint16_t addr);
 	void ConfigField(const JsonObject& jsonList);

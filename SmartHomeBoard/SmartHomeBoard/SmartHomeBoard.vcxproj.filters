@@ -90,6 +90,12 @@
     <ClInclude Include="Contactor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ShiftRegister.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShiftRegisterOut.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Action.cpp">
@@ -135,6 +141,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Contactor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShiftRegister.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShiftRegisterOut.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

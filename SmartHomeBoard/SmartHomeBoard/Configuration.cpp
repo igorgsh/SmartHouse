@@ -16,6 +16,7 @@
 #include "OneWireThermo.h"
 #include "PowerMeter.h"
 #include "Contactor.h"
+#include "ShiftRegisterOut.h"
 
 //extern Mqtt MqttClient;
 
@@ -152,6 +153,14 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::CONTACTOR;
+	} 
+	else if (type == UnitType::SHIFTOUT) {
+		u = new ShiftRegisterOut();
+		if (u == NULL) {
+			Log->Error(F1("Can't create ShiftRegisterOut"));
+			Board::Reset(10000);
+		}
+		u->Type = UnitType::SHIFTOUT;
 	}
 	if (u == NULL) {
 		Log->append(F1("Can't create a typed unit:")).append((char)type).Error();
@@ -356,6 +365,15 @@ void Configuration::UnitsLoop() {
 		if (units[i]->Type != UnitType::POWER_METER) {
 			units[i]->UnitLoop();
 		}
+	}
+}
+
+void Configuration::Pass2Parent(uint16_t parentId, byte parentPin, bool status) {
+
+	Unit* parent = FindUnit(parentId);
+	if (parent != NULL) {
+		ShiftRegisterOut* SRegOut = (ShiftRegisterOut*)parent;
+		SRegOut->Set(parentPin, status);
 	}
 }
 

@@ -7,15 +7,16 @@ class Relay : public Unit
 {
 public:
 	byte Pin;
+	byte parentPin=0;
 	bool lhOn;
 
-	void SetDefault();
+	//void SetDefault();
 	void InitUnit();
 	void ProcessUnit(ActionType event);
 	void UnitLoop();
 	void FinalInitUnit() {};
 	bool Compare(const Unit* u);
-	byte UnitStoredSize() { return 5; }
+	byte UnitStoredSize() { return 9; }
 	void ReadFromEEPROM(uint16_t addr);
 	void WriteToEEPROM(uint16_t addr);
 	void ConfigField(const JsonObject& jsonList);

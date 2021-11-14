@@ -71,7 +71,8 @@ bool Contactor::Compare(const Unit* u) {
 		Id == tu->Id &&
 		Type == tu->Type &&
 		Pin == tu->Pin &&
-		lhOn == tu->lhOn 
+		lhOn == tu->lhOn && 
+		parentId == tu->parentId
 		;
 	return res;
 }
@@ -79,19 +80,21 @@ bool Contactor::Compare(const Unit* u) {
 
 void Contactor::ReadFromEEPROM(uint16_t addr) {
 
-	Id = SigmaEEPROM::Read8(addr);
-	Type = SigmaEEPROM::Read8(addr + 1);
-	Pin = SigmaEEPROM::Read8(addr + 2);
-	lhOn = SigmaEEPROM::Read8(addr + 3);
-
+	Id = SigmaEEPROM::Read16(addr); //0-1
+	Type = SigmaEEPROM::Read8(addr + 2);
+	Pin = SigmaEEPROM::Read8(addr + 3);
+	lhOn = SigmaEEPROM::Read8(addr + 4);
+	parentId = SigmaEEPROM::Read16(addr + 5); //5-6
 }
 
 void Contactor::WriteToEEPROM(uint16_t addr) {
 
-	SigmaEEPROM::Write8(addr, Id);
-	SigmaEEPROM::Write8(addr + 1, Type);
-	SigmaEEPROM::Write8(addr + 2, Pin);
-	SigmaEEPROM::Write8(addr + 3, lhOn);
+	SigmaEEPROM::Write16(addr, Id); //0-1
+	SigmaEEPROM::Write8(addr + 2, Type);
+	SigmaEEPROM::Write8(addr + 3, Pin);
+	SigmaEEPROM::Write8(addr + 4, lhOn);
+	SigmaEEPROM::Write16(addr + 5 , parentId); //5-6
+
 }
 
 void Contactor::ConfigField(const JsonObject& jsonList) {
@@ -100,6 +103,9 @@ void Contactor::ConfigField(const JsonObject& jsonList) {
 	}
 	if (jsonList.containsKey("lhOn")) {
 		lhOn = jsonList["lhOn"];
+	}
+	if (jsonList.containsKey("parentId")) {
+		parentId = jsonList["parentId"];
 	}
 }
 
@@ -112,6 +118,7 @@ void const Contactor::print(const char* header, DebugLevel level) {
 	Config.Log->append(F1(";Type:")).append((char)Type);
 	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
 	Config.Log->append(F1(";lhOn:")).append((unsigned int)lhOn);
+	Config.Log->append(F1(";ParentId:")).append((unsigned int)parentId);
 	Config.Log->append(F1(" @"));
 	Config.Log->Log(level);
 }

@@ -63,7 +63,7 @@ uint16_t Mqtt::GetUnitId(const char* str, int offset) {
 void Mqtt::Callback() {
 
 	if (lenCB > 0) {
-		
+
 		Config.Log->append(F1("[")).append(topicCB).append(F1("]:")).append(payLoadCB).append(F1("#")).Debug();
 		sprintf(topicBuff, MQTT_CONFIG_RESPONSE, Config.BoardId);
 		if (strcmp(topicCB, topicBuff) == 0) {
@@ -81,42 +81,31 @@ void Mqtt::Callback() {
 			}
 			else {
 				int v = atoi(payLoadCB);
-				
 
-				if (strncmp(topicCB,MQTT_BUTTONS,strlen(MQTT_BUTTONS))) {
-					Config.UpdateButton(GetUnitId(topicCB, strlen(MQTT_BUTTONS) + 2), v) ;
+
+				if (strncmp(topicCB, MQTT_BUTTONS, strlen(MQTT_BUTTONS))) {
+					Config.UpdateButton(GetUnitId(topicCB, strlen(MQTT_BUTTONS) + 2), v);
 				}
-				else {
-					if (strncmp(topicCB,MQTT_RELAYS,strlen(MQTT_RELAYS))) {
-						Config.UpdateRelay(GetUnitId(topicCB, strlen(MQTT_RELAYS) + 2), v);					}
-					else {
-						if (strncmp(topicCB,MQTT_1WIREBUS,strlen(MQTT_1WIREBUS))) {
-							Config.UpdateOneWireBus(GetUnitId(topicCB, strlen(MQTT_1WIREBUS) + 2), v);
-						}
-						else {
-							if (strncmp(topicCB,MQTT_1WIRETHERMO,strlen(MQTT_1WIRETHERMO))) {
-								Config.UpdateOneWireThermo(GetUnitId(topicCB, strlen(MQTT_1WIRETHERMO) + 2), v);
-							}
-							else {
-								if (strncmp(topicCB,MQTT_POWERMETER, strlen(MQTT_POWERMETER))) {
-									Config.UpdatePowerMeter(GetUnitId(topicCB, strlen(MQTT_POWERMETER) + 2), v);
-								}
-								else {
-									if (strncmp(topicCB,MQTT_CONTACTOR, strlen(MQTT_CONTACTOR))) {
-										Config.UpdateContactor(GetUnitId(topicCB, strlen(MQTT_CONTACTOR) + 2), v);
-									}
-									else {
-										if (strncmp(topicCB, MQTT_RESET_BOARD, strlen(MQTT_RESET_BOARD))) {
-											Config.Log->Info(F1("Reset"));
+				else if (strncmp(topicCB, MQTT_RELAYS, strlen(MQTT_RELAYS))) {
+					Config.UpdateRelay(GetUnitId(topicCB, strlen(MQTT_RELAYS) + 2), v);
+				}
+				else if (strncmp(topicCB, MQTT_1WIREBUS, strlen(MQTT_1WIREBUS))) {
+					Config.UpdateOneWireBus(GetUnitId(topicCB, strlen(MQTT_1WIREBUS) + 2), v);
+				}
+				else if (strncmp(topicCB, MQTT_1WIRETHERMO, strlen(MQTT_1WIRETHERMO))) {
+					Config.UpdateOneWireThermo(GetUnitId(topicCB, strlen(MQTT_1WIRETHERMO) + 2), v);
+				}
+				else if (strncmp(topicCB, MQTT_POWERMETER, strlen(MQTT_POWERMETER))) {
+					Config.UpdatePowerMeter(GetUnitId(topicCB, strlen(MQTT_POWERMETER) + 2), v);
+				}
+				else if (strncmp(topicCB, MQTT_CONTACTOR, strlen(MQTT_CONTACTOR))) {
+					Config.UpdateContactor(GetUnitId(topicCB, strlen(MQTT_CONTACTOR) + 2), v);
+				}
+				else if (strncmp(topicCB, MQTT_RESET_BOARD, strlen(MQTT_RESET_BOARD))) {
+					Config.Log->Info(F1("Reset"));
 
-											if (v > 0) {
-												Board::Reset(10000);
-											}
-										}
-									}
-								}
-							}
-						}
+					if (v > 0) {
+						Board::Reset(10000);
 					}
 				}
 			}
@@ -129,9 +118,6 @@ void Mqtt::Callback() {
 void Mqtt::InitMqtt(void) {
 	long connectTry = 0;
 	bool res = false;
-	for (int i = 0; i < 7; i++) {
-		sprintf(topicLog[i], MQTT_LOG, Config.BoardId, LOG_END[i]);
-	}
 
 	while (!res && connectTry <= MQTT_TRY_COUNT) {
 		res = MqttReconnect();
@@ -174,7 +160,8 @@ void Mqtt::MqttLoop() {
 void Mqtt::PublishLog(DebugLevel level, const char* message) {
 
 	if (connected()) {
-		publish(topicLog[level], message);
+		sprintf(topicLog, MQTT_LOG, Config.BoardId, LOG_END[level]);
+		publish(topicLog, message);
 	}
 }
 
@@ -301,6 +288,8 @@ void Mqtt::SubscribeUnit(int unitNumber) {
 			Subscribe(topicBuff);
 			PowerMeter::MqttTopic(Config.units[unitNumber]->Id, topicBuff, PM_ENERGY);
 			Subscribe(topicBuff);
+		} else if(Config.units[unitNumber]->Type == UnitType::SHIFTIN 
+			|| Config.units[unitNumber]->Type == UnitType::SHIFTOUT){// no subscription required 
 		}
 		else {
 			switch (Config.units[unitNumber]->Type) {
