@@ -1,18 +1,20 @@
 
 #include "Relay.h"
-#include "process.h"
-#include "ext_global.h"
-#include "mqtt.h"
+//#include "process.h"
+#include "Configuration.h"
 #include "SigmaEEPROM.h"
 
-extern Mqtt MqttClient;
+extern Configuration Config;
 
 void Relay::SetDefault() {
 
 	status = LOW;
 }
 void Relay::InitUnit() {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	pinMode(Pin, OUTPUT);
 	ProcessUnit(status==HIGH ? ACT_ON : ACT_OFF);
 	
@@ -22,7 +24,7 @@ void Relay::RelaySet(bool newStatus)
 {
 	digitalWrite(Pin, (newStatus == HIGH ? lhOn : !lhOn));
 	status = newStatus;
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 	Config.ProcessAction(Id, newStatus);
 }
 
@@ -33,7 +35,7 @@ void Relay::RelaySwitch() {
 void Relay::ProcessUnit(ActionType event) {
 	switch (event) {
 	case ACT_OFF: {
-		RelayOff();
+		RelayOfF1();
 		break;
 	}
 	case ACT_ON: {
@@ -91,8 +93,13 @@ void Relay::WriteToEEPROM(uint16_t addr) {
 
 
 void Relay::ConfigField(const JsonObject& jsonList) {
+<<<<<<< HEAD
 	if (jsonList.containsKey(F("Pin"))) {
 		Pin = jsonList[F("Pin")];
+=======
+	if (jsonList.containsKey("Pin")) {
+		Pin = jsonList["Pin"];
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	}
 	if (jsonList.containsKey(F("lhOn"))) {
 		lhOn = jsonList[F("lhOn")];
@@ -104,11 +111,10 @@ void Relay::ConfigField(const JsonObject& jsonList) {
 
 
 void const Relay::print(const char* header, DebugLevel level) {
-	String str0 = "";
-
 	if (header != NULL) {
-		str0 = header;
+		Config.Log->append(header);
 	}
+<<<<<<< HEAD
 	str0 += F("Id:");
 	str0 += (unsigned int)Id;
 	str0 += F(";Type:");
@@ -123,5 +129,14 @@ void const Relay::print(const char* header, DebugLevel level) {
 	str0 += (isSubscribed ? F("true") : F("false"));
 	str0 += F(" @");
 	Loger::Log(level, str0);
+=======
+	Config.Log->append(F1("Id:")).append((unsigned int)Id);
+	Config.Log->append(F1(";Type:")).append((char)Type);
+	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
+	Config.Log->append(F1(";lhOn:")).append((unsigned int)lhOn);
+	Config.Log->append(F1(";status:")).append((unsigned int)status);
+	Config.Log->append(F1(" @"));
+	Config.Log->Log(level);
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }
 

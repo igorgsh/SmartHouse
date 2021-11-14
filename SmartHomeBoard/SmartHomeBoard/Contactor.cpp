@@ -4,12 +4,17 @@
 
 #include "Contactor.h"
 
+<<<<<<< HEAD
 #include "ext_global.h"
 #include "mqtt.h"
 //#include "Loger.h"
+=======
+#include "Configuration.h"
+//#include "mqtt.h"
+#include "Loger.h"
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 #include "SigmaEEPROM.h"
-
-extern Mqtt MqttClient;
+extern Configuration Config;
 
 void Contactor::SetDefault() {
 	startContact = 0;
@@ -22,7 +27,7 @@ void Contactor::InitUnit() {
 	startContact = 0;
 	prevValue = digitalRead(Pin);
 	status = !lhOn;
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 }
 
 
@@ -48,14 +53,14 @@ void Contactor::HandleContactor() {
 
 void Contactor::HandleFinish(int newStatus) {
 	status = newStatus;
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 	Config.ProcessAction(Id, status);
 
 }
 
 void Contactor::ProcessUnit(ActionType event) {
 	Config.ProcessAction(Id, event);
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 
 }
 
@@ -79,7 +84,6 @@ bool Contactor::Compare(const Unit* u) {
 
 
 void Contactor::ReadFromEEPROM(uint16_t addr) {
-	//	bool res = true;
 
 	Id = SigmaEEPROM::Read8(addr);
 	Type = SigmaEEPROM::Read8(addr + 1);
@@ -97,8 +101,13 @@ void Contactor::WriteToEEPROM(uint16_t addr) {
 }
 
 void Contactor::ConfigField(const JsonObject& jsonList) {
+<<<<<<< HEAD
 	if (jsonList.containsKey(F("Pin"))) {
 		Pin = jsonList[F("Pin")];
+=======
+	if (jsonList.containsKey("Pin")) {
+		Pin = jsonList["Pin"];
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	}
 	if (jsonList.containsKey(F("lhOn"))) {
 		lhOn = jsonList[F("lhOn")];
@@ -107,6 +116,7 @@ void Contactor::ConfigField(const JsonObject& jsonList) {
 
 
 void const Contactor::print(const char* header, DebugLevel level) {
+<<<<<<< HEAD
 	Loger::LogMessage = F("");
 
 	if (header != NULL) {
@@ -124,4 +134,15 @@ void const Contactor::print(const char* header, DebugLevel level) {
 	Loger::LogMessage += (isSubscribed ? F("true") : F("false"));
 	Loger::LogMessage += F("@");
 	Loger::Log(level);
+=======
+	if (header != NULL) {
+		Config.Log->append(header);
+	}
+	Config.Log->append(F1("Id:")).append((unsigned int)Id);
+	Config.Log->append(F1(";Type:")).append((char)Type);
+	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
+	Config.Log->append(F1(";lhOn:")).append((unsigned int)lhOn);
+	Config.Log->append(F1(" @"));
+	Config.Log->Log(level);
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }

@@ -1,9 +1,8 @@
 #include "PowerMeter.h"
-#include "ext_global.h"
-#include "mqtt.h"
+#include "Configuration.h"
 #include "SigmaEEPROM.h"
 
-extern Mqtt MqttClient;
+extern Configuration Config;
 
 
 PowerMeter::PowerMeter()
@@ -33,7 +32,7 @@ void PowerMeter::InitUnit() {
 			port = &Serial3;
 			break;
 		default:
-			Loger::Debug("Port not found");
+			Config.Log->Error(F1("Port not found"));
 			port = NULL;
 			break;
 		}
@@ -102,25 +101,25 @@ void PowerMeter::PublishAll() {
 
 	dtostrf(v, 6, 2, payload);
 	MqttTopic(Id, topic, PM_VOLTAGE);
-	MqttClient.Publish(topic, payload);
+	Config.MqttClient->Publish(topic, payload);
 
 	v = current();
 	if (v <= 0) v = 0;
 	dtostrf(v, 6, 2, payload);
 	MqttTopic(Id, topic, PM_CURRENT);
-	MqttClient.Publish(topic, payload);
+	Config.MqttClient->Publish(topic, payload);
 
 	v = power();
 	if (v <= 0) v = 0;
 	dtostrf(v, 6, 2, payload);
 	MqttTopic(Id, topic, PM_POWER);
-	MqttClient.Publish(topic, payload);
+	Config.MqttClient->Publish(topic, payload);
 
 	v = energy();
 	if (v > 0) {
 		dtostrf(v, 6, 2, payload);
 		MqttTopic(Id, topic, PM_ENERGY);
-		MqttClient.Publish(topic, payload);
+		Config.MqttClient->Publish(topic, payload);
 	}
 }
 
@@ -218,9 +217,9 @@ void PowerMeter::ConfigField(const JsonObject& jsonList) {
 
 
 void const PowerMeter::print(const char* header, DebugLevel level) {
-	String str0 = "";
 
 	if (header != NULL) {
+<<<<<<< HEAD
 		str0 = header;
 	}
 	str0 += F("Id:");
@@ -239,4 +238,17 @@ void const PowerMeter::print(const char* header, DebugLevel level) {
 	str0 += (isSubscribed ? F("true") : F("false"));
 	str0 += F("@");
 	Loger::Log(level, str0);
+=======
+		Config.Log->append(header);
+	}
+	Config.Log->append(F1("Id:")).append((unsigned int)Id);
+	Config.Log->append(F1(";Type:")).append((char)Type);
+	Config.Log->append(F1(";Serial:")).append((unsigned int)Serial);
+	Config.Log->append(F1(";SerialRX:")).append((unsigned int)serialRX);
+	Config.Log->append(F1(";SerialTX:")).append((unsigned int)serialTX);
+	Config.Log->append(F1(";Factor:")).append((unsigned int)factor);
+//	Log.append(F1(";subscription:")).append(isSubscribed ? "true" : "false");
+	Config.Log->append(F1(" @"));
+	Config.Log->Log(level);
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }

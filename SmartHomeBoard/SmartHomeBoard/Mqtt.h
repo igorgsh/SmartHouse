@@ -2,17 +2,23 @@
 
 #pragma once 
 
+#include <SafeString.h>
 #include <PubSubClient.h>
 #include "definitions.h"
-#include "configuration.h"
-#include "ext_global.h"
+#include "Unit.h"
+//#include "configuration.h"
+//#include "ext_global.h"
 
 
 
 #define MQTT_INITIAL_RETRY_DELAY	1000 //delay between INITIAL reconnection retry
 #define MQTT_RETRY_TIME				10000 //delay between mqtt reconnect in loop
 #define MQTT_TOPIC_LENGTH	100
+<<<<<<< HEAD
 #define MQTT_PAYLOAD_LENGTH	100
+=======
+#define MQTT_PAYLOAD_LENGTH	200
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 #define MQTT_TRY_COUNT 5
 #define MQTT_WAITING_RESPONSE 10000
 #define MQTT_RESUBSCRIBE_TRY_COUNT 1
@@ -61,6 +67,7 @@ class Mqtt : public PubSubClient
 		void MqttLoop();
 		void GetConfiguration();
 		void GetActions();
+<<<<<<< HEAD
 		void PublishLog(DebugLevel level, const String &message);
 		void PublishUnit(const Unit* unit);
 		void SubscribeUnits();
@@ -68,15 +75,36 @@ class Mqtt : public PubSubClient
 		void Subscribe(const String &topic);
 		bool Publish(const String &topic, const String &payload);
 		void Callback(const String& topic, const String& payload, unsigned int length);
+=======
+		void PublishLog(DebugLevel level, const char* message);
+		void PublishUnit(const Unit* unit);
+		void SubscribeUnits();
+		void SubscribeUnit(int unitNumber);
+		void Subscribe(const char* topic);
+		bool Publish(const char* topic, const char* payload);
+		//void Callback(const char* topic, const char* payload, unsigned int length);
+		void Callback();
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 
 		Mqtt();
 		void WatchDog();
+		void PutBuffer(const char* topic, const char* payload, unsigned int len);
 
 private:
 		char *boardId = (char*)BOARD_ID;
 		const char *LOG_END[7] = { "OFF", "FATAL","ERROR","WARN","INFO","DEBUG","ALL" };
+<<<<<<< HEAD
 
 		bool MqttReconnect();
 		void SubscribeBoardTopic(const char* templ, byte boardId);
 		int GetUnitId(const String &topic, int prefixLen);
+=======
+		uint16_t GetUnitId(const char* str, int offset);
+		char topicBuff[MQTT_TOPIC_LENGTH];
+		char topicLog[7][MQTT_TOPIC_LENGTH];
+		bool MqttReconnect();
+		char topicCB[MQTT_TOPIC_LENGTH];
+		char payLoadCB[MQTT_PAYLOAD_LENGTH];
+		unsigned int lenCB;
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 };

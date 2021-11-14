@@ -20,6 +20,7 @@ int memoryFree()
 	return freeValue;
 }
 
+<<<<<<< HEAD
  void PrintIP(IPAddress addr, String& dest) {
 	 dest+=addr[0];
 	 dest += '.';
@@ -29,5 +30,10 @@ int memoryFree()
 	 dest += '.';
 	 dest+=addr[3];
 }
+=======
+//String PrintIP(IPAddress addr) {
+//	return String(addr[0]) + "." + String(addr[1]) + "." + String(addr[2]) + "." + String(addr[3]);
+//}
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 
 

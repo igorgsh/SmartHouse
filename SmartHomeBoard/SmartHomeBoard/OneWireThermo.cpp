@@ -1,16 +1,23 @@
 #include "OneWireThermo.h"
 //#include "Loger.h"
 #include "OneWireBus.h"
+<<<<<<< HEAD
 #include "ext_global.h"
 #include "Mqtt.h"
+=======
+#include "Loger.h"
+#include "Configuration.h"
+//#include "Mqtt.h"
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 
-extern Mqtt MqttClient;
+extern Configuration Config;
 
 void OneWireThermo::SetDefault() {
 	//nothing todo
 }
 
 void OneWireThermo::InitUnit() {
+<<<<<<< HEAD
 	Loger::Debug(F("Init OneWireThermo Unit"));
 
 	OneWireBusUnit::InitUnit();
@@ -19,6 +26,12 @@ void OneWireThermo::InitUnit() {
 		Loger::LogMessage += Id;
 		Loger::LogMessage = F(" Is unavailable on the bus");
 		Loger::Error();
+=======
+
+	OneWireBusUnit::InitUnit();
+	if (!IsAccessible()) {
+		Config.Log->append(F1("Unit: ")).append(Id).append(F1(" Is unavailable on the bus")).Error();
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	}
 
 }
@@ -37,7 +50,7 @@ void OneWireThermo::HandleData() {
 	if (IsAccessible()) {
 		float t =  parent->GetTemperature(address);
 		status = (int)(t*10);
-		MqttClient.PublishUnit(this);
+		Config.MqttClient->PublishUnit(this);
 		Config.ProcessAction(Id, ACT_SENSOR_READY);
 	}
 }

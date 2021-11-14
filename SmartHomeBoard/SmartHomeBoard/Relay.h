@@ -6,11 +6,8 @@
 class Relay : public Unit
 {
 public:
-
-
 	byte Pin;
 	bool lhOn;
-
 
 	void SetDefault();
 	void InitUnit();
@@ -28,7 +25,7 @@ private:
 	void RelaySet(bool highLow);
 	void RelaySwitch();
 	void RelayOn() { RelaySet(HIGH); };
-	void RelayOff() { RelaySet(LOW); };
+	void RelayOfF1() { RelaySet(LOW); };
 
 };
 

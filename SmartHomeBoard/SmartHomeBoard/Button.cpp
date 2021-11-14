@@ -1,10 +1,16 @@
 #include "button.h"
+<<<<<<< HEAD
 #include "ext_global.h"
 #include "mqtt.h"
 //#include "Loger.h"
+=======
+//#include "mqtt.h"
+#include "Loger.h"
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 #include "SigmaEEPROM.h"
+#include "Configuration.h"
 
-extern Mqtt MqttClient;
+extern Configuration Config;
 
 void Button::SetDefault() {
 	startPressing = 0;
@@ -15,7 +21,7 @@ void Button::SetDefault() {
 void Button::InitUnit() {
 	pinMode(Pin, INPUT);
 	digitalWrite(Pin, !lhOn);
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 }
 
 
@@ -86,7 +92,7 @@ void Button::HandleButton() {
 
 void Button::HandleFinish(int newStatus) {
 	status = newStatus;
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 	Config.ProcessAction(Id, newStatus);
 
 }
@@ -94,7 +100,7 @@ void Button::HandleFinish(int newStatus) {
 void Button::ProcessUnit(ActionType event) {
 	Config.ProcessAction(Id, event);
 	status = ACT_OFF;
-	MqttClient.PublishUnit(this);
+	Config.MqttClient->PublishUnit(this);
 
 }
 
@@ -137,8 +143,13 @@ void Button::WriteToEEPROM(uint16_t addr) {
 }
 
 void Button::ConfigField(const JsonObject& jsonList) {
+<<<<<<< HEAD
 	if (jsonList.containsKey(F("Pin"))) {
 		Pin = jsonList[F("Pin")];
+=======
+	if (jsonList.containsKey("Pin")) {
+		Pin = jsonList["Pin"];
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	}
 	if (jsonList.containsKey(F("lhOn"))) {
 		lhOn = jsonList[F("lhOn")];
@@ -150,6 +161,7 @@ void Button::ConfigField(const JsonObject& jsonList) {
 
 
 void const Button::print(const char* header, DebugLevel level) {
+<<<<<<< HEAD
 
 	if (header != NULL) {
 		Loger::LogMessage = header;
@@ -166,4 +178,16 @@ void const Button::print(const char* header, DebugLevel level) {
 	Loger::LogMessage += (isSubscribed ? F("true") : F("false"));
 	Loger::LogMessage += F("@");
 	Loger::Log(level);
+=======
+	if (header != NULL) {
+		Config.Log->append(header);
+	}
+	Config.Log->append(F1("Id:")).append((unsigned int)Id);
+	Config.Log->append(F1(";Type:")).append((char)Type);
+	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
+	Config.Log->append(F1(";lhOn:")).append((unsigned int)lhOn);
+	Config.Log->append(F1(" @"));
+
+	Config.Log->Log(level);
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }

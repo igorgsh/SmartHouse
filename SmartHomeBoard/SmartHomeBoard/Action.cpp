@@ -4,7 +4,9 @@
 
 #include "action.h"
 #include "SigmaEEPROM.h"
+#include"Configuration.h"
 
+extern Configuration Config;
 
 
 bool Action::Compare(const Action* a) {
@@ -21,14 +23,19 @@ bool Action::Compare(const Action* a) {
 		);
 }
 
+<<<<<<< HEAD
 void Action::print(const char* header, DebugLevel level) {
 
 	String str0;
 	str0.reserve(100);
 	str0 = "";
+=======
+void Action::print(const char* header,DebugLevel level) {
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	if (header != NULL) {
-		str0 = header;
+		Config.Log->append(header);
 	}
+<<<<<<< HEAD
 	str0 += F("Id:");
 	str0 += Id;
 	str0 += F(";event:");
@@ -46,6 +53,18 @@ void Action::print(const char* header, DebugLevel level) {
 
 	str0 += F("@");
 	Loger::Log(level, str0);
+=======
+	Config.Log->append(F1("Id:")).append(Id);
+	Config.Log->append(F1(";event:")).append(event);
+	Config.Log->append(F1(";originId:")).append(originId);
+	Config.Log->append(F1(";originType:")).append((char)originType);
+	Config.Log->append(F1(";targetAction:")).append(targetAction);
+	Config.Log->append(F1(";targetId:")).append(targetId);
+	Config.Log->append(F1(";targetType:")).append((char)targetType);
+	
+	Config.Log->append(F1(" @ "));
+	Config.Log->Log(level);
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }
 
 void Action::FillFrom(const Action* a) {

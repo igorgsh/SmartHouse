@@ -23,8 +23,6 @@ public:
 
 	byte Pin;
 	bool lhOn;
-
-
 	
 	void SetDefault();
 	void InitUnit();

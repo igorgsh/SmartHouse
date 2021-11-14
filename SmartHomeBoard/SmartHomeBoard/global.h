@@ -9,7 +9,8 @@
 Configuration Config;
 DebugLevel dLevel = D_DEBUG;
 
-EthernetClient EthClient;
-Mqtt MqttClient;
+//EthernetClient EthClient;
+//Mqtt MqttClient;
+//Loger Log = Loger(200);
 
 

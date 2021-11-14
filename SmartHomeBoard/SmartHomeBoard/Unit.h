@@ -7,13 +7,18 @@
 #include <ArduinoJson.h>
 
 
+
 class Unit
 {
 public:
 	uint16_t Id;
 	byte Type;
 	byte status;
+<<<<<<< HEAD
 	bool isSubscribed = false;
+=======
+	//bool isSubscribed = false;
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 
 	virtual bool Compare(const Unit* u) =0;
 	virtual void FillFrom(const Unit* u);

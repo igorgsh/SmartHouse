@@ -20,7 +20,7 @@
 #include "ShiftRegisterIn.h"
 
 
-extern Mqtt MqttClient;
+//extern Mqtt MqttClient;
 
 
 
@@ -34,9 +34,12 @@ Unit** Configuration::CreateUnits(byte nUnits) {
 		}
 		delete units;
 	}
+<<<<<<< HEAD
 	Loger::LogMessage = F("Create Units:");
 	Loger::LogMessage += nUnits;
 	Loger::Debug();
+=======
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	if (nUnits == 0) {
 		units = NULL;
 	}
@@ -44,7 +47,11 @@ Unit** Configuration::CreateUnits(byte nUnits) {
 		units = new Unit * [nUnits];
 	}
 	numberUnits = nUnits;
+<<<<<<< HEAD
 	return Config.units;
+=======
+	return units;
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }
 
 Action** Configuration::CreateActions(byte nActions) {
@@ -56,9 +63,12 @@ Action** Configuration::CreateActions(byte nActions) {
 		}
 		delete actions;
 	}
+<<<<<<< HEAD
 	Loger::LogMessage = F("Create Actions:");
 	Loger::LogMessage += nActions;
 	Loger::Debug();
+=======
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	if (nActions == 0) {
 		actions = NULL;
 	}
@@ -71,7 +81,11 @@ Action** Configuration::CreateActions(byte nActions) {
 
 
 Unit* Configuration::FindUnit(uint16_t id) {
+<<<<<<< HEAD
 	if (units != NULL /*&& IsConfigReady*/) {
+=======
+	if (units != NULL /*&& IsConfigReady*/ ) {
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 		for (int i = 0; i < numberUnits; i++) {
 			if (units[i]->Id == id) {
 				return units[i];
@@ -83,21 +97,29 @@ Unit* Configuration::FindUnit(uint16_t id) {
 
 
 void Configuration::MainLoop() {
-	MqttClient.MqttLoop();
-	Config.UnitsLoop();
+	MqttClient->MqttLoop();
+	UnitsLoop();
 }
 
 void Configuration::InitializeServer() {
+<<<<<<< HEAD
 	Ethernet.begin(Config.mac, Config.ip);
 	Loger::LogMessage = F("Board IP is: ");
 	PrintIP(Ethernet.localIP(), Loger::LogMessage);
 	Loger::Info();
+=======
+	Ethernet.begin(mac, ip);
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }
 
 
 void Configuration::Init() {
+	Log = new Loger(200);
 	ReadBoardId();
+	EthClient = new EthernetClient();
+	
 	if (IsEthernetConnection) {
+<<<<<<< HEAD
 		Loger::LogMessage = F("Init Ethernet");
 		Loger::Debug();
 		InitializeServer();
@@ -119,6 +141,20 @@ Configuration::Configuration()
 {
 //	BoardName.reserve(9);
 // 	BoardName = "";
+=======
+		//Log->Debug(F1("Init Ethernet"));
+		InitializeServer();
+		//Log->Debug(F1("Initialize MQTT"));
+		MqttClient = new Mqtt();
+		MqttClient->InitMqtt();
+	}
+	BuildConfig();
+	BuildActions();
+
+	Log->Debug(F1("Subscribe Units"));
+	MqttClient->SubscribeUnits();
+	Log->Debug(F1("Config init is finished"));
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }
 
 Unit* Configuration::CreateTypedUnit(byte type) {
@@ -127,8 +163,12 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 	if (type == UnitType::BUTTON) {
 		u = new Button();
 		if (u == NULL) {
+<<<<<<< HEAD
 			Loger::LogMessage = F("Can't create Button Unit");
 			Loger::Error();
+=======
+			Log->Error(F1("Can't create Button Unit"));
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::BUTTON;
@@ -137,8 +177,12 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 
 		u = new Relay();
 		if (u == NULL) {
+<<<<<<< HEAD
 			Loger::LogMessage = F("Can't create Relay Unit");
 			Loger::Error();
+=======
+			Log->Error(F1("Can't create Relay Unit"));
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::RELAY;
@@ -146,8 +190,12 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 	else if (type == UnitType::ONE_WIRE_BUS) {
 		u = new OneWireBus();
 		if (u == NULL) {
+<<<<<<< HEAD
 			Loger::LogMessage = F("Can't create OneWire bus Unit");
 			Loger::Error();
+=======
+			Log->Error(F1("Can't create OneWire bus Unit"));
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::ONE_WIRE_BUS;
@@ -155,8 +203,12 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 	else if (type == UnitType::ONE_WIRE_THERMO) {
 		u = new OneWireThermo();
 		if (u == NULL) {
+<<<<<<< HEAD
 			Loger::LogMessage = F("Can't create OneWire Thermometer Unit");
 			Loger::Error();
+=======
+			Log->Error(F1("Can't create OneWire Thermometer Unit"));
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::ONE_WIRE_THERMO;
@@ -164,8 +216,12 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 	else if (type == UnitType::POWER_METER) {
 		u = new PowerMeter();
 		if (u == NULL) {
+<<<<<<< HEAD
 			Loger::LogMessage = F("Can't create Power Meter Unit");
 			Loger::Error();
+=======
+			Log->Error(F1("Can't create Power Meter Unit"));
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::POWER_METER;
@@ -173,8 +229,12 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 	else if (type == UnitType::CONTACTOR) {
 		u = new Contactor();
 		if (u == NULL) {
+<<<<<<< HEAD
 			Loger::LogMessage = F("Can't create Contactor");
 			Loger::Error();
+=======
+			Log->Error(F1("Can't create Contactor"));
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::CONTACTOR;
@@ -199,15 +259,23 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 	}
 
 	if (u == NULL) {
+<<<<<<< HEAD
 		Loger::LogMessage = F("Can't create a typed unit:");
 		Loger::LogMessage += (char)type;
 		Loger::Debug();
+=======
+		Log->append(F1("Can't create a typed unit:")).append((char)type).Error();
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	}
 	return u;
 }
 
 
+<<<<<<< HEAD
 void Configuration::UpdateConfig(const String& jsonConfig) {
+=======
+void Configuration::UpdateConfig(const char* jsonConfig) {
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	if (isConfigRequested) {
 		static bool lenDetected = false;
 		const size_t CAPACITY = JSON_OBJECT_SIZE(JSON_SIZE);
@@ -217,11 +285,17 @@ void Configuration::UpdateConfig(const String& jsonConfig) {
 		// extract the data
 		JsonObject root = doc.as<JsonObject>();
 
+<<<<<<< HEAD
 		if (root.containsKey(F("length"))) {
 			byte nUnits = (byte)root[F("length")];
 			Loger::LogMessage = F("Number of config Units=");
 			Loger::LogMessage += numberUnits;
 			Loger::Debug();
+=======
+		if (root.containsKey("length")) {
+			byte nUnits = (byte)root["length"];
+			Log->append(F1("Number of config Units=")).append(nUnits).Debug();
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 			configCounter = 0;
 			CreateUnits(nUnits);
 			lenDetected = true;
@@ -239,8 +313,12 @@ void Configuration::UpdateConfig(const String& jsonConfig) {
 
 				configCounter++;
 				if (configCounter == numberUnits) {
+<<<<<<< HEAD
 					Loger::LogMessage = F("Finish update configuration");
 					Loger::Debug();
+=======
+					Log->append(F1("Finish update configuration(")).append(numberUnits).append(")").Debug();
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 					IsConfigReady = true;
 				}
 			}
@@ -248,25 +326,29 @@ void Configuration::UpdateConfig(const String& jsonConfig) {
 	}
 }
 
-bool CheckConfigReady() {
-	return Config.IsConfigReady;
-}
+//bool CheckConfigReady() {
+//	return IsConfigReady;
+//}
 
 void Configuration::BuildConfig() {
 	IsConfigReady = false;
 
-	if (MqttClient.connected()) {
-		MqttClient.GetConfiguration();
+	if (MqttClient->connected()) {
+		MqttClient->GetConfiguration();
 		unsigned long startLoop = millis();
 		while (!IsConfigReady && millis() - startLoop < MQTT_WAITING_RESPONSE) {
-			MqttClient.MqttLoop();
+			MqttClient->MqttLoop();
 		}
 	}
 
 	if (numberUnits != 0) {
 		if (!IsConfigReady) { //Mqtt failed for some reasons
+<<<<<<< HEAD
 			Loger::LogMessage = F("Read Units from EEPROM");
 			Loger::Debug();
+=======
+			Log->Debug(F1("Read Units from EEPROM"));
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 			SigmaEEPROM::ReadUnits();
 		}
 		else {
@@ -276,6 +358,7 @@ void Configuration::BuildConfig() {
 	IsConfigReady = true;
 	InitializeUnits();
 	FinalizeInitUnits();
+<<<<<<< HEAD
 
 	Loger::LogMessage = F("IsConfigReady=");
 	Loger::LogMessage += IsConfigReady;
@@ -283,6 +366,8 @@ void Configuration::BuildConfig() {
 	Loger::LogMessage = F("NumberOfunits=");
 	Loger::LogMessage += numberUnits;
 	Loger::Debug();
+=======
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }
 
 
@@ -309,8 +394,8 @@ void Configuration::InitializeActions() {
 
 
 void Configuration::ReadBoardId() {
-
 	BoardId = SigmaEEPROM::ReadBoardId();
+<<<<<<< HEAD
 	//BoardName.reserve(10);
 	BoardName = F("Board_");
 	BoardName += (BoardId < 10 ? "0" : "");
@@ -319,21 +404,40 @@ void Configuration::ReadBoardId() {
 	mac[5] = BoardId;
 	ip[3] = ip[3] + BoardId;
 
+=======
+	sprintf(BoardName, "Board_%02u", BoardId);
+	mac[5] = BoardId;
+	ip[3] = ip[3] + BoardId;
+
+	sprintf(strIP, "%u.%u.%u.%u", ip[0], ip[1], ip[2], ip[3]);
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }
 
 
 
+<<<<<<< HEAD
 void Configuration::UpdateActions(const String& jsonConfig) {
 	if (isActionRequested) {
 		static bool lenDetected = false;
+=======
+void Configuration::UpdateActions(const char* jsonConfig) {
+	if (isActionRequested) {
+		static bool lenDetected = false;
+		// allocate the memory for the document
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 		const size_t CAPACITY = JSON_OBJECT_SIZE(JSON_SIZE);
 		StaticJsonDocument<CAPACITY> doc;
 		deserializeJson(doc, jsonConfig);
 		// extract the data
 		JsonObject root = doc.as<JsonObject>();
+<<<<<<< HEAD
 		if (root.containsKey(F("length"))) {
 
 			byte nActions = (byte)root[F("length")];
+=======
+		if (root.containsKey("length")) {
+			byte nActions = (byte)root["length"];
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 			actionCounter = 0;
 			CreateActions(nActions);
 			lenDetected = true;
@@ -367,34 +471,36 @@ void Configuration::UpdateActions(const String& jsonConfig) {
 
 			actionCounter++;
 			if (actionCounter == numberActions) {
+<<<<<<< HEAD
 				Loger::LogMessage = F("Finish update actions configuration");
 				Loger::Debug();
+=======
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 				IsActionsReady = true;
-
 			}
-
 		}
 	}
 }
 
-bool CheckActions() {
-	return Config.IsActionsReady;
-}
+//bool CheckActions() {
+//	return Config.IsActionsReady;
+//}
 
 
 
 
 void Configuration::BuildActions() {
 	IsActionsReady = false;
-	if (MqttClient.connected()) {
-		MqttClient.GetActions();
+	if (MqttClient->connected()) {
+		MqttClient->GetActions();
 		unsigned long startLoop = millis();
 		while (!IsActionsReady && millis() - startLoop < MQTT_WAITING_RESPONSE) {
-			MqttClient.MqttLoop();
+			MqttClient->MqttLoop();
 		}
 	}
 	if (numberActions != 0) {
 		if (!IsActionsReady) { //Mqtt failed for some reasons
+<<<<<<< HEAD
 			Loger::LogMessage = F("Read Actions from EEPROM");
 			Loger::Debug();
 			SigmaEEPROM::ReadActions();
@@ -402,12 +508,18 @@ void Configuration::BuildActions() {
 		else {
 			Loger::LogMessage = F("Update Actions(Build Actions)");
 			Loger::Debug();
+=======
+			SigmaEEPROM::ReadActions();
+		}
+		else {
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 			SigmaEEPROM::UpdateActions(numberActions, actions);
 		}
 	}
 
 	InitializeActions();
 	IsActionsReady = true;
+<<<<<<< HEAD
 	Loger::LogMessage = F("Actions are ready");
 	Loger::Debug();
 }
@@ -424,11 +536,23 @@ void Configuration::UpdateUnit(UnitType type, int id, const String& value) {
 		u->isSubscribed = true;
 		u->ProcessUnit((ActionType)value.toInt());
 	}
+=======
+}
+
+void Configuration::UpdateUnit(UnitType type, uint16_t id, uint16_t value) {
+	Unit *u = FindUnit(id);
+	if (u != NULL) {
+		//u->isSubscribed = true;
+		u->ProcessUnit((ActionType)(value));
+	} 
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }
 
 void Configuration::UnitsLoop() {
 	for (int i = 0; i < numberUnits; i++) {
-		units[i]->UnitLoop();
+		if (units[i]->Type != UnitType::POWER_METER) {
+			units[i]->UnitLoop();
+		}
 	}
 }
 
@@ -456,31 +580,47 @@ void Configuration::ProcessAction(uint16_t id, byte event) {
 						}
 					}
 					else {
+<<<<<<< HEAD
 						Loger::LogMessage = F("Action:");
 						Loger::LogMessage += actions[i]->Id;
 						Loger::LogMessage += F(". Target not found");
 						Loger::Error();
 						Unit* u = new UnitProto();
+=======
+						Log->append(F1("Action:")).append(actions[i]->Id).append(F1(". Target not found")).Debug();
+						Unit *u = new UnitProto();
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 						u->Id = actions[i]->targetId;
 						u->Type = actions[i]->targetType;
 						u->status = actions[i]->targetAction;
-						u->isSubscribed = true; //this fake activation is used just for publish
-						MqttClient.PublishUnit(u);
+						//u->isSubscribed = true; //this fake activation is used just for publish
+						MqttClient->PublishUnit(u);
 						delete u;
 					}
 				}
 				else {
+<<<<<<< HEAD
 					Loger::LogMessage = F("Action:");
 					Loger::LogMessage += actions[i]->Id;
 					Loger::LogMessage += F(". Origin not found");
 					Loger::Error();
+=======
+					Log->append(F1("Action:")).append(actions[i]->Id).append(F1(". Origin not found")).Error();
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 				}
 			}
 		}
 	}
 }
 
+void Configuration::loop1() {
+};
+
 void Configuration::loop30() {
+};
+
+
+void Configuration::loop10() {
 	for (int i = 0; i < numberUnits; i++) {
 		if (units[i]->Type == UnitType::POWER_METER) {
 			((PowerMeter*)units[i])->PublishAll();
@@ -490,5 +630,10 @@ void Configuration::loop30() {
 
 void Configuration::loop60() {
 	// start every 1min
+<<<<<<< HEAD
 	MqttClient.WatchDog();
+=======
+	//Loger::Debug("Loop60");
+	MqttClient->WatchDog();
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }

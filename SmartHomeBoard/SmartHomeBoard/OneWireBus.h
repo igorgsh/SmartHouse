@@ -26,10 +26,17 @@ public:
 	byte UnitStoredSize() { return 3; }
 	void ReadFromEEPROM(uint16_t addr);
 	void WriteToEEPROM(uint16_t addr);
+<<<<<<< HEAD
 	static bool CompareDeviceAddress(const DeviceAddress a0, const DeviceAddress a1);
 	void ConfigField(const JsonObject& jsonList);
 	static void ConvertStringToAddress(DeviceAddress address, const String &addrStr);
 	static void ConvertAddressToString(const DeviceAddress address, String &strAddress);
+=======
+	static bool CompareDeviceAddress(DeviceAddress a0, DeviceAddress a1);
+	void ConfigField(const JsonObject& jsonList);
+	static void ConvertStringToAddress(DeviceAddress address, String addrStr);
+	//static String ConvertAddressToString(const DeviceAddress address);
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	void const print(const char* header, DebugLevel level);
 
 private:
