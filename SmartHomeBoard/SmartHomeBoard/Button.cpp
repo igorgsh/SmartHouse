@@ -118,8 +118,8 @@ bool Button::Compare(const Unit* u) {
 		Id == tu->Id &&
 		Type == tu->Type &&
 		Pin == tu->Pin &&
-		lhOn == tu->lhOn //&&
-		//status == tu->status
+		lhOn == tu->lhOn &&
+		parentId == tu->parentId
 		;
 	return res;
 }
@@ -127,19 +127,21 @@ bool Button::Compare(const Unit* u) {
 
 void Button::ReadFromEEPROM(uint16_t addr) {
 
-	Id = SigmaEEPROM::Read8(addr);
-	Type = SigmaEEPROM::Read8(addr + 1);
-	Pin = SigmaEEPROM::Read8(addr + 2);
-	lhOn = SigmaEEPROM::Read8(addr + 3);
+	Id = SigmaEEPROM::Read16(addr);
+	Type = SigmaEEPROM::Read8(addr + 2);
+	Pin = SigmaEEPROM::Read8(addr + 3);
+	lhOn = SigmaEEPROM::Read8(addr + 4);
+	parentId = SigmaEEPROM::Read16(addr + 5); //5-6
 
 }
 
 void Button::WriteToEEPROM(uint16_t addr) {
 
-	SigmaEEPROM::Write8(addr, Id);
-	SigmaEEPROM::Write8(addr + 1, Type);
-	SigmaEEPROM::Write8(addr + 2, Pin);
-	SigmaEEPROM::Write8(addr + 3, lhOn);
+	SigmaEEPROM::Write16(addr, Id);
+	SigmaEEPROM::Write8(addr + 2, Type);
+	SigmaEEPROM::Write8(addr + 3, Pin);
+	SigmaEEPROM::Write8(addr + 4, lhOn);
+	SigmaEEPROM::Write16(addr + 5 , Id); //5-6
 }
 
 void Button::ConfigField(const JsonObject& jsonList) {
@@ -156,6 +158,9 @@ void Button::ConfigField(const JsonObject& jsonList) {
 	}
 	if (jsonList.containsKey(F("status"))) {
 		status = jsonList["status"];
+	}
+	if (jsonList.containsKey("parentId")) {
+		parentId = jsonList["parentId"];
 	}
 }
 
@@ -186,6 +191,7 @@ void const Button::print(const char* header, DebugLevel level) {
 	Config.Log->append(F1(";Type:")).append((char)Type);
 	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
 	Config.Log->append(F1(";lhOn:")).append((unsigned int)lhOn);
+	Config.Log->append(F1(";ParentId:")).append((unsigned int)parentId);
 	Config.Log->append(F1(" @"));
 
 	Config.Log->Log(level);

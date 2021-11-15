@@ -76,6 +76,8 @@ public:
 	void UpdateContactor(uint16_t unitId, uint16_t value) { UpdateUnit(UnitType::CONTACTOR, unitId, value); };
 >>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	void ProcessAction(uint16_t id, byte event);
+	void Pass2Parent(uint16_t parentId, byte parentPin, bool status);
+
 	Unit* CreateTypedUnit(byte type);
 
 	void MainLoop();

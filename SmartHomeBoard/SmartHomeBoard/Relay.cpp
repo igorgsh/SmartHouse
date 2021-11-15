@@ -6,10 +6,6 @@
 
 extern Configuration Config;
 
-void Relay::SetDefault() {
-
-	status = LOW;
-}
 void Relay::InitUnit() {
 <<<<<<< HEAD
 
@@ -22,10 +18,17 @@ void Relay::InitUnit() {
 
 void Relay::RelaySet(bool newStatus)
 {
-	digitalWrite(Pin, (newStatus == HIGH ? lhOn : !lhOn));
+	if (parentId == 0) {
+		digitalWrite(Pin, (newStatus == HIGH ? lhOn : !lhOn));
+	}
+	else {
+		Config.Pass2Parent(parentId, parentPin, (newStatus == HIGH ? lhOn : !lhOn));
+	}
+
 	status = newStatus;
 	Config.MqttClient->PublishUnit(this);
 	Config.ProcessAction(Id, newStatus);
+
 }
 
 void Relay::RelaySwitch() {
@@ -65,7 +68,9 @@ bool Relay::Compare(const Unit* u) {
 		Type == tu->Type &&
 		Pin == tu->Pin &&
 		lhOn == tu->lhOn &&
-		status == tu->status
+		status == tu->status &&
+		parentId == tu->parentId &&
+		parentPin == tu->parentPin
 		);
 	return res;
 }
@@ -73,21 +78,25 @@ bool Relay::Compare(const Unit* u) {
 
 void Relay::ReadFromEEPROM(uint16_t addr) {
 
-	Id = SigmaEEPROM::Read8(addr);
-	Type = SigmaEEPROM::Read8(addr + 1);
-	Pin = SigmaEEPROM::Read8(addr + 2);
-	lhOn = SigmaEEPROM::Read8(addr + 3);
-	status = SigmaEEPROM::Read8(addr + 4);
+	Id = SigmaEEPROM::Read16(addr); //0-1
+	Type = SigmaEEPROM::Read8(addr + 2);
+	Pin = SigmaEEPROM::Read8(addr + 3);
+	lhOn = SigmaEEPROM::Read8(addr + 4);
+	status = SigmaEEPROM::Read8(addr + 5);
+	parentId = SigmaEEPROM::Read16(addr + 6); //6-7
+	parentPin = SigmaEEPROM::Read8(addr + 8);
 
 }
 
 void Relay::WriteToEEPROM(uint16_t addr) {
 
-	SigmaEEPROM::Write8(addr, Id);
-	SigmaEEPROM::Write8(addr + 1, Type);
-	SigmaEEPROM::Write8(addr + 2, Pin);
-	SigmaEEPROM::Write8(addr + 3, lhOn);
-	SigmaEEPROM::Write8(addr + 4, status);
+	SigmaEEPROM::Write16(addr, Id); //0-1
+	SigmaEEPROM::Write8(addr + 2, Type); 
+	SigmaEEPROM::Write8(addr + 3, Pin);
+	SigmaEEPROM::Write8(addr + 4, lhOn);
+	SigmaEEPROM::Write8(addr + 5, status);
+	SigmaEEPROM::Write16(addr + 6, parentId); //6-7
+	SigmaEEPROM::Write8(addr + 8, parentPin);
 
 }
 
@@ -106,6 +115,12 @@ void Relay::ConfigField(const JsonObject& jsonList) {
 	}
 	if (jsonList.containsKey(F("status"))) {
 		status = jsonList[F("status")];
+	}
+	if (jsonList.containsKey("parentId")) {
+		parentId = jsonList["parentId"];
+	}
+	if (jsonList.containsKey("parentPin")) {
+		parentPin = jsonList["parentPin"];
 	}
 }
 
@@ -135,6 +150,8 @@ void const Relay::print(const char* header, DebugLevel level) {
 	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
 	Config.Log->append(F1(";lhOn:")).append((unsigned int)lhOn);
 	Config.Log->append(F1(";status:")).append((unsigned int)status);
+	Config.Log->append(F1(";ParentId:")).append((unsigned int)parentId);
+	Config.Log->append(F1(";ParentPin:")).append((unsigned int)parentPin);
 	Config.Log->append(F1(" @"));
 	Config.Log->Log(level);
 >>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516

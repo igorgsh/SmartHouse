@@ -15,11 +15,7 @@ typedef enum {
 } DebugLevel;
 
 extern DebugLevel dLevel;
-<<<<<<< HEAD
-//#define MEMFREE Loger::Debug("Memory=" + String(memoryFree(),DEC));
-=======
 #define MEMFREE(N) Config.Log->append(("Memory_")).append(N).append("=").append(freeMemory()).Debug();
->>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 
 
 typedef enum {
@@ -30,8 +26,8 @@ typedef enum {
 	POWER_METER		= 'P',
 	VIRTUAL_BUTTON	= 'b',
 	CONTACTOR		= 'C',
-	SHIFT_OUT		='H',
-	SHIFT_IN		='h'
+	SHIFTOUT		= 'S',
+	SHIFTIN			= 's'
 } UnitType;
 
 
