@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 #include "definitions.h"
-//#include "Loger.h"
+#include "Loger.h"
 #include "Action.h"
 #include <ArduinoJson.h>
 
@@ -15,6 +15,7 @@ public:
 	byte Type;
 	byte status;
 	uint16_t parentId=0;
+	
 	//bool isSubscribed = false;
 
 	virtual bool Compare(const Unit* u) =0;

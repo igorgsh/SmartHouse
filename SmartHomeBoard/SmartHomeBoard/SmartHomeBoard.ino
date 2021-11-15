@@ -5,11 +5,6 @@
 */
 
 
-<<<<<<< HEAD
-#include "definitions.h"
-#include "ext_global.h"
-#include "global.h"
-=======
 #include <MemoryFree.h>
 #include <SerialComs.h>
 #include <SafeStringStream.h>
@@ -22,7 +17,6 @@
 #include <loopTimer.h>
 #include <BufferedOutput.h>
 #include <BufferedInput.h>
->>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 
 #include "Contactor.h"
 #include <PZEM004T.h>
@@ -33,27 +27,23 @@
 #include <DallasTemperature.h>
 #include <OneWire.h>
 #include "utils.h"
+//#include <Ethernet.h>
 #include "avr\wdt.h"
 //#include "Mqtt.h"
 #include "Configuration.h"
 #include "Action.h"
 #include "Relay.h"
 #include <Arduino.h>
+#include "definitions.h"
+#include "global.h"
 #include "Button.h"
 #include "Loger.h"
-<<<<<<< HEAD
-#include "utils.h"
-
-String Loger::LogMessage;
-
-=======
 #include "definitions.h"
 //#include "ext_global.h"
 
 
 #include "utils.h"
 
->>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 // the setup function runs once when you press reset or power the board
 void setup() {
 	wdt_disable();
@@ -61,32 +51,14 @@ void setup() {
 	while (!Serial) {
 		delay(10); // wait for serial port to connect. Needed for native USB port only
 	}
-<<<<<<< HEAD
-	Loger::LogMessage.reserve(200);
-=======
 	Serial.println("Serial!");
 	//MEMFREE("Start Init");
 	SafeString::setOutput(Serial);
->>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	//init random generator
 	randomSeed(analogRead(0));
 
 	//initialization of config
 	Config.Init();
-<<<<<<< HEAD
-	Loger::LogMessage = F("Board is ready");
-	Loger::Info();
-	Loger::LogMessage = F("Board Id#:");
-	Loger::LogMessage += Config.BoardId;
-	Loger::Info();
-	Loger::LogMessage = F("IP Address is:");
-	PrintIP(Ethernet.localIP(), Loger::LogMessage);
-	Loger::Info();
-	pinMode(13, OUTPUT);
-	digitalWrite(13, HIGH);
-	Loger::LogMessage = F("Enjoy!");
-	Loger::Debug();
-=======
 	Config.Log->Info(F1("Board is ready"));
 	Config.Log->append(F1("Board Id#:")).append(Config.BoardId).Info();
 	Config.Log->append(F1("IP Address is:")).append(Config.strIP).Info();
@@ -97,7 +69,6 @@ void setup() {
 	digitalWrite(13, HIGH);
 	Config.Log->Info("Enjoy!");
 	//MEMFREE("End init");
->>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }
 
 // the loop function runs over and over again until power down or reset
@@ -108,6 +79,7 @@ void loop() {
 	static unsigned long tp10 = 0;
 	static unsigned long tp1 = 0;
 	unsigned long now = millis();
+	//Loger::Debug("Loop");
 
 
 	if ((now-tp60) > (unsigned long)60*1000) { //1 min 

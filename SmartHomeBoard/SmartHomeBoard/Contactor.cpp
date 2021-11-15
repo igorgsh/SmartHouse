@@ -4,15 +4,9 @@
 
 #include "Contactor.h"
 
-<<<<<<< HEAD
-#include "ext_global.h"
-#include "mqtt.h"
-//#include "Loger.h"
-=======
 #include "Configuration.h"
 //#include "mqtt.h"
 #include "Loger.h"
->>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 #include "SigmaEEPROM.h"
 extern Configuration Config;
 
@@ -104,16 +98,11 @@ void Contactor::WriteToEEPROM(uint16_t addr) {
 }
 
 void Contactor::ConfigField(const JsonObject& jsonList) {
-<<<<<<< HEAD
-	if (jsonList.containsKey(F("Pin"))) {
-		Pin = jsonList[F("Pin")];
-=======
 	if (jsonList.containsKey("Pin")) {
 		Pin = jsonList["Pin"];
->>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	}
-	if (jsonList.containsKey(F("lhOn"))) {
-		lhOn = jsonList[F("lhOn")];
+	if (jsonList.containsKey("lhOn")) {
+		lhOn = jsonList["lhOn"];
 	}
 	if (jsonList.containsKey("parentId")) {
 		parentId = jsonList["parentId"];
@@ -122,25 +111,6 @@ void Contactor::ConfigField(const JsonObject& jsonList) {
 
 
 void const Contactor::print(const char* header, DebugLevel level) {
-<<<<<<< HEAD
-	Loger::LogMessage = F("");
-
-	if (header != NULL) {
-		Loger::LogMessage = header;
-	}
-	Loger::LogMessage += F("Id:");
-	Loger::LogMessage+=(unsigned int)Id;
-	Loger::LogMessage += F(";Type:");
-	Loger::LogMessage += (char)Type;
-	Loger::LogMessage += F(";Pin:");
-	Loger::LogMessage += (unsigned int)Pin;
-	Loger::LogMessage += F(";lhOn:");
-	Loger::LogMessage += (unsigned int)lhOn;
-	Loger::LogMessage += F(";subscription:");
-	Loger::LogMessage += (isSubscribed ? F("true") : F("false"));
-	Loger::LogMessage += F("@");
-	Loger::Log(level);
-=======
 	if (header != NULL) {
 		Config.Log->append(header);
 	}
@@ -151,5 +121,4 @@ void const Contactor::print(const char* header, DebugLevel level) {
 	Config.Log->append(F1(";ParentId:")).append((unsigned int)parentId);
 	Config.Log->append(F1(" @"));
 	Config.Log->Log(level);
->>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }
