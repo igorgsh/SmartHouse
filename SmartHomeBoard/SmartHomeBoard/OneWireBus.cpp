@@ -4,11 +4,15 @@
 //#include "ext_global.h"
 //#include "Mqtt.h"
 #include "Unit.h"
-#include "Loger.h"
+//#include "Loger.h"
 #include <DallasTemperature.h>
+<<<<<<< HEAD
+extern Mqtt MqttClient;
+=======
 #include "Configuration.h"
 
 extern Configuration Config;
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 
 void OneWireBus::SetDefault() {
 
@@ -19,8 +23,14 @@ float OneWireBus::GetTemperature(const DeviceAddress address) {
 		return sensors->getTempC(address);
 	}
 	else {
+<<<<<<< HEAD
+		Loger::LogMessage = F("Temp is failed: ");
+		ConvertAddressToString(address, Loger::LogMessage);
+		Loger::Error();
+=======
 
 		Config.Log->append(F1("Temp is failed: ")).append(Id).Error();
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 		return -999;
 	}
 }
@@ -30,6 +40,10 @@ bool OneWireBus::CheckAddress(const DeviceAddress address) {
 }
 
 void OneWireBus::InitUnit() {
+<<<<<<< HEAD
+	Loger::Debug(F("1-Wire init"));
+=======
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	oneWire = new OneWire(Pin);
 	sensors = new DallasTemperature(oneWire);
 	sensors->begin();
@@ -89,13 +103,22 @@ void OneWireBus::WriteToEEPROM(uint16_t addr) {
 
 
 void OneWireBus::ConfigField(const JsonObject& jsonList) {
+<<<<<<< HEAD
+	if (jsonList.containsKey(F("Pin"))) {
+		Pin = jsonList[F("Pin")];
+=======
 	if (jsonList.containsKey("Pin")) {
 		Pin = jsonList["Pin"];
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	}
 }
 
 
+<<<<<<< HEAD
+void OneWireBus::ConvertStringToAddress(DeviceAddress address, const String &addrStr) {
+=======
 void OneWireBus::ConvertStringToAddress(DeviceAddress address, String addrStr) {
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	for (int i = 0, j = 0; i < 16; i += 2, j++) {
 		unsigned long l = addrStr[i];
 		strtoul(addrStr.substring(i, i + 2).c_str(), NULL, 16);
@@ -103,18 +126,28 @@ void OneWireBus::ConvertStringToAddress(DeviceAddress address, String addrStr) {
 	}
 }
 
+<<<<<<< HEAD
+
+void OneWireBus::ConvertAddressToString(const DeviceAddress address, String &strAddress) {
+	
+	//strAddress = "";
+	
+	String hAddress;
+	hAddress.reserve(2);
+=======
 /*
 String OneWireBus::ConvertAddressToString(const DeviceAddress address) {
 	String str0 = "";
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 
 	for (int i = 0; i < 16; i++) {
-		str0 += String(address[i], HEX);
+		hAddress = String(address[i], HEX);
+		strAddress += hAddress;
 	}
-	return str0;
 }
 */
 
-bool OneWireBus::CompareDeviceAddress(DeviceAddress a0, DeviceAddress a1) {
+bool OneWireBus::CompareDeviceAddress(const DeviceAddress a0, const DeviceAddress a1) {
 	bool res = false;
 
 	for (int i = 0; !res && i < 8; i++) {
@@ -129,9 +162,22 @@ void const OneWireBus::print(const char* header, DebugLevel level) {
 	if (header != NULL) {
 		Config.Log->append(header);
 	}
+<<<<<<< HEAD
+	str0 += F("Id:");
+	str0 += (unsigned int)Id;
+	str0 += F(";Type:");
+	str0 += (char)Type;
+	str0 += F(";Pin:");
+	str0 += (unsigned int)Pin;
+	str0 += F(";subscription:");
+	str0 += (isSubscribed ? F("true") : F("false"));
+	str0 += F("@");
+	Loger::Log(level, str0);
+=======
 	Config.Log->append(F1("Id:")).append((unsigned int)Id);
 	Config.Log->append(F1(";Type:")).append((char)Type);
 	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
 	Config.Log->append(F1(" @"));
 	Config.Log->Log(level);
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }

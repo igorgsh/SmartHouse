@@ -23,10 +23,37 @@ bool Action::Compare(const Action* a) {
 		);
 }
 
+<<<<<<< HEAD
+void Action::print(const char* header, DebugLevel level) {
+
+	String str0;
+	str0.reserve(100);
+	str0 = "";
+=======
 void Action::print(const char* header,DebugLevel level) {
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	if (header != NULL) {
 		Config.Log->append(header);
 	}
+<<<<<<< HEAD
+	str0 += F("Id:");
+	str0 += Id;
+	str0 += F(";event:");
+	str0 += event;
+	str0 += F(";originId:");
+	str0 += originId;
+	str0 += F(";originType:");
+	str0 += ((char)originType);
+	str0 += F(";targetAction:");
+	str0 += targetAction;
+	str0 += F(";targetId:");
+	str0 += targetId;
+	str0 += F(";targetType:");
+	str0 += (char)targetType;
+
+	str0 += F("@");
+	Loger::Log(level, str0);
+=======
 	Config.Log->append(F1("Id:")).append(Id);
 	Config.Log->append(F1(";event:")).append(event);
 	Config.Log->append(F1(";originId:")).append(originId);
@@ -37,6 +64,7 @@ void Action::print(const char* header,DebugLevel level) {
 	
 	Config.Log->append(F1(" @ "));
 	Config.Log->Log(level);
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }
 
 void Action::FillFrom(const Action* a) {

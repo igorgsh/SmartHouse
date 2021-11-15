@@ -7,6 +7,10 @@
 extern Configuration Config;
 
 void Relay::InitUnit() {
+<<<<<<< HEAD
+
+=======
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	pinMode(Pin, OUTPUT);
 	ProcessUnit(status==HIGH ? ACT_ON : ACT_OFF);
 	
@@ -98,14 +102,19 @@ void Relay::WriteToEEPROM(uint16_t addr) {
 
 
 void Relay::ConfigField(const JsonObject& jsonList) {
+<<<<<<< HEAD
+	if (jsonList.containsKey(F("Pin"))) {
+		Pin = jsonList[F("Pin")];
+=======
 	if (jsonList.containsKey("Pin")) {
 		Pin = jsonList["Pin"];
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 	}
-	if (jsonList.containsKey("lhOn")) {
-		lhOn = jsonList["lhOn"];
+	if (jsonList.containsKey(F("lhOn"))) {
+		lhOn = jsonList[F("lhOn")];
 	}
-	if (jsonList.containsKey("status")) {
-		status = jsonList["status"];
+	if (jsonList.containsKey(F("status"))) {
+		status = jsonList[F("status")];
 	}
 	if (jsonList.containsKey("parentId")) {
 		parentId = jsonList["parentId"];
@@ -120,6 +129,22 @@ void const Relay::print(const char* header, DebugLevel level) {
 	if (header != NULL) {
 		Config.Log->append(header);
 	}
+<<<<<<< HEAD
+	str0 += F("Id:");
+	str0 += (unsigned int)Id;
+	str0 += F(";Type:");
+	str0 += (char)Type;
+	str0 += F(";Pin:");
+	str0 += (unsigned int)Pin;
+	str0 += F(";lhOn:");
+	str0 += (unsigned int)lhOn;
+	str0 += F(";status:");
+	str0 += (unsigned int)status;
+	str0 += F(";subscription:");
+	str0 += (isSubscribed ? F("true") : F("false"));
+	str0 += F(" @");
+	Loger::Log(level, str0);
+=======
 	Config.Log->append(F1("Id:")).append((unsigned int)Id);
 	Config.Log->append(F1(";Type:")).append((char)Type);
 	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
@@ -129,5 +154,6 @@ void const Relay::print(const char* header, DebugLevel level) {
 	Config.Log->append(F1(";ParentPin:")).append((unsigned int)parentPin);
 	Config.Log->append(F1(" @"));
 	Config.Log->Log(level);
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 }
 

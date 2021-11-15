@@ -11,11 +11,14 @@
 
 
 
-
 #define MQTT_INITIAL_RETRY_DELAY	1000 //delay between INITIAL reconnection retry
 #define MQTT_RETRY_TIME				10000 //delay between mqtt reconnect in loop
 #define MQTT_TOPIC_LENGTH	100
+<<<<<<< HEAD
+#define MQTT_PAYLOAD_LENGTH	100
+=======
 #define MQTT_PAYLOAD_LENGTH	200
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 #define MQTT_TRY_COUNT 5
 #define MQTT_WAITING_RESPONSE 10000
 #define MQTT_RESUBSCRIBE_TRY_COUNT 1
@@ -28,13 +31,19 @@
 
 #define CHECK_MQTT	"info"
 
-#define MQTT_WATCH_DOG "Config" MQTT_SEPARATOR BOARD_ID MQTT_SEPARATOR "WatchDog"
-#define MQTT_CONFIG_REQUEST "Config" MQTT_SEPARATOR BOARD_ID MQTT_SEPARATOR "ConfigurationRequest"
-#define MQTT_CONFIG_RESPONSE "Config" MQTT_SEPARATOR BOARD_ID MQTT_SEPARATOR "Configuration"
-#define MQTT_ACTIONS_REQUEST "Config" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "ActionRequest"
-#define MQTT_ACTIONS_RESPONSE "Config" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "Action"
-#define MQTT_RESET_BOARD "Config" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "Reset"
+#define MQTT_CONFIGURATION "Configuration"
+#define MQTT_ACTIONS "Action"
 #define MQTT_EQUIPMENT "Equipment" 
+
+
+#define MQTT_CONFIG_TOPIC "Config" MQTT_SEPARATOR BOARD_ID MQTT_SEPARATOR
+
+#define MQTT_WATCH_DOG MQTT_CONFIG_TOPIC "WatchDog"
+#define MQTT_CONFIG_REQUEST MQTT_CONFIG_TOPIC "ConfigurationRequest"
+#define MQTT_CONFIG_RESPONSE MQTT_CONFIG_TOPIC MQTT_CONFIGURATION
+#define MQTT_ACTIONS_REQUEST MQTT_CONFIG_TOPIC "ActionRequest"
+#define MQTT_ACTIONS_RESPONSE MQTT_CONFIG_TOPIC MQTT_ACTIONS
+#define MQTT_RESET_BOARD MQTT_CONFIG_TOPIC "Reset"
 #define MQTT_VIRTUAL_EQUIPMENT MQTT_EQUIPMENT MQTT_SEPARATOR "Virtual"
 #define MQTT_LOG  "Logs" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "%s"
 #define MQTT_BUTTONS MQTT_EQUIPMENT MQTT_SEPARATOR "Buttons"
@@ -44,6 +53,8 @@
 #define MQTT_POWERMETER  MQTT_EQUIPMENT MQTT_SEPARATOR "PowerMeter"
 #define MQTT_VIRTUAL_BUTTONS  MQTT_VIRTUAL_EQUIPMENT MQTT_SEPARATOR "Buttons"
 #define MQTT_CONTACTOR  MQTT_EQUIPMENT MQTT_SEPARATOR "Contactors"
+#define MQTT_SHIFT_REGISTER_IN  MQTT_EQUIPMENT MQTT_SEPARATOR "ShiftRegisterIn"
+#define MQTT_SHIFT_REGISTER_OUT  MQTT_EQUIPMENT MQTT_SEPARATOR "ShiftRegisterOut"
 
 
 void callbackFunc(char* topic, uint8_t* payload, unsigned int length);
@@ -56,6 +67,15 @@ class Mqtt : public PubSubClient
 		void MqttLoop();
 		void GetConfiguration();
 		void GetActions();
+<<<<<<< HEAD
+		void PublishLog(DebugLevel level, const String &message);
+		void PublishUnit(const Unit* unit);
+		void SubscribeUnits();
+		void SubscribeUnit(int unitNumber);
+		void Subscribe(const String &topic);
+		bool Publish(const String &topic, const String &payload);
+		void Callback(const String& topic, const String& payload, unsigned int length);
+=======
 		void PublishLog(DebugLevel level, const char* message);
 		void PublishUnit(const Unit* unit);
 		void SubscribeUnits();
@@ -64,6 +84,7 @@ class Mqtt : public PubSubClient
 		bool Publish(const char* topic, const char* payload);
 		//void Callback(const char* topic, const char* payload, unsigned int length);
 		void Callback();
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 
 		Mqtt();
 		void WatchDog();
@@ -72,6 +93,12 @@ class Mqtt : public PubSubClient
 private:
 		char *boardId = (char*)BOARD_ID;
 		const char *LOG_END[7] = { "OFF", "FATAL","ERROR","WARN","INFO","DEBUG","ALL" };
+<<<<<<< HEAD
+
+		bool MqttReconnect();
+		void SubscribeBoardTopic(const char* templ, byte boardId);
+		int GetUnitId(const String &topic, int prefixLen);
+=======
 		uint16_t GetUnitId(const char* str, int offset);
 		char topicBuff[MQTT_TOPIC_LENGTH];
 		char topicLog[MQTT_TOPIC_LENGTH];
@@ -80,5 +107,5 @@ private:
 		char topicCB[MQTT_TOPIC_LENGTH];
 		char payLoadCB[MQTT_PAYLOAD_LENGTH];
 		unsigned int lenCB;
+>>>>>>> 1ec5f3fb062a15470b96ea082aff7a6990f76516
 };
-

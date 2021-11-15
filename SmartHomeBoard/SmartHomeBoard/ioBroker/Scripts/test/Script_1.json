@@ -1,9 +1,0 @@
-/* -- do not edit following lines - START --
-{
-  "expert": true,
-  "debug": false,
-  "verbose": true,
-  "enabled": false
-}
--- do not edit previous lines - END --*/
-ChangeCooling(1);
