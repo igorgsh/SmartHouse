@@ -372,6 +372,7 @@ void Configuration::Pass2Parent(uint16_t parentId, byte parentPin, bool status) 
 
 	Unit* parent = FindUnit(parentId);
 	if (parent != NULL) {
+		
 		ShiftRegisterOut* SRegOut = (ShiftRegisterOut*)parent;
 		SRegOut->Set(parentPin, status);
 	}

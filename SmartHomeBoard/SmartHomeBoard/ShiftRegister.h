@@ -1,14 +1,14 @@
 #pragma once
 #include "Unit.h"
 
-//              ,'{"id":207, "type":"S", "Pin":7, "latch":8, "clock":9, "PinsN":16}'
+//              ,'{"id":207, "type":"S", "DPin":7, "latch":8, "clock":9, "PinsN":16}'
 //  , '{"id":901, "type":"R","Pin":0, "lhOn":1, "status":0,"priority":10, "parentId":207, "parentPin":1}'
 
 class ShiftRegister :
     public Unit
 {
 public:
-    byte Pin;
+    byte DPin;
     byte LatchPin;
     byte ClockPin;
     byte pinsNumber;

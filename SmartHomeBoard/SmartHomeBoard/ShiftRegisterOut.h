@@ -12,7 +12,7 @@ public:
 private:
     int nByte;
     byte* States;
-    void SetBit(byte x, int n, bool v);
+    byte SetBit(byte x, int n, bool v);
     void Out();
 };
 
