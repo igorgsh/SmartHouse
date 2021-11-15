@@ -241,3 +241,7 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/SmartHomeBoard/__vm/.SmartHomeBoard.vsarduino.h
+/SmartHomeBoard/__vm/Compile.vmps.xml
+/SmartHomeBoard/__vm/Configuration.Debug.vmps.xml
+/SmartHomeBoard/__vm/Upload.vmps.xml
