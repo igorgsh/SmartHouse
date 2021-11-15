@@ -24,7 +24,7 @@ bld/
 
 # Visual Studio 2015 cache/options directory
 .vs/
-__vm\
+__vm/
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
@@ -245,3 +245,4 @@ ModelManifest.xml
 /SmartHomeBoard/__vm/Compile.vmps.xml
 /SmartHomeBoard/__vm/Configuration.Debug.vmps.xml
 /SmartHomeBoard/__vm/Upload.vmps.xml
+/WriteBoardID/__vm/.WriteBoardID.vsarduino.h

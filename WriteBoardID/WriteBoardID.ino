@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 #include <EEPROM.h>
 
 
@@ -8,7 +10,6 @@ void setup() {
   EEPROM.write(0,0x02);
   byte res = EEPROM.read(0);
 //  EEPROM.write(0,0x02);
-  int res = EEPROM.read(0);
   Serial.begin(115200);
   Serial.println("Board Id=" + String(res));
 }
