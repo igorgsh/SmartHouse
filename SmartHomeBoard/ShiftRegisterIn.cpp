@@ -30,7 +30,7 @@ void ShiftRegisterIn::InitUnit()
 
 	nByte = ceil(pinsNumber / 8);
 	children = new Unit* [pinsNumber];
-	Config.Log->append("SIR:init nbyte=").append(nByte).append(" ;Parent=").append(parentId).Debug();
+	//Config.Log->append("SIR:init nbyte=").append(nByte).append(" ;Parent=").append(parentId).Debug();
 	
 
 	for (int i = 0; i < pinsNumber; i++) {

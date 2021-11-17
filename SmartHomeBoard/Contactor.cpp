@@ -43,7 +43,7 @@ void Contactor::HandleContactor(bool isDirect, bool v) {
 		else {
 
 			if (startContact + CONTACTOR_SWITCHED_TIME <= millis()) {//contact is long enough
-				Config.Log->append("PPOINT1:v=").append(v).append(" ;prev=").append(prevValue).append(";start=").append(startContact).Debug();
+				//Config.Log->append("PPOINT1:v=").append(v).append(" ;prev=").append(prevValue).append(";start=").append(startContact).Debug();
 				HandleFinish(cntValue == lhOn ? ACT_ON : ACT_OFF);
 				startContact = 0;
 				prevValue = cntValue;

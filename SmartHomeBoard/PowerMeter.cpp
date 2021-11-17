@@ -101,25 +101,25 @@ void PowerMeter::PublishAll() {
 	v = voltage();
 	if (v <= 0) v = 0;
 
-	dtostrf(v, 6, 2, payload);
+	sprintf(payload, "%f", v);
 	MqttTopic(Id, topic, PM_VOLTAGE);
 	Config.MqttClient->Publish(topic, payload);
 
 	v = current();
 	if (v <= 0) v = 0;
-	dtostrf(v, 6, 2, payload);
+	sprintf(payload, "%f", v);
 	MqttTopic(Id, topic, PM_CURRENT);
 	Config.MqttClient->Publish(topic, payload);
 
 	v = power();
 	if (v <= 0) v = 0;
-	dtostrf(v, 6, 2, payload);
+	sprintf(payload, "%f", v);
 	MqttTopic(Id, topic, PM_POWER);
 	Config.MqttClient->Publish(topic, payload);
 
 	v = energy();
 	if (v > 0) {
-		dtostrf(v, 6, 2, payload);
+		sprintf(payload, "%f", v);
 		MqttTopic(Id, topic, PM_ENERGY);
 		Config.MqttClient->Publish(topic, payload);
 	}
