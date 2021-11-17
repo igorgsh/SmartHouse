@@ -35,7 +35,7 @@ Mqtt::Mqtt() : PubSubClient(Configuration::MqttServer(), Configuration::MqttPort
 bool Mqtt::MqttReconnect() {
 	
 	bool res = false;
-
+	
 	if (Config.IsEthernetConnection) {
 		if (!connected()) {
 			Config.Log->Debug(F1("MqttReconnect"));

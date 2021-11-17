@@ -9,7 +9,6 @@ extern Configuration Config;
 void Relay::InitUnit() {
 	pinMode(Pin, OUTPUT);
 	ProcessUnit(status==HIGH ? ACT_ON : ACT_OFF);
-	
 };
 
 void Relay::RelaySet(bool newStatus)
@@ -18,7 +17,7 @@ void Relay::RelaySet(bool newStatus)
 		digitalWrite(Pin, (newStatus == HIGH ? lhOn : !lhOn));
 	}
 	else {
-		Config.Pass2Parent(parentId, parentPin, (newStatus == HIGH ? lhOn : !lhOn));
+		Config.Pass2Parent(parentId, Pin, (newStatus == HIGH ? lhOn : !lhOn));
 	}
 
 	status = newStatus;
@@ -65,8 +64,7 @@ bool Relay::Compare(const Unit* u) {
 		Pin == tu->Pin &&
 		lhOn == tu->lhOn &&
 		status == tu->status &&
-		parentId == tu->parentId &&
-		parentPin == tu->parentPin
+		parentId == tu->parentId 
 		);
 	return res;
 }
@@ -80,7 +78,6 @@ void Relay::ReadFromEEPROM(uint16_t addr) {
 	lhOn = SigmaEEPROM::Read8(addr + 4);
 	status = SigmaEEPROM::Read8(addr + 5);
 	parentId = SigmaEEPROM::Read16(addr + 6); //6-7
-	parentPin = SigmaEEPROM::Read8(addr + 8);
 
 }
 
@@ -92,8 +89,6 @@ void Relay::WriteToEEPROM(uint16_t addr) {
 	SigmaEEPROM::Write8(addr + 4, lhOn);
 	SigmaEEPROM::Write8(addr + 5, status);
 	SigmaEEPROM::Write16(addr + 6, parentId); //6-7
-	SigmaEEPROM::Write8(addr + 8, parentPin);
-
 }
 
 
@@ -110,9 +105,6 @@ void Relay::ConfigField(const JsonObject& jsonList) {
 	if (jsonList.containsKey("parentId")) {
 		parentId = jsonList["parentId"];
 	}
-	if (jsonList.containsKey("parentPin")) {
-		parentPin = jsonList["parentPin"];
-	}
 }
 
 
@@ -126,7 +118,6 @@ void const Relay::print(const char* header, DebugLevel level) {
 	Config.Log->append(F1(";lhOn:")).append((unsigned int)lhOn);
 	Config.Log->append(F1(";status:")).append((unsigned int)status);
 	Config.Log->append(F1(";ParentId:")).append((unsigned int)parentId);
-	Config.Log->append(F1(";ParentPin:")).append((unsigned int)parentPin);
 	Config.Log->append(F1(" @"));
 	Config.Log->Log(level);
 }

@@ -18,6 +18,11 @@ public:
     virtual void InitUnit() = 0;
     virtual void FinalInitUnit() = 0;
 
+    void ParentUnitLoop(bool v) {};
+    void ParentInitUnit() {};
+    void ParentFinalInitUnit() {};
+
+
     void ConfigField(const JsonObject& jsonList);
     byte UnitStoredSize() { return 7; }
     void ReadFromEEPROM(uint16_t addr);

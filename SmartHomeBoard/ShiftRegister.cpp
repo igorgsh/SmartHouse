@@ -50,7 +50,7 @@ void ShiftRegister::WriteToEEPROM(uint16_t addr) {
 	SigmaEEPROM::Write8(addr + 2, Type);
 	SigmaEEPROM::Write8(addr + 3, DPin);
 	SigmaEEPROM::Write8(addr + 4, LatchPin);
-	SigmaEEPROM::Write8(addr + 5 , ClockPin);
+	SigmaEEPROM::Write8(addr + 5, ClockPin);
 	SigmaEEPROM::Write8(addr + 6, pinsNumber);
 
 }

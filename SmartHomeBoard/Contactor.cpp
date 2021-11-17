@@ -10,33 +10,40 @@
 #include "SigmaEEPROM.h"
 extern Configuration Config;
 
-void Contactor::SetDefault() {
+
+void Contactor::ParentInitUnit() {
+	prevValue = 0xff;
 	startContact = 0;
-	status = ActionType::ACT_OFF;
+	status = !lhOn;
 }
 
 void Contactor::InitUnit() {
 	pinMode(Pin, INPUT);
 	digitalWrite(Pin, lhOn? LOW : HIGH);
-	startContact = 0;
+	ParentInitUnit();
 	prevValue = digitalRead(Pin);
-	status = !lhOn;
-	Config.MqttClient->PublishUnit(this);
 }
 
 
-void Contactor::HandleContactor() {
+void Contactor::HandleContactor(bool isDirect, bool v) {
 
 	byte cntValue;
 
-	cntValue = digitalRead(Pin);
+	if (isDirect) {
+		cntValue = digitalRead(Pin);
+	}
+	else {
+		cntValue = v;
+	}
 
 	if (prevValue != cntValue) { // contactor is starting switch
 		if (startContact == 0) {
 			startContact = millis();
 		}
 		else {
+
 			if (startContact + CONTACTOR_SWITCHED_TIME <= millis()) {//contact is long enough
+				Config.Log->append("PPOINT1:v=").append(v).append(" ;prev=").append(prevValue).append(";start=").append(startContact).Debug();
 				HandleFinish(cntValue == lhOn ? ACT_ON : ACT_OFF);
 				startContact = 0;
 				prevValue = cntValue;
@@ -59,8 +66,13 @@ void Contactor::ProcessUnit(ActionType event) {
 }
 
 void Contactor::UnitLoop() {
-	HandleContactor();
+	HandleContactor(true, true);
 };
+
+void Contactor::ParentUnitLoop(bool v) {
+	HandleContactor(false, v);
+};
+
 
 bool Contactor::Compare(const Unit* u) {
 

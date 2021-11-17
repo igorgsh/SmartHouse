@@ -21,15 +21,16 @@ class Button :
 {
 public:
 
-	byte Pin;
 	bool lhOn;
 	
-	void SetDefault();
+	void ParentInitUnit();
+	void ParentUnitLoop(bool v);
+	void ParentFinalInitUnit(){};
 	void InitUnit();
-
-	void ProcessUnit(ActionType event);
 	void UnitLoop();
 	void FinalInitUnit() {};
+
+	void ProcessUnit(ActionType event);
 	bool Compare(const Unit* u);
 	byte UnitStoredSize() {return 7;}
 	void ReadFromEEPROM(uint16_t addr);
@@ -41,9 +42,9 @@ private:
 	bool isLongMode = false;
 	bool isExtraLongMode = false;
 	bool isShortMode = false;
-	unsigned long startPressing;
+	unsigned long startPressing=0;
 
-	void HandleButton();
+	void HandleButton(bool isDirect, bool v);
 	void HandleFinish(int newStatus);
 };
 

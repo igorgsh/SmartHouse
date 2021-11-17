@@ -6,25 +6,34 @@
 
 extern Configuration Config;
 
-void Button::SetDefault() {
-	startPressing = 0;
-	isLongMode = false;
-	status = ActionType::ACT_OFF;
-}
+//void Button::SetDefault() {
+//	startPressing = 0;
+//	isLongMode = false;
+//	status = ActionType::ACT_OFF;
+//}
 
 void Button::InitUnit() {
 	pinMode(Pin, INPUT);
 	digitalWrite(Pin, !lhOn);
-	Config.MqttClient->PublishUnit(this);
+//	Config.MqttClient->PublishUnit(this);
+}
+
+void Button::ParentInitUnit() {
+//	Config.MqttClient->PublishUnit(this);
 }
 
 
-void Button::HandleButton() {
+void Button::HandleButton(bool isDirect, bool v) {
 
 	byte btnValue;
 
 	unsigned long now = millis();
-	btnValue = digitalRead(Pin);
+	if (isDirect) {
+		btnValue = digitalRead(Pin);
+	}
+	else {
+		btnValue = v;
+	}
 
 	if (btnValue == lhOn) {// button is pressed
 		if (startPressing == 0) { // start pressing
@@ -93,14 +102,19 @@ void Button::HandleFinish(int newStatus) {
 
 void Button::ProcessUnit(ActionType event) {
 	Config.ProcessAction(Id, event);
-	status = ACT_OFF;
+	//status = ACT_OFF;
 	Config.MqttClient->PublishUnit(this);
 
 }
 
 void Button::UnitLoop() {
-	HandleButton();
+	HandleButton(true, true);
 };
+
+void Button::ParentUnitLoop(bool v) {
+	HandleButton(false, v);
+};
+
 
 bool Button::Compare(const Unit* u) {
 

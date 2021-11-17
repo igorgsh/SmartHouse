@@ -14,11 +14,16 @@ public:
 	OneWireBus *parent;
 
 	void InitUnit();
+	void UnitLoop();
+	void FinalInitUnit();
+
+	void ParentInitUnit() {};
+	void ParentUnitLoop(bool v) {};
+	void ParentFinalInitUnit() {};
+
 	bool IsAccessible();
 	virtual void HandleData()=0;
-	void UnitLoop();
 	void FillFrom(const Unit* u);
-	void FinalInitUnit();
 	void const print(const char* header, DebugLevel level) override;
 	void ConfigField(const JsonObject& jsonList) override;
 

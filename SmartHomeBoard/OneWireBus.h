@@ -11,13 +11,15 @@ class OneWireBus :
 	public Unit
 {
 public:
-	byte Pin;
 
 	void InitUnit();
-	void ProcessUnit(ActionType action);
 	void UnitLoop();
-	void SetDefault();
 	void FinalInitUnit();
+	void ParentInitUnit();
+	void ParentUnitLoop(bool v);
+	void ParentFinalInitUnit();
+
+	void ProcessUnit(ActionType action);
 	float GetTemperature(const DeviceAddress address);
 	bool CheckAddress(const DeviceAddress address);
 	void SetResolution(const DeviceAddress address);
