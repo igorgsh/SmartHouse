@@ -16,18 +16,16 @@
 class Contactor:public Unit
 {
 public:
-
-	byte Pin;
 	bool lhOn;
 
-
-
-	void SetDefault();
 	void InitUnit();
-
-	void ProcessUnit(ActionType event);
 	void UnitLoop();
 	void FinalInitUnit() {};
+	void ParentInitUnit();
+	void ParentUnitLoop(bool v);
+	void ParentFinalInitUnit() {};
+
+	void ProcessUnit(ActionType event);
 	bool Compare(const Unit* u);
 	byte UnitStoredSize() { return 7; }
 	void ReadFromEEPROM(uint16_t addr);
@@ -36,10 +34,10 @@ public:
 	void const print(const char* header, DebugLevel level);
 
 private:
-	unsigned long startContact;
+	unsigned long startContact=0;
 	byte prevValue;
 
-	void HandleContactor();
+	void HandleContactor(bool isDirect, bool v);
 	void HandleFinish(int newStatus);
 };
 

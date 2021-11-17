@@ -18,17 +18,22 @@ public:
 
 	PowerMeter();
 	~PowerMeter();
-	void InitUnit();
 	
 	double voltage();
 	double current();
 	double power();
 	double energy();
 
+	void InitUnit();
 	void UnitLoop();
-	void PublishAll();
-	void SetDefault();
 	void FinalInitUnit();
+
+	void ParentInitUnit() {};
+	void ParentUnitLoop(bool v) {};
+	void ParentFinalInitUnit() {};
+
+
+	void PublishAll();
 	void ProcessUnit(ActionType action);
 
 	byte serialNumber = 0;

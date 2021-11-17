@@ -17,6 +17,7 @@
 #include "PowerMeter.h"
 #include "Contactor.h"
 #include "ShiftRegisterOut.h"
+#include "ShiftRegisterIn.h"
 
 //extern Mqtt MqttClient;
 
@@ -162,6 +163,14 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 		}
 		u->Type = UnitType::SHIFTOUT;
 	}
+	else if (type == UnitType::SHIFTIN) {
+		u = new ShiftRegisterIn();
+		if (u == NULL) {
+			Log->Error(F1("Can't create ShiftRegisterOut"));
+			Board::Reset(10000);
+		}
+		u->Type = UnitType::SHIFTIN;
+	}
 	if (u == NULL) {
 		Log->append(F1("Can't create a typed unit:")).append((char)type).Error();
 	}
@@ -243,14 +252,18 @@ void Configuration::BuildConfig() {
 
 void Configuration::InitializeUnits() {
 	for (int i = 0; i < numberUnits; i++) {
-		units[i]->InitUnit();
+		if (units[i]->parentId == 0) {
+			units[i]->InitUnit();
+		}
 	}
 
 }
 
 void Configuration::FinalizeInitUnits() {
 	for (int i = 0; i < numberUnits; i++) {
-		units[i]->FinalInitUnit();
+		if (units[i]->parentId == 0) {
+			units[i]->FinalInitUnit();
+		}
 	}
 }
 
@@ -362,8 +375,10 @@ void Configuration::UpdateUnit(UnitType type, uint16_t id, uint16_t value) {
 
 void Configuration::UnitsLoop() {
 	for (int i = 0; i < numberUnits; i++) {
-		if (units[i]->Type != UnitType::POWER_METER) {
-			units[i]->UnitLoop();
+		if (units[i]->parentId == 0) {
+			if (units[i]->Type != UnitType::POWER_METER) {
+				units[i]->UnitLoop();
+			}
 		}
 	}
 }
@@ -372,9 +387,10 @@ void Configuration::Pass2Parent(uint16_t parentId, byte parentPin, bool status) 
 
 	Unit* parent = FindUnit(parentId);
 	if (parent != NULL) {
-		
-		ShiftRegisterOut* SRegOut = (ShiftRegisterOut*)parent;
-		SRegOut->Set(parentPin, status);
+		if (parent->Type == UnitType::SHIFTOUT) {
+			ShiftRegisterOut* SRegOut = (ShiftRegisterOut*)parent;
+			SRegOut->Set(parentPin, status);
+		}
 	}
 }
 

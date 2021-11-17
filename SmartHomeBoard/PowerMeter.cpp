@@ -149,8 +149,6 @@ void PowerMeter::MqttTopic(uint16_t unitId, char* topic,PowerMeterValues val) {
 	}
 }
 
-void PowerMeter::SetDefault() {
-}
 
 void PowerMeter::FinalInitUnit() {
 

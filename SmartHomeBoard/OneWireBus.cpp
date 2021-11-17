@@ -10,9 +10,6 @@
 
 extern Configuration Config;
 
-void OneWireBus::SetDefault() {
-
-}
 
 float OneWireBus::GetTemperature(const DeviceAddress address) {
 	if (CheckAddress(address)) {
@@ -29,14 +26,28 @@ bool OneWireBus::CheckAddress(const DeviceAddress address) {
 	return sensors->isConnected(address);
 }
 
+void OneWireBus::ParentInitUnit() {
+	// it is impossible
+}
+
+void OneWireBus::ParentFinalInitUnit() {
+	// it is impossible
+}
+
+
+void OneWireBus::ParentUnitLoop(bool v) {
+	// it is impossible
+}
+
+
 void OneWireBus::InitUnit() {
 	oneWire = new OneWire(Pin);
 	sensors = new DallasTemperature(oneWire);
 	sensors->begin();
 	Config.MqttClient->PublishUnit(this);
 	Config.ProcessAction(Id, status);
-
 }
+
 void OneWireBus::ProcessUnit(ActionType action) {
 	status = action;
 	Config.MqttClient->PublishUnit(this);

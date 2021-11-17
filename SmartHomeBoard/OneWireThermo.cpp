@@ -7,9 +7,6 @@
 
 extern Configuration Config;
 
-void OneWireThermo::SetDefault() {
-	//nothing todo
-}
 
 void OneWireThermo::InitUnit() {
 

@@ -10,26 +10,30 @@
 #include "SigmaEEPROM.h"
 extern Configuration Config;
 
-void Contactor::SetDefault() {
+
+void Contactor::ParentInitUnit() {
 	startContact = 0;
-	status = ActionType::ACT_OFF;
+	prevValue = digitalRead(Pin);
+	status = !lhOn;
 }
 
 void Contactor::InitUnit() {
 	pinMode(Pin, INPUT);
 	digitalWrite(Pin, lhOn? LOW : HIGH);
-	startContact = 0;
-	prevValue = digitalRead(Pin);
-	status = !lhOn;
-	Config.MqttClient->PublishUnit(this);
+	ParentInitUnit();
 }
 
 
-void Contactor::HandleContactor() {
+void Contactor::HandleContactor(bool isDirect, bool v) {
 
 	byte cntValue;
 
-	cntValue = digitalRead(Pin);
+	if (isDirect) {
+		cntValue = digitalRead(Pin);
+	}
+	else {
+		cntValue = v;
+	}
 
 	if (prevValue != cntValue) { // contactor is starting switch
 		if (startContact == 0) {
@@ -59,8 +63,13 @@ void Contactor::ProcessUnit(ActionType event) {
 }
 
 void Contactor::UnitLoop() {
-	HandleContactor();
+	HandleContactor(true, true);
 };
+
+void Contactor::ParentUnitLoop(bool v) {
+	HandleContactor(false, v);
+};
+
 
 bool Contactor::Compare(const Unit* u) {
 

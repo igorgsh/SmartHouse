@@ -4,7 +4,11 @@
 extern Configuration Config;
 
 void ShiftRegisterOut::UnitLoop() {
-	//Nothing
+	for (int i = 0; i < Config.numberUnits; i++) {
+		if (Config.units[i]->parentId == Id) {
+			Config.units[i]->ParentUnitLoop(false);
+		}
+	}
 }
 
 void ShiftRegisterOut::InitUnit()
@@ -20,11 +24,20 @@ void ShiftRegisterOut::InitUnit()
 		States[i] = 0;
 	}
 	Out();
+	for (int i = 0; i < Config.numberUnits; i++) {
+		if (Config.units[i]->parentId == Id) {
+			Config.units[i]->ParentInitUnit();
+		}
+	}
 }
 
 void ShiftRegisterOut::FinalInitUnit()
 {
-	//Nothing
+	for (int i = 0; i < Config.numberUnits; i++) {
+		if (Config.units[i]->parentId == Id) {
+			Config.units[i]->ParentFinalInitUnit();
+		}
+	}
 }
 
 void ShiftRegisterOut::Set(byte parentPin, bool status)

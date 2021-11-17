@@ -10,11 +10,9 @@ class OneWireThermo :
 public:
 
 
-	void SetDefault();
 	void UnitLoop();
 	void InitUnit();
 	void ProcessUnit(ActionType action);
-	//void FinalInitUnit();
 	void HandleData();
 	bool Compare(const Unit* u);
 	byte UnitStoredSize() { return 11; }
