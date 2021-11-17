@@ -11,7 +11,7 @@ public:
 	Loger& append(byte str) { loger->concat(str);  return *this; };
 	Loger& append(uint16_t str) { loger->concat(str);  return *this; };
 	Loger& append(int str) { loger->concat(str);  return *this; };
-	Loger& append(long str) { loger->concat(str);  return *this; };
+	Loger& append(unsigned long str) { loger->concat(str);  return *this; };
 	Loger& append(double str) { loger->concat(str);  return *this; };
 	Loger& append(const __FlashStringHelper* str) { loger->concat(str);  return *this; };
 	Loger& append(const char* str) { loger->concat(str);  return *this; };

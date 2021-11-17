@@ -133,7 +133,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties arduino.upload.port="COM4" config.Debug.arduino.upload.port="COM3" config.Debug.customdebug_mega_atmega2560_debugger_type="universal" />
+      <UserProperties arduino.upload.port="COM4" config.Debug.arduino.upload.port="COM3" config.Debug.customdebug_mega_atmega2560_debugger_type="universal" config.Release.arduino.upload.port="COM3" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
