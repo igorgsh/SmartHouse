@@ -7,7 +7,6 @@ class Loger
 {
 public:
 	Loger& clear() { loger->clear(); return *this; };
-	Loger& append(const char* str) { loger->concat(str);  return *this; };
 	Loger& append(const SafeString& str) { loger->concat((SafeString&)str); return *this; };
 	Loger& append(byte str) { loger->concat(str);  return *this; };
 	Loger& append(uint16_t str) { loger->concat(str);  return *this; };
@@ -15,6 +14,7 @@ public:
 	Loger& append(long str) { loger->concat(str);  return *this; };
 	Loger& append(double str) { loger->concat(str);  return *this; };
 	Loger& append(const __FlashStringHelper* str) { loger->concat(str);  return *this; };
+	Loger& append(const char* str) { loger->concat(str);  return *this; };
 
 	Loger(int size);
 

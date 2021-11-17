@@ -12,8 +12,8 @@ extern Configuration Config;
 
 
 void Contactor::ParentInitUnit() {
+	prevValue = 0xff;
 	startContact = 0;
-	prevValue = digitalRead(Pin);
 	status = !lhOn;
 }
 
@@ -21,6 +21,7 @@ void Contactor::InitUnit() {
 	pinMode(Pin, INPUT);
 	digitalWrite(Pin, lhOn? LOW : HIGH);
 	ParentInitUnit();
+	prevValue = digitalRead(Pin);
 }
 
 
