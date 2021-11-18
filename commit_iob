@@ -8,4 +8,5 @@ cp /opt/iobroker/iobroker-data/files/vis.0/main/* ./SmartHomeBoard/iobroker
 cp /opt/iobroker/iobroker-data/objects.json  ./SmartHomeBoard/iobroker
 git add *
 git commit -m "Script changes"
-git push https://igorgsh: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@github.com/igorgsh/SmartHouse.git
+git push origin master
+#https://igorgsh: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@github.com/igorgsh/SmartHouse.git
