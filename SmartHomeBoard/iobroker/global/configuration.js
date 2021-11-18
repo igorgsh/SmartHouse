@@ -165,7 +165,8 @@ var Configurations = [
             //,'{"id":246, "type":"R","Pin":46,"lhOn":1,"status":0,"priority":10}'  
             //,'{"id":248, "type":"R","Pin":48,"lhOn":1,"status":0,"priority":10}'  
             '{"id":205, "type":"s","DPin":3,"latchPin":5,"clockPin":4,"PinsN":16}'  
-            ,'{"id":281, "type":"C","Pin":0,"lhOn":1,"status":0,"priority":10, "parentId":205, "parentPin":0}'  
+            ,'{"id":281, "type":"C","Pin":0,"lhOn":1,"status":0,"priority":10, "parentId":205}'  
+            ,'{"id":282, "type":"B","Pin":1,"lhOn":0,"status":0,"priority":10, "parentId":205}'  
        
 
         ]
