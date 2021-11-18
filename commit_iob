@@ -1,0 +1,11 @@
+#!/bin/sh
+
+ROOT_DIR=/backup/scripts
+IOB_DIR=/opt/iobroker
+cd $ROOT_DIR
+git pull
+cp /opt/iobroker/iobroker-data/files/vis.0/main/* .
+cp /opt/iobroker/iobroker-data/objects.json .
+git add *
+git commit -m "changes"
+git push https://igorgsh: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@github.com/igorgsh/SmartHouse.git
