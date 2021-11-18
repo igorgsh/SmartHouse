@@ -27,6 +27,8 @@ var reqConfPart = 'ConfigurationRequest';
 
 var reqActPart = 'ActionRequest';
 
+var reqState = 'StateRequest';
+
 
 var pingGrp = "ping.0";
 var RouterPing = pingGrp + '.192_168_0_1';
