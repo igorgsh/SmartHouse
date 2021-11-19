@@ -24,11 +24,11 @@ void OneWireBusUnit::InitUnit() {
 	//parent = (OneWireBus*)Config.FindUnitByTypeAndPin(UnitType::ONE_WIRE_BUS, Pin);
 	parent = (OneWireBus*)FindOneWireBus(Pin);
 	if (parent == NULL) {
-		Config.Log->append(F1("Can't find bus for unit: ")).append(Id).Error();
+		Config.Log->append(F("Can't find bus for unit: ")).append(Id).Error();
 	}
 	else {
 		if (!parent->CheckAddress(address)) {
-			Config.Log->append(F1("Unit:")).append(Id).append(F1(" is absent on the bus")).Error();
+			Config.Log->append(F("Unit:")).append(Id).append(F(" is absent on the bus")).Error();
 			IsAvailable = false;
 		}
 		else {
@@ -59,7 +59,7 @@ void OneWireBusUnit::FillFrom(const Unit* u) {
 		}
 	}
 	else {
-		Config.Log->append(F1("Bad conversion type for unit ")).append(Id).Error();
+		Config.Log->append(F("Bad conversion type for unit ")).append(Id).Error();
 	}
 }
 
@@ -68,10 +68,10 @@ void const OneWireBusUnit::print(const char* header, DebugLevel level) {
 	if (header != NULL) {
 		Config.Log->append(header);
 	}
-	Config.Log->append(F1("Id:")).append(Id);
-	Config.Log->append(F1(";Type:")).append(Type);
-	Config.Log->append(F1(";Pin:")).append(Pin);
-	Config.Log->append(F1(" @ "));
+	Config.Log->append(F("Id:")).append(Id);
+	Config.Log->append(F(";Type:")).append(Type);
+	Config.Log->append(F(";Pin:")).append(Pin);
+	Config.Log->append(F(" @ "));
 	Config.Log->Log(level);
 }
 

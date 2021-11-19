@@ -32,7 +32,7 @@ void PowerMeter::InitUnit(bool isParent) {
 			port = &Serial3;
 			break;
 		default:
-			Config.Log->Error(F1("Port not found"));
+			Config.Log->Error(F("Port not found"));
 			port = NULL;
 			break;
 		}
@@ -226,13 +226,13 @@ void const PowerMeter::print(const char* header, DebugLevel level) {
 	if (header != NULL) {
 		Config.Log->append(header);
 	}
-	Config.Log->append(F1("Id:")).append((unsigned int)Id);
-	Config.Log->append(F1(";Type:")).append((char)Type);
-	Config.Log->append(F1(";Serial:")).append((unsigned int)Serial);
-	Config.Log->append(F1(";SerialRX:")).append((unsigned int)serialRX);
-	Config.Log->append(F1(";SerialTX:")).append((unsigned int)serialTX);
-	Config.Log->append(F1(";Factor:")).append((unsigned int)factor);
-//	Log.append(F1(";subscription:")).append(isSubscribed ? "true" : "false");
-	Config.Log->append(F1(" @"));
+	Config.Log->append(F("Id:")).append((unsigned int)Id);
+	Config.Log->append(F(";Type:")).append((char)Type);
+	Config.Log->append(F(";Serial:")).append((unsigned int)Serial);
+	Config.Log->append(F(";SerialRX:")).append((unsigned int)serialRX);
+	Config.Log->append(F(";SerialTX:")).append((unsigned int)serialTX);
+	Config.Log->append(F(";Factor:")).append((unsigned int)factor);
+//	Log.append(F(";subscription:")).append(isSubscribed ? "true" : "false");
+	Config.Log->append(F(" @"));
 	Config.Log->Log(level);
 }

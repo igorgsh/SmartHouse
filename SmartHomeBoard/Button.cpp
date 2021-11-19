@@ -169,12 +169,12 @@ void const Button::print(const char* header, DebugLevel level) {
 	if (header != NULL) {
 		Config.Log->append(header);
 	}
-	Config.Log->append(F1("Id:")).append((unsigned int)Id);
-	Config.Log->append(F1(";Type:")).append((char)Type);
-	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
-	Config.Log->append(F1(";lhOn:")).append((unsigned int)lhOn);
-	Config.Log->append(F1(";ParentId:")).append((unsigned int)parentId);
-	Config.Log->append(F1(" @"));
+	Config.Log->append(F("Id:")).append((unsigned int)Id);
+	Config.Log->append(F(";Type:")).append((char)Type);
+	Config.Log->append(F(";Pin:")).append((unsigned int)Pin);
+	Config.Log->append(F(";lhOn:")).append((unsigned int)lhOn);
+	Config.Log->append(F(";ParentId:")).append((unsigned int)parentId);
+	Config.Log->append(F(" @"));
 
 	Config.Log->Log(level);
 }

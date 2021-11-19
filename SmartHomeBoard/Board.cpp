@@ -7,7 +7,7 @@
 extern Configuration Config;
 
 void Board::Reset(unsigned long timeout) {
-	Config.Log->Info(F1("RESET!!!"));
+	Config.Log->Info(F("RESET!!!"));
 	if (timeout > 4000) {
 		delay(timeout - 4000);
 	}

@@ -17,7 +17,7 @@ float OneWireBus::GetTemperature(const DeviceAddress address) {
 	}
 	else {
 
-		Config.Log->append(F1("Temp is failed: ")).append(Id).Error();
+		Config.Log->append(F("Temp is failed: ")).append(Id).Error();
 		return -999;
 	}
 }
@@ -130,9 +130,9 @@ void const OneWireBus::print(const char* header, DebugLevel level) {
 	if (header != NULL) {
 		Config.Log->append(header);
 	}
-	Config.Log->append(F1("Id:")).append((unsigned int)Id);
-	Config.Log->append(F1(";Type:")).append((char)Type);
-	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
-	Config.Log->append(F1(" @"));
+	Config.Log->append(F("Id:")).append((unsigned int)Id);
+	Config.Log->append(F(";Type:")).append((char)Type);
+	Config.Log->append(F(";Pin:")).append((unsigned int)Pin);
+	Config.Log->append(F(" @"));
 	Config.Log->Log(level);
 }

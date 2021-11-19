@@ -59,9 +59,9 @@ void setup() {
 
 	//initialization of config
 	Config.Init();
-	Config.Log->Info(F1("Board is ready"));
-	Config.Log->append(F1("Board Id#:")).append(Config.BoardId).Info();
-	Config.Log->append(F1("IP Address is:")).append(Config.ip[0]).append(".").append(Config.ip[1]).append(".").append(Config.ip[2]).append(".").append(Config.ip[3]).append(".").Info();
+	Config.Log->Info(F("Board is ready"));
+	Config.Log->append(F("Board Id#:")).append(Config.BoardId).Info();
+	Config.Log->append(F("IP Address is:")).append(Config.ip[0]).append(".").append(Config.ip[1]).append(".").append(Config.ip[2]).append(".").append(Config.ip[3]).append(".").Info();
 	//Set a timer 
 	//MsTimer2::set(100, Timer2);
 	//MsTimer2::start();
