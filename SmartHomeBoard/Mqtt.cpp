@@ -22,7 +22,6 @@ extern Configuration Config;
 void callbackFunc(char* topic, uint8_t* payload, unsigned int length) {
 	char* pl = (char*)payload;
 	pl[length] = 0;
-	//Config.MqttClient->Callback(topic, pl, length);
 	Config.MqttClient->PutBuffer(topic, pl, length);
 }
 

@@ -297,6 +297,12 @@ void Configuration::ReadBoardId() {
 	mqttIp[0] = ip[0];
 	mqttIp[1] = ip[1];
 	mqttIp[2] = ip[2];
+
+	Log->append(F("IP Address is:")).append(ip[0]).append(".").append(ip[1]).append(".")
+		.append(ip[2]).append(".").append(ip[3]).Info();
+	Log->append(F("Mqtt Server IP is:")).append(mqttIp[0]).append(".").append(mqttIp[1]).append(".")
+		.append(mqttIp[2]).append(".").append(mqttIp[3]).Info();
+
 	//ip[3] = ip[3] + BoardId;
 
 	//sprintf(strIP, "%u.%u.%u.%u", ip[0], ip[1], ip[2], ip[3]);
