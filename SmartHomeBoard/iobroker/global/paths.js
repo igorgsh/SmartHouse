@@ -10,7 +10,7 @@ var prefixBrd = prefixConfig + '.Board_';
 
 
 var prefixEquip = prefixTopic + '.Equipment';
-var prefixLog = prefixTopic + '.Log.Board_';
+var prefixLog = prefixTopic + '.Logs.Board_';
 var prefixRelays = prefixEquip + ".Relays";
 var prefixButtons = prefixEquip + ".Buttons";
 var prefixPowerMeter = prefixEquip + '.PowerMeter';
