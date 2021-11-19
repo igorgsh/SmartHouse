@@ -1,0 +1,10 @@
+#!/bin/sh
+
+ROOT_DIR=/backup
+IOB_DIR=/opt/iobroker
+cd $ROOT_DIR
+git pull origin master
+cp $IOB_DIR/iobroker-data/files/vis.0/main/* ./SmartHomeBoard/iobroker
+git add *
+git commit -m "Script Changes"
+git push origin master
