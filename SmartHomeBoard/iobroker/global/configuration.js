@@ -97,12 +97,12 @@ var Configurations = [
             ,'{"id":44, "type":"R","Pin":44,"lhOn":1,"status":0,"priority":10}'	//L3.8 Кухня юг-восток
 		    ,'{"id":45, "type":"R","Pin":45,"lhOn":1,"status":0,"priority":10}'   //L3.1
 
-
+/*
            //,'{"id":62, "type":"P","SerialRX":63,"SerialTX":54,"Factor":3}' // Power meter 
            ,'{"id":64, "type":"P","SerialRX":64,"SerialTX":57,"Factor":1}' // Power meter 3 
            ,'{"id":65, "type":"P","SerialRX":65,"SerialTX":58,"Factor":1}' // Power meter 3 
            ,'{"id":66, "type":"P","SerialRX":66,"SerialTX":59,"Factor":1}' // Power meter 3 
-
+*/
         ]
         ,[ //Board 01
         
