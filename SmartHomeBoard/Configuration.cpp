@@ -291,12 +291,15 @@ void Configuration::InitializeActions() {
 
 
 void Configuration::ReadBoardId() {
-	BoardId = SigmaEEPROM::ReadBoardId();
+	SigmaEEPROM::ReadBoardId();
 	sprintf(BoardName, "Board_%02u", BoardId);
 	mac[5] = BoardId;
-	ip[3] = ip[3] + BoardId;
+	mqttIp[0] = ip[0];
+	mqttIp[1] = ip[1];
+	mqttIp[2] = ip[2];
+	//ip[3] = ip[3] + BoardId;
 
-	sprintf(strIP, "%u.%u.%u.%u", ip[0], ip[1], ip[2], ip[3]);
+	//sprintf(strIP, "%u.%u.%u.%u", ip[0], ip[1], ip[2], ip[3]);
 }
 
 

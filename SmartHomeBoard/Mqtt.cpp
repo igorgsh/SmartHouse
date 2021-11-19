@@ -26,7 +26,7 @@ void callbackFunc(char* topic, uint8_t* payload, unsigned int length) {
 	Config.MqttClient->PutBuffer(topic, pl, length);
 }
 
-Mqtt::Mqtt() : PubSubClient(Configuration::MqttServer(), Configuration::MqttPort, callbackFunc, *(Config.EthClient)) {
+	Mqtt::Mqtt() : PubSubClient(Config.mqttIp/* Configuration::MqttServer()*/, Configuration::MqttPort, callbackFunc, *(Config.EthClient)) {
 	Serial.println("MQTT!");
 	mqttWaiting = MQTT_INITIAL_RETRY_DELAY;
 }

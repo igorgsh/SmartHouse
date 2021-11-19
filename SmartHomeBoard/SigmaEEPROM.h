@@ -16,7 +16,7 @@ class SigmaEEPROM
 {
 
  public:
-	 static byte ReadBoardId();
+	 static void ReadBoardId();
 	 static bool UpdateUnits(byte numberOfUnits, Unit** units);
 	 static bool UpdateActions(byte numberOfActions, Action** actions);
 	 static uint16_t Read16(uint16_t addr);
@@ -27,6 +27,7 @@ class SigmaEEPROM
 	 static Unit* ReadUnit(int addr);
 	 static void ReadActions();
 	 static Action* ReadAction(int addr);
+	 //static void ReadIps();
 
 private:
 	 static void WriteUnits(byte numberOfUnits, Unit** units);
@@ -41,14 +42,18 @@ private:
 	 //	-------------
 	 //	0:	BoardId
 	 static const byte addrBoardId = 0;
-	 //	1: Number Of Units 
-	 static const byte addrNumberUnits = 1;
-	 //	2: Number of Actions
-	 static const byte addrNumberActions = 2;
-	 //	3: Address of Start of Units block
+	 //	1-4:	ip High to low
+	 static const byte addrBoardIp = 1;
+	 //	5:	Mqtt low ip
+	 static const byte addrMqttIp = 5;
+	 //	6: Number Of Units 
+	 static const byte addrNumberUnits = 6;
+	 //	7: Number of Actions
+	 static const byte addrNumberActions = 7;
+	 // 8-9: Address of Start of Actions block
+	 static const uint16_t addrStartActions = 8;
+	 //	-: Address of Start of Units block
 	 static const byte addrStartUnits = 10;
-	 // 4-5: Address of Start of Actions block
-	 static const uint16_t addrStartActions = 4;
 	 // Unit structure
 	//	Byte | Object
 	//	-------------
