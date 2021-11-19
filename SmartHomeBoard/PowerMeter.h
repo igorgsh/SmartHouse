@@ -24,16 +24,14 @@ public:
 	double power();
 	double energy();
 
-	void InitUnit();
-	void UnitLoop();
-	void FinalInitUnit();
-
-	void ParentInitUnit() {};
-	void ParentUnitLoop(bool v) {};
-	void ParentFinalInitUnit() {};
+	void InitUnit(bool isParent);
+	void UnitLoop(unsigned long timePeriod, bool isParent, bool val);
+	void FinalInitUnit(bool isParent);
 
 
-	void PublishAll();
+	//void PublishAll();
+	void PublishPowerMeter(PowerMeterValues step, double v);
+
 	void ProcessUnit(ActionType action);
 
 	byte serialNumber = 0;

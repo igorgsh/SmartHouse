@@ -52,7 +52,7 @@ public:
 
 	Unit* CreateTypedUnit(byte type);
 
-	void MainLoop();
+	//void MainLoop();
 	/*
 	static const char* MqttServer() {
 		return "192.168.0.99"; //IP-адрес сервера ioBroker
@@ -64,7 +64,6 @@ public:
 	int numberActions = 0;
 
 	//Timer 
-	//unsigned long counter01 = 0;	//100ms
 	unsigned long counter10 = 0;	//10ms
 	unsigned long counter1 = 0;		//1 sec
 	unsigned long counter30 = 0;	//30 sec
@@ -72,11 +71,7 @@ public:
 	//unsigned long counter300 = 0;	//5min
 
 	//void loop01();
-	void loop10();
-	void loop1();
-	void loop30();
-	void loop60();
-	//void loop300();
+	void Loop(unsigned long timePeriod);
 	Unit** CreateUnits(byte nUnits);
 	Action** CreateActions(byte nActions);
 
@@ -94,7 +89,7 @@ private:
 	void InitializeActions();
 	void BuildConfig();
 	void InitializeServer();
-	void UnitsLoop();
+	void UnitsLoop(unsigned long timePeriod);
 
 
 };

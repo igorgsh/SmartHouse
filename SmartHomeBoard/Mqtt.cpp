@@ -196,7 +196,7 @@ void Mqtt::PutBuffer(const char* topic, const char* payload, unsigned int length
 	lenCB = length;
 	//Config.Log->append("Buffer:(").append(lenCB).append(")[").append(topicCB).append("]:").append(payLoadCB).Debug();
 }
-
+/*
 
 void Mqtt::PublishUnit(const Unit* unit) {
 	if (connected()) {
@@ -205,6 +205,7 @@ void Mqtt::PublishUnit(const Unit* unit) {
 		byte unitType = 0;
 		if (unit->Type == ::POWER_METER) {
 			PowerMeter* p = (PowerMeter*)unit;
+
 			p->PublishAll();
 		}
 		else {
@@ -248,6 +249,7 @@ void Mqtt::PublishUnit(const Unit* unit) {
 		}
 	}
 }
+*/
 
 bool Mqtt::Publish(const char* topic, const char* payload) {
 	Config.Log->append(F1("Publish [")).append(topic).append(F1("]:")).append(payload).Debug();

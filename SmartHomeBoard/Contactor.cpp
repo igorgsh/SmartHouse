@@ -11,25 +11,23 @@
 extern Configuration Config;
 
 
-void Contactor::ParentInitUnit() {
+
+void Contactor::InitUnit(bool isParent) {
+	if (!isParent) {
+		pinMode(Pin, INPUT);
+		digitalWrite(Pin, lhOn ? LOW : HIGH);
+	}
 	prevValue = 0xff;
 	startContact = 0;
 	status = !lhOn;
 }
 
-void Contactor::InitUnit() {
-	pinMode(Pin, INPUT);
-	digitalWrite(Pin, lhOn? LOW : HIGH);
-	ParentInitUnit();
-	prevValue = digitalRead(Pin);
-}
 
-
-void Contactor::HandleContactor(bool isDirect, bool v) {
+void Contactor::HandleContactor(unsigned long timePeriod, bool isParent, bool v) {
 
 	byte cntValue;
 
-	if (isDirect) {
+	if (!isParent) {
 		cntValue = digitalRead(Pin);
 	}
 	else {
@@ -54,24 +52,20 @@ void Contactor::HandleContactor(bool isDirect, bool v) {
 
 void Contactor::HandleFinish(int newStatus) {
 	status = newStatus;
-	Config.MqttClient->PublishUnit(this);
+	PublishUnit(MQTT_CONTACTOR);
 	Config.ProcessAction(Id, status);
 
 }
 
 void Contactor::ProcessUnit(ActionType event) {
 	Config.ProcessAction(Id, event);
-	Config.MqttClient->PublishUnit(this);
-
+	PublishUnit(MQTT_CONTACTOR);
 }
 
-void Contactor::UnitLoop() {
-	HandleContactor(true, true);
+void Contactor::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
+	HandleContactor(timePeriod, isParent, val);
 };
 
-void Contactor::ParentUnitLoop(bool v) {
-	HandleContactor(false, v);
-};
 
 
 bool Contactor::Compare(const Unit* u) {

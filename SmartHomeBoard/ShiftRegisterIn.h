@@ -4,9 +4,9 @@ class ShiftRegisterIn :
     public ShiftRegister
 {
 public:
-    void UnitLoop();
-    void InitUnit();
-    void FinalInitUnit();
+    void UnitLoop(unsigned long timePeriod, bool isParent, bool val);
+    void InitUnit(bool isParent);
+    void FinalInitUnit(bool isParent);
 
 private:
     int nByte;

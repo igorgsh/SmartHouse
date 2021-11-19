@@ -33,3 +33,10 @@ void const Unit::print(const char* header, DebugLevel level){
 	Config.Log->append(F1(" @"));
 	Config.Log->Log(level);
 }
+
+void Unit::PublishUnit(const char* uPrefix)
+{
+	sprintf(Config.MqttClient->topicBuff, "%s%s%c%04d", uPrefix, MQTT_SEPARATOR, Type, Id);
+	sprintf(Config.MqttClient->payloadBuff, "%u", status);
+	Config.MqttClient->Publish(Config.MqttClient->topicBuff, Config.MqttClient->payloadBuff);
+}

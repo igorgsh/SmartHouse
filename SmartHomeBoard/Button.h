@@ -23,12 +23,9 @@ public:
 
 	bool lhOn;
 	
-	void ParentInitUnit();
-	void ParentUnitLoop(bool v);
-	void ParentFinalInitUnit(){};
-	void InitUnit();
-	void UnitLoop();
-	void FinalInitUnit() {};
+	void InitUnit(bool isParent);
+	void UnitLoop(unsigned long timePeriod, bool isParent, bool val);
+	void FinalInitUnit(bool isParent) {};
 
 	void ProcessUnit(ActionType event);
 	bool Compare(const Unit* u);
@@ -44,7 +41,7 @@ private:
 	bool isShortMode = false;
 	unsigned long startPressing=0;
 
-	void HandleButton(bool isDirect, bool v);
+	void HandleButton(unsigned long timePeriod, bool isParent, bool v);
 	void HandleFinish(int newStatus);
 };
 

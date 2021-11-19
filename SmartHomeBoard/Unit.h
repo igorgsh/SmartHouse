@@ -23,12 +23,9 @@ public:
 
 	virtual bool Compare(const Unit* u) =0;
 	virtual void FillFrom(const Unit* u);
-	virtual void UnitLoop() = 0;
-	virtual void InitUnit() = 0;
-	virtual void FinalInitUnit() = 0;
-	virtual void ParentUnitLoop(bool v) = 0;
-	virtual void ParentInitUnit() = 0;
-	virtual void ParentFinalInitUnit() = 0;
+	virtual void UnitLoop(unsigned long timePeriod, bool isParent = false, bool val = false) = 0;
+	virtual void InitUnit(bool isParent=false) = 0;
+	virtual void FinalInitUnit(bool isParent = false) = 0;
 	virtual byte UnitStoredSize() = 0;
 	virtual void ReadFromEEPROM(uint16_t addr) = 0;
 	virtual void WriteToEEPROM(uint16_t addr) = 0;
@@ -37,21 +34,21 @@ public:
 	virtual ~Unit() {};
 	virtual void const print(const char* header, DebugLevel level);
 	virtual void ConfigField(const JsonObject& jsonList) = 0;
+protected:
+	void PublishUnit(const char* uPrefix);
 };
+
 
 class UnitProto : public Unit {
 public:
-	void InitUnit() {};
+	void InitUnit(bool isParent) {};
 	void ProcessUnit(ActionType action) {};
-	void UnitLoop() {};
-	void FinalInitUnit() {};
+	void UnitLoop(unsigned long timePeriod, bool isParent, bool val) {};
+	void FinalInitUnit(bool isParent) {};
 	byte UnitStoredSize() {return 0;};
 	void ReadFromEEPROM(uint16_t addr) {};
 	void WriteToEEPROM(uint16_t addr) {};
 	void ConfigField(const JsonObject& jsonList) {};
 	bool Compare(const Unit* u) { return false; };
-	void ParentUnitLoop(bool v) {};
-	void ParentInitUnit() {};
-	void ParentFinalInitUnit() {};
 
 };

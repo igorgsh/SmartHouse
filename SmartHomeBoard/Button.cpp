@@ -12,23 +12,20 @@ extern Configuration Config;
 //	status = ActionType::ACT_OFF;
 //}
 
-void Button::InitUnit() {
-	pinMode(Pin, INPUT);
-	digitalWrite(Pin, !lhOn);
-//	Config.MqttClient->PublishUnit(this);
-}
-
-void Button::ParentInitUnit() {
-//	Config.MqttClient->PublishUnit(this);
+void Button::InitUnit(bool isParent) {
+	if (!isParent) {
+		pinMode(Pin, INPUT);
+		digitalWrite(Pin, !lhOn);
+	}
 }
 
 
-void Button::HandleButton(bool isDirect, bool v) {
+void Button::HandleButton(unsigned long timePeriod, bool isParent, bool v) {
 
 	byte btnValue;
 
 	unsigned long now = millis();
-	if (isDirect) {
+	if (!isParent) {
 		btnValue = digitalRead(Pin);
 	}
 	else {
@@ -95,24 +92,24 @@ void Button::HandleButton(bool isDirect, bool v) {
 
 void Button::HandleFinish(int newStatus) {
 	status = newStatus;
-	Config.MqttClient->PublishUnit(this);
+	PublishUnit(MQTT_BUTTONS);
 	Config.ProcessAction(Id, newStatus);
 
 }
 
+
+
 void Button::ProcessUnit(ActionType event) {
 	Config.ProcessAction(Id, event);
-	//status = ACT_OFF;
-	Config.MqttClient->PublishUnit(this);
-
+	PublishUnit(MQTT_BUTTONS);
 }
 
-void Button::UnitLoop() {
-	HandleButton(true, true);
-};
-
-void Button::ParentUnitLoop(bool v) {
-	HandleButton(false, v);
+void Button::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
+	if (isParent || parentId==0) {
+		HandleButton(timePeriod, isParent, val);
+	}
+	else {// nothing - button on ShiftRegister
+	}
 };
 
 

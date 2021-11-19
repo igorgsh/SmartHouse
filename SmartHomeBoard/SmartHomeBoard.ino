@@ -84,27 +84,28 @@ void loop() {
 
 	if ((now-tp60) > (unsigned long)60*1000) { //1 min 
 		//MEMFREE("StartLoop1m");
-		Config.loop60();
+		Config.Loop(60000);
 		Config.counter60++;
 		tp60 = now;
 	}
 
 	if ((now - tp30) > (unsigned long)30 * 1000) { //30 sec 
-		Config.loop30();
+		Config.Loop(30000);
 		Config.counter30++;
 		tp30 = now;
 	}
 	if ((now - tp10) > (unsigned long)10 * 1000) { //10 sec 
-		Config.loop10();
+		Config.Loop(10000);
 		Config.counter10++;
 		tp10 = now;
 	}
 	if ((now - tp1) > (unsigned long)1 * 1000) { //1 sec 
-		Config.loop1();
+		Config.Loop(1000);
 		Config.counter1++;
 		tp1 = now;
 	}
 
-	Config.MainLoop();
+
+	Config.Loop(0);
 
 }

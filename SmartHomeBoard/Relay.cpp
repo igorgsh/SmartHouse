@@ -6,9 +6,11 @@
 
 extern Configuration Config;
 
-void Relay::InitUnit() {
-	pinMode(Pin, OUTPUT);
-	ProcessUnit(status==HIGH ? ACT_ON : ACT_OFF);
+void Relay::InitUnit(bool isParent) {
+	if (!isParent) {
+		pinMode(Pin, OUTPUT);
+		//ProcessUnit(status==HIGH ? ACT_ON : ACT_OFF);
+	}
 };
 
 void Relay::RelaySet(bool newStatus)
@@ -21,7 +23,7 @@ void Relay::RelaySet(bool newStatus)
 	}
 
 	status = newStatus;
-	Config.MqttClient->PublishUnit(this);
+	PublishUnit(MQTT_RELAYS);
 	Config.ProcessAction(Id, newStatus);
 
 }
@@ -33,7 +35,7 @@ void Relay::RelaySwitch() {
 void Relay::ProcessUnit(ActionType event) {
 	switch (event) {
 	case ACT_OFF: {
-		RelayOfF1();
+		RelayOff();
 		break;
 	}
 	case ACT_ON: {
@@ -49,8 +51,8 @@ void Relay::ProcessUnit(ActionType event) {
 	}
 }
 
-void Relay::UnitLoop() {
-//nothing todo
+void Relay::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
+	//nothing todo
 };
 
 bool Relay::Compare(const Unit* u) {

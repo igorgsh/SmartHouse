@@ -14,14 +14,10 @@ public:
     byte pinsNumber;
     bool Compare(const Unit* u);
     //virtual void SetDefault() = 0;
-    virtual void UnitLoop() = 0;
-    virtual void InitUnit() = 0;
-    virtual void FinalInitUnit() = 0;
-
-    void ParentUnitLoop(bool v) {};
-    void ParentInitUnit() {};
-    void ParentFinalInitUnit() {};
-
+    virtual void UnitLoop(unsigned long timePeriod, bool isParent, bool val) = 0;
+    virtual void InitUnit(bool isParent) = 0;
+    virtual void FinalInitUnit(bool isParent) = 0;
+ 
 
     void ConfigField(const JsonObject& jsonList);
     byte UnitStoredSize() { return 7; }

@@ -57,7 +57,7 @@ class Mqtt : public PubSubClient
 		void GetConfiguration();
 		void GetActions();
 		void PublishLog(DebugLevel level, const char* message);
-		void PublishUnit(const Unit* unit);
+		//void PublishUnit(const Unit* unit);
 		void SubscribeUnits();
 		void SubscribeUnit(int unitNumber);
 		void Subscribe(const char* topic);
@@ -68,12 +68,13 @@ class Mqtt : public PubSubClient
 		Mqtt();
 		void WatchDog();
 		void PutBuffer(const char* topic, const char* payload, unsigned int len);
-
+		char topicBuff[MQTT_TOPIC_LENGTH];
+		char payloadBuff[MQTT_PAYLOAD_LENGTH];
 private:
 		char *boardId = (char*)BOARD_ID;
 		const char *LOG_END[7] = { "OFF", "FATAL","ERROR","WARN","INFO","DEBUG","ALL" };
 		uint16_t GetUnitId(const char* str, int offset);
-		char topicBuff[MQTT_TOPIC_LENGTH];
+		//char topicBuff[MQTT_TOPIC_LENGTH];
 		char topicLog[MQTT_TOPIC_LENGTH];
 		//char topicLog[7][MQTT_TOPIC_LENGTH];
 		bool MqttReconnect();

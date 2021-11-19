@@ -14,7 +14,7 @@ PowerMeter::~PowerMeter()
 {
 }
 
-void PowerMeter::InitUnit() {
+void PowerMeter::InitUnit(bool isParent) {
 
 	if (serialNumber != 0) {
 		HardwareSerial *port = NULL;
@@ -88,41 +88,46 @@ double PowerMeter::energy() {
 	}
 }
 
-void PowerMeter::UnitLoop() {
-	//PublishAll();
+void PowerMeter::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
+	//Parent is impossible
+	PowerMeterValues step = PM_VOLTAGE;
+	double v;
+	if (timePeriod == 1000) {
+		if (step == PM_VOLTAGE) {
+			v = voltage();
+			if (v <= 0) v = 0;
+			PublishPowerMeter(step, v);
+			step = PM_CURRENT;
+		}
+		else if (step == PM_CURRENT) {
+			v = current();
+			if (v <= 0) v = 0;
+			PublishPowerMeter(step, v);
+			step = PM_POWER;
+		}
+		else if (step == PM_POWER) {
+			v = power();
+			if (v <= 0) v = 0;
+			PublishPowerMeter(step, v);
+			step = PM_ENERGY;
+		}
+		else if (step == PM_ENERGY) {
+			v = energy();
+			if (v <= 0) v = 0;
+			PublishPowerMeter(step, v);
+			step = PM_VOLTAGE;
+		}
+	}
 }
 
-void PowerMeter::PublishAll() {
+void PowerMeter::PublishPowerMeter(PowerMeterValues step, double v) {
 	char topic[MQTT_TOPIC_LENGTH];
 	char payload[MQTT_PAYLOAD_LENGTH];
 
-	double v;
-
-	v = voltage();
-	if (v <= 0) v = 0;
-
 	sprintf(payload, "%f", v);
-	MqttTopic(Id, topic, PM_VOLTAGE);
+	MqttTopic(Id, topic, step);
 	Config.MqttClient->Publish(topic, payload);
 
-	v = current();
-	if (v <= 0) v = 0;
-	sprintf(payload, "%f", v);
-	MqttTopic(Id, topic, PM_CURRENT);
-	Config.MqttClient->Publish(topic, payload);
-
-	v = power();
-	if (v <= 0) v = 0;
-	sprintf(payload, "%f", v);
-	MqttTopic(Id, topic, PM_POWER);
-	Config.MqttClient->Publish(topic, payload);
-
-	v = energy();
-	if (v > 0) {
-		sprintf(payload, "%f", v);
-		MqttTopic(Id, topic, PM_ENERGY);
-		Config.MqttClient->Publish(topic, payload);
-	}
 }
 
 
@@ -150,7 +155,7 @@ void PowerMeter::MqttTopic(uint16_t unitId, char* topic,PowerMeterValues val) {
 }
 
 
-void PowerMeter::FinalInitUnit() {
+void PowerMeter::FinalInitUnit(bool isParent) {
 
 }
 

@@ -3,15 +3,17 @@
 
 extern Configuration Config;
 
-void ShiftRegisterOut::UnitLoop() {
+void ShiftRegisterOut::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
+/*
 	for (int i = 0; i < Config.numberUnits; i++) {
 		if (Config.units[i]->parentId == Id) {
-			Config.units[i]->ParentUnitLoop(false);
+			Config.units[i]->UnitLoop(timePeriod,true, );
 		}
 	}
+	*/
 }
 
-void ShiftRegisterOut::InitUnit()
+void ShiftRegisterOut::InitUnit(bool isParent)
 {
 	pinMode(LatchPin, OUTPUT);
 	pinMode(ClockPin, OUTPUT);
@@ -19,23 +21,22 @@ void ShiftRegisterOut::InitUnit()
 
 	nByte = ceil(pinsNumber / 8);
 	States = new byte(nByte);
-	//Config.Log->append("Init ShiftRegisterOut: pinsN=").append(pinsNumber).append("; nByte=").append(nByte).Debug();
 	for (int i = 0; i < nByte; i++) {
 		States[i] = 0;
 	}
 	Out();
 	for (int i = 0; i < Config.numberUnits; i++) {
 		if (Config.units[i]->parentId == Id) {
-			Config.units[i]->ParentInitUnit();
+			Config.units[i]->InitUnit(true);
 		}
 	}
 }
 
-void ShiftRegisterOut::FinalInitUnit()
+void ShiftRegisterOut::FinalInitUnit(bool isParent)
 {
 	for (int i = 0; i < Config.numberUnits; i++) {
 		if (Config.units[i]->parentId == Id) {
-			Config.units[i]->ParentFinalInitUnit();
+			Config.units[i]->FinalInitUnit(true);
 		}
 	}
 }

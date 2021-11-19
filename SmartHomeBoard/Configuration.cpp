@@ -73,9 +73,24 @@ Unit* Configuration::FindUnit(uint16_t id) {
 }
 
 
-void Configuration::MainLoop() {
-	MqttClient->MqttLoop();
-	UnitsLoop();
+void Configuration::Loop(unsigned long timePeriod) {
+	if (timePeriod == 0) {
+		MqttClient->MqttLoop();
+		UnitsLoop(timePeriod);
+	}
+	else if (timePeriod == 60000) {
+		UnitsLoop(timePeriod);
+		MqttClient->WatchDog();
+	}
+	else if (timePeriod == 30000) {
+		UnitsLoop(timePeriod);
+	}
+	else if (timePeriod == 10000) {
+		UnitsLoop(timePeriod);
+	}
+	else if (timePeriod == 1000) {
+		UnitsLoop(timePeriod);
+	}
 }
 
 void Configuration::InitializeServer() {
@@ -123,22 +138,22 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 		}
 		u->Type = UnitType::RELAY;
 	}
-	else if (type == UnitType::ONE_WIRE_BUS) {
-		u = new OneWireBus();
-		if (u == NULL) {
-			Log->Error(F1("Can't create OneWire bus Unit"));
-			Board::Reset(10000);
-		}
-		u->Type = UnitType::ONE_WIRE_BUS;
-	}
-	else if (type == UnitType::ONE_WIRE_THERMO) {
-		u = new OneWireThermo();
-		if (u == NULL) {
-			Log->Error(F1("Can't create OneWire Thermometer Unit"));
-			Board::Reset(10000);
-		}
-		u->Type = UnitType::ONE_WIRE_THERMO;
-	}
+	//else if (type == UnitType::ONE_WIRE_BUS) {
+	//	u = new OneWireBus();
+	//	if (u == NULL) {
+	//		Log->Error(F1("Can't create OneWire bus Unit"));
+	//		Board::Reset(10000);
+	//	}
+	//	u->Type = UnitType::ONE_WIRE_BUS;
+	//}
+	//else if (type == UnitType::ONE_WIRE_THERMO) {
+	//	u = new OneWireThermo();
+	//	if (u == NULL) {
+	//		Log->Error(F1("Can't create OneWire Thermometer Unit"));
+	//		Board::Reset(10000);
+	//	}
+	//	u->Type = UnitType::ONE_WIRE_THERMO;
+	//}
 	else if (type == UnitType::POWER_METER) {
 		u = new PowerMeter();
 		if (u == NULL) {
@@ -373,13 +388,9 @@ void Configuration::UpdateUnit(UnitType type, uint16_t id, uint16_t value) {
 	} 
 }
 
-void Configuration::UnitsLoop() {
+void Configuration::UnitsLoop(unsigned long timePeriod){
 	for (int i = 0; i < numberUnits; i++) {
-		if (units[i]->parentId == 0) {
-			if (units[i]->Type != UnitType::POWER_METER) {
-				units[i]->UnitLoop();
-			}
-		}
+		units[i]->UnitLoop(timePeriod);
 	}
 }
 
@@ -421,13 +432,13 @@ void Configuration::ProcessAction(uint16_t id, byte event) {
 					}
 					else {
 						Log->append(F1("Action:")).append(actions[i]->Id).append(F1(". Target not found")).Debug();
-						Unit *u = new UnitProto();
-						u->Id = actions[i]->targetId;
-						u->Type = actions[i]->targetType;
-						u->status = actions[i]->targetAction;
-						//u->isSubscribed = true; //this fake activation is used just for publish
-						MqttClient->PublishUnit(u);
-						delete u;
+						//Unit *u = new UnitProto();
+						//u->Id = actions[i]->targetId;
+						//u->Type = actions[i]->targetType;
+						//u->status = actions[i]->targetAction;
+						////u->isSubscribed = true; //this fake activation is used just for publish
+						//MqttClient->PublishUnit(u);
+						//delete u;
 					}
 				}
 				else {
@@ -436,25 +447,4 @@ void Configuration::ProcessAction(uint16_t id, byte event) {
 			}
 		}
 	}
-}
-
-void Configuration::loop1() {
-};
-
-void Configuration::loop30() {
-};
-
-
-void Configuration::loop10() {
-	for (int i = 0; i < numberUnits; i++) {
-		if (units[i]->Type == UnitType::POWER_METER) {
-			((PowerMeter*)units[i])->PublishAll();
-		}
-	}
-}
-
-void Configuration::loop60() {
-	// start every 1min
-	//Loger::Debug("Loop60");
-	MqttClient->WatchDog();
 }
