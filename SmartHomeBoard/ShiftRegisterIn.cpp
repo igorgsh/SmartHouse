@@ -13,7 +13,7 @@ void ShiftRegisterIn::UnitLoop(unsigned long timePeriod, bool isParent, bool val
 			bool b = (digitalRead(DPin) != 0);
 			//Config.Log->append("SIR. pin=").append(j*8 + i).append("; b =").append(b).Debug();
 			if (children[j * 8 + i] != NULL) {
-				Config.Log->append("Pass:(").append(j * 8 + i).append(") =").append(b).Debug();
+				//Config.Log->append("Pass:(").append(j * 8 + i).append(") =").append(b).Debug();
 				children[j * 8 + i]->UnitLoop(timePeriod, true, b);
 			}
 			digitalWrite(ClockPin, HIGH);

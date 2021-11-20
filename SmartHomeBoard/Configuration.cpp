@@ -104,18 +104,16 @@ void Configuration::Init() {
 	EthClient = new EthernetClient();
 	
 	if (IsEthernetConnection) {
-		//Log->Debug(F("Init Ethernet"));
 		InitializeServer();
-		//Log->Debug(F("Initialize MQTT"));
 		MqttClient = new Mqtt();
 		MqttClient->InitMqtt();
 	}
 	BuildConfig();
 	BuildActions();
 
-	Log->Debug(F("Subscribe Units"));
+	Log->Info(F("Subscribe Units"));
 	MqttClient->SubscribeUnits();
-	Log->Debug(F("Config init is finished"));
+	Log->Info(F("Config init is finished"));
 }
 
 Unit* Configuration::CreateTypedUnit(byte type) {
@@ -204,7 +202,7 @@ void Configuration::UpdateConfig(const char* jsonConfig) {
 
 		if (root.containsKey("length")) {
 			byte nUnits = (byte)root["length"];
-			Log->append(F("Number of config Units=")).append(nUnits).Debug();
+			Log->append(F("Number of config Units=")).append(nUnits).Info();
 			configCounter = 0;
 			CreateUnits(nUnits);
 			lenDetected = true;
@@ -226,7 +224,7 @@ void Configuration::UpdateConfig(const char* jsonConfig) {
 
 				configCounter++;
 				if (configCounter == numberUnits) {
-					Log->append(F("Finish update configuration(")).append(numberUnits).append(")").Debug();
+					Log->append(F("Finish update configuration(")).append(numberUnits).append(")").Info();
 					IsConfigReady = true;
 				}
 			}
@@ -251,7 +249,7 @@ void Configuration::BuildConfig() {
 
 	if (numberUnits != 0) {
 		if (!IsConfigReady) { //Mqtt failed for some reasons
-			Log->Debug(F("Read Units from EEPROM"));
+			Log->Info(F("Read Units from EEPROM"));
 			SigmaEEPROM::ReadUnits();
 		}
 		else {
@@ -440,14 +438,7 @@ void Configuration::ProcessAction(uint16_t id, byte event) {
 						}
 					}
 					else {
-						Log->append(F("Action:")).append(actions[i]->Id).append(F(". Target not found")).Debug();
-						//Unit *u = new UnitProto();
-						//u->Id = actions[i]->targetId;
-						//u->Type = actions[i]->targetType;
-						//u->status = actions[i]->targetAction;
-						////u->isSubscribed = true; //this fake activation is used just for publish
-						//MqttClient->PublishUnit(u);
-						//delete u;
+						Unit::PublishTypedUnit(actions[i]->targetType, actions[i]->targetId, actions[i]->targetAction);
 					}
 				}
 				else {

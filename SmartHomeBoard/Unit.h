@@ -34,6 +34,8 @@ public:
 	virtual ~Unit() {};
 	virtual void const print(const char* header, DebugLevel level);
 	virtual void ConfigField(const JsonObject& jsonList) = 0;
+	static void PublishTypedUnit(UnitType ut, uint16_t id, byte status);
+
 protected:
 	void PublishUnit(const char* uPrefix);
 };

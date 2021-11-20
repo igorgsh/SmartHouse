@@ -79,7 +79,6 @@ void loop() {
 	static unsigned long tp10 = 0;
 	static unsigned long tp1 = 0;
 	unsigned long now = millis();
-	//Loger::Debug("Loop");
 
 
 	if ((now-tp60) > (unsigned long)60*1000) { //1 min 

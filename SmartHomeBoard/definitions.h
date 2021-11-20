@@ -19,6 +19,7 @@ extern DebugLevel dLevel;
 
 
 typedef enum {
+	NOTHING			= 0,
 	BUTTON			= 'B',
 	RELAY			= 'R',
 	ONE_WIRE_BUS	= '1',

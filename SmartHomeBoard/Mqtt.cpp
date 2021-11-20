@@ -37,7 +37,7 @@ bool Mqtt::MqttReconnect() {
 	
 	if (Config.IsEthernetConnection) {
 		if (!connected()) {
-			Config.Log->Debug(F("MqttReconnect"));
+			Config.Log->Info(F("MqttReconnect"));
 			if (connect(Config.BoardName)) {
 				IdleLoop(); // clean the buffer
 				sprintf(topicBuff, MQTT_CONFIG_RESPONSE, Config.BoardId);
@@ -142,13 +142,11 @@ void Mqtt::MqttLoop() {
 	static long lastConnected = 0;
 
 	if (connected()) {
-		//Config.Log->Debug("Point1");
 		bool res = loop();
 		if (!res) {
 			Config.Log->Error(F("Failed loop"));
 		}
 		lastConnected = millis();
-		//Config.Log->Debug("Point2");
 		if (lenCB != 0) {
 			Callback();
 			lenCB = 0;
@@ -156,7 +154,7 @@ void Mqtt::MqttLoop() {
 	}
 	else {
 		if (lastConnected + millis() <= MQTT_RETRY_TIME) {
-			Config.Log->Debug(F("Trying to reconnect MQTT"));
+			Config.Log->Info(F("Trying to reconnect MQTT"));
 			bool res = MqttReconnect();
 			if (res) {
 				Config.Init();
@@ -203,7 +201,6 @@ void Mqtt::PutBuffer(const char* topic, const char* payload, unsigned int length
 	strncpy(payLoadCB, payload,length+1);
 	payLoadCB[length] = 0;
 	lenCB = length;
-	//Config.Log->append("Buffer:(").append(lenCB).append(")[").append(topicCB).append("]:").append(payLoadCB).Debug();
 }
 /*
 
@@ -336,31 +333,10 @@ void Mqtt::SubscribeUnit(int unitNumber) {
 
 void Mqtt::SubscribeUnits() {
 	if (connected()) {
-//		bool isSubscriptionSuccess = true;
-		Config.Log->Debug(F("Subscribing Units..."));
 		for (int i = 0; i < Config.numberUnits; i++) {
 			SubscribeUnit(i);
 		}
-		/*
-		delay(MQTT_RESUBSCRIPTION_DELAY);
-		for (int i = 0; i < Config.numberUnits; i++) {
-
-			MqttClient.MqttLoop();
-			for (int j = 0; j < MQTT_RESUBSCRIBE_TRY_COUNT && !Config.units[i]->isSubscribed; j++) {
-				SubscribeUnit(i);
-				delay(MQTT_RESUBSCRIPTION_DELAY);
-				MqttClient.MqttLoop();
-			}
-			if (!Config.units[i]->isSubscribed) {
-				Log.append("Subscription Failed. Unit id=").append(Config.units[i]->Id).Debug();
-				isSubscriptionSuccess = false;
-			}
-		}
-		if (!isSubscriptionSuccess) {
-			Log.Error(F("Some units are not subscribed"));
-		}
-		*/
-		Config.Log->append(F("End subscription:")).append(Config.numberUnits).Debug();
+		Config.Log->append(F("End subscription:")).append(Config.numberUnits).Info();
 	}
 }
 

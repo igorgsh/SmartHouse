@@ -20,7 +20,7 @@ void Contactor::InitUnit(bool isParent) {
 	prevValue = 0xff;
 	startContact = 0;
 	status = !lhOn;
-	Config.Log->append("SIR. Prev=").append(prevValue).Debug();
+	//Config.Log->append("SIR. Prev=").append(prevValue).Debug();
 }
 
 
@@ -34,11 +34,11 @@ void Contactor::HandleContactor(unsigned long timePeriod, bool isParent, bool v)
 	else {
 		cntValue = v;
 	}
-	Config.Log->append("SIR: Parent=").append(isParent).append("; v=").append(v).append("; prev=").append(prevValue).Debug();
+	//Config.Log->append("SIR: Parent=").append(isParent).append("; v=").append(v).append("; prev=").append(prevValue).Debug();
 	if (prevValue != cntValue) { // contactor is starting switch
 		unsigned long now = millis();
-		Config.Log->append("SIR: Parent=").append(isParent).append("; v=").append(v)
-			.append("; start=").append(startContact).append("; delta=").append(now-startContact).Debug();
+		//Config.Log->append("SIR: Parent=").append(isParent).append("; v=").append(v)
+		//	.append("; start=").append(startContact).append("; delta=").append(now-startContact).Debug();
 		if (startContact == 0) {
 			startContact = now;
 		}
