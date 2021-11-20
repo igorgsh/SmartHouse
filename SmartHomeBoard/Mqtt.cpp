@@ -39,6 +39,7 @@ bool Mqtt::MqttReconnect() {
 		if (!connected()) {
 			Config.Log->Debug(F("MqttReconnect"));
 			if (connect(Config.BoardName)) {
+				IdleLoop(); // clean the buffer
 				sprintf(topicBuff, MQTT_CONFIG_RESPONSE, Config.BoardId);
 				Subscribe(topicBuff);
 				sprintf(topicBuff, MQTT_ACTIONS_RESPONSE, Config.BoardId);
@@ -54,6 +55,14 @@ bool Mqtt::MqttReconnect() {
 		}
 	}
 	return res;
+}
+void Mqtt::IdleLoop()
+{
+	while (lenCB > 0) {
+		lenCB = 0;
+		loop();
+	}
+
 }
 uint16_t Mqtt::GetUnitId(const char* str, int offset) {
 	return atoi(str + offset);
@@ -190,8 +199,9 @@ void Mqtt::WatchDog() {
 
 void Mqtt::PutBuffer(const char* topic, const char* payload, unsigned int length)
 {
-	strcpy(topicCB, topic);
-	strcpy(payLoadCB, payload);
+	strncpy(topicCB, topic, MQTT_TOPIC_LENGTH);
+	strncpy(payLoadCB, payload,length+1);
+	payLoadCB[length] = 0;
 	lenCB = length;
 	//Config.Log->append("Buffer:(").append(lenCB).append(")[").append(topicCB).append("]:").append(payLoadCB).Debug();
 }

@@ -81,5 +81,6 @@ private:
 		char topicCB[MQTT_TOPIC_LENGTH];
 		char payLoadCB[MQTT_PAYLOAD_LENGTH];
 		unsigned int lenCB;
+		void IdleLoop();
 };
 

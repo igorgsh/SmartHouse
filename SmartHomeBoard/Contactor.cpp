@@ -20,6 +20,7 @@ void Contactor::InitUnit(bool isParent) {
 	prevValue = 0xff;
 	startContact = 0;
 	status = !lhOn;
+	Config.Log->append("SIR. Prev=").append(prevValue).Debug();
 }
 
 
@@ -33,14 +34,17 @@ void Contactor::HandleContactor(unsigned long timePeriod, bool isParent, bool v)
 	else {
 		cntValue = v;
 	}
-
+	Config.Log->append("SIR: Parent=").append(isParent).append("; v=").append(v).append("; prev=").append(prevValue).Debug();
 	if (prevValue != cntValue) { // contactor is starting switch
+		unsigned long now = millis();
+		Config.Log->append("SIR: Parent=").append(isParent).append("; v=").append(v)
+			.append("; start=").append(startContact).append("; delta=").append(now-startContact).Debug();
 		if (startContact == 0) {
-			startContact = millis();
+			startContact = now;
 		}
 		else {
 
-			if (startContact + CONTACTOR_SWITCHED_TIME <= millis()) {//contact is long enough
+			if (startContact + CONTACTOR_SWITCHED_TIME <= now) {//contact is long enough
 				//Config.Log->append("PPOINT1:v=").append(v).append(" ;prev=").append(prevValue).append(";start=").append(startContact).Debug();
 				HandleFinish(cntValue == lhOn ? ACT_ON : ACT_OFF);
 				startContact = 0;
@@ -63,7 +67,10 @@ void Contactor::ProcessUnit(ActionType event) {
 }
 
 void Contactor::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
-	HandleContactor(timePeriod, isParent, val);
+	if (parentId == 0
+		|| (parentId != 0 && isParent)) {
+		HandleContactor(timePeriod, isParent, val);
+	}
 };
 
 
