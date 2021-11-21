@@ -11807,13 +11807,13 @@
           "lc-border-radius": 10,
           "lc-zindex": 0,
           "url": "http://192.168.0.35/camera/Parking.jpg",
-          "alt": "Калитка",
-          "text": "Калитка",
+          "alt": "Парковка",
+          "text": "Парковка",
           "title": "Калитка"
         },
         "style": {
-          "left": "242px",
-          "top": "6px",
+          "left": "180px",
+          "top": "10px",
           "z-index": "0"
         },
         "widgetSet": "jqui-mfd"
