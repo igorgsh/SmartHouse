@@ -12,12 +12,9 @@ class OneWireBus :
 {
 public:
 
-	void InitUnit();
-	void UnitLoop();
-	void FinalInitUnit();
-	void ParentInitUnit();
-	void ParentUnitLoop(bool v);
-	void ParentFinalInitUnit();
+	void InitUnit(bool isParent);
+	void UnitLoop(unsigned long timePeriod, bool isParent, bool val);
+	void FinalInitUnit(bool isParent) {};
 
 	void ProcessUnit(ActionType action);
 	float GetTemperature(const DeviceAddress address);

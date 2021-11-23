@@ -11,38 +11,40 @@
 extern Configuration Config;
 
 
-void Contactor::ParentInitUnit() {
+
+void Contactor::InitUnit(bool isParent) {
+	if (!isParent) {
+		pinMode(Pin, INPUT);
+		digitalWrite(Pin, lhOn ? LOW : HIGH);
+	}
 	prevValue = 0xff;
 	startContact = 0;
 	status = !lhOn;
-}
-
-void Contactor::InitUnit() {
-	pinMode(Pin, INPUT);
-	digitalWrite(Pin, lhOn? LOW : HIGH);
-	ParentInitUnit();
-	prevValue = digitalRead(Pin);
+	//Config.Log->append("SIR. Prev=").append(prevValue).Debug();
 }
 
 
-void Contactor::HandleContactor(bool isDirect, bool v) {
+void Contactor::HandleContactor(unsigned long timePeriod, bool isParent, bool v) {
 
 	byte cntValue;
 
-	if (isDirect) {
+	if (!isParent) {
 		cntValue = digitalRead(Pin);
 	}
 	else {
 		cntValue = v;
 	}
-
+	//Config.Log->append("SIR: Parent=").append(isParent).append("; v=").append(v).append("; prev=").append(prevValue).Debug();
 	if (prevValue != cntValue) { // contactor is starting switch
+		unsigned long now = millis();
+		//Config.Log->append("SIR: Parent=").append(isParent).append("; v=").append(v)
+		//	.append("; start=").append(startContact).append("; delta=").append(now-startContact).Debug();
 		if (startContact == 0) {
-			startContact = millis();
+			startContact = now;
 		}
 		else {
 
-			if (startContact + CONTACTOR_SWITCHED_TIME <= millis()) {//contact is long enough
+			if (startContact + CONTACTOR_SWITCHED_TIME <= now) {//contact is long enough
 				//Config.Log->append("PPOINT1:v=").append(v).append(" ;prev=").append(prevValue).append(";start=").append(startContact).Debug();
 				HandleFinish(cntValue == lhOn ? ACT_ON : ACT_OFF);
 				startContact = 0;
@@ -54,24 +56,23 @@ void Contactor::HandleContactor(bool isDirect, bool v) {
 
 void Contactor::HandleFinish(int newStatus) {
 	status = newStatus;
-	Config.MqttClient->PublishUnit(this);
+	PublishUnit(MQTT_CONTACTOR);
 	Config.ProcessAction(Id, status);
 
 }
 
 void Contactor::ProcessUnit(ActionType event) {
 	Config.ProcessAction(Id, event);
-	Config.MqttClient->PublishUnit(this);
-
+	PublishUnit(MQTT_CONTACTOR);
 }
 
-void Contactor::UnitLoop() {
-	HandleContactor(true, true);
+void Contactor::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
+	if (parentId == 0
+		|| (parentId != 0 && isParent)) {
+		HandleContactor(timePeriod, isParent, val);
+	}
 };
 
-void Contactor::ParentUnitLoop(bool v) {
-	HandleContactor(false, v);
-};
 
 
 bool Contactor::Compare(const Unit* u) {
@@ -126,11 +127,11 @@ void const Contactor::print(const char* header, DebugLevel level) {
 	if (header != NULL) {
 		Config.Log->append(header);
 	}
-	Config.Log->append(F1("Id:")).append((unsigned int)Id);
-	Config.Log->append(F1(";Type:")).append((char)Type);
-	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
-	Config.Log->append(F1(";lhOn:")).append((unsigned int)lhOn);
-	Config.Log->append(F1(";ParentId:")).append((unsigned int)parentId);
-	Config.Log->append(F1(" @"));
+	Config.Log->append(F("Id:")).append((unsigned int)Id);
+	Config.Log->append(F(";Type:")).append((char)Type);
+	Config.Log->append(F(";Pin:")).append((unsigned int)Pin);
+	Config.Log->append(F(";lhOn:")).append((unsigned int)lhOn);
+	Config.Log->append(F(";ParentId:")).append((unsigned int)parentId);
+	Config.Log->append(F(" @"));
 	Config.Log->Log(level);
 }

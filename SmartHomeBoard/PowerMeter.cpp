@@ -14,7 +14,7 @@ PowerMeter::~PowerMeter()
 {
 }
 
-void PowerMeter::InitUnit() {
+void PowerMeter::InitUnit(bool isParent) {
 
 	if (serialNumber != 0) {
 		HardwareSerial *port = NULL;
@@ -32,7 +32,7 @@ void PowerMeter::InitUnit() {
 			port = &Serial3;
 			break;
 		default:
-			Config.Log->Error(F1("Port not found"));
+			Config.Log->Error(F("Port not found"));
 			port = NULL;
 			break;
 		}
@@ -88,49 +88,63 @@ double PowerMeter::energy() {
 	}
 }
 
-void PowerMeter::UnitLoop() {
-	//PublishAll();
-}
-
-void PowerMeter::PublishAll() {
-	char topic[MQTT_TOPIC_LENGTH];
-	char payload[MQTT_PAYLOAD_LENGTH];
+void PowerMeter::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
+	//Parent is impossible
 
 	double v;
-
-	v = voltage();
-	if (v <= 0) v = 0;
-
-	sprintf(payload, "%f", v);
-	MqttTopic(Id, topic, PM_VOLTAGE);
-	Config.MqttClient->Publish(topic, payload);
-
-	v = current();
-	if (v <= 0) v = 0;
-	sprintf(payload, "%f", v);
-	MqttTopic(Id, topic, PM_CURRENT);
-	Config.MqttClient->Publish(topic, payload);
-
-	v = power();
-	if (v <= 0) v = 0;
-	sprintf(payload, "%f", v);
-	MqttTopic(Id, topic, PM_POWER);
-	Config.MqttClient->Publish(topic, payload);
-
-	v = energy();
-	if (v > 0) {
-		sprintf(payload, "%f", v);
-		MqttTopic(Id, topic, PM_ENERGY);
-		Config.MqttClient->Publish(topic, payload);
+	if (timePeriod == 1000) {
+		//Config.Log->append("PWR: id=").append(Id).append("; time = ").append(timePeriod).append("; step=").append(step).Debug();
+		if (step == PM_VOLTAGE) {
+			v = voltage();
+			if (v <= 0) v = 0;
+			PublishPowerMeter(step, v);
+			step = PM_CURRENT;
+		}
+		else if (step == PM_CURRENT) {
+			v = current();
+			if (v <= 0) v = 0;
+			PublishPowerMeter(step, v);
+			step = PM_POWER;
+		}
+		else if (step == PM_POWER) {
+			v = power();
+			if (v <= 0) v = 0;
+			PublishPowerMeter(step, v);
+			step = PM_ENERGY;
+		}
+		else if (step == PM_ENERGY) {
+			v = energy();
+			if (v <= 0) v = 0;
+			PublishPowerMeter(step, v);
+			step = PM_VOLTAGE;
+		}
 	}
 }
 
+void PowerMeter::PublishPowerMeter(PowerMeterValues step, double v) {
+	char topic[MQTT_TOPIC_LENGTH];
+	char payload[MQTT_PAYLOAD_LENGTH];
+	//Config.Log->append("PWR:val=").append(v).Debug();
+	//sprintf(payload, "%f", v);
+	//dtostrf(v, 20, 2, payload);
+	unsigned long p1;
+	uint8_t p2;
 
-void PowerMeter::MqttTopic(uint16_t unitId, char* topic,PowerMeterValues val) {
+	p1 = (unsigned long)v;
+	p2 = (uint8_t)((v - p1) * 100);
+	sprintf(payload, "%lu.%u", p1, p2);
+
+	MqttTopic(Id, topic, step);
+	Config.MqttClient->Publish(topic, payload);
+
+}
+
+
+void PowerMeter::MqttTopic(uint16_t unitId, char* topic,PowerMeterValues step) {
 	char topic0[MQTT_TOPIC_LENGTH];
 	sprintf(topic0, "%s%s%c%04d", MQTT_POWERMETER, MQTT_SEPARATOR, UnitType::POWER_METER, unitId);
 
-	switch (val) {
+	switch (step) {
 	case PM_VOLTAGE:
 		sprintf(topic, "%s%sVoltage", topic0, MQTT_SEPARATOR);
 		break;
@@ -150,7 +164,7 @@ void PowerMeter::MqttTopic(uint16_t unitId, char* topic,PowerMeterValues val) {
 }
 
 
-void PowerMeter::FinalInitUnit() {
+void PowerMeter::FinalInitUnit(bool isParent) {
 
 }
 
@@ -221,13 +235,13 @@ void const PowerMeter::print(const char* header, DebugLevel level) {
 	if (header != NULL) {
 		Config.Log->append(header);
 	}
-	Config.Log->append(F1("Id:")).append((unsigned int)Id);
-	Config.Log->append(F1(";Type:")).append((char)Type);
-	Config.Log->append(F1(";Serial:")).append((unsigned int)Serial);
-	Config.Log->append(F1(";SerialRX:")).append((unsigned int)serialRX);
-	Config.Log->append(F1(";SerialTX:")).append((unsigned int)serialTX);
-	Config.Log->append(F1(";Factor:")).append((unsigned int)factor);
-//	Log.append(F1(";subscription:")).append(isSubscribed ? "true" : "false");
-	Config.Log->append(F1(" @"));
+	Config.Log->append(F("Id:")).append((unsigned int)Id);
+	Config.Log->append(F(";Type:")).append((char)Type);
+	Config.Log->append(F(";Serial:")).append((unsigned int)Serial);
+	Config.Log->append(F(";SerialRX:")).append((unsigned int)serialRX);
+	Config.Log->append(F(";SerialTX:")).append((unsigned int)serialTX);
+	Config.Log->append(F(";Factor:")).append((unsigned int)factor);
+//	Log.append(F(";subscription:")).append(isSubscribed ? "true" : "false");
+	Config.Log->append(F(" @"));
 	Config.Log->Log(level);
 }

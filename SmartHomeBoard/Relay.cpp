@@ -6,9 +6,11 @@
 
 extern Configuration Config;
 
-void Relay::InitUnit() {
-	pinMode(Pin, OUTPUT);
-	ProcessUnit(status==HIGH ? ACT_ON : ACT_OFF);
+void Relay::InitUnit(bool isParent) {
+	if (!isParent) {
+		pinMode(Pin, OUTPUT);
+		//ProcessUnit(status==HIGH ? ACT_ON : ACT_OFF);
+	}
 };
 
 void Relay::RelaySet(bool newStatus)
@@ -21,7 +23,7 @@ void Relay::RelaySet(bool newStatus)
 	}
 
 	status = newStatus;
-	Config.MqttClient->PublishUnit(this);
+	PublishUnit(MQTT_RELAYS);
 	Config.ProcessAction(Id, newStatus);
 
 }
@@ -33,7 +35,7 @@ void Relay::RelaySwitch() {
 void Relay::ProcessUnit(ActionType event) {
 	switch (event) {
 	case ACT_OFF: {
-		RelayOfF1();
+		RelayOff();
 		break;
 	}
 	case ACT_ON: {
@@ -49,8 +51,8 @@ void Relay::ProcessUnit(ActionType event) {
 	}
 }
 
-void Relay::UnitLoop() {
-//nothing todo
+void Relay::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
+	//nothing todo
 };
 
 bool Relay::Compare(const Unit* u) {
@@ -112,13 +114,13 @@ void const Relay::print(const char* header, DebugLevel level) {
 	if (header != NULL) {
 		Config.Log->append(header);
 	}
-	Config.Log->append(F1("Id:")).append((unsigned int)Id);
-	Config.Log->append(F1(";Type:")).append((char)Type);
-	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
-	Config.Log->append(F1(";lhOn:")).append((unsigned int)lhOn);
-	Config.Log->append(F1(";status:")).append((unsigned int)status);
-	Config.Log->append(F1(";ParentId:")).append((unsigned int)parentId);
-	Config.Log->append(F1(" @"));
+	Config.Log->append(F("Id:")).append((unsigned int)Id);
+	Config.Log->append(F(";Type:")).append((char)Type);
+	Config.Log->append(F(";Pin:")).append((unsigned int)Pin);
+	Config.Log->append(F(";lhOn:")).append((unsigned int)lhOn);
+	Config.Log->append(F(";status:")).append((unsigned int)status);
+	Config.Log->append(F(";ParentId:")).append((unsigned int)parentId);
+	Config.Log->append(F(" @"));
 	Config.Log->Log(level);
 }
 

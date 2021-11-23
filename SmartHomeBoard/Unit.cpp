@@ -3,19 +3,6 @@
 
 extern Configuration Config;
 
-/*
-bool Unit::Compare(Unit* u) {
-	if (u == NULL) return false;
-	Loger::Debug("Compare Unit:" + String(Id == u->Id) + ":" +String(Type == u->Type) +":" + String(Pin == u->Pin) + ":" + String(lhOn == u->lhOn) + "#");
-	return (
-		Id == u->Id &&
-		Type == u->Type &&
-		Pin == u->Pin &&
-		lhOn == u->lhOn &&
-		status == u->status
-		);
-}
-*/
 
 void Unit::FillFrom(const Unit* u) {
 	Id = u->Id;
@@ -27,9 +14,62 @@ void const Unit::print(const char* header, DebugLevel level){
 	if (header != NULL) {
 		Config.Log->append(header);
 	}
-	Config.Log->append(F1("Id:")).append((unsigned int) Id);
-	Config.Log->append(F1(";Type:")).append((char)Type);
-	Config.Log->append(F1(";status:")).append((unsigned int)status);
-	Config.Log->append(F1(" @"));
+	Config.Log->append(F("Id:")).append((unsigned int) Id);
+	Config.Log->append(F(";Type:")).append((char)Type);
+	Config.Log->append(F(";status:")).append((unsigned int)status);
+	Config.Log->append(F(" @"));
 	Config.Log->Log(level);
 }
+
+void Unit::PublishUnit(const char* uPrefix)
+{
+	sprintf(Config.MqttClient->topicBuff, "%s%s%c%04d", uPrefix, MQTT_SEPARATOR, Type, Id);
+	sprintf(Config.MqttClient->payloadBuff, "%u", status);
+	Config.MqttClient->Publish(Config.MqttClient->topicBuff, Config.MqttClient->payloadBuff);
+}
+
+void Unit::PublishTypedUnit(UnitType ut, uint16_t id, byte status)
+{
+	const char* unitPrefix;
+	byte unitType = ut;
+	switch (ut) {
+	case UnitType::BUTTON: {
+		unitPrefix = MQTT_BUTTONS;
+		break;
+	}
+	case UnitType::RELAY: {
+		unitPrefix = MQTT_RELAYS;
+		break;
+	}
+	case UnitType::ONE_WIRE_BUS: {
+		unitPrefix = MQTT_1WIREBUS;
+		break;
+	}
+	case UnitType::ONE_WIRE_THERMO: {
+		unitPrefix = MQTT_1WIRETHERMO;
+		break;
+	}
+	case UnitType::VIRTUAL_BUTTON: {
+		unitPrefix = MQTT_VIRTUAL_BUTTONS;
+		unitType = UnitType::BUTTON;
+		break;
+	}
+	case UnitType::CONTACTOR: {
+		unitPrefix = MQTT_CONTACTOR;
+		break;
+	}
+	case POWER_METER:
+	case NOTHING:
+	case SHIFTIN:
+	case SHIFTOUT: {
+		ut = NOTHING;
+		break;
+	}
+	}
+	if (ut != NOTHING) {
+		sprintf(Config.MqttClient->topicBuff, "%s%s%c%04d", unitPrefix, MQTT_SEPARATOR, unitType, id);
+		sprintf(Config.MqttClient->payloadBuff, "%u", status);
+		Config.MqttClient->Publish(Config.MqttClient->topicBuff, Config.MqttClient->payloadBuff);
+	}
+}
+

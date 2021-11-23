@@ -17,7 +17,7 @@ float OneWireBus::GetTemperature(const DeviceAddress address) {
 	}
 	else {
 
-		Config.Log->append(F1("Temp is failed: ")).append(Id).Error();
+		Config.Log->append(F("Temp is failed: ")).append(Id).Error();
 		return -999;
 	}
 }
@@ -26,26 +26,16 @@ bool OneWireBus::CheckAddress(const DeviceAddress address) {
 	return sensors->isConnected(address);
 }
 
-void OneWireBus::ParentInitUnit() {
-	// it is impossible
-}
-
-void OneWireBus::ParentFinalInitUnit() {
-	// it is impossible
-}
 
 
-void OneWireBus::ParentUnitLoop(bool v) {
-	// it is impossible
-}
-
-
-void OneWireBus::InitUnit() {
-	oneWire = new OneWire(Pin);
-	sensors = new DallasTemperature(oneWire);
-	sensors->begin();
-	Config.MqttClient->PublishUnit(this);
-	Config.ProcessAction(Id, status);
+void OneWireBus::InitUnit(bool isParent) {
+	if (!isParent) {
+		oneWire = new OneWire(Pin);
+		sensors = new DallasTemperature(oneWire);
+		sensors->begin();
+		Config.MqttClient->PublishUnit(this);
+		Config.ProcessAction(Id, status);
+	}
 }
 
 void OneWireBus::ProcessUnit(ActionType action) {
@@ -140,9 +130,9 @@ void const OneWireBus::print(const char* header, DebugLevel level) {
 	if (header != NULL) {
 		Config.Log->append(header);
 	}
-	Config.Log->append(F1("Id:")).append((unsigned int)Id);
-	Config.Log->append(F1(";Type:")).append((char)Type);
-	Config.Log->append(F1(";Pin:")).append((unsigned int)Pin);
-	Config.Log->append(F1(" @"));
+	Config.Log->append(F("Id:")).append((unsigned int)Id);
+	Config.Log->append(F(";Type:")).append((char)Type);
+	Config.Log->append(F(";Pin:")).append((unsigned int)Pin);
+	Config.Log->append(F(" @"));
 	Config.Log->Log(level);
 }

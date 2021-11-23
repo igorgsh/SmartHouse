@@ -73,9 +73,24 @@ Unit* Configuration::FindUnit(uint16_t id) {
 }
 
 
-void Configuration::MainLoop() {
-	MqttClient->MqttLoop();
-	UnitsLoop();
+void Configuration::Loop(unsigned long timePeriod) {
+	if (timePeriod == 0) {
+		MqttClient->MqttLoop();
+		UnitsLoop(timePeriod);
+	}
+	else if (timePeriod == 60000) {
+		UnitsLoop(timePeriod);
+		MqttClient->WatchDog();
+	}
+	else if (timePeriod == 30000) {
+		UnitsLoop(timePeriod);
+	}
+	else if (timePeriod == 10000) {
+		UnitsLoop(timePeriod);
+	}
+	else if (timePeriod == 1000) {
+		UnitsLoop(timePeriod);
+	}
 }
 
 void Configuration::InitializeServer() {
@@ -89,18 +104,16 @@ void Configuration::Init() {
 	EthClient = new EthernetClient();
 	
 	if (IsEthernetConnection) {
-		//Log->Debug(F1("Init Ethernet"));
 		InitializeServer();
-		//Log->Debug(F1("Initialize MQTT"));
 		MqttClient = new Mqtt();
 		MqttClient->InitMqtt();
 	}
 	BuildConfig();
 	BuildActions();
 
-	Log->Debug(F1("Subscribe Units"));
+	Log->Info(F("Subscribe Units"));
 	MqttClient->SubscribeUnits();
-	Log->Debug(F1("Config init is finished"));
+	Log->Info(F("Config init is finished"));
 }
 
 Unit* Configuration::CreateTypedUnit(byte type) {
@@ -109,7 +122,7 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 	if (type == UnitType::BUTTON) {
 		u = new Button();
 		if (u == NULL) {
-			Log->Error(F1("Can't create Button Unit"));
+			Log->Error(F("Can't create Button Unit"));
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::BUTTON;
@@ -118,31 +131,31 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 
 		u = new Relay();
 		if (u == NULL) {
-			Log->Error(F1("Can't create Relay Unit"));
+			Log->Error(F("Can't create Relay Unit"));
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::RELAY;
 	}
-	else if (type == UnitType::ONE_WIRE_BUS) {
-		u = new OneWireBus();
-		if (u == NULL) {
-			Log->Error(F1("Can't create OneWire bus Unit"));
-			Board::Reset(10000);
-		}
-		u->Type = UnitType::ONE_WIRE_BUS;
-	}
-	else if (type == UnitType::ONE_WIRE_THERMO) {
-		u = new OneWireThermo();
-		if (u == NULL) {
-			Log->Error(F1("Can't create OneWire Thermometer Unit"));
-			Board::Reset(10000);
-		}
-		u->Type = UnitType::ONE_WIRE_THERMO;
-	}
+	//else if (type == UnitType::ONE_WIRE_BUS) {
+	//	u = new OneWireBus();
+	//	if (u == NULL) {
+	//		Log->Error(F("Can't create OneWire bus Unit"));
+	//		Board::Reset(10000);
+	//	}
+	//	u->Type = UnitType::ONE_WIRE_BUS;
+	//}
+	//else if (type == UnitType::ONE_WIRE_THERMO) {
+	//	u = new OneWireThermo();
+	//	if (u == NULL) {
+	//		Log->Error(F("Can't create OneWire Thermometer Unit"));
+	//		Board::Reset(10000);
+	//	}
+	//	u->Type = UnitType::ONE_WIRE_THERMO;
+	//}
 	else if (type == UnitType::POWER_METER) {
 		u = new PowerMeter();
 		if (u == NULL) {
-			Log->Error(F1("Can't create Power Meter Unit"));
+			Log->Error(F("Can't create Power Meter Unit"));
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::POWER_METER;
@@ -150,7 +163,7 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 	else if (type == UnitType::CONTACTOR) {
 		u = new Contactor();
 		if (u == NULL) {
-			Log->Error(F1("Can't create Contactor"));
+			Log->Error(F("Can't create Contactor"));
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::CONTACTOR;
@@ -158,7 +171,7 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 	else if (type == UnitType::SHIFTOUT) {
 		u = new ShiftRegisterOut();
 		if (u == NULL) {
-			Log->Error(F1("Can't create ShiftRegisterOut"));
+			Log->Error(F("Can't create ShiftRegisterOut"));
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::SHIFTOUT;
@@ -166,13 +179,13 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 	else if (type == UnitType::SHIFTIN) {
 		u = new ShiftRegisterIn();
 		if (u == NULL) {
-			Log->Error(F1("Can't create ShiftRegisterOut"));
+			Log->Error(F("Can't create ShiftRegisterOut"));
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::SHIFTIN;
 	}
 	if (u == NULL) {
-		Log->append(F1("Can't create a typed unit:")).append((char)type).Error();
+		Log->append(F("Can't create a typed unit:")).append((char)type).Error();
 	}
 	return u;
 }
@@ -189,7 +202,7 @@ void Configuration::UpdateConfig(const char* jsonConfig) {
 
 		if (root.containsKey("length")) {
 			byte nUnits = (byte)root["length"];
-			Log->append(F1("Number of config Units=")).append(nUnits).Debug();
+			Log->append(F("Number of config Units=")).append(nUnits).Info();
 			configCounter = 0;
 			CreateUnits(nUnits);
 			lenDetected = true;
@@ -211,7 +224,7 @@ void Configuration::UpdateConfig(const char* jsonConfig) {
 
 				configCounter++;
 				if (configCounter == numberUnits) {
-					Log->append(F1("Finish update configuration(")).append(numberUnits).append(")").Debug();
+					Log->append(F("Finish update configuration(")).append(numberUnits).append(")").Info();
 					IsConfigReady = true;
 				}
 			}
@@ -236,7 +249,7 @@ void Configuration::BuildConfig() {
 
 	if (numberUnits != 0) {
 		if (!IsConfigReady) { //Mqtt failed for some reasons
-			Log->Debug(F1("Read Units from EEPROM"));
+			Log->Info(F("Read Units from EEPROM"));
 			SigmaEEPROM::ReadUnits();
 		}
 		else {
@@ -276,12 +289,21 @@ void Configuration::InitializeActions() {
 
 
 void Configuration::ReadBoardId() {
-	BoardId = SigmaEEPROM::ReadBoardId();
+	SigmaEEPROM::ReadBoardId();
 	sprintf(BoardName, "Board_%02u", BoardId);
 	mac[5] = BoardId;
-	ip[3] = ip[3] + BoardId;
+	mqttIp[0] = ip[0];
+	mqttIp[1] = ip[1];
+	mqttIp[2] = ip[2];
 
-	sprintf(strIP, "%u.%u.%u.%u", ip[0], ip[1], ip[2], ip[3]);
+	Log->append(F("IP Address is:")).append(ip[0]).append(".").append(ip[1]).append(".")
+		.append(ip[2]).append(".").append(ip[3]).Info();
+	Log->append(F("Mqtt Server IP is:")).append(mqttIp[0]).append(".").append(mqttIp[1]).append(".")
+		.append(mqttIp[2]).append(".").append(mqttIp[3]).Info();
+
+	//ip[3] = ip[3] + BoardId;
+
+	//sprintf(strIP, "%u.%u.%u.%u", ip[0], ip[1], ip[2], ip[3]);
 }
 
 
@@ -373,13 +395,9 @@ void Configuration::UpdateUnit(UnitType type, uint16_t id, uint16_t value) {
 	} 
 }
 
-void Configuration::UnitsLoop() {
+void Configuration::UnitsLoop(unsigned long timePeriod){
 	for (int i = 0; i < numberUnits; i++) {
-		if (units[i]->parentId == 0) {
-			if (units[i]->Type != UnitType::POWER_METER) {
-				units[i]->UnitLoop();
-			}
-		}
+		units[i]->UnitLoop(timePeriod);
 	}
 }
 
@@ -420,41 +438,13 @@ void Configuration::ProcessAction(uint16_t id, byte event) {
 						}
 					}
 					else {
-						Log->append(F1("Action:")).append(actions[i]->Id).append(F1(". Target not found")).Debug();
-						Unit *u = new UnitProto();
-						u->Id = actions[i]->targetId;
-						u->Type = actions[i]->targetType;
-						u->status = actions[i]->targetAction;
-						//u->isSubscribed = true; //this fake activation is used just for publish
-						MqttClient->PublishUnit(u);
-						delete u;
+						Unit::PublishTypedUnit(actions[i]->targetType, actions[i]->targetId, actions[i]->targetAction);
 					}
 				}
 				else {
-					Log->append(F1("Action:")).append(actions[i]->Id).append(F1(". Origin not found")).Error();
+					Log->append(F("Action:")).append(actions[i]->Id).append(F(". Origin not found")).Error();
 				}
 			}
 		}
 	}
-}
-
-void Configuration::loop1() {
-};
-
-void Configuration::loop30() {
-};
-
-
-void Configuration::loop10() {
-	for (int i = 0; i < numberUnits; i++) {
-		if (units[i]->Type == UnitType::POWER_METER) {
-			((PowerMeter*)units[i])->PublishAll();
-		}
-	}
-}
-
-void Configuration::loop60() {
-	// start every 1min
-	//Loger::Debug("Loop60");
-	MqttClient->WatchDog();
 }

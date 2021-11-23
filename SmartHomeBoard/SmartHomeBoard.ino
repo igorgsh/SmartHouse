@@ -59,9 +59,9 @@ void setup() {
 
 	//initialization of config
 	Config.Init();
-	Config.Log->Info(F1("Board is ready"));
-	Config.Log->append(F1("Board Id#:")).append(Config.BoardId).Info();
-	Config.Log->append(F1("IP Address is:")).append(Config.strIP).Info();
+	Config.Log->Info(F("Board is ready"));
+	Config.Log->append(F("Board Id#:")).append(Config.BoardId).Info();
+	Config.Log->append(F("IP Address is:")).append(Config.ip[0]).append(".").append(Config.ip[1]).append(".").append(Config.ip[2]).append(".").append(Config.ip[3]).append(".").Info();
 	//Set a timer 
 	//MsTimer2::set(100, Timer2);
 	//MsTimer2::start();
@@ -79,32 +79,32 @@ void loop() {
 	static unsigned long tp10 = 0;
 	static unsigned long tp1 = 0;
 	unsigned long now = millis();
-	//Loger::Debug("Loop");
 
-
+	//Config.Log->append("Loop:now=").append(now).Info();
 	if ((now-tp60) > (unsigned long)60*1000) { //1 min 
 		//MEMFREE("StartLoop1m");
-		Config.loop60();
+		Config.Loop(60000);
 		Config.counter60++;
 		tp60 = now;
 	}
 
 	if ((now - tp30) > (unsigned long)30 * 1000) { //30 sec 
-		Config.loop30();
+		Config.Loop(30000);
 		Config.counter30++;
 		tp30 = now;
 	}
 	if ((now - tp10) > (unsigned long)10 * 1000) { //10 sec 
-		Config.loop10();
+		Config.Loop(10000);
 		Config.counter10++;
 		tp10 = now;
 	}
 	if ((now - tp1) > (unsigned long)1 * 1000) { //1 sec 
-		Config.loop1();
+		Config.Loop(1000);
 		Config.counter1++;
 		tp1 = now;
 	}
 
-	Config.MainLoop();
+
+	Config.Loop(0);
 
 }

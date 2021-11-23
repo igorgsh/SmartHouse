@@ -1,12 +1,13 @@
 #pragma once
 #include "ShiftRegister.h"
+
 class ShiftRegisterOut :
     public ShiftRegister
 {
 public:
-    void UnitLoop();
-    void InitUnit();
-    void FinalInitUnit();
+    void UnitLoop(unsigned long timePeriod, bool isParent, bool val);
+    void InitUnit(bool isParent);
+    void FinalInitUnit(bool isParent);
 
     void Set(byte parentPin, bool status);
 private:

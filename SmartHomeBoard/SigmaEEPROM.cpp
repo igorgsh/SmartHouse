@@ -29,8 +29,16 @@ void SigmaEEPROM::Write8(uint16_t addr, byte val) {
 	EEPROM.write(addr, val);
 }
 
-byte SigmaEEPROM::ReadBoardId() {
-	return Read8(addrBoardId);
+void SigmaEEPROM::ReadBoardId() {
+	byte v= Read8(addrBoardId);
+	Config.BoardId = v;
+	Config.ip[0] = Read8(addrBoardIp);
+	Config.ip[1] = Read8(addrBoardIp+1);
+	Config.ip[2] = Read8(addrBoardIp+2);
+	Config.ip[3] = Read8(addrBoardIp+3);
+
+	Config.mqttIp[3] = Read8(addrMqttIp);
+
 }
 
 bool SigmaEEPROM::UpdateUnits(byte numberOfUnits, Unit** units) {
@@ -75,15 +83,8 @@ void SigmaEEPROM::WriteUnits(byte numberOfUnits, Unit** units) {
 	uint16_t currentPtr = addrStartUnits;
 	for (int i = 0; i < numberOfUnits; i++) {
 		units[i]->WriteToEEPROM(currentPtr);
-
-		Unit* u = Config.CreateTypedUnit(units[i]->Type);
-		u->ReadFromEEPROM(currentPtr);
-//		u->print("Reading unit:", D_DEBUG);
-		delete u;
-
 		currentPtr += units[i]->UnitStoredSize();
 	}
-
 	Write8(addrNumberUnits, numberOfUnits);
 	Write16(addrStartActions, currentPtr);
 }
@@ -96,9 +97,7 @@ void SigmaEEPROM::ReadUnits() {
 
 	int currPtr = addrStartUnits;
 	for (int i = 0; i < nUnits; i++) {
-		//Loger::Debug("Curptr=" + String(currPtr));
 		units[i] = ReadUnit(currPtr);
-//		units[i]->print("Read Units:",D_DEBUG);
 		currPtr += units[i]->UnitStoredSize();
 	}
 }
@@ -140,9 +139,7 @@ void SigmaEEPROM::ReadActions() {
 
 	int currPtr = Read16(addrStartActions);
 	for (int i = 0; i < nActions; i++) {
-		//Loger::Debug("Curptr=" + String(currPtr));
 		actions[i] = ReadAction(currPtr);
-//		actions[i]->print("Read Actions:", D_DEBUG);
 		currPtr += actions[i]->ActionStoredSize();
 	}
 }
@@ -162,7 +159,6 @@ bool SigmaEEPROM::UpdateActions(byte numberOfActions, Action** actions) {
 		for (int i = 0; !res && i < numberOfActions; i++) {
 			Action* a = new Action;
 			a->ReadFromEEPROM(currentPtr);
-//			a->print("Read action:", D_DEBUG);
 			if (!a->Compare(actions[i])) {
 				res = true;
 			}
