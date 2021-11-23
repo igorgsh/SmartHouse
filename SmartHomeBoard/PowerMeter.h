@@ -54,6 +54,7 @@ private:
 	PZEM004T* pzem=NULL;
 	IPAddress ip = IPAddress(10, 10, 10, 10);
 	//Stream *port = NULL;
+	PowerMeterValues step = PM_VOLTAGE;
 
 };
 

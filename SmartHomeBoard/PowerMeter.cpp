@@ -90,9 +90,10 @@ double PowerMeter::energy() {
 
 void PowerMeter::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
 	//Parent is impossible
-	PowerMeterValues step = PM_VOLTAGE;
+
 	double v;
 	if (timePeriod == 1000) {
+		//Config.Log->append("PWR: id=").append(Id).append("; time = ").append(timePeriod).append("; step=").append(step).Debug();
 		if (step == PM_VOLTAGE) {
 			v = voltage();
 			if (v <= 0) v = 0;
@@ -123,19 +124,27 @@ void PowerMeter::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
 void PowerMeter::PublishPowerMeter(PowerMeterValues step, double v) {
 	char topic[MQTT_TOPIC_LENGTH];
 	char payload[MQTT_PAYLOAD_LENGTH];
+	//Config.Log->append("PWR:val=").append(v).Debug();
+	//sprintf(payload, "%f", v);
+	//dtostrf(v, 20, 2, payload);
+	unsigned long p1;
+	uint8_t p2;
 
-	sprintf(payload, "%f", v);
+	p1 = (unsigned long)v;
+	p2 = (uint8_t)((v - p1) * 100);
+	sprintf(payload, "%lu.%u", p1, p2);
+
 	MqttTopic(Id, topic, step);
 	Config.MqttClient->Publish(topic, payload);
 
 }
 
 
-void PowerMeter::MqttTopic(uint16_t unitId, char* topic,PowerMeterValues val) {
+void PowerMeter::MqttTopic(uint16_t unitId, char* topic,PowerMeterValues step) {
 	char topic0[MQTT_TOPIC_LENGTH];
 	sprintf(topic0, "%s%s%c%04d", MQTT_POWERMETER, MQTT_SEPARATOR, UnitType::POWER_METER, unitId);
 
-	switch (val) {
+	switch (step) {
 	case PM_VOLTAGE:
 		sprintf(topic, "%s%sVoltage", topic0, MQTT_SEPARATOR);
 		break;

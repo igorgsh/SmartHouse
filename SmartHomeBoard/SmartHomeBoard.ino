@@ -80,7 +80,7 @@ void loop() {
 	static unsigned long tp1 = 0;
 	unsigned long now = millis();
 
-
+	//Config.Log->append("Loop:now=").append(now).Info();
 	if ((now-tp60) > (unsigned long)60*1000) { //1 min 
 		//MEMFREE("StartLoop1m");
 		Config.Loop(60000);
