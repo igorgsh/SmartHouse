@@ -158,15 +158,18 @@ var Configurations = [
         ]
         ,[ //Board 02
 
+           '{"id":64, "type":"P","SerialRX":64,"SerialTX":57,"Factor":1}' // Power meter 3 
+           ,'{"id":65, "type":"P","SerialRX":65,"SerialTX":58,"Factor":1}' // Power meter 3 
+           ,'{"id":66, "type":"P","SerialRX":66,"SerialTX":59,"Factor":1}' // Power meter 3 
             //'{"id":238, "type":"R","Pin":38,"lhOn":1,"status":0,"priority":10}'  
             //,'{"id":240, "type":"R","Pin":40,"lhOn":1,"status":0,"priority":10}'  
             //,'{"id":242, "type":"R","Pin":42,"lhOn":1,"status":0,"priority":10}'  
             //,'{"id":244, "type":"R","Pin":44,"lhOn":1,"status":0,"priority":10}'  
             //,'{"id":246, "type":"R","Pin":46,"lhOn":1,"status":0,"priority":10}'  
             //,'{"id":248, "type":"R","Pin":48,"lhOn":1,"status":0,"priority":10}'  
-            '{"id":205, "type":"s","DPin":3,"latchPin":5,"clockPin":4,"PinsN":16}'  
-            ,'{"id":281, "type":"C","Pin":0,"lhOn":1,"status":0,"priority":10, "parentId":205}'  
-            ,'{"id":282, "type":"B","Pin":1,"lhOn":0,"status":0,"priority":10, "parentId":205}'  
+    //          '{"id":205, "type":"s","DPin":3,"latchPin":5,"clockPin":4,"PinsN":16}'  
+      //      ,'{"id":281, "type":"C","Pin":0,"lhOn":1,"status":0,"priority":10, "parentId":205}'  
+        //    ,'{"id":282, "type":"B","Pin":1,"lhOn":0,"status":0,"priority":10, "parentId":205}'  
        
 
         ]
