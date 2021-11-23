@@ -132,7 +132,7 @@ void PowerMeter::PublishPowerMeter(PowerMeterValues step, double v) {
 
 	p1 = (unsigned long)v;
 	p2 = (uint8_t)((v - p1) * 100);
-	sprintf(payload, "%lu.%u", p1, p2);
+	sprintf(payload, "%lu.%02u", p1, p2);
 
 	MqttTopic(Id, topic, step);
 	Config.MqttClient->Publish(topic, payload);
