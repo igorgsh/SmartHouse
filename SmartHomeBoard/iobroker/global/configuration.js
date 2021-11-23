@@ -158,9 +158,15 @@ var Configurations = [
         ]
         ,[ //Board 02
 
-           '{"id":64, "type":"P","SerialRX":64,"SerialTX":57,"Factor":1}' // Power meter 3 
-           ,'{"id":65, "type":"P","SerialRX":65,"SerialTX":58,"Factor":1}' // Power meter 3 
-           ,'{"id":66, "type":"P","SerialRX":66,"SerialTX":59,"Factor":1}' // Power meter 3 
+           '{"id":264, "type":"P","SerialRX":64,"SerialTX":57,"Factor":1}' // Power meter 3 
+           ,'{"id":265, "type":"P","SerialRX":65,"SerialTX":58,"Factor":1}' // Power meter 3 
+           ,'{"id":266, "type":"P","SerialRX":66,"SerialTX":59,"Factor":1}' // Power meter 3 
+ 
+        ]
+        ,[ //Board 03
+            '{"id":307, "type":"H","Pin":7,"latch":8,"clock":9,"steps":2,"status":0}' // Shift Register out 
+		    //,'{"id":370, "type":"R","register":307, "Pin":4, "lhOn":1,"status":0}'   //
+		    //,'{"id":371, "type":"R","register":307, "Pin":12, "lhOn":1,"status":0}'   //
             //'{"id":238, "type":"R","Pin":38,"lhOn":1,"status":0,"priority":10}'  
             //,'{"id":240, "type":"R","Pin":40,"lhOn":1,"status":0,"priority":10}'  
             //,'{"id":242, "type":"R","Pin":42,"lhOn":1,"status":0,"priority":10}'  
@@ -171,13 +177,7 @@ var Configurations = [
       //      ,'{"id":281, "type":"C","Pin":0,"lhOn":1,"status":0,"priority":10, "parentId":205}'  
         //    ,'{"id":282, "type":"B","Pin":1,"lhOn":0,"status":0,"priority":10, "parentId":205}'  
        
-
-        ]
-        ,[ //Board 03
-            '{"id":307, "type":"H","Pin":7,"latch":8,"clock":9,"steps":2,"status":0}' // Shift Register out 
-		    //,'{"id":370, "type":"R","register":307, "Pin":4, "lhOn":1,"status":0}'   //
-		    //,'{"id":371, "type":"R","register":307, "Pin":12, "lhOn":1,"status":0}'   //
-                    
+                   
      /*
             '{"id":318, "type":"P","Pin":18,"lhOn":0,"status":0}' // Power meter 
         
