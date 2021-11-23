@@ -1,12 +1,12 @@
 var ElectricityGroup = [
                         {"aggregation": "mqtt.0.Others.Heating", "sensor": 
-                                                                [prefixPowerMeter + ".P0064",
-                                                                 prefixPowerMeter + ".P0065",
-                                                                 prefixPowerMeter + ".P0066"]},
+                                                                [prefixPowerMeter + ".P0264",
+                                                                 prefixPowerMeter + ".P0265",
+                                                                 prefixPowerMeter + ".P0266"]},
                         {"aggregation": "mqtt.0.Others.Electricity", "sensor": 
-                                                                [prefixPowerMeter + ".P0064",
-                                                                 prefixPowerMeter + ".P0065",
-                                                                 prefixPowerMeter + ".P0066"]}
+                                                                [prefixPowerMeter + ".P0264",
+                                                                 prefixPowerMeter + ".P0265",
+                                                                 prefixPowerMeter + ".P0266"]}
 ];  
 
 
@@ -28,27 +28,21 @@ ElectricityGroup.forEach(function(item, i, ElectricityGroup) {
   }
 });
 function ProcessEnergy(nm) {
-//    log("nm=" + nm);
     var aggr = ElectricityGroup.filter(function(el){
         for (var i=0; i<3 ; i++) {
-//            log ("Point2");
             if (nm.startsWith(el.sensor[i])) {
-//                log("Point3");
                 return true; 
             }
         }
-//        log("Point4");
         return false;
     });
   
     aggr.forEach(function(item, i, aggr) {
-//        log("Point1");
         var sens = item.sensor.filter(function(el){
             return (nm.startsWith(el));
         });
 
         var suff = nm.substring(sens[0].length + 1);
-  //      log ("suffix=" + suff);
         var v1, v2, v3;
         switch (suff) {
             case 'Voltage':
