@@ -8,13 +8,9 @@ class Relay : public Unit
 public:
 	bool lhOn;
 
-	void InitUnit();
-	void UnitLoop();
-	void FinalInitUnit() {};
-
-	void ParentInitUnit() {};
-	void ParentUnitLoop(bool v) { UnitLoop(); };
-	void ParentFinalInitUnit() {};
+	void InitUnit(bool isParent);
+	void UnitLoop(unsigned long timePeriod, bool isParent, bool val);
+	void FinalInitUnit(bool isParent) {};
 
 
 	void ProcessUnit(ActionType event);
@@ -29,7 +25,7 @@ private:
 	void RelaySet(bool highLow);
 	void RelaySwitch();
 	void RelayOn() { RelaySet(HIGH); };
-	void RelayOfF1() { RelaySet(LOW); };
+	void RelayOff() { RelaySet(LOW); };
 
 };
 

@@ -20,7 +20,8 @@ public:
 	char BoardName[10];
 	byte mac[6] = { 0x00, 0xAA, 0x22, 0x07, 0x69, 0x00 };
 	IPAddress ip= IPAddress(192, 168, 0, 90);
-	char strIP[20];
+	IPAddress mqttIp = IPAddress(192, 168, 0, 99);
+	//char strIP[16];
 
 	bool IsConfigReady=false;
 	bool IsActionsReady = false;
@@ -52,19 +53,18 @@ public:
 
 	Unit* CreateTypedUnit(byte type);
 
-	void MainLoop();
+	//void MainLoop();
 	/*
 	static const char* MqttServer() {
 		return "192.168.0.99"; //IP-адрес сервера ioBroker
 	}
 	*/
-	static const char* MqttServer() { return "192.168.0.99"; };
+	//static const char* MqttServer() { return "192.168.0.99"; };
 
 	int numberUnits = 0;
 	int numberActions = 0;
 
 	//Timer 
-	//unsigned long counter01 = 0;	//100ms
 	unsigned long counter10 = 0;	//10ms
 	unsigned long counter1 = 0;		//1 sec
 	unsigned long counter30 = 0;	//30 sec
@@ -72,11 +72,7 @@ public:
 	//unsigned long counter300 = 0;	//5min
 
 	//void loop01();
-	void loop10();
-	void loop1();
-	void loop30();
-	void loop60();
-	//void loop300();
+	void Loop(unsigned long timePeriod);
 	Unit** CreateUnits(byte nUnits);
 	Action** CreateActions(byte nActions);
 
@@ -94,7 +90,7 @@ private:
 	void InitializeActions();
 	void BuildConfig();
 	void InitializeServer();
-	void UnitsLoop();
+	void UnitsLoop(unsigned long timePeriod);
 
 
 };

@@ -18,12 +18,9 @@ class Contactor:public Unit
 public:
 	bool lhOn;
 
-	void InitUnit();
-	void UnitLoop();
-	void FinalInitUnit() {};
-	void ParentInitUnit();
-	void ParentUnitLoop(bool v);
-	void ParentFinalInitUnit() {};
+	void InitUnit(bool isParent);
+	void UnitLoop(unsigned long timePeriod, bool isParent, bool val);
+	void FinalInitUnit(bool isParent) {};
 
 	void ProcessUnit(ActionType event);
 	bool Compare(const Unit* u);
@@ -37,7 +34,7 @@ private:
 	unsigned long startContact=0;
 	byte prevValue;
 
-	void HandleContactor(bool isDirect, bool v);
+	void HandleContactor(unsigned long timePeriod, bool isDirect, bool v);
 	void HandleFinish(int newStatus);
 };
 

@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SmartHomeBoard", "SmartHome
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WriteBoardID", "WriteBoardID\WriteBoardID.vcxproj", "{73031311-3DAC-4765-B1D8-2E30D0BD3DC4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Archive", "Archive\Archive.vcxproj", "{6C537F86-12BE-4620-AEFC-CFD91B1B57DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,21 @@ Global
 		{73031311-3DAC-4765-B1D8-2E30D0BD3DC4}.Release|x64.Build.0 = Release|Win32
 		{73031311-3DAC-4765-B1D8-2E30D0BD3DC4}.Release|x86.ActiveCfg = Release|Win32
 		{73031311-3DAC-4765-B1D8-2E30D0BD3DC4}.Release|x86.Build.0 = Release|Win32
+		{6C537F86-12BE-4620-AEFC-CFD91B1B57DB}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{6C537F86-12BE-4620-AEFC-CFD91B1B57DB}.Debug|Any CPU.Build.0 = Debug|x64
+		{6C537F86-12BE-4620-AEFC-CFD91B1B57DB}.Debug|ARM.ActiveCfg = Debug|x64
+		{6C537F86-12BE-4620-AEFC-CFD91B1B57DB}.Debug|ARM.Build.0 = Debug|x64
+		{6C537F86-12BE-4620-AEFC-CFD91B1B57DB}.Debug|x64.ActiveCfg = Debug|x64
+		{6C537F86-12BE-4620-AEFC-CFD91B1B57DB}.Debug|x64.Build.0 = Debug|x64
+		{6C537F86-12BE-4620-AEFC-CFD91B1B57DB}.Debug|x86.ActiveCfg = Debug|Win32
+		{6C537F86-12BE-4620-AEFC-CFD91B1B57DB}.Debug|x86.Build.0 = Debug|Win32
+		{6C537F86-12BE-4620-AEFC-CFD91B1B57DB}.Release|Any CPU.ActiveCfg = Release|x64
+		{6C537F86-12BE-4620-AEFC-CFD91B1B57DB}.Release|ARM.ActiveCfg = Release|x64
+		{6C537F86-12BE-4620-AEFC-CFD91B1B57DB}.Release|ARM.Build.0 = Release|x64
+		{6C537F86-12BE-4620-AEFC-CFD91B1B57DB}.Release|x64.ActiveCfg = Release|x64
+		{6C537F86-12BE-4620-AEFC-CFD91B1B57DB}.Release|x64.Build.0 = Release|x64
+		{6C537F86-12BE-4620-AEFC-CFD91B1B57DB}.Release|x86.ActiveCfg = Release|Win32
+		{6C537F86-12BE-4620-AEFC-CFD91B1B57DB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

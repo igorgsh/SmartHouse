@@ -27,15 +27,15 @@ void Action::print(const char* header,DebugLevel level) {
 	if (header != NULL) {
 		Config.Log->append(header);
 	}
-	Config.Log->append(F1("Id:")).append(Id);
-	Config.Log->append(F1(";event:")).append(event);
-	Config.Log->append(F1(";originId:")).append(originId);
-	Config.Log->append(F1(";originType:")).append((char)originType);
-	Config.Log->append(F1(";targetAction:")).append(targetAction);
-	Config.Log->append(F1(";targetId:")).append(targetId);
-	Config.Log->append(F1(";targetType:")).append((char)targetType);
+	Config.Log->append(F("Id:")).append(Id);
+	Config.Log->append(F(";event:")).append(event);
+	Config.Log->append(F(";originId:")).append(originId);
+	Config.Log->append(F(";originType:")).append((char)originType);
+	Config.Log->append(F(";targetAction:")).append(targetAction);
+	Config.Log->append(F(";targetId:")).append(targetId);
+	Config.Log->append(F(";targetType:")).append((char)targetType);
 	
-	Config.Log->append(F1(" @ "));
+	Config.Log->append(F(" @ "));
 	Config.Log->Log(level);
 }
 
