@@ -19,7 +19,7 @@
 
 
 
-function resetDevice(pin, devName) {
+function resetDevice(pin, devName) {/*
     log("Reset device:" + devName +"["+pin+"]("+relayOff+")", 'error');
     var gpioPin = gpio.export(pin,{ direction: 'out',
         'ready' : function() {
@@ -32,7 +32,7 @@ function resetDevice(pin, devName) {
             }, 10000);
             
         }
-    });
+    });*/
 }
 
  
