@@ -18,7 +18,7 @@ function checkStates() {
                         log("Undefined device "+ devName, "debug");
                     }
                 } else { //check Watchdog
-                    if (checkWatchDog(devName) > 60000) { //watchDog older than 1 minutes
+                    if (checkWatchDog(devName) > 3* 60 * 1000) { //watchDog older than 3 minutes
                         if (typeof DevConfig[devName] != 'undefined') {
                             log("WatchDog: Device " + devName +" on pin:" + DevConfig[devName] + " should be reset", 'error');
                 
