@@ -77,7 +77,7 @@ var illumination = prefixRelays + ".R0036";
 var totalHeatingPower = prefixHeating + '.Power';
 var totalHeatingConsumption = prefixHeating + '.Consumption';
 
-
+var rpiPath = "rpi2.0.gpio.";
 
 
 
