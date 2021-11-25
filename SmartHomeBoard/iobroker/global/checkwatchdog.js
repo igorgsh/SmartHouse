@@ -4,15 +4,8 @@
   "verbose": false
 }
 -- do not edit previous lines - END --*/
-//var prefixTopic = 'mqtt.0';
-//var prefixCfg = prefixTopic + '.Config';
-//log('prefix000='+ prefixCfg);
-
 
 function checkWatchDog(devName) {
-    //log('DevName='+ devName);
-    //log('prefix='+prefixCfg);
-    //log('watch='+ watchDogPart);
     var objName = prefixConfig + "." + devName + "." + watchDogPart;
     //log ("Watchdog checker for "+ objName);
     var obj = $(objName);
