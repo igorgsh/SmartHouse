@@ -10,7 +10,7 @@ public:
 
 	void InitUnit(bool isParent);
 	void UnitLoop(unsigned long timePeriod, bool isParent, bool val);
-	void FinalInitUnit(bool isParent) {};
+	void FinalInitUnit(bool isParent);
 
 
 	void ProcessUnit(ActionType event);

@@ -56,14 +56,14 @@ void Contactor::HandleContactor(unsigned long timePeriod, bool isParent, bool v)
 
 void Contactor::HandleFinish(int newStatus) {
 	status = newStatus;
-	PublishUnit(MQTT_CONTACTOR);
+	Publish(MQTT_CONTACTOR);
 	Config.ProcessAction(Id, status);
 
 }
 
 void Contactor::ProcessUnit(ActionType event) {
 	Config.ProcessAction(Id, event);
-	PublishUnit(MQTT_CONTACTOR);
+	Publish(MQTT_CONTACTOR);
 }
 
 void Contactor::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
@@ -71,7 +71,13 @@ void Contactor::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
 		|| (parentId != 0 && isParent)) {
 		HandleContactor(timePeriod, isParent, val);
 	}
-};
+}
+void Contactor::FinalInitUnit(bool isParent)
+{
+	// No Subscription
+	// No Values request
+}
+;
 
 
 

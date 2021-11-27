@@ -165,7 +165,8 @@ void PowerMeter::MqttTopic(uint16_t unitId, char* topic,PowerMeterValues step) {
 
 
 void PowerMeter::FinalInitUnit(bool isParent) {
-
+	// No Subscription
+	// No value request
 }
 
 void PowerMeter::ProcessUnit(ActionType action) {

@@ -164,30 +164,36 @@ var Configurations = [
  
         ]
         ,[ //Board 03
-            '{"id":307, "type":"H","Pin":7,"latch":8,"clock":9,"steps":2,"status":0}' // Shift Register out 
-		    //,'{"id":370, "type":"R","register":307, "Pin":4, "lhOn":1,"status":0}'   //
-		    //,'{"id":371, "type":"R","register":307, "Pin":12, "lhOn":1,"status":0}'   //
-            //'{"id":238, "type":"R","Pin":38,"lhOn":1,"status":0,"priority":10}'  
-            //,'{"id":240, "type":"R","Pin":40,"lhOn":1,"status":0,"priority":10}'  
-            //,'{"id":242, "type":"R","Pin":42,"lhOn":1,"status":0,"priority":10}'  
-            //,'{"id":244, "type":"R","Pin":44,"lhOn":1,"status":0,"priority":10}'  
-            //,'{"id":246, "type":"R","Pin":46,"lhOn":1,"status":0,"priority":10}'  
-            //,'{"id":248, "type":"R","Pin":48,"lhOn":1,"status":0,"priority":10}'  
-    //          '{"id":205, "type":"s","DPin":3,"latchPin":5,"clockPin":4,"PinsN":16}'  
-      //      ,'{"id":281, "type":"C","Pin":0,"lhOn":1,"status":0,"priority":10, "parentId":205}'  
-        //    ,'{"id":282, "type":"B","Pin":1,"lhOn":0,"status":0,"priority":10, "parentId":205}'  
+            '{"id":307, "type":"S","DPin":7,"latch":8,"clock":9,"PinsN":16}'  
+            //'{"id":307, "type":"S","DPin":7,"latch":8,"clock":9,"steps":2,"status":0}' // Shift Register out 
+		    ,'{"id":370, "type":"R","parentId":307, "Pin":0, "lhOn":1,"status":0}'   //
+		    ,'{"id":371, "type":"R","parentId":307, "Pin":1, "lhOn":1,"status":0}'   //
+		    ,'{"id":372, "type":"R","parentId":307, "Pin":2, "lhOn":1,"status":0}'   //
+		    ,'{"id":373, "type":"R","parentId":307, "Pin":3, "lhOn":1,"status":0}'   //
+		    ,'{"id":374, "type":"R","parentId":307, "Pin":4, "lhOn":1,"status":0}'   //
+		    ,'{"id":375, "type":"R","parentId":307, "Pin":5, "lhOn":1,"status":0}'   //
+		    ,'{"id":376, "type":"R","parentId":307, "Pin":6, "lhOn":1,"status":0}'   //
+		    ,'{"id":377, "type":"R","parentId":307, "Pin":7, "lhOn":1,"status":0}'   //
+		    ,'{"id":378, "type":"R","parentId":307, "Pin":8, "lhOn":1,"status":0}'   //
+		    ,'{"id":379, "type":"R","parentId":307, "Pin":9, "lhOn":1,"status":0}'   //
+		    ,'{"id":390, "type":"R","parentId":307, "Pin":10, "lhOn":1,"status":0}'   //
+		    ,'{"id":391, "type":"R","parentId":307, "Pin":11, "lhOn":1,"status":0}'   //
+		    ,'{"id":392, "type":"R","parentId":307, "Pin":12, "lhOn":1,"status":0}'   //
+		    ,'{"id":393, "type":"R","parentId":307, "Pin":13, "lhOn":1,"status":0}'   //
+		    ,'{"id":394, "type":"R","parentId":307, "Pin":14, "lhOn":1,"status":0}'   //
+		    ,'{"id":395, "type":"R","parentId":307, "Pin":15, "lhOn":1,"status":0}'   //
+            
+            ,'{"id":338, "type":"R","Pin":38,"lhOn":1,"status":0,"priority":10}'  
+            ,'{"id":340, "type":"R","Pin":40,"lhOn":1,"status":0,"priority":10}'  
+            ,'{"id":342, "type":"R","Pin":42,"lhOn":1,"status":0,"priority":10}'  
+            ,'{"id":344, "type":"R","Pin":44,"lhOn":1,"status":0,"priority":10}'  
+            ,'{"id":346, "type":"R","Pin":46,"lhOn":1,"status":0,"priority":10}'  
+            ,'{"id":348, "type":"R","Pin":48,"lhOn":1,"status":0,"priority":10}'  
+            ,'{"id":305, "type":"s","DPin":3,"latch":5,"clock":4,"PinsN":16}'  
+            ,'{"id":381, "type":"C","Pin":0,"lhOn":1,"status":0,"priority":10, "parentId":305}'  
+            ,'{"id":382, "type":"B","Pin":1,"lhOn":0,"status":0,"priority":10, "parentId":305}'  
        
                    
-     /*
-            '{"id":318, "type":"P","Pin":18,"lhOn":0,"status":0}' // Power meter 
-        
-       
-            '{"id":312, "type":"B","Pin":12,"lhOn":0,"status":0}' // 
-            ,'{"id":311, "type":"B","Pin":11,"lhOn":0,"status":0}' // 
-            ,'{"id":309, "type":"B","Pin":9,"lhOn":0,"status":0}' // 
-
-			 ,'{"id":345, "type":"R","Pin":45,"lhOn":1,"status":0}'   //
-        */
         ]
     ];
 	

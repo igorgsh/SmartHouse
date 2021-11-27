@@ -23,7 +23,7 @@ void Relay::RelaySet(bool newStatus)
 	}
 
 	status = newStatus;
-	PublishUnit(MQTT_RELAYS);
+	Publish(MQTT_RELAYS);
 	Config.ProcessAction(Id, newStatus);
 
 }
@@ -53,7 +53,12 @@ void Relay::ProcessUnit(ActionType event) {
 
 void Relay::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
 	//nothing todo
-};
+}
+void Relay::FinalInitUnit(bool isParent)
+{
+	Subscribe(MQTT_RELAYS, true);
+}
+
 
 bool Relay::Compare(const Unit* u) {
 
@@ -101,9 +106,9 @@ void Relay::ConfigField(const JsonObject& jsonList) {
 	if (jsonList.containsKey("lhOn")) {
 		lhOn = jsonList["lhOn"];
 	}
-	if (jsonList.containsKey("status")) {
-		status = jsonList["status"];
-	}
+	//if (jsonList.containsKey("status")) {
+	//	status = jsonList["status"];
+	//}
 	if (jsonList.containsKey("parentId")) {
 		parentId = jsonList["parentId"];
 	}
