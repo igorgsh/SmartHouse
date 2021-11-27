@@ -2,6 +2,11 @@
 Smart House development
 
 History.
+V 3.0
+- switch to the SafeString and char*
+- refactoring of application
+- support of Shift Register In/Out
+- The initial values are taken from the last state
 
 V 2.1 
 - bug fixes
