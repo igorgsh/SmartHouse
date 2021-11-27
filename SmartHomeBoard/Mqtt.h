@@ -28,12 +28,15 @@
 
 #define CHECK_MQTT	"info"
 
+
 #define MQTT_WATCH_DOG "Config" MQTT_SEPARATOR BOARD_ID MQTT_SEPARATOR "WatchDog"
 #define MQTT_CONFIG_REQUEST "Config" MQTT_SEPARATOR BOARD_ID MQTT_SEPARATOR "ConfigurationRequest"
 #define MQTT_CONFIG_RESPONSE "Config" MQTT_SEPARATOR BOARD_ID MQTT_SEPARATOR "Configuration"
 #define MQTT_ACTIONS_REQUEST "Config" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "ActionRequest"
 #define MQTT_ACTIONS_RESPONSE "Config" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "Action"
 #define MQTT_RESET_BOARD "Config" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "Reset"
+#define MQTT_STATE_REQUEST "Config" MQTT_SEPARATOR  "StateRequest"
+
 #define MQTT_EQUIPMENT "Equipment" 
 #define MQTT_VIRTUAL_EQUIPMENT MQTT_EQUIPMENT MQTT_SEPARATOR "Virtual"
 #define MQTT_LOG  "Logs" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "%s"
@@ -58,8 +61,8 @@ class Mqtt : public PubSubClient
 		void GetActions();
 		void PublishLog(DebugLevel level, const char* message);
 		//void PublishUnit(const Unit* unit);
-		void SubscribeUnits();
-		void SubscribeUnit(int unitNumber);
+//		void SubscribeUnits();
+//		void SubscribeUnit(int unitNumber);
 		void Subscribe(const char* topic);
 		bool Publish(const char* topic, const char* payload);
 		//void Callback(const char* topic, const char* payload, unsigned int length);
@@ -70,6 +73,8 @@ class Mqtt : public PubSubClient
 		void PutBuffer(const char* topic, const char* payload, unsigned int len);
 		char topicBuff[MQTT_TOPIC_LENGTH];
 		char payloadBuff[MQTT_PAYLOAD_LENGTH];
+		void RequestValue(const char* topic);
+
 private:
 		char *boardId = (char*)BOARD_ID;
 		const char *LOG_END[7] = { "OFF", "FATAL","ERROR","WARN","INFO","DEBUG","ALL" };

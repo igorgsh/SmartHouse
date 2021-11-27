@@ -202,6 +202,10 @@ void Mqtt::PutBuffer(const char* topic, const char* payload, unsigned int length
 	payLoadCB[length] = 0;
 	lenCB = length;
 }
+void Mqtt::RequestValue(const char* topic)
+{
+	Publish(MQTT_STATE_REQUEST, topic);
+}
 /*
 
 void Mqtt::PublishUnit(const Unit* unit) {
@@ -282,7 +286,7 @@ void Mqtt::GetActions() {
 		Config.isActionRequested = true;
 	}
 }
-
+/*
 void Mqtt::SubscribeUnit(int unitNumber) {
 	if (connected()) {
 		//char topic[MQTT_TOPIC_LENGTH];
@@ -329,8 +333,8 @@ void Mqtt::SubscribeUnit(int unitNumber) {
 		}
 	}
 }
-
-
+*/
+/*
 void Mqtt::SubscribeUnits() {
 	if (connected()) {
 		for (int i = 0; i < Config.numberUnits; i++) {
@@ -339,7 +343,7 @@ void Mqtt::SubscribeUnits() {
 		Config.Log->append(F("End subscription:")).append(Config.numberUnits).Info();
 	}
 }
-
+*/
 void Mqtt::Subscribe(const char* topic) {
 	Config.Log->append(F("Subscription:")).append(topic).Debug();
 	if (connected()) {
