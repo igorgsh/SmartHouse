@@ -10,7 +10,7 @@ var SwitchOffPriority = 15;
 
 // Rules: 
 // 1. All buses units should be leaded Bus Definition first.
-//         '{"id":1,"type":"B","Pin":23,"lhOn":0,"status":0}' 
+//         '{"id":1,"type":"B","Pin":23,"lhOn":0}' 
 //        ,'{"id":2,"type":"R","Pin":22,"lhOn":0}'
 //        ,'{"id":3,"type":"1","Pin":40,"cycle":120}' 
 //        ,'{"id":4,"type":"T","Pin":40,"address":"28C46F33080000C6"}' 
@@ -46,56 +46,56 @@ var Configurations = [
         [ //Board 00
             
 
-            '{"id":2, "type":"B","Pin":2,"lhOn":0,"status":0}' // СУ 1(левый) 
-            ,'{"id":3, "type":"B","Pin":3,"lhOn":0,"status":0}' // Кухня, возле мойки
-            ,'{"id":5, "type":"B","Pin":5,"lhOn":0,"status":0}' // Крыльцо внешний
-            ,'{"id":6, "type":"B","Pin":6,"lhOn":0,"status":0}' // СУ 1(правый)
-            ,'{"id":7, "type":"B","Pin":7,"lhOn":0,"status":0}' // Коридор(левый) 
-            ,'{"id":8, "type":"B","Pin":8,"lhOn":0,"status":0}' // Коридор(правый) - крыльцо
-            ,'{"id":9, "type":"B","Pin":9,"lhOn":0,"status":0}' // Топочная вход
-            ,'{"id":11, "type":"B","Pin":11,"lhOn":0,"status":0}' // Галерея
-            ,'{"id":12, "type":"B","Pin":12,"lhOn":0,"status":0}' // 
+            '{"id":2, "type":"B","Pin":2,"lhOn":0}' // СУ 1(левый) 
+            ,'{"id":3, "type":"B","Pin":3,"lhOn":0}' // Кухня, возле мойки
+            ,'{"id":5, "type":"B","Pin":5,"lhOn":0}' // Крыльцо внешний
+            ,'{"id":6, "type":"B","Pin":6,"lhOn":0}' // СУ 1(правый)
+            ,'{"id":7, "type":"B","Pin":7,"lhOn":0}' // Коридор(левый) 
+            ,'{"id":8, "type":"B","Pin":8,"lhOn":0}' // Коридор(правый) - крыльцо
+            ,'{"id":9, "type":"B","Pin":9,"lhOn":0}' // Топочная вход
+            ,'{"id":11, "type":"B","Pin":11,"lhOn":0}' // Галерея
+            ,'{"id":12, "type":"B","Pin":12,"lhOn":0}' // 
 
-            ,'{"id":14, "type":"B","Pin":14,"lhOn":0,"status":0}' // Сарай
-            ,'{"id":15, "type":"B","Pin":15,"lhOn":0,"status":0}' // Красная спальня
-            ,'{"id":16, "type":"B","Pin":16,"lhOn":0,"status":0}' // Кухня Возле холодильника
-            ,'{"id":17, "type":"B","Pin":17,"lhOn":0,"status":0}' // Чулан
+            ,'{"id":14, "type":"B","Pin":14,"lhOn":0}' // Сарай
+            ,'{"id":15, "type":"B","Pin":15,"lhOn":0}' // Красная спальня
+            ,'{"id":16, "type":"B","Pin":16,"lhOn":0}' // Кухня Возле холодильника
+            ,'{"id":17, "type":"B","Pin":17,"lhOn":0}' // Чулан
 
-            ,'{"id":18, "type":"R","Pin":18,"lhOn":1,"status":0}' // реле в кладовой (боилер) 
-            ,'{"id":56, "type":"R","Pin":56,"lhOn":1,"status":0}' // бойлер левый
-            ,'{"id":55, "type":"R","Pin":55,"lhOn":1,"status":0}' // бойлер правый
+            ,'{"id":18, "type":"R","Pin":18,"lhOn":1}' // реле в кладовой (боилер) 
+            ,'{"id":56, "type":"R","Pin":56,"lhOn":1}' // бойлер левый
+            ,'{"id":55, "type":"R","Pin":55,"lhOn":1}' // бойлер правый
             
 
-            ,'{"id":19, "type":"B","Pin":19,"lhOn":0,"status":0}' // Стена Кладовка запад
-            ,'{"id":20, "type":"B","Pin":20,"lhOn":0,"status":0}' // Стена Кладовка восток
+            ,'{"id":19, "type":"B","Pin":19,"lhOn":0}' // Стена Кладовка запад
+            ,'{"id":20, "type":"B","Pin":20,"lhOn":0}' // Стена Кладовка восток
 
 			
-            ,'{"id":22, "type":"R","Pin":22,"lhOn":1,"status":0,"priority":10}' 	//L1.1 Коридор 1. Восток
-            ,'{"id":23, "type":"R","Pin":23,"lhOn":1,"status":0,"priority":10}'   //L2.1 Вытяжка
-		    ,'{"id":24, "type":"R","Pin":24,"lhOn":1,"status":0,"priority":10}'	//L1.2 Коридор 1. Запад
-            ,'{"id":25, "type":"R","Pin":25,"lhOn":1,"status":0,"priority":10}'   //L2.2 Кухня, между мойкой и плитой
-            ,'{"id":26, "type":"R","Pin":26,"lhOn":1,"status":0,"priority":10}'	//L1.3 Кухня Восток
-            ,'{"id":27, "type":"R","Pin":27,"lhOn":1,"status":0,"priority":10}'   //L2.3 Кухня Север
-		    ,'{"id":28, "type":"R","Pin":28,"lhOn":1,"status":0,"priority":10}'	//L1.4 Кладовка
-		    ,'{"id":29, "type":"R","Pin":29,"lhOn":1,"status":0,"priority":10}'   //L2.4 Сарай
+            ,'{"id":22, "type":"R","Pin":22,"lhOn":1,"priority":10}' 	//L1.1 Коридор 1. Восток
+            ,'{"id":23, "type":"R","Pin":23,"lhOn":1,"priority":10}'   //L2.1 Вытяжка
+		    ,'{"id":24, "type":"R","Pin":24,"lhOn":1,"priority":10}'	//L1.2 Коридор 1. Запад
+            ,'{"id":25, "type":"R","Pin":25,"lhOn":1,"priority":10}'   //L2.2 Кухня, между мойкой и плитой
+            ,'{"id":26, "type":"R","Pin":26,"lhOn":1,"priority":10}'	//L1.3 Кухня Восток
+            ,'{"id":27, "type":"R","Pin":27,"lhOn":1,"priority":10}'   //L2.3 Кухня Север
+		    ,'{"id":28, "type":"R","Pin":28,"lhOn":1,"priority":10}'	//L1.4 Кладовка
+		    ,'{"id":29, "type":"R","Pin":29,"lhOn":1,"priority":10}'   //L2.4 Сарай
             
-            ,'{"id":30, "type":"R","Pin":30,"lhOn":1,"status":0,"priority":10}'	//L1.5 Тамбур 
-		    ,'{"id":31, "type":"R","Pin":31,"lhOn":1,"status":0,"priority":10}'   //L2.5 ????
-            ,'{"id":32, "type":"R","Pin":32,"lhOn":1,"status":0,"priority":10}'	//L1.6 Топочная над входом
-		    ,'{"id":33, "type":"R","Pin":33,"lhOn":1,"status":0,"priority":10}'   //L2.6 Красная спальня 
-            ,'{"id":34, "type":"R","Pin":34,"lhOn":1,"status":0,"priority":20}'	//L1.7 НЕ РАБОТАЕТ!!!!
-	        ,'{"id":35, "type":"R","Pin":35,"lhOn":1,"status":0,"priority":10}'   //L2.7
-            ,'{"id":36, "type":"R","Pin":36,"lhOn":1,"status":0,"priority":10}'	//L1.8 Крыльцо наружный
-		    ,'{"id":37, "type":"R","Pin":37,"lhOn":1,"status":0,"priority":10}'   //L2.8
+            ,'{"id":30, "type":"R","Pin":30,"lhOn":1,"priority":10}'	//L1.5 Тамбур 
+		    ,'{"id":31, "type":"R","Pin":31,"lhOn":1,"priority":10}'   //L2.5 ????
+            ,'{"id":32, "type":"R","Pin":32,"lhOn":1,"priority":10}'	//L1.6 Топочная над входом
+		    ,'{"id":33, "type":"R","Pin":33,"lhOn":1,"priority":10}'   //L2.6 Красная спальня 
+            ,'{"id":34, "type":"R","Pin":34,"lhOn":1,"priority":20}'	//L1.7 НЕ РАБОТАЕТ!!!!
+	        ,'{"id":35, "type":"R","Pin":35,"lhOn":1,"priority":10}'   //L2.7
+            ,'{"id":36, "type":"R","Pin":36,"lhOn":1,"priority":10}'	//L1.8 Крыльцо наружный
+		    ,'{"id":37, "type":"R","Pin":37,"lhOn":1,"priority":10}'   //L2.8
             
-            ,'{"id":38, "type":"R","Pin":38,"lhOn":1,"status":0,"priority":10}'	//L3.5 СУ1 Душ
-		    ,'{"id":39, "type":"R","Pin":39,"lhOn":1,"status":0,"priority":10}'   //L3.4 Чулан
-            ,'{"id":40, "type":"R","Pin":40,"lhOn":1,"status":0,"priority":10}'	//L3.6 СУ1 Вход
-		    ,'{"id":41, "type":"R","Pin":41,"lhOn":1,"status":0,"priority":10}'   //L3.3 Галерея Запад
-            ,'{"id":42, "type":"R","Pin":42,"lhOn":1,"status":0,"priority":10}'	//L3.7 Кухня юг над мойкой
-		    ,'{"id":43, "type":"R","Pin":43,"lhOn":1,"status":0,"priority":10}'   //L3.2 Галерея Восток
-            ,'{"id":44, "type":"R","Pin":44,"lhOn":1,"status":0,"priority":10}'	//L3.8 Кухня юг-восток
-		    ,'{"id":45, "type":"R","Pin":45,"lhOn":1,"status":0,"priority":10}'   //L3.1
+            ,'{"id":38, "type":"R","Pin":38,"lhOn":1,"priority":10}'	//L3.5 СУ1 Душ
+		    ,'{"id":39, "type":"R","Pin":39,"lhOn":1,"priority":10}'   //L3.4 Чулан
+            ,'{"id":40, "type":"R","Pin":40,"lhOn":1,"priority":10}'	//L3.6 СУ1 Вход
+		    ,'{"id":41, "type":"R","Pin":41,"lhOn":1,"priority":10}'   //L3.3 Галерея Запад
+            ,'{"id":42, "type":"R","Pin":42,"lhOn":1,"priority":10}'	//L3.7 Кухня юг над мойкой
+		    ,'{"id":43, "type":"R","Pin":43,"lhOn":1,"priority":10}'   //L3.2 Галерея Восток
+            ,'{"id":44, "type":"R","Pin":44,"lhOn":1,"priority":10}'	//L3.8 Кухня юг-восток
+		    ,'{"id":45, "type":"R","Pin":45,"lhOn":1,"priority":10}'   //L3.1
 
 /*
            //,'{"id":62, "type":"P","SerialRX":63,"SerialTX":54,"Factor":3}' // Power meter 
@@ -106,53 +106,53 @@ var Configurations = [
         ]
         ,[ //Board 01
         
-            '{"id":112, "type":"B","Pin":12,"lhOn":0,"status":0,"priority":10}' // Гостиная Север
-            ,'{"id":111, "type":"B","Pin":11,"lhOn":0,"status":0,"priority":10}' // Гостиная Юг
-            ,'{"id":109, "type":"B","Pin":9,"lhOn":0,"status":0,"priority":10}' // CУ2
-            ,'{"id":108, "type":"B","Pin":8,"lhOn":0,"status":0,"priority":10}'// Желтая спальня
-            ,'{"id":107, "type":"B","Pin":7,"lhOn":0,"status":0,"priority":10}'// Синяя спальня
-            ,'{"id":106, "type":"B","Pin":6,"lhOn":0,"status":0,"priority":10}'// Зеленая спальня
-            ,'{"id":105, "type":"B","Pin":5,"lhOn":0,"status":0,"priority":10}'// Террасса
-            ,'{"id":148, "type":"B","Pin":48,"lhOn":0,"status":0,"priority":10}'// Калитка (сигнал с домофона)
+            '{"id":112, "type":"B","Pin":12,"lhOn":0,"priority":10}' // Гостиная Север
+            ,'{"id":111, "type":"B","Pin":11,"lhOn":0,"priority":10}' // Гостиная Юг
+            ,'{"id":109, "type":"B","Pin":9,"lhOn":0,"priority":10}' // CУ2
+            ,'{"id":108, "type":"B","Pin":8,"lhOn":0,"priority":10}'// Желтая спальня
+            ,'{"id":107, "type":"B","Pin":7,"lhOn":0,"priority":10}'// Синяя спальня
+            ,'{"id":106, "type":"B","Pin":6,"lhOn":0,"priority":10}'// Зеленая спальня
+            ,'{"id":105, "type":"B","Pin":5,"lhOn":0,"priority":10}'// Террасса
+            ,'{"id":148, "type":"B","Pin":48,"lhOn":0,"priority":10}'// Калитка (сигнал с домофона)
 
-    	    ,'{"id":103, "type":"R","Pin":3,"lhOn":0,"status":0,"priority":20}'   //2 Блок Реле 1 - калитка
-    	    ,'{"id":149, "type":"R","Pin":49,"lhOn":0,"status":0,"priority":20}'   //2 Блок Реле 1 - калитка
+    	    ,'{"id":103, "type":"R","Pin":3,"lhOn":0,"priority":20}'   //2 Блок Реле 1 - калитка
+    	    ,'{"id":149, "type":"R","Pin":49,"lhOn":0,"priority":20}'   //2 Блок Реле 1 - калитка
 
 
-            ,'{"id":102, "type":"R","Pin":2,"lhOn":1,"status":0,"priority":20}' 	//переноска для зарядки аккума
-            ,'{"id":122, "type":"R","Pin":22,"lhOn":1,"status":0,"priority":10}' 	//L4.1 СУ2 над раковиной
-            ,'{"id":123, "type":"R","Pin":23,"lhOn":1,"status":0,"priority":10}'   //L6.1 Гостиная запад
-            ,'{"id":124, "type":"R","Pin":24,"lhOn":1,"status":0,"priority":10}'	//L4.2
-            ,'{"id":125, "type":"R","Pin":25,"lhOn":1,"status":0,"priority":10}' //L6.2 Гостиная, восток
-            ,'{"id":126, "type":"R","Pin":26,"lhOn":1,"status":0,"priority":10}'	//L4.3
-            ,'{"id":127, "type":"R","Pin":27,"lhOn":1,"status":0,"priority":10}'  //L6.3 Камин Север
-            ,'{"id":128, "type":"R","Pin":28,"lhOn":1,"status":0,"priority":10}'	//L4.4 Спальня зеленая возле балкона
-            ,'{"id":129, "type":"R","Pin":29,"lhOn":1,"status":0,"priority":10}'  //L6.4 Гостиная Юг
-            ,'{"id":130, "type":"R","Pin":30,"lhOn":1,"status":0,"priority":10}'	//L4.5 Спальня зеленая возле двери
-		    ,'{"id":131, "type":"R","Pin":31,"lhOn":1,"status":0,"priority":10}'  //L6.5 Камин Восток
-            ,'{"id":132, "type":"R","Pin":32,"lhOn":1,"status":0,"priority":10}'	//L4.6 Синяя спальня Восток
-		    ,'{"id":133, "type":"R","Pin":33,"lhOn":1,"status":0,"priority":10}'  //L6.6 СУ2 над ванной
-            ,'{"id":134, "type":"R","Pin":34,"lhOn":1,"status":0,"priority":10}'	//L4.7
-		    ,'{"id":135, "type":"R","Pin":35,"lhOn":1,"status":0,"priority":10}'  //L6.7 желтая спальня над входом
-            ,'{"id":136, "type":"R","Pin":36,"lhOn":1,"status":0,"priority":10}'	//L4.8
-		    ,'{"id":137, "type":"R","Pin":37,"lhOn":1,"status":0,"priority":10}'  //L6.8 Синяя спальня Юг
-            ,'{"id":138, "type":"R","Pin":38,"lhOn":1,"status":0,"priority":10}'	//L5.2
-		    ,'{"id":139, "type":"R","Pin":39,"lhOn":1,"status":0,"priority":10}'   //L5.8 - Взрыв
-            ,'{"id":140, "type":"R","Pin":40,"lhOn":1,"status":0,"priority":10}'	//L5.1
-		    ,'{"id":141, "type":"R","Pin":41,"lhOn":1,"status":0,"priority":10}'   //L5.7
-            ,'{"id":142, "type":"R","Pin":42,"lhOn":1,"status":0,"priority":10}'	//L5.3
-		    ,'{"id":143, "type":"R","Pin":43,"lhOn":1,"status":0,"priority":10}'   //L5.6 Терраса 1
-            ,'{"id":144, "type":"R","Pin":44,"lhOn":1,"status":0,"priority":10}'	//L5.4 Периметр ССВ
-		    ,'{"id":145, "type":"R","Pin":45,"lhOn":1,"status":0,"priority":10}'   //L5.5
+            ,'{"id":102, "type":"R","Pin":2,"lhOn":1,"priority":20}' 	//переноска для зарядки аккума
+            ,'{"id":122, "type":"R","Pin":22,"lhOn":1,"priority":10}' 	//L4.1 СУ2 над раковиной
+            ,'{"id":123, "type":"R","Pin":23,"lhOn":1,"priority":10}'   //L6.1 Гостиная запад
+            ,'{"id":124, "type":"R","Pin":24,"lhOn":1,"priority":10}'	//L4.2
+            ,'{"id":125, "type":"R","Pin":25,"lhOn":1,"priority":10}' //L6.2 Гостиная, восток
+            ,'{"id":126, "type":"R","Pin":26,"lhOn":1,"priority":10}'	//L4.3
+            ,'{"id":127, "type":"R","Pin":27,"lhOn":1,"priority":10}'  //L6.3 Камин Север
+            ,'{"id":128, "type":"R","Pin":28,"lhOn":1,"priority":10}'	//L4.4 Спальня зеленая возле балкона
+            ,'{"id":129, "type":"R","Pin":29,"lhOn":1,"priority":10}'  //L6.4 Гостиная Юг
+            ,'{"id":130, "type":"R","Pin":30,"lhOn":1,"priority":10}'	//L4.5 Спальня зеленая возле двери
+		    ,'{"id":131, "type":"R","Pin":31,"lhOn":1,"priority":10}'  //L6.5 Камин Восток
+            ,'{"id":132, "type":"R","Pin":32,"lhOn":1,"priority":10}'	//L4.6 Синяя спальня Восток
+		    ,'{"id":133, "type":"R","Pin":33,"lhOn":1,"priority":10}'  //L6.6 СУ2 над ванной
+            ,'{"id":134, "type":"R","Pin":34,"lhOn":1,"priority":10}'	//L4.7
+		    ,'{"id":135, "type":"R","Pin":35,"lhOn":1,"priority":10}'  //L6.7 желтая спальня над входом
+            ,'{"id":136, "type":"R","Pin":36,"lhOn":1,"priority":10}'	//L4.8
+		    ,'{"id":137, "type":"R","Pin":37,"lhOn":1,"priority":10}'  //L6.8 Синяя спальня Юг
+            ,'{"id":138, "type":"R","Pin":38,"lhOn":1,"priority":10}'	//L5.2
+		    ,'{"id":139, "type":"R","Pin":39,"lhOn":1,"priority":10}'   //L5.8 - Взрыв
+            ,'{"id":140, "type":"R","Pin":40,"lhOn":1,"priority":10}'	//L5.1
+		    ,'{"id":141, "type":"R","Pin":41,"lhOn":1,"priority":10}'   //L5.7
+            ,'{"id":142, "type":"R","Pin":42,"lhOn":1,"priority":10}'	//L5.3
+		    ,'{"id":143, "type":"R","Pin":43,"lhOn":1,"priority":10}'   //L5.6 Терраса 1
+            ,'{"id":144, "type":"R","Pin":44,"lhOn":1,"priority":10}'	//L5.4 Периметр ССВ
+		    ,'{"id":145, "type":"R","Pin":45,"lhOn":1,"priority":10}'   //L5.5
 
-    	    ,'{"id":114, "type":"R","Pin":14,"lhOn":0,"status":0,"priority":20}'   //1 Блок Реле 4 клапан 1
-	        ,'{"id":115, "type":"R","Pin":15,"lhOn":0,"status":0,"priority":20}'   //1 Блок Реле 5 клапан 2
-	        ,'{"id":116, "type":"R","Pin":16,"lhOn":0,"status":0,"priority":20}'   //1 Блок Реле 3 клапан 4
-	        ,'{"id":117, "type":"R","Pin":17,"lhOn":0,"status":1,"priority":20}'   //1 Блок Реле 2 насос 1 этажа 
-	        ,'{"id":118, "type":"R","Pin":18,"lhOn":0,"status":0,"priority":20}'   //1 Блок Реле 8 
-	        ,'{"id":119, "type":"R","Pin":19,"lhOn":0,"status":0,"priority":20}'   //1 Блок Реле 6 клапан 3
-	        ,'{"id":120, "type":"R","Pin":20,"lhOn":0,"status":0,"priority":20}'   //1 Блок Реле 7 насос сада
-	        ,'{"id":121, "type":"R","Pin":21,"lhOn":0,"status":1,"priority":20}'   //1 Блок Реле 1 насос 2 этаж
+    	    ,'{"id":114, "type":"R","Pin":14,"lhOn":0,"priority":20}'   //1 Блок Реле 4 клапан 1
+	        ,'{"id":115, "type":"R","Pin":15,"lhOn":0,"priority":20}'   //1 Блок Реле 5 клапан 2
+	        ,'{"id":116, "type":"R","Pin":16,"lhOn":0,"priority":20}'   //1 Блок Реле 3 клапан 4
+	        ,'{"id":117, "type":"R","Pin":17,"lhOn":0,"priority":20}'   //1 Блок Реле 2 насос 1 этажа 
+	        ,'{"id":118, "type":"R","Pin":18,"lhOn":0,"priority":20}'   //1 Блок Реле 8 
+	        ,'{"id":119, "type":"R","Pin":19,"lhOn":0,"priority":20}'   //1 Блок Реле 6 клапан 3
+	        ,'{"id":120, "type":"R","Pin":20,"lhOn":0,"priority":20}'   //1 Блок Реле 7 насос сада
+	        ,'{"id":121, "type":"R","Pin":21,"lhOn":0,"priority":20}'   //1 Блок Реле 1 насос 2 этаж
 
 
         ]
@@ -165,33 +165,33 @@ var Configurations = [
         ]
         ,[ //Board 03
             '{"id":307, "type":"S","DPin":7,"latch":8,"clock":9,"PinsN":16}'  
-            //'{"id":307, "type":"S","DPin":7,"latch":8,"clock":9,"steps":2,"status":0}' // Shift Register out 
-		    ,'{"id":370, "type":"R","parentId":307, "Pin":0, "lhOn":1,"status":0}'   //
-		    ,'{"id":371, "type":"R","parentId":307, "Pin":1, "lhOn":1,"status":0}'   //
-		    ,'{"id":372, "type":"R","parentId":307, "Pin":2, "lhOn":1,"status":0}'   //
-		    ,'{"id":373, "type":"R","parentId":307, "Pin":3, "lhOn":1,"status":0}'   //
-		    ,'{"id":374, "type":"R","parentId":307, "Pin":4, "lhOn":1,"status":0}'   //
-		    ,'{"id":375, "type":"R","parentId":307, "Pin":5, "lhOn":1,"status":0}'   //
-		    ,'{"id":376, "type":"R","parentId":307, "Pin":6, "lhOn":1,"status":0}'   //
-		    ,'{"id":377, "type":"R","parentId":307, "Pin":7, "lhOn":1,"status":0}'   //
-		    ,'{"id":378, "type":"R","parentId":307, "Pin":8, "lhOn":1,"status":0}'   //
-		    ,'{"id":379, "type":"R","parentId":307, "Pin":9, "lhOn":1,"status":0}'   //
-		    ,'{"id":390, "type":"R","parentId":307, "Pin":10, "lhOn":1,"status":0}'   //
-		    ,'{"id":391, "type":"R","parentId":307, "Pin":11, "lhOn":1,"status":0}'   //
-		    ,'{"id":392, "type":"R","parentId":307, "Pin":12, "lhOn":1,"status":0}'   //
-		    ,'{"id":393, "type":"R","parentId":307, "Pin":13, "lhOn":1,"status":0}'   //
-		    ,'{"id":394, "type":"R","parentId":307, "Pin":14, "lhOn":1,"status":0}'   //
-		    ,'{"id":395, "type":"R","parentId":307, "Pin":15, "lhOn":1,"status":0}'   //
+            //'{"id":307, "type":"S","DPin":7,"latch":8,"clock":9,"steps":2}' // Shift Register out 
+		    ,'{"id":370, "type":"R","parentId":307, "Pin":0, "lhOn":1}'   //
+		    ,'{"id":371, "type":"R","parentId":307, "Pin":1, "lhOn":1}'   //
+		    ,'{"id":372, "type":"R","parentId":307, "Pin":2, "lhOn":1}'   //
+		    ,'{"id":373, "type":"R","parentId":307, "Pin":3, "lhOn":1}'   //
+		    ,'{"id":374, "type":"R","parentId":307, "Pin":4, "lhOn":1}'   //
+		    ,'{"id":375, "type":"R","parentId":307, "Pin":5, "lhOn":1}'   //
+		    ,'{"id":376, "type":"R","parentId":307, "Pin":6, "lhOn":1}'   //
+		    ,'{"id":377, "type":"R","parentId":307, "Pin":7, "lhOn":1}'   //
+		    ,'{"id":378, "type":"R","parentId":307, "Pin":8, "lhOn":1}'   //
+		    ,'{"id":379, "type":"R","parentId":307, "Pin":9, "lhOn":1}'   //
+		    ,'{"id":390, "type":"R","parentId":307, "Pin":10, "lhOn":1}'   //
+		    ,'{"id":391, "type":"R","parentId":307, "Pin":11, "lhOn":1}'   //
+		    ,'{"id":392, "type":"R","parentId":307, "Pin":12, "lhOn":1}'   //
+		    ,'{"id":393, "type":"R","parentId":307, "Pin":13, "lhOn":1}'   //
+		    ,'{"id":394, "type":"R","parentId":307, "Pin":14, "lhOn":1}'   //
+		    ,'{"id":395, "type":"R","parentId":307, "Pin":15, "lhOn":1}'   //
             
-            ,'{"id":338, "type":"R","Pin":38,"lhOn":1,"status":0,"priority":10}'  
-            ,'{"id":340, "type":"R","Pin":40,"lhOn":1,"status":0,"priority":10}'  
-            ,'{"id":342, "type":"R","Pin":42,"lhOn":1,"status":0,"priority":10}'  
-            ,'{"id":344, "type":"R","Pin":44,"lhOn":1,"status":0,"priority":10}'  
-            ,'{"id":346, "type":"R","Pin":46,"lhOn":1,"status":0,"priority":10}'  
-            ,'{"id":348, "type":"R","Pin":48,"lhOn":1,"status":0,"priority":10}'  
+            ,'{"id":338, "type":"R","Pin":38,"lhOn":1,"priority":10}'  
+            ,'{"id":340, "type":"R","Pin":40,"lhOn":1,"priority":10}'  
+            ,'{"id":342, "type":"R","Pin":42,"lhOn":1,"priority":10}'  
+            ,'{"id":344, "type":"R","Pin":44,"lhOn":1,"priority":10}'  
+            ,'{"id":346, "type":"R","Pin":46,"lhOn":1,"priority":10}'  
+            ,'{"id":348, "type":"R","Pin":48,"lhOn":1,"priority":10}'  
             ,'{"id":305, "type":"s","DPin":3,"latch":5,"clock":4,"PinsN":16}'  
-            ,'{"id":381, "type":"C","Pin":0,"lhOn":1,"status":0,"priority":10, "parentId":305}'  
-            ,'{"id":382, "type":"B","Pin":1,"lhOn":0,"status":0,"priority":10, "parentId":305}'  
+            ,'{"id":381, "type":"C","Pin":0,"lhOn":1,"priority":10, "parentId":305}'  
+            ,'{"id":382, "type":"B","Pin":1,"lhOn":0,"priority":10, "parentId":305}'  
        
                    
         ]

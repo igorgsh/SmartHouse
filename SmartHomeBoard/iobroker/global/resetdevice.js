@@ -15,6 +15,7 @@ function resetDevice(pin, devName) {
     var pinState = rpiPath + pin + ".state";
 
     log("Reset device:" + devName + "[" + pin + "](" + pinState + ")", 'error');
+    sendTo('telegram', "Reset device:" + devName);
     setState(pinState, relayOff);
     log("Delay for 5 sec");
     setTimeout(function () {
