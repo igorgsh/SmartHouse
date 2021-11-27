@@ -106,9 +106,9 @@ void Relay::ConfigField(const JsonObject& jsonList) {
 	if (jsonList.containsKey("lhOn")) {
 		lhOn = jsonList["lhOn"];
 	}
-	if (jsonList.containsKey("status")) {
-		status = jsonList["status"];
-	}
+	//if (jsonList.containsKey("status")) {
+	//	status = jsonList["status"];
+	//}
 	if (jsonList.containsKey("parentId")) {
 		parentId = jsonList["parentId"];
 	}
