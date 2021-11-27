@@ -92,7 +92,7 @@ void Button::HandleButton(unsigned long timePeriod, bool isParent, bool v) {
 
 void Button::HandleFinish(int newStatus) {
 	status = newStatus;
-	PublishUnit(MQTT_BUTTONS);
+	Publish(MQTT_BUTTONS);
 	Config.ProcessAction(Id, newStatus);
 
 }
@@ -101,7 +101,7 @@ void Button::HandleFinish(int newStatus) {
 
 void Button::ProcessUnit(ActionType event) {
 	Config.ProcessAction(Id, event);
-	PublishUnit(MQTT_BUTTONS);
+	Publish(MQTT_BUTTONS);
 }
 
 void Button::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
@@ -110,7 +110,13 @@ void Button::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
 	}
 	else {// nothing - button on ShiftRegister
 	}
-};
+}
+void Button::FinalInitUnit(bool isParent)
+{
+	// No Subscription
+	// No value request
+}
+;
 
 
 bool Button::Compare(const Unit* u) {

@@ -111,8 +111,8 @@ void Configuration::Init() {
 	BuildConfig();
 	BuildActions();
 
-	Log->Info(F("Subscribe Units"));
-	MqttClient->SubscribeUnits();
+//	Log->Info(F("Subscribe Units"));
+//	MqttClient->SubscribeUnits();
 	Log->Info(F("Config init is finished"));
 }
 
