@@ -66,13 +66,23 @@ function ProcessEnergy(nm) {
                     Number(getState(item.sensor[1] + '.' + suff).val) + 
                     Number(getState(item.sensor[2] + '.' + suff).val); 
                 setState(item.aggregation + '.' + suff, p);
+                var v1, v2, v3;
+                v1 = Number(getState(item.sensor[0]+".Power").val);
+                v2 = Number(getState(item.sensor[1]+".Power").val);
+                v3 = Number(getState(item.sensor[2]+".Power").val);
+                setState(item.aggregation+".PowerA", Number(v1));
+                setState(item.aggregation+".PowerB", Number(v2));
+                setState(item.aggregation+".PowerC", Number(v3));
+                v1 = Number(getState(item.sensor[0]+".Energy").val);
+                v2 = Number(getState(item.sensor[1]+".Energy").val);
+                v3 = Number(getState(item.sensor[2]+".Energy").val);
+                setState(item.aggregation+".EnergyA", Number(v1));
+                setState(item.aggregation+".EnergyB", Number(v2));
+                setState(item.aggregation+".EnergyC", Number(v3));
+                
                 break;
-
         } 
-
-        
     });
-
 } 
 
 
