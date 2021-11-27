@@ -35,9 +35,11 @@ public:
 	virtual void const print(const char* header, DebugLevel level);
 	virtual void ConfigField(const JsonObject& jsonList) = 0;
 	static void PublishTypedUnit(UnitType ut, uint16_t id, byte status);
-
+	
 protected:
-	void PublishUnit(const char* uPrefix);
+	void Publish(const char* uPrefix);
+	void Subscribe(const char* uPrefix, bool isValueRequested);
+
 };
 
 

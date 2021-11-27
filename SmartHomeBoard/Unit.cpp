@@ -21,11 +21,24 @@ void const Unit::print(const char* header, DebugLevel level){
 	Config.Log->Log(level);
 }
 
-void Unit::PublishUnit(const char* uPrefix)
+void Unit::Publish(const char* uPrefix)
 {
 	sprintf(Config.MqttClient->topicBuff, "%s%s%c%04d", uPrefix, MQTT_SEPARATOR, Type, Id);
 	sprintf(Config.MqttClient->payloadBuff, "%u", status);
 	Config.MqttClient->Publish(Config.MqttClient->topicBuff, Config.MqttClient->payloadBuff);
+}
+
+void Unit::Subscribe(const char* uPrefix, bool isValueRequested)
+{
+	if (uPrefix != NULL) {
+		sprintf(Config.MqttClient->topicBuff, "%s%s%c%04d", uPrefix, MQTT_SEPARATOR, Type, Id);
+		Config.MqttClient->Subscribe(Config.MqttClient->topicBuff);
+
+		if (isValueRequested) {
+			Config.MqttClient->RequestValue(Config.MqttClient->topicBuff);
+
+		}
+	}
 }
 
 void Unit::PublishTypedUnit(UnitType ut, uint16_t id, byte status)

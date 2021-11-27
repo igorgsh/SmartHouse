@@ -19,10 +19,11 @@ void ShiftRegisterOut::InitUnit(bool isParent)
 	pinMode(ClockPin, OUTPUT);
 	pinMode(DPin, OUTPUT);
 
-	nByte = ceil(pinsNumber / 8);
-	States = new byte(nByte);
-	for (int i = 0; i < nByte; i++) {
-		States[i] = 0;
+	//nByte = ceil(pinsNumber / 8);
+	ChildStates = new bool[pinsNumber];
+
+	for (int i = pinsNumber-1; i >=0; i--) {
+		ChildStates[i] = false;
 	}
 	Out();
 	for (int i = 0; i < Config.numberUnits; i++) {
@@ -41,17 +42,14 @@ void ShiftRegisterOut::FinalInitUnit(bool isParent)
 	}
 }
 
-void ShiftRegisterOut::Set(byte parentPin, bool status)
+void ShiftRegisterOut::Set(byte parentPin, bool st)
 {
 	if (parentPin <= pinsNumber) {
-		int nState = parentPin / 8;
-		int pNumber = parentPin % 8;
-		//Config.Log->append("Set: pin=").append(parentPin).append(";nState=").append(nState).append(";pnumber=").append(pNumber).Debug();
-		States[nState]=SetBit(States[nState], pNumber, status);
+		ChildStates[parentPin] = st;
 		Out();
 	}
 }
-
+/*
 byte ShiftRegisterOut::SetBit(byte x, int n, bool v)
 {
 	byte m = v;
@@ -60,13 +58,25 @@ byte ShiftRegisterOut::SetBit(byte x, int n, bool v)
 	x = (x & masks[n]) | m;
 	return x;
 }
+*/
 
 void ShiftRegisterOut::Out()
 {
 	digitalWrite(LatchPin, LOW);
+	/*
 	for (int i = 0; i < nByte; i++) {
+
 		shiftOut(DPin, ClockPin, LSBFIRST, States[i]);
 	}
+	*/
+	for (int j = pinsNumber-1; j >=0 ; j--) {
+//		Config.Log->append("SIR. pin=").append(j).append("; b =").append(ChildStates[j]).Debug();
+		digitalWrite(DPin, ChildStates[j]);
+
+		digitalWrite(ClockPin, HIGH);
+		digitalWrite(ClockPin, LOW);
+	}
+
 	//"защелкиваем" регистр, тем самым устанавлива¤ значени¤ на выходах
 	digitalWrite(LatchPin, HIGH);
 }
