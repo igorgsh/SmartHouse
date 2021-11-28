@@ -1,5 +1,4 @@
-
-var reqSt = prefixConfig + '.' + reqState;
+var reqSt = prefixConfig + '.Common.' + reqState;
 var cacheReqSt = $(reqSt);
 cacheReqSt.on (function(obj) {
     //var reqTopic = obj.id;
