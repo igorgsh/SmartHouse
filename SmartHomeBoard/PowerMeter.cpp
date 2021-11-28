@@ -49,7 +49,7 @@ void PowerMeter::InitUnit(bool isParent) {
 }
 
 double PowerMeter::Current() {
-	double v=factor * pzem->current(ip);
+	double v= pzem->current(ip);
 	if (v == NAN) {
 		v = 0.0;
 	}
@@ -66,14 +66,14 @@ double PowerMeter::Voltage() {
 }
 
 double PowerMeter::Power() {
-	double v = factor * pzem->power(ip);
+	double v = pzem->power(ip);
 	if (v == NAN) {
 		v = 0.0;
 	}
 	return v;
 }
 double PowerMeter::Energy() {
-	double v =  factor * pzem->energy(ip);
+	double v = pzem->energy(ip);
 	if (v == NAN) {
 		v = 0.0;
 	}
@@ -204,7 +204,7 @@ bool PowerMeter::Compare(const Unit* u) {
 		serialRX == tu->serialRX &&
 		serialTX == tu->serialTX &&
 		serialNumber == tu->serialNumber &&
-		factor == tu->factor
+		version == tu->version
 		);
 	return res;
 }
@@ -217,7 +217,7 @@ void PowerMeter::ReadFromEEPROM(uint16_t addr) {
 	serialNumber = SigmaEEPROM::Read8(addr + 3);
 	serialRX = SigmaEEPROM::Read8(addr + 4);
 	serialTX = SigmaEEPROM::Read8(addr + 5);
-	factor = SigmaEEPROM::Read16(addr + 6);
+	version = SigmaEEPROM::Read8(addr + 6);
 }
 
 void PowerMeter::WriteToEEPROM(uint16_t addr) {
@@ -227,7 +227,7 @@ void PowerMeter::WriteToEEPROM(uint16_t addr) {
 	SigmaEEPROM::Write8(addr + 3, serialNumber);
 	SigmaEEPROM::Write8(addr + 4, serialRX);
 	SigmaEEPROM::Write8(addr + 5, serialTX);
-	SigmaEEPROM::Write16(addr + 6, factor);
+	SigmaEEPROM::Write8(addr + 6, version);
 
 }
 
@@ -244,9 +244,8 @@ void PowerMeter::ConfigField(const JsonObject& jsonList) {
 	if (jsonList.containsKey("SerialTX")) {
 		serialTX = jsonList["SerialTX"];
 	}
-
-	if (jsonList.containsKey("Factor")) {
-		factor = jsonList["Factor"];
+	if (jsonList.containsKey("version")) {
+		version = jsonList["version"];
 	}
 }
 
@@ -261,7 +260,7 @@ void const PowerMeter::print(const char* header, DebugLevel level) {
 	Config.Log->append(F(";Serial:")).append((unsigned int)Serial);
 	Config.Log->append(F(";SerialRX:")).append((unsigned int)serialRX);
 	Config.Log->append(F(";SerialTX:")).append((unsigned int)serialTX);
-	Config.Log->append(F(";Factor:")).append((unsigned int)factor);
+	Config.Log->append(F(";Version:")).append((unsigned int)version);
 //	Log.append(F(";subscription:")).append(isSubscribed ? "true" : "false");
 	Config.Log->append(F(" @"));
 	Config.Log->Log(level);
