@@ -53,8 +53,11 @@ void PowerMeter::InitUnit(bool isParent) {
 				pzem->setAddress(ip);
 			}
 			else {
-				//softPort = new SoftwareSerial(serialRX, serialTX);
-				//pzem3 = new PZEM004Tv30(*softPort);
+				softPort = new SoftwareSerial(serialRX, serialTX);
+				softPort->begin(9600);
+
+				//Config.Log->append("SoftPort=").append(softPort->available()).Debug();
+				pzem3 = new PZEM004Tv30(*softPort);
 			}
 		}
 	}
@@ -64,6 +67,9 @@ double PowerMeter::Current() {
 	double v;
 	if (version != 3) {
 		v = pzem->current(ip);
+	}
+	else {
+		v = pzem3->current();
 	}
 	if (v == NAN) {
 		v = 0.0;
@@ -77,6 +83,9 @@ double PowerMeter::Voltage() {
 	if (version != 3) {
 		v = pzem->voltage(ip);
 	}
+	else {
+		v = pzem3->voltage();
+	}
 	if (v == NAN) {
 		v = 0.0;
 	}
@@ -88,6 +97,9 @@ double PowerMeter::Power() {
 	if (version != 3) {
 		v = pzem->power(ip);
 	}
+	else {
+		v = pzem3->power();
+	}
 	if (v == NAN) {
 		v = 0.0;
 	}
@@ -98,6 +110,9 @@ double PowerMeter::Energy() {
 	if (version != 3) {
 		v = pzem->energy(ip);
 	}
+	else {
+		v = pzem3->energy();
+	}
 	if (v == NAN) {
 		v = 0.0;
 	}
@@ -106,12 +121,33 @@ double PowerMeter::Energy() {
 
 double PowerMeter::Frequency()
 {
-	return 0.0;
+	double v;
+	if (version != 3) {
+		v = 0.0;
+	}
+	else {
+		v = pzem3->frequency();
+	}
+	if (v == NAN) {
+		v = 0.0;
+	}
+	return v;
 }
 
 double PowerMeter::PowerFactor()
 {
-	return 0.0;
+	double v;
+	if (version != 3) {
+		v = 0.0;
+	}
+	else {
+		v = pzem3->pf();
+		//Config.Log->append("PF:").append(v).Debug();
+	}
+	if (v == NAN) {
+		v = 0.0;
+	}
+	return v;
 }
 
 void PowerMeter::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {

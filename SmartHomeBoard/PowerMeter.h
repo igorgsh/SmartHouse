@@ -59,7 +59,7 @@ private:
 	HardwareSerial *hardPort=NULL;
 	SoftwareSerial *softPort = NULL;
 	PZEM004T* pzem = NULL;
-	//PZEM004Tv30* pzem3 = NULL;
+	PZEM004Tv30* pzem3 = NULL;
 	IPAddress ip = IPAddress(10, 10, 10, 10);
 	PowerMeterValues step = PM_VOLTAGE;
 
