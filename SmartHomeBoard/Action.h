@@ -23,7 +23,7 @@ public:
 	void print(const char* header, DebugLevel level);
 	void ReadFromEEPROM(uint16_t curPtr);
 	void WriteToEEPROM(uint16_t addr);
-	int ActionStoredSize() { return 7; };
+	int ActionStoredSize() { return 10; };
 
 private:
 };

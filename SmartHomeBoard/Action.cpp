@@ -70,12 +70,12 @@ void Action::ReadFromEEPROM(uint16_t addr) {
 void Action::WriteToEEPROM(uint16_t addr) {
 	//bool res = true;
 
-	SigmaEEPROM::Write8(addr, Id);
-	SigmaEEPROM::Write8(addr + 1, originId);
-	SigmaEEPROM::Write8(addr + 2, originType);
-	SigmaEEPROM::Write8(addr + 3, event);
-	SigmaEEPROM::Write8(addr + 4, targetId);
-	SigmaEEPROM::Write8(addr + 5, targetAction);
-	SigmaEEPROM::Write8(addr + 6, targetType);
+	SigmaEEPROM::Write16(addr, Id);
+	SigmaEEPROM::Write16(addr + 2, originId);
+	SigmaEEPROM::Write8(addr + 4, originType);
+	SigmaEEPROM::Write8(addr + 5, event);
+	SigmaEEPROM::Write16(addr + 6, targetId);
+	SigmaEEPROM::Write8(addr + 8, targetAction);
+	SigmaEEPROM::Write8(addr + 9, targetType);
 
 }

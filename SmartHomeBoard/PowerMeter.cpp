@@ -192,22 +192,22 @@ bool PowerMeter::Compare(const Unit* u) {
 
 void PowerMeter::ReadFromEEPROM(uint16_t addr) {
 
-	Id = SigmaEEPROM::Read8(addr);
-	Type = SigmaEEPROM::Read8(addr + 1);
-	serialNumber = SigmaEEPROM::Read8(addr + 2);
-	serialRX = SigmaEEPROM::Read8(addr + 3);
-	serialTX = SigmaEEPROM::Read8(addr + 4);
-	factor = SigmaEEPROM::Read16(addr + 5);
+	Id = SigmaEEPROM::Read16(addr);
+	Type = SigmaEEPROM::Read8(addr + 2);
+	serialNumber = SigmaEEPROM::Read8(addr + 3);
+	serialRX = SigmaEEPROM::Read8(addr + 4);
+	serialTX = SigmaEEPROM::Read8(addr + 5);
+	factor = SigmaEEPROM::Read16(addr + 6);
 }
 
 void PowerMeter::WriteToEEPROM(uint16_t addr) {
 
-	SigmaEEPROM::Write8(addr, Id);
-	SigmaEEPROM::Write8(addr + 1, Type);
-	SigmaEEPROM::Write8(addr + 2, serialNumber);
-	SigmaEEPROM::Write8(addr + 3, serialRX);
-	SigmaEEPROM::Write8(addr + 4, serialTX);
-	SigmaEEPROM::Write16(addr + 5, factor);
+	SigmaEEPROM::Write16(addr, Id);
+	SigmaEEPROM::Write8(addr + 2, Type);
+	SigmaEEPROM::Write8(addr + 3, serialNumber);
+	SigmaEEPROM::Write8(addr + 4, serialRX);
+	SigmaEEPROM::Write8(addr + 5, serialTX);
+	SigmaEEPROM::Write16(addr + 6, factor);
 
 }
 
