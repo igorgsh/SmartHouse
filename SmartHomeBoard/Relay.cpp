@@ -23,9 +23,9 @@ void Relay::RelaySet(bool newStatus)
 	}
 
 	status = newStatus;
+	delayStart = 0;
 	Publish(MQTT_RELAYS);
 	Config.ProcessAction(Id, newStatus);
-
 }
 
 void Relay::RelaySwitch() {
@@ -46,6 +46,24 @@ void Relay::ProcessUnit(ActionType event) {
 		RelaySwitch();
 		break;
 	}
+	case ACT_RELAY_DELAY_ON: 
+	{
+		RelayOff();
+		status = event;
+		Publish(MQTT_RELAYS);
+		Config.ProcessAction(Id, status);
+		delayStart = millis();
+		break;
+	}
+	case ACT_RELAY_DELAY_OFF:
+	{
+		RelayOn();
+		status = event;
+		Publish(MQTT_RELAYS);
+		Config.ProcessAction(Id, status);
+		delayStart = millis();
+		break;
+	}
 	default:
 		break;
 	}
@@ -53,7 +71,19 @@ void Relay::ProcessUnit(ActionType event) {
 
 void Relay::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
 	//nothing todo
+	unsigned long now = millis();
+	if (status == ACT_RELAY_DELAY_OFF) {
+		if (now >= delayStart + Config.Delay_OFF_6) {
+			RelayOff();
+		}  
+	}
+	else if (status == ACT_RELAY_DELAY_ON) {
+		if (now >= delayStart + Config.Delay_ON_7) {
+			RelayOn();
+		}
+	}
 }
+
 void Relay::FinalInitUnit(bool isParent)
 {
 	Subscribe(MQTT_RELAYS, true);

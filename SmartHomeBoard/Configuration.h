@@ -32,6 +32,9 @@ public:
 	bool isConfigRequested = false;
 	bool isActionRequested = false;
 
+	unsigned long Delay_OFF_6 = 0;
+	unsigned long Delay_ON_7 = 0;
+
 
 	Unit** units = NULL;
 	Action** actions = NULL;
@@ -75,6 +78,7 @@ public:
 	void Loop(unsigned long timePeriod);
 	Unit** CreateUnits(byte nUnits);
 	Action** CreateActions(byte nActions);
+	void UpdateCommonParams(const char* topic, const char* payload);
 
 private:
 	int configCounter;

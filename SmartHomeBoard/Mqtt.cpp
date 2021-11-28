@@ -87,34 +87,37 @@ void Mqtt::Callback() {
 					Config.UpdateActions(payLoadCB);
 				}
 			}
-			else {
+			else if (strncmp(topicCB, MQTT_CONFIG_COMMON, strlen(MQTT_CONFIG_COMMON)) == 0) {
+				Config.UpdateCommonParams(topicCB, payLoadCB);
+			}
+			else if (strncmp(topicCB, MQTT_EQUIPMENT, strlen(MQTT_EQUIPMENT)) == 0) {
 				int v = atoi(payLoadCB);
 
 
-				if (strncmp(topicCB, MQTT_BUTTONS, strlen(MQTT_BUTTONS))) {
+				if (strncmp(topicCB, MQTT_BUTTONS, strlen(MQTT_BUTTONS)) == 0) {
 					Config.UpdateButton(GetUnitId(topicCB, strlen(MQTT_BUTTONS) + 2), v);
 				}
-				else if (strncmp(topicCB, MQTT_RELAYS, strlen(MQTT_RELAYS))) {
+				else if (strncmp(topicCB, MQTT_RELAYS, strlen(MQTT_RELAYS)) == 0) {
 					Config.UpdateRelay(GetUnitId(topicCB, strlen(MQTT_RELAYS) + 2), v);
 				}
-				else if (strncmp(topicCB, MQTT_1WIREBUS, strlen(MQTT_1WIREBUS))) {
+				else if (strncmp(topicCB, MQTT_1WIREBUS, strlen(MQTT_1WIREBUS)) == 0) {
 					Config.UpdateOneWireBus(GetUnitId(topicCB, strlen(MQTT_1WIREBUS) + 2), v);
 				}
-				else if (strncmp(topicCB, MQTT_1WIRETHERMO, strlen(MQTT_1WIRETHERMO))) {
+				else if (strncmp(topicCB, MQTT_1WIRETHERMO, strlen(MQTT_1WIRETHERMO)) == 0) {
 					Config.UpdateOneWireThermo(GetUnitId(topicCB, strlen(MQTT_1WIRETHERMO) + 2), v);
 				}
-				else if (strncmp(topicCB, MQTT_POWERMETER, strlen(MQTT_POWERMETER))) {
+				else if (strncmp(topicCB, MQTT_POWERMETER, strlen(MQTT_POWERMETER)) == 0) {
 					Config.UpdatePowerMeter(GetUnitId(topicCB, strlen(MQTT_POWERMETER) + 2), v);
 				}
-				else if (strncmp(topicCB, MQTT_CONTACTOR, strlen(MQTT_CONTACTOR))) {
+				else if (strncmp(topicCB, MQTT_CONTACTOR, strlen(MQTT_CONTACTOR)) == 0) {
 					Config.UpdateContactor(GetUnitId(topicCB, strlen(MQTT_CONTACTOR) + 2), v);
 				}
-				else if (strncmp(topicCB, MQTT_RESET_BOARD, strlen(MQTT_RESET_BOARD))) {
-					Config.Log->Info(F("Reset"));
-
-					if (v > 0) {
-						Board::Reset(10000);
-					}
+			}
+			else if (strncmp(topicCB, MQTT_RESET_BOARD, strlen(MQTT_RESET_BOARD)) == 0) {
+				Config.Log->Info(F("Reset"));
+				int v = atoi(payLoadCB);
+				if (v > 0) {
+					Board::Reset(10000);
 				}
 			}
 		}
