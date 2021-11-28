@@ -2,6 +2,10 @@
 Smart House development
 
 History.
+V 3.2
+- support of PZEM0004t v 3.0
+- bug fixes
+
 V 3.1
 - add support of dalayed relay on and off
 - bug fixes 
