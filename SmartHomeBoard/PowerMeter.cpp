@@ -2,6 +2,7 @@
 #include "Configuration.h"
 #include "SigmaEEPROM.h"
 
+
 extern Configuration Config;
 
 
@@ -17,39 +18,53 @@ PowerMeter::~PowerMeter()
 void PowerMeter::InitUnit(bool isParent) {
 
 	if (serialNumber != 0) {
-		HardwareSerial *port = NULL;
 		switch (serialNumber) {
 //		case 0:
 //			port = &Serial;
 //			break;
 		case 1:
-			port = &Serial1;
+			hardPort = &Serial1;
 			break;
 		case 2:
-			port = &Serial2;
+			hardPort = &Serial2;
 			break;
 		case 3:
-			port = &Serial3;
+			hardPort = &Serial3;
 			break;
 		default:
 			Config.Log->Error(F("Port not found"));
-			port = NULL;
 			break;
 		}
-		if (port != NULL) {
-			pzem = new PZEM004T(port);
+		if (hardPort != NULL) {
+			if (version != 3) {
+				pzem = new PZEM004T(hardPort);
+				pzem->setAddress(ip);
+			}
+			else {
+				//pzem3 = new PZEM004Tv30(*hardPort);
+			}
 		}
+
 	}
 	else {
 		if (serialTX != 0 && serialRX != 0) {
-			pzem = new PZEM004T(serialRX, serialTX);
+			if (version != 3) {
+				pzem = new PZEM004T(serialRX, serialTX);
+				pzem->setAddress(ip);
+			}
+			else {
+				//softPort = new SoftwareSerial(serialRX, serialTX);
+				//pzem3 = new PZEM004Tv30(*softPort);
+			}
 		}
 	}
-	pzem->setAddress(ip);
 }
 
 double PowerMeter::Current() {
-	double v= pzem->current(ip);
+	double v;
+	if (version != 3) {
+		v = pzem->current(ip);
+	}
 	if (v == NAN) {
 		v = 0.0;
 	}
@@ -58,7 +73,10 @@ double PowerMeter::Current() {
 
 
 double PowerMeter::Voltage() {
-	double v= pzem->voltage(ip);
+	double v;
+	if (version != 3) {
+		v = pzem->voltage(ip);
+	}
 	if (v == NAN) {
 		v = 0.0;
 	}
@@ -66,14 +84,20 @@ double PowerMeter::Voltage() {
 }
 
 double PowerMeter::Power() {
-	double v = pzem->power(ip);
+	double v;
+	if (version != 3) {
+		v = pzem->power(ip);
+	}
 	if (v == NAN) {
 		v = 0.0;
 	}
 	return v;
 }
 double PowerMeter::Energy() {
-	double v = pzem->energy(ip);
+	double v;
+	if (version != 3) {
+		v = pzem->energy(ip);
+	}
 	if (v == NAN) {
 		v = 0.0;
 	}

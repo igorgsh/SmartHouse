@@ -1,7 +1,8 @@
 #pragma once
 #include "Unit.h"
+#include <SoftwareSerial.h>
 #include <PZEM004T.h>
-
+#include <PZEM004Tv30.h>
 
 typedef enum {
 	PM_VOLTAGE,
@@ -55,10 +56,11 @@ public:
 
 
 private:
-	//HardwareSerial *port=NULL;
+	HardwareSerial *hardPort=NULL;
+	SoftwareSerial *softPort = NULL;
 	PZEM004T* pzem = NULL;
+	//PZEM004Tv30* pzem3 = NULL;
 	IPAddress ip = IPAddress(10, 10, 10, 10);
-	//Stream *port = NULL;
 	PowerMeterValues step = PM_VOLTAGE;
 
 };
