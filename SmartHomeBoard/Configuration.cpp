@@ -62,8 +62,6 @@ Action** Configuration::CreateActions(byte nActions) {
 
 void Configuration::UpdateCommonParams(const char* topic, const char* payload)
 {
-	Log->append("COMMON: topic=").append(topic).append("; payload=").append(payload).Debug();
-
 	if (strcmp(topic, MQTT_DELAY_OFF_6) == 0) {
 		Delay_OFF_6 = atol(payload);
 	} else if (strcmp(topic, MQTT_DELAY_ON_7) == 0) {
