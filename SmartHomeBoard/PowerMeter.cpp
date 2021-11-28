@@ -2,6 +2,7 @@
 #include "Configuration.h"
 #include "SigmaEEPROM.h"
 
+
 extern Configuration Config;
 
 
@@ -17,75 +18,136 @@ PowerMeter::~PowerMeter()
 void PowerMeter::InitUnit(bool isParent) {
 
 	if (serialNumber != 0) {
-		HardwareSerial *port = NULL;
 		switch (serialNumber) {
 //		case 0:
 //			port = &Serial;
 //			break;
 		case 1:
-			port = &Serial1;
+			hardPort = &Serial1;
 			break;
 		case 2:
-			port = &Serial2;
+			hardPort = &Serial2;
 			break;
 		case 3:
-			port = &Serial3;
+			hardPort = &Serial3;
 			break;
 		default:
 			Config.Log->Error(F("Port not found"));
-			port = NULL;
 			break;
 		}
-		if (port != NULL) {
-			pzem = new PZEM004T(port);
+		if (hardPort != NULL) {
+			if (version != 3) {
+				pzem = new PZEM004T(hardPort);
+				pzem->setAddress(ip);
+			}
+			else {
+				//pzem3 = new PZEM004Tv30(*hardPort);
+			}
 		}
+
 	}
 	else {
 		if (serialTX != 0 && serialRX != 0) {
-			pzem = new PZEM004T(serialRX, serialTX);
+			if (version != 3) {
+				pzem = new PZEM004T(serialRX, serialTX);
+				pzem->setAddress(ip);
+			}
+			else {
+				softPort = new SoftwareSerial(serialRX, serialTX);
+				softPort->begin(9600);
+
+				//Config.Log->append("SoftPort=").append(softPort->available()).Debug();
+				pzem3 = new PZEM004Tv30(*softPort);
+			}
 		}
 	}
-	if (pzem!=NULL) {
-		//IPAddress ip = IPAddress(10, 10, 10, 10);
-		pzem->setAddress(ip);
-		//MqttClient.PublishUnit(this);
-	}
 }
 
-double PowerMeter::current() {
-	if (pzem != NULL) {
-		return factor * pzem->current(ip);
+double PowerMeter::Current() {
+	double v;
+	if (version != 3) {
+		v = pzem->current(ip);
 	}
 	else {
-		return 0.0;
+		v = pzem3->current();
 	}
+	if (v == NAN) {
+		v = 0.0;
+	}
+	return v;
 }
 
 
-double PowerMeter::voltage() {
-	if (pzem != NULL) {
-		return pzem->voltage(ip);
+double PowerMeter::Voltage() {
+	double v;
+	if (version != 3) {
+		v = pzem->voltage(ip);
 	}
 	else {
-		return 0.0;
+		v = pzem3->voltage();
 	}
+	if (v == NAN) {
+		v = 0.0;
+	}
+	return v;
 }
 
-double PowerMeter::power() {
-	if (pzem != NULL) {
-		return factor * pzem->power(ip);
+double PowerMeter::Power() {
+	double v;
+	if (version != 3) {
+		v = pzem->power(ip);
 	}
 	else {
-		return 0.0;
+		v = pzem3->power();
 	}
+	if (v == NAN) {
+		v = 0.0;
+	}
+	return v;
 }
-double PowerMeter::energy() {
-	if (pzem != NULL) {
-		return factor * pzem->energy(ip);
+double PowerMeter::Energy() {
+	double v;
+	if (version != 3) {
+		v = pzem->energy(ip);
 	}
 	else {
-		return 0.0;
+		v = pzem3->energy();
 	}
+	if (v == NAN) {
+		v = 0.0;
+	}
+	return v;
+}
+
+double PowerMeter::Frequency()
+{
+	double v;
+	if (version != 3) {
+		v = 0.0;
+	}
+	else {
+		v = pzem3->frequency();
+	}
+	if (v == NAN) {
+		v = 0.0;
+	}
+	return v;
+}
+
+double PowerMeter::PowerFactor()
+{
+	double v;
+	if (version != 3) {
+		v = 0.0;
+	}
+	else {
+		v = pzem3->pf();
+		//Config.Log->append("PF:").append(v).Debug();
+	}
+	if (v == NAN) {
+		v = 0.0;
+	}
+	return v;
 }
 
 void PowerMeter::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
@@ -95,25 +157,37 @@ void PowerMeter::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
 	if (timePeriod == 1000) {
 		//Config.Log->append("PWR: id=").append(Id).append("; time = ").append(timePeriod).append("; step=").append(step).Debug();
 		if (step == PM_VOLTAGE) {
-			v = voltage();
+			v = Voltage();
 			if (v <= 0) v = 0;
 			PublishPowerMeter(step, v);
 			step = PM_CURRENT;
 		}
 		else if (step == PM_CURRENT) {
-			v = current();
+			v = Current();
 			if (v <= 0) v = 0;
 			PublishPowerMeter(step, v);
 			step = PM_POWER;
 		}
 		else if (step == PM_POWER) {
-			v = power();
+			v = Power();
 			if (v <= 0) v = 0;
 			PublishPowerMeter(step, v);
 			step = PM_ENERGY;
 		}
 		else if (step == PM_ENERGY) {
-			v = energy();
+			v = Energy();
+			if (v <= 0) v = 0;
+			PublishPowerMeter(step, v);
+			step = PM_FREQUENCY;
+		}
+		else if (step == PM_FREQUENCY) {
+			v = Frequency();
+			if (v <= 0) v = 0;
+			PublishPowerMeter(step, v);
+			step = PM_POWERFACTOR;
+		}
+		else if (step == PM_POWERFACTOR) {
+			v = PowerFactor();
 			if (v <= 0) v = 0;
 			PublishPowerMeter(step, v);
 			step = PM_VOLTAGE;
@@ -157,6 +231,12 @@ void PowerMeter::MqttTopic(uint16_t unitId, char* topic,PowerMeterValues step) {
 	case PM_ENERGY:
 		sprintf(topic, "%s%sEnergy", topic0, MQTT_SEPARATOR);
 		break;
+	case PM_FREQUENCY:
+		sprintf(topic, "%s%sFrequency", topic0, MQTT_SEPARATOR);
+		break;
+	case PM_POWERFACTOR:
+		sprintf(topic, "%s%sPowerFactor", topic0, MQTT_SEPARATOR);
+		break;
 	default:
 		topic[0] = 0;
 		break;
@@ -184,7 +264,7 @@ bool PowerMeter::Compare(const Unit* u) {
 		serialRX == tu->serialRX &&
 		serialTX == tu->serialTX &&
 		serialNumber == tu->serialNumber &&
-		factor == tu->factor
+		version == tu->version
 		);
 	return res;
 }
@@ -197,7 +277,7 @@ void PowerMeter::ReadFromEEPROM(uint16_t addr) {
 	serialNumber = SigmaEEPROM::Read8(addr + 3);
 	serialRX = SigmaEEPROM::Read8(addr + 4);
 	serialTX = SigmaEEPROM::Read8(addr + 5);
-	factor = SigmaEEPROM::Read16(addr + 6);
+	version = SigmaEEPROM::Read8(addr + 6);
 }
 
 void PowerMeter::WriteToEEPROM(uint16_t addr) {
@@ -207,7 +287,7 @@ void PowerMeter::WriteToEEPROM(uint16_t addr) {
 	SigmaEEPROM::Write8(addr + 3, serialNumber);
 	SigmaEEPROM::Write8(addr + 4, serialRX);
 	SigmaEEPROM::Write8(addr + 5, serialTX);
-	SigmaEEPROM::Write16(addr + 6, factor);
+	SigmaEEPROM::Write8(addr + 6, version);
 
 }
 
@@ -224,9 +304,8 @@ void PowerMeter::ConfigField(const JsonObject& jsonList) {
 	if (jsonList.containsKey("SerialTX")) {
 		serialTX = jsonList["SerialTX"];
 	}
-
-	if (jsonList.containsKey("Factor")) {
-		factor = jsonList["Factor"];
+	if (jsonList.containsKey("version")) {
+		version = jsonList["version"];
 	}
 }
 
@@ -241,7 +320,7 @@ void const PowerMeter::print(const char* header, DebugLevel level) {
 	Config.Log->append(F(";Serial:")).append((unsigned int)Serial);
 	Config.Log->append(F(";SerialRX:")).append((unsigned int)serialRX);
 	Config.Log->append(F(";SerialTX:")).append((unsigned int)serialTX);
-	Config.Log->append(F(";Factor:")).append((unsigned int)factor);
+	Config.Log->append(F(";Version:")).append((unsigned int)version);
 //	Log.append(F(";subscription:")).append(isSubscribed ? "true" : "false");
 	Config.Log->append(F(" @"));
 	Config.Log->Log(level);

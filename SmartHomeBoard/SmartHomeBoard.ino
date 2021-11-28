@@ -5,6 +5,7 @@
 */
 
 
+#include <PZEM004Tv30.h>
 #include <MemoryFree.h>
 #include <SerialComs.h>
 #include <SafeStringStream.h>

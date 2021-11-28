@@ -1,13 +1,16 @@
 #pragma once
 #include "Unit.h"
+#include <SoftwareSerial.h>
 #include <PZEM004T.h>
-
+#include <PZEM004Tv30.h>
 
 typedef enum {
 	PM_VOLTAGE,
 	PM_CURRENT,
 	PM_POWER,
-	PM_ENERGY
+	PM_ENERGY,
+	PM_FREQUENCY,
+	PM_POWERFACTOR
 } PowerMeterValues;
 
 class PowerMeter :
@@ -19,10 +22,12 @@ public:
 	PowerMeter();
 	~PowerMeter();
 	
-	double voltage();
-	double current();
-	double power();
-	double energy();
+	double Voltage();
+	double Current();
+	double Power();
+	double Energy();
+	double Frequency();
+	double PowerFactor();
 
 	void InitUnit(bool isParent);
 	void UnitLoop(unsigned long timePeriod, bool isParent, bool val);
@@ -37,7 +42,8 @@ public:
 	byte serialNumber = 0;
 	byte serialRX = 0;
 	byte serialTX = 0;
-	int factor = 1;
+	//byte factor = 1;
+	byte version = 2;
 
 	void static MqttTopic(uint16_t unitId, char *topic, PowerMeterValues val);
 
@@ -50,10 +56,11 @@ public:
 
 
 private:
-	//HardwareSerial *port=NULL;
-	PZEM004T* pzem=NULL;
+	HardwareSerial *hardPort=NULL;
+	SoftwareSerial *softPort = NULL;
+	PZEM004T* pzem = NULL;
+	PZEM004Tv30* pzem3 = NULL;
 	IPAddress ip = IPAddress(10, 10, 10, 10);
-	//Stream *port = NULL;
 	PowerMeterValues step = PM_VOLTAGE;
 
 };
