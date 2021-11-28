@@ -60,6 +60,15 @@ Action** Configuration::CreateActions(byte nActions) {
 	return actions;
 }
 
+void Configuration::UpdateCommonParams(const char* topic, const char* payload)
+{
+	if (strcmp(topic, MQTT_DELAY_OFF_6) == 0) {
+		Delay_OFF_6 = atol(payload);
+	} else if (strcmp(topic, MQTT_DELAY_ON_7) == 0) {
+		Delay_ON_7 = atol(payload);
+	}
+}
+
 
 Unit* Configuration::FindUnit(uint16_t id) {
 	if (units != NULL /*&& IsConfigReady*/ ) {
@@ -259,6 +268,13 @@ void Configuration::BuildConfig() {
 	IsConfigReady = true;
 	InitializeUnits();
 	FinalizeInitUnits();
+
+	//request common params
+	MqttClient->Subscribe(MQTT_DELAY_OFF_6);
+	MqttClient->Subscribe(MQTT_DELAY_ON_7);
+
+	MqttClient->Publish(MQTT_STATE_REQUEST, MQTT_DELAY_OFF_6);
+	MqttClient->Publish(MQTT_STATE_REQUEST, MQTT_DELAY_ON_7);
 }
 
 

@@ -35,12 +35,13 @@ typedef enum {
 typedef enum {
 	ACT_OFF = 0, //Off for any device
 	ACT_ON = 1, //On for any device
-	ACT_SWITCH = 3, //Switch device
 	ACT_LONG = 2, //Long (for button)
-	ACT_SHORT_LONG = 5, //Button. Is pressed not released yet. And pressed time less than long
+	ACT_SWITCH = 3, //Switch device
 	ACT_EXTRA_LONG = 4, //Button. Extra long
+	ACT_SHORT_LONG = 5, //Button. Is pressed not released yet. And pressed time less than long
+	ACT_RELAY_DELAY_OFF = 6, //Relay off with delay
+	ACT_RELAY_DELAY_ON = 7, //Relay on with delay
 	ACT_SENSOR_READY = 10 //Sensor ready
-
 } ActionType;
 
 //#define F1	F

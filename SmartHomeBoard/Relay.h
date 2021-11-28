@@ -26,7 +26,7 @@ private:
 	void RelaySwitch();
 	void RelayOn() { RelaySet(HIGH); };
 	void RelayOff() { RelaySet(LOW); };
-
+	unsigned long delayStart;
 };
 
 
