@@ -7,7 +7,9 @@ typedef enum {
 	PM_VOLTAGE,
 	PM_CURRENT,
 	PM_POWER,
-	PM_ENERGY
+	PM_ENERGY,
+	PM_FREQUENCY,
+	PM_POWERFACTOR
 } PowerMeterValues;
 
 class PowerMeter :
@@ -19,10 +21,12 @@ public:
 	PowerMeter();
 	~PowerMeter();
 	
-	double voltage();
-	double current();
-	double power();
-	double energy();
+	double Voltage();
+	double Current();
+	double Power();
+	double Energy();
+	double Frequency();
+	double PowerFactor();
 
 	void InitUnit(bool isParent);
 	void UnitLoop(unsigned long timePeriod, bool isParent, bool val);
@@ -51,7 +55,7 @@ public:
 
 private:
 	//HardwareSerial *port=NULL;
-	PZEM004T* pzem=NULL;
+	PZEM004T* pzem = NULL;
 	IPAddress ip = IPAddress(10, 10, 10, 10);
 	//Stream *port = NULL;
 	PowerMeterValues step = PM_VOLTAGE;

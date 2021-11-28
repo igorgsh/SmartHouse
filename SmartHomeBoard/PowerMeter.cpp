@@ -45,47 +45,49 @@ void PowerMeter::InitUnit(bool isParent) {
 			pzem = new PZEM004T(serialRX, serialTX);
 		}
 	}
-	if (pzem!=NULL) {
-		//IPAddress ip = IPAddress(10, 10, 10, 10);
-		pzem->setAddress(ip);
-		//MqttClient.PublishUnit(this);
-	}
+	pzem->setAddress(ip);
 }
 
-double PowerMeter::current() {
-	if (pzem != NULL) {
-		return factor * pzem->current(ip);
+double PowerMeter::Current() {
+	double v=factor * pzem->current(ip);
+	if (v == NAN) {
+		v = 0.0;
 	}
-	else {
-		return 0.0;
-	}
+	return v;
 }
 
 
-double PowerMeter::voltage() {
-	if (pzem != NULL) {
-		return pzem->voltage(ip);
+double PowerMeter::Voltage() {
+	double v= pzem->voltage(ip);
+	if (v == NAN) {
+		v = 0.0;
 	}
-	else {
-		return 0.0;
-	}
+	return v;
 }
 
-double PowerMeter::power() {
-	if (pzem != NULL) {
-		return factor * pzem->power(ip);
+double PowerMeter::Power() {
+	double v = factor * pzem->power(ip);
+	if (v == NAN) {
+		v = 0.0;
 	}
-	else {
-		return 0.0;
-	}
+	return v;
 }
-double PowerMeter::energy() {
-	if (pzem != NULL) {
-		return factor * pzem->energy(ip);
+double PowerMeter::Energy() {
+	double v =  factor * pzem->energy(ip);
+	if (v == NAN) {
+		v = 0.0;
 	}
-	else {
-		return 0.0;
-	}
+	return v;
+}
+
+double PowerMeter::Frequency()
+{
+	return 0.0;
+}
+
+double PowerMeter::PowerFactor()
+{
+	return 0.0;
 }
 
 void PowerMeter::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
@@ -95,25 +97,37 @@ void PowerMeter::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
 	if (timePeriod == 1000) {
 		//Config.Log->append("PWR: id=").append(Id).append("; time = ").append(timePeriod).append("; step=").append(step).Debug();
 		if (step == PM_VOLTAGE) {
-			v = voltage();
+			v = Voltage();
 			if (v <= 0) v = 0;
 			PublishPowerMeter(step, v);
 			step = PM_CURRENT;
 		}
 		else if (step == PM_CURRENT) {
-			v = current();
+			v = Current();
 			if (v <= 0) v = 0;
 			PublishPowerMeter(step, v);
 			step = PM_POWER;
 		}
 		else if (step == PM_POWER) {
-			v = power();
+			v = Power();
 			if (v <= 0) v = 0;
 			PublishPowerMeter(step, v);
 			step = PM_ENERGY;
 		}
 		else if (step == PM_ENERGY) {
-			v = energy();
+			v = Energy();
+			if (v <= 0) v = 0;
+			PublishPowerMeter(step, v);
+			step = PM_FREQUENCY;
+		}
+		else if (step == PM_FREQUENCY) {
+			v = Frequency();
+			if (v <= 0) v = 0;
+			PublishPowerMeter(step, v);
+			step = PM_POWERFACTOR;
+		}
+		else if (step == PM_POWERFACTOR) {
+			v = PowerFactor();
 			if (v <= 0) v = 0;
 			PublishPowerMeter(step, v);
 			step = PM_VOLTAGE;
@@ -156,6 +170,12 @@ void PowerMeter::MqttTopic(uint16_t unitId, char* topic,PowerMeterValues step) {
 		break;
 	case PM_ENERGY:
 		sprintf(topic, "%s%sEnergy", topic0, MQTT_SEPARATOR);
+		break;
+	case PM_FREQUENCY:
+		sprintf(topic, "%s%sFrequency", topic0, MQTT_SEPARATOR);
+		break;
+	case PM_POWERFACTOR:
+		sprintf(topic, "%s%sPowerFactor", topic0, MQTT_SEPARATOR);
 		break;
 	default:
 		topic[0] = 0;

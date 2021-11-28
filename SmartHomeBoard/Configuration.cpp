@@ -336,8 +336,13 @@ void Configuration::UpdateActions(const char* jsonConfig) {
 		if (root.containsKey("length")) {
 			byte nActions = (byte)root["length"];
 			actionCounter = 0;
-			CreateActions(nActions);
 			lenDetected = true;
+			if (nActions == 0) {
+				IsActionsReady = true;
+			}
+			else {
+				CreateActions(nActions);
+			}
 		}
 		else if (lenDetected && root.containsKey("id")) {
 			actions[actionCounter] = new Action();
