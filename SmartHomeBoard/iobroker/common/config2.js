@@ -18,7 +18,7 @@ cacheConfigState.on (function(obj) {
    //log ("Config topic:" + configTopic);
    
     var configLength = Configurations[boardId].length;
-    setState(configTopic, '{"length":' + configLength +'}');
+    setState(configTopic, '{"length":' + configLength + ',"req":' + obj.state.val +'}');
     log("Config length=" + configLength);
     for (var i=0; i< configLength; i++) {
         //log(JSON.stringify(JSON.parse(Configurations[i])));
@@ -42,7 +42,7 @@ cacheActState.on (function(obj) {
 //   log ("Action topic:" + actTopic);
     var actLength = Actions[boardId].length;
     
-    setState(actTopic, '{"length":' + actLength +'}');
+    setState(actTopic, '{"length":' + actLength + ',"req":' + obj.state.val +'}');
     log ("Action length = " + actLength);    
     for (var i=0; i< actLength; i++) {
         setState(actTopic,Actions[boardId][i]);
@@ -50,4 +50,9 @@ cacheActState.on (function(obj) {
     
    log("End Action Request"); 
 });
+
+
+
+
+
 
