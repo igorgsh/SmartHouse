@@ -2,7 +2,11 @@
 Smart House development
 
 History.
-V 3.0
+V 3.1
+- add support of dalayed relay on and off
+- bug fixes 
+
+V 3.0 (not recommended)
 - switch to the SafeString and char*
 - refactoring of application
 - support of Shift Register In/Out
