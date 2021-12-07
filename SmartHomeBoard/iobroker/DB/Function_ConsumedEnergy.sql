@@ -5,7 +5,7 @@
 CREATE OR REPLACE FUNCTION public.consumedenergy(
 	"DateFrom" date,
 	"DateTo" date)
-    RETURNS TABLE(source text, indicator text, isday boolean, dt date, consumption double precision) 
+    RETURNS TABLE(sect text, d_cons real, n_cons real) 
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
@@ -13,26 +13,25 @@ CREATE OR REPLACE FUNCTION public.consumedenergy(
 
 AS $BODY$
 begin
-	return query (
-select t1.source as source, t1.indicator as indicator, t1.isday as isday, t1.dt as dt, SUM(t1.cons) as consumption
-from(
-select t.source, t.indicator, t.isday, t.dt, (t.end-t.beg) as cons
+return query (
+select t2.sect, Max(day_cons) as d_cons, max(night_cons) as n_cons
 from (
-select e.source, e.indicator, e.isday, e.dt, min(e.val) as beg, max (e.val) as end
-from "EnergyView" e
-where (e.dt >= "DateFrom" AND e.dt<= "DateTo") and e.indicator='Energy'
-and e.hour != 23
-group by e.source, e.indicator, e.isday, e.dt
-union all
-select e.source, e.indicator, e.isday, e.dt, min(e.val) as beg, max(e.val) as end
-from "EnergyView" e
-where (e.dt >= "DateFrom" AND e.dt<= "DateTo") and e.indicator='Energy'
-and e.hour = 23
-group by e.source, e.indicator, e.isday, e.dt
-) t
+select "section" as sect, day_night,
+case when day_night=true then max(e) - min(e) else 0 end as day_cons,
+case when day_night=false then max(e) - min(e) else 0 end as night_cons
+from (
+select section,day_night, energy_a+energy_b+energy_c as e
+  from "PowerValues"
+  where ts>="DateFrom" AND ts<"DateTo" and (energy_a!=0 and energy_a is not NULL) and
+  (energy_b!=0 and energy_b is not NULL) AND
+  (energy_c!=0 and energy_c is not NULL)
 ) t1
-group by t1.source, t1.indicator, t1.isday, t1.dt
-      );
+group by "section", day_night
+)t2 
+group by t2.sect
+	
+);
+
 end;
 $BODY$;
 
