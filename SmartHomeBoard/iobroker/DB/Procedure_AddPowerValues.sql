@@ -62,15 +62,15 @@ BEGIN
 		WHEN id_rec = elIds[2] OR id_rec = htIds[2] THEN recPV.current_b := val_rec;
 		WHEN id_rec = elIds[3] OR id_rec = htIds[3] THEN recPV.current_c := val_rec;
 
-		WHEN id_rec = elIds[4] OR id_rec = htIds[4] THEN recPV.energy_a := val_rec;
-		WHEN id_rec = elIds[5] OR id_rec = htIds[5] THEN recPV.energy_b := val_rec;
-		WHEN id_rec = elIds[6] OR id_rec = htIds[6] THEN recPV.energy_c := val_rec;
+		WHEN id_rec = elIds[4] OR id_rec = htIds[4] THEN IF val_rec>recPV.energy_a THEN recPV.energy_a:=val_rec; END IF;
+		WHEN id_rec = elIds[5] OR id_rec = htIds[5] THEN IF val_rec>recPV.energy_b THEN recPV.energy_b:=val_rec; END IF;
+		WHEN id_rec = elIds[6] OR id_rec = htIds[6] THEN IF val_rec>recPV.energy_c THEN recPV.energy_c:=val_rec; END IF;
 
 		WHEN id_rec = elIds[7] OR id_rec = htIds[7] THEN recPV.frequency_a := val_rec;
 		WHEN id_rec = elIds[8] OR id_rec = htIds[8] THEN recPV.frequency_b := val_rec;
 		WHEN id_rec = elIds[9] OR id_rec = htIds[9] THEN recPV.frequency_c := val_rec;
 
-		WHEN id_rec = elIds[10]  OR id_rec = htIds[10]  THEN recPV.power_a := val_rec;
+		WHEN id_rec = elIds[10] OR id_rec = htIds[10] THEN recPV.power_a := val_rec;
 		WHEN id_rec = elIds[11] OR id_rec = htIds[11] THEN recPV.power_b := val_rec;
 		WHEN id_rec = elIds[12] OR id_rec = htIds[12] THEN recPV.power_c := val_rec;
 
