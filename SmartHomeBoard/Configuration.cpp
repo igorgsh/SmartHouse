@@ -22,7 +22,6 @@
 //extern Mqtt MqttClient;
 
 Unit** Configuration::CreateUnits(byte nUnits) {
-
 	if (units != NULL) {
 		for (int i = 0; i < numberUnits; i++) {
 			if (units[i] != NULL) {
@@ -35,7 +34,7 @@ Unit** Configuration::CreateUnits(byte nUnits) {
 		units = NULL;
 	}
 	else {
-		units = new Unit * [nUnits];
+		units = new Unit* [nUnits];
 	}
 	numberUnits = nUnits;
 	return units;
@@ -251,19 +250,18 @@ void Configuration::BuildConfig() {
 	if (MqttClient->connected()) {
 		MqttClient->GetConfiguration();
 		unsigned long startLoop = millis();
-		while (!IsConfigReady && millis() - startLoop < MQTT_WAITING_RESPONSE) {
+		while (!IsConfigReady && (millis() - startLoop < MQTT_WAITING_RESPONSE)) {
 			MqttClient->MqttLoop();
 		}
 	}
 
 	if (numberUnits != 0) {
-		if (!IsConfigReady) { //Mqtt failed for some reasons
-			Log->Info(F("Read Units from EEPROM"));
-			SigmaEEPROM::ReadUnits();
-		}
-		else {
+		if (IsConfigReady) { //Mqtt is ok
 			SigmaEEPROM::UpdateUnits(numberUnits, units);
 		}
+	} else { // mqtt failed
+		Log->Info(F("Read Units from EEPROM"));
+		SigmaEEPROM::ReadUnits();
 	}
 	IsConfigReady = true;
 	InitializeUnits();
@@ -395,13 +393,15 @@ void Configuration::BuildActions() {
 			MqttClient->MqttLoop();
 		}
 	}
+
 	if (numberActions != 0) {
-		if (!IsActionsReady) { //Mqtt failed for some reasons
-			SigmaEEPROM::ReadActions();
-		}
-		else {
+		if (IsActionsReady) { //Mqtt is ok
 			SigmaEEPROM::UpdateActions(numberActions, actions);
 		}
+	}
+	else { // mqtt failed
+		Log->Info(F("Read Actions from EEPROM"));
+		SigmaEEPROM::ReadActions();
 	}
 
 	InitializeActions();

@@ -74,6 +74,7 @@ void setup() {
 
 // the loop function runs over and over again until power down or reset
 void loop() {
+	//return;
 	//while (1);
 	static unsigned long tp60 = 0;
 	static unsigned long tp30 = 0;
