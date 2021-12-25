@@ -4,9 +4,9 @@ var ElectricityGroup = [
                                                                  prefixPowerMeter + ".P0265",
                                                                  prefixPowerMeter + ".P0266"]},
                         {"aggregation": "mqtt.0.Others.Electricity", "sensor": 
-                                                                [prefixPowerMeter + ".P0264",
-                                                                 prefixPowerMeter + ".P0265",
-                                                                 prefixPowerMeter + ".P0266"]}
+                                                                [prefixPowerMeter + ".P0267",
+                                                                 prefixPowerMeter + ".P0263",
+                                                                 prefixPowerMeter + ".P0262"]}
 ];  
 
 
@@ -22,6 +22,18 @@ ElectricityGroup.forEach(function(item, i, ElectricityGroup) {
         ProcessEnergy(obj.id);
     });
     str = item.sensor[j] + ".Energy";
+    $(str).on(function(obj){
+        ProcessEnergy(obj.id);
+    });
+    str = item.sensor[j] + ".Current";
+    $(str).on(function(obj){
+        ProcessEnergy(obj.id);
+    });
+    str = item.sensor[j] + ".PowerFactor";
+    $(str).on(function(obj){
+        ProcessEnergy(obj.id);
+    });
+    str = item.sensor[j] + ".Frequency";
     $(str).on(function(obj){
         ProcessEnergy(obj.id);
     });
@@ -44,44 +56,33 @@ function ProcessEnergy(nm) {
 
         var suff = nm.substring(sens[0].length + 1);
         var v1, v2, v3;
-        switch (suff) {
-            case 'Voltage':
-                var v1, v2, v3;
-                v1 = Number(getState(item.sensor[0]+".Voltage").val);
-                v2 = Number(getState(item.sensor[1]+".Voltage").val);
-                v3 = Number(getState(item.sensor[2]+".Voltage").val);
 
-                var mn = Math.min(v1, v2, v3);
-                var mx = Math.max(v1, v2, v3);
-                setState(item.aggregation+".Max", Number(mx));
-                setState(item.aggregation+".Min", Number(mn));
-                setState(item.aggregation+".Delta", Number(mx-mn));
-                setState(item.aggregation+".LineA", Number(v1));
-                setState(item.aggregation+".LineB", Number(v2));
-                setState(item.aggregation+".LineC", Number(v3));
+        v1 = Number(getState(item.sensor[0]+"." + suff).val);
+        v2 = Number(getState(item.sensor[1]+"." + suff).val);
+        v3 = Number(getState(item.sensor[2]+"." + suff).val);
+        var mn = Math.min(v1, v2, v3);
+        var mx = Math.max(v1, v2, v3);
+        setState(item.aggregation+"."+suff+".Max", Number(mx));
+        setState(item.aggregation+"."+suff+".Min", Number(mn));
+        setState(item.aggregation+"."+suff+".Delta", Number(mx-mn));
+        setState(item.aggregation+"."+suff+".LineA", Number(v1));
+        setState(item.aggregation+"."+suff+".LineB", Number(v2));
+        setState(item.aggregation+"."+suff+".LineC", Number(v3));
+
+        switch(suff) {
+            case "Voltage":
+            case "Current":
+            case "Frequency":
+            case "PowerFactor":
+                setState(item.aggregation+"."+suff+".Avg", (v1+v2+v3)/3 );
                 break;
-            case 'Power':
-            case 'Energy':
-                var p = Number(getState(item.sensor[0] + '.' + suff).val) + 
-                    Number(getState(item.sensor[1] + '.' + suff).val) + 
-                    Number(getState(item.sensor[2] + '.' + suff).val); 
-                setState(item.aggregation + '.' + suff, p);
-                var v1, v2, v3;
-                v1 = Number(getState(item.sensor[0]+".Power").val);
-                v2 = Number(getState(item.sensor[1]+".Power").val);
-                v3 = Number(getState(item.sensor[2]+".Power").val);
-                setState(item.aggregation+".PowerA", Number(v1));
-                setState(item.aggregation+".PowerB", Number(v2));
-                setState(item.aggregation+".PowerC", Number(v3));
-                v1 = Number(getState(item.sensor[0]+".Energy").val);
-                v2 = Number(getState(item.sensor[1]+".Energy").val);
-                v3 = Number(getState(item.sensor[2]+".Energy").val);
-                setState(item.aggregation+".EnergyA", Number(v1));
-                setState(item.aggregation+".EnergyB", Number(v2));
-                setState(item.aggregation+".EnergyC", Number(v3));
-                
+            case "Power":
+            case "Energy":
+                setState(item.aggregation+"."+suff+".Sum", (v1+v2+v3) );
                 break;
-        } 
+
+        }
+
     });
 } 
 
