@@ -4,7 +4,6 @@ Smart House development
 History.
 V 3.4
 - add support of WatchDog2
-- Add hardreset request when no config downloaded from server
 
 V 3.3
 - fix bug with read config from EEPROM
