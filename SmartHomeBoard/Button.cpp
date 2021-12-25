@@ -124,7 +124,8 @@ bool Button::Compare(const Unit* u) {
 	if (u == NULL) return false;
 	if (u->Type != UnitType::BUTTON) return false;
 	Button *tu = (Button*)u;
-	
+	//Config.Log->append(Id == tu->Id).append(Type == tu->Type).append(Pin == tu->Pin).append(lhOn == tu->lhOn).append(parentId == tu->parentId).Debug();
+
 	bool res = 
 		Id == tu->Id &&
 		Type == tu->Type &&
@@ -152,7 +153,7 @@ void Button::WriteToEEPROM(uint16_t addr) {
 	SigmaEEPROM::Write8(addr + 2, Type);
 	SigmaEEPROM::Write8(addr + 3, Pin);
 	SigmaEEPROM::Write8(addr + 4, lhOn);
-	SigmaEEPROM::Write16(addr + 5 , Id); //5-6
+	SigmaEEPROM::Write16(addr + 5 , parentId); //5-6
 }
 
 void Button::ConfigField(const JsonObject& jsonList) {
