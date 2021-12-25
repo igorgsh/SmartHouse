@@ -2,6 +2,9 @@
 Smart House development
 
 History.
+V 3.4
+- add support of WatchDog2
+
 V 3.3
 - fix bug with read config from EEPROM
 

@@ -44,8 +44,10 @@ bool Mqtt::MqttReconnect() {
 				Subscribe(topicBuff);
 				sprintf(topicBuff, MQTT_ACTIONS_RESPONSE, Config.BoardId);
 				Subscribe(topicBuff);
-				//sprintF1(topic, MQTT_RESET_BOARD, Config.BoardId);
-				//Subscribe(topic);
+				sprintf(topicBuff, MQTT_WATCH_DOG2, Config.BoardId);
+				Subscribe(topicBuff);
+				sprintf(topicBuff, MQTT_RESET_BOARD, Config.BoardId);
+				Subscribe(topicBuff);
 				res = true;
 			}
 			else {
@@ -87,37 +89,48 @@ void Mqtt::Callback() {
 					Config.UpdateActions(payLoadCB);
 				}
 			}
-			else if (strncmp(topicCB, MQTT_CONFIG_COMMON, strlen(MQTT_CONFIG_COMMON)) == 0) {
-				Config.UpdateCommonParams(topicCB, payLoadCB);
-			}
-			else if (strncmp(topicCB, MQTT_EQUIPMENT, strlen(MQTT_EQUIPMENT)) == 0) {
-				int v = atoi(payLoadCB);
+			else {
+				sprintf(topicBuff, MQTT_WATCH_DOG2, Config.BoardId);
+
+				if (strcmp(topicCB, topicBuff) == 0) {
+					WatchDog2();
+				}
+				else {
+					sprintf(topicBuff, MQTT_RESET_BOARD, Config.BoardId);
+
+					if (strcmp(topicCB,topicBuff) == 0) {
+						Config.Log->Info(F("Reset"));
+						int v = atoi(payLoadCB);
+						if (v > 0) {
+							Board::Reset(5000);
+						}
+					}
+					else if (strncmp(topicCB, MQTT_CONFIG_COMMON, strlen(MQTT_CONFIG_COMMON)) == 0) {
+						Config.UpdateCommonParams(topicCB, payLoadCB);
+					}
+					else if (strncmp(topicCB, MQTT_EQUIPMENT, strlen(MQTT_EQUIPMENT)) == 0) {
+						int v = atoi(payLoadCB);
 
 
-				if (strncmp(topicCB, MQTT_BUTTONS, strlen(MQTT_BUTTONS)) == 0) {
-					Config.UpdateButton(GetUnitId(topicCB, strlen(MQTT_BUTTONS) + 2), v);
-				}
-				else if (strncmp(topicCB, MQTT_RELAYS, strlen(MQTT_RELAYS)) == 0) {
-					Config.UpdateRelay(GetUnitId(topicCB, strlen(MQTT_RELAYS) + 2), v);
-				}
-				else if (strncmp(topicCB, MQTT_1WIREBUS, strlen(MQTT_1WIREBUS)) == 0) {
-					Config.UpdateOneWireBus(GetUnitId(topicCB, strlen(MQTT_1WIREBUS) + 2), v);
-				}
-				else if (strncmp(topicCB, MQTT_1WIRETHERMO, strlen(MQTT_1WIRETHERMO)) == 0) {
-					Config.UpdateOneWireThermo(GetUnitId(topicCB, strlen(MQTT_1WIRETHERMO) + 2), v);
-				}
-				else if (strncmp(topicCB, MQTT_POWERMETER, strlen(MQTT_POWERMETER)) == 0) {
-					Config.UpdatePowerMeter(GetUnitId(topicCB, strlen(MQTT_POWERMETER) + 2), v);
-				}
-				else if (strncmp(topicCB, MQTT_CONTACTOR, strlen(MQTT_CONTACTOR)) == 0) {
-					Config.UpdateContactor(GetUnitId(topicCB, strlen(MQTT_CONTACTOR) + 2), v);
-				}
-			}
-			else if (strncmp(topicCB, MQTT_RESET_BOARD, strlen(MQTT_RESET_BOARD)) == 0) {
-				Config.Log->Info(F("Reset"));
-				int v = atoi(payLoadCB);
-				if (v > 0) {
-					Board::Reset(10000);
+						if (strncmp(topicCB, MQTT_BUTTONS, strlen(MQTT_BUTTONS)) == 0) {
+							Config.UpdateButton(GetUnitId(topicCB, strlen(MQTT_BUTTONS) + 2), v);
+						}
+						else if (strncmp(topicCB, MQTT_RELAYS, strlen(MQTT_RELAYS)) == 0) {
+							Config.UpdateRelay(GetUnitId(topicCB, strlen(MQTT_RELAYS) + 2), v);
+						}
+						else if (strncmp(topicCB, MQTT_1WIREBUS, strlen(MQTT_1WIREBUS)) == 0) {
+							Config.UpdateOneWireBus(GetUnitId(topicCB, strlen(MQTT_1WIREBUS) + 2), v);
+						}
+						else if (strncmp(topicCB, MQTT_1WIRETHERMO, strlen(MQTT_1WIRETHERMO)) == 0) {
+							Config.UpdateOneWireThermo(GetUnitId(topicCB, strlen(MQTT_1WIRETHERMO) + 2), v);
+						}
+						else if (strncmp(topicCB, MQTT_POWERMETER, strlen(MQTT_POWERMETER)) == 0) {
+							Config.UpdatePowerMeter(GetUnitId(topicCB, strlen(MQTT_POWERMETER) + 2), v);
+						}
+						else if (strncmp(topicCB, MQTT_CONTACTOR, strlen(MQTT_CONTACTOR)) == 0) {
+							Config.UpdateContactor(GetUnitId(topicCB, strlen(MQTT_CONTACTOR) + 2), v);
+						}
+					}
 				}
 			}
 		}
@@ -197,6 +210,12 @@ void Mqtt::WatchDog() {
 	sprintf(topicBuff, MQTT_WATCH_DOG, Config.BoardId);
 	Publish(topicBuff, String(Config.counter60).c_str());
 }
+
+void Mqtt::WatchDog2() {
+	sprintf(topicBuff, MQTT_WATCH_DOG2, Config.BoardId);
+	Publish(topicBuff, "0");
+}
+
 
 void Mqtt::PutBuffer(const char* topic, const char* payload, unsigned int length)
 {

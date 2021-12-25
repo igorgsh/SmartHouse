@@ -56,20 +56,20 @@ bool SigmaEEPROM::UpdateUnits(byte numberOfUnits, Unit** units) {
 		for (int i = 0; !res && i < numberOfUnits; i++) {
 			uint16_t uId = Read16(currentPtr);
 			byte uType = Read8(currentPtr+2);
-			Config.Log->append("uid=").append(uId).append("; uType=").append(uType).Debug();
-			Config.Log->append("Unitid=").append(units[i]->Id).append("; UnitType=").append(units[i]->Type).Debug();
+			//Config.Log->append("uid=").append(uId).append("; uType=").append(uType).Debug();
+			//Config.Log->append("Unitid=").append(units[i]->Id).append("; UnitType=").append(units[i]->Type).Debug();
 			if (uId != units[i]->Id || uType != units[i]->Type) {
 				Config.Log->Debug("Point 2");
 				res = true;
 			}
 			else {
-				Config.Log->Debug("Point 5");
-				Config.Log->append("i=").append(i).Debug();
+				//Config.Log->Debug("Point 5");
+				//Config.Log->append("i=").append(i).Debug();
 				Unit* u = Config.CreateTypedUnit(uType);
 				u->Id = uId;
 				u->ReadFromEEPROM(currentPtr);
 				if (!u->Compare(units[i])) {
-					Config.Log->Debug("Point 7");
+					//Config.Log->Debug("Point 7");
 					res = true;
 
 				}
@@ -83,7 +83,7 @@ bool SigmaEEPROM::UpdateUnits(byte numberOfUnits, Unit** units) {
 	}
 
 	if (res) {
-		Config.Log->Debug("Point 3");
+		//Config.Log->Debug("Point 3");
 		SigmaEEPROM::WriteUnits(numberOfUnits, units);
 	}
 	return res;
@@ -92,7 +92,7 @@ bool SigmaEEPROM::UpdateUnits(byte numberOfUnits, Unit** units) {
 void SigmaEEPROM::WriteUnits(byte numberOfUnits, Unit** units) {
 	uint16_t currentPtr = addrStartUnits;
 	for (int i = 0; i < numberOfUnits; i++) {
-		Config.Log->append("currptr=").append(currentPtr).append("; UType=").append(units[i]->Type).Debug();
+		//Config.Log->append("currptr=").append(currentPtr).append("; UType=").append(units[i]->Type).Debug();
 		units[i]->WriteToEEPROM(currentPtr);
 
 		//Unit* u = Config.CreateTypedUnit(units[i]->Type);
