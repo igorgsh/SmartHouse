@@ -32,6 +32,7 @@
 
 
 #define MQTT_WATCH_DOG "Config" MQTT_SEPARATOR BOARD_ID MQTT_SEPARATOR "WatchDog"
+#define MQTT_WATCH_DOG2 "Config" MQTT_SEPARATOR BOARD_ID MQTT_SEPARATOR "WatchDog2"
 #define MQTT_CONFIG_REQUEST "Config" MQTT_SEPARATOR BOARD_ID MQTT_SEPARATOR "ConfigurationRequest"
 #define MQTT_CONFIG_RESPONSE "Config" MQTT_SEPARATOR BOARD_ID MQTT_SEPARATOR "Configuration"
 #define MQTT_ACTIONS_REQUEST "Config" MQTT_SEPARATOR BOARD_ID  MQTT_SEPARATOR "ActionRequest"
@@ -76,6 +77,7 @@ class Mqtt : public PubSubClient
 
 		Mqtt();
 		void WatchDog();
+		void WatchDog2();
 		void PutBuffer(const char* topic, const char* payload, unsigned int len);
 		char topicBuff[MQTT_TOPIC_LENGTH];
 		char payloadBuff[MQTT_PAYLOAD_LENGTH];
