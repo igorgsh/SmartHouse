@@ -25,6 +25,9 @@
     <Filter Include="iobroker\test">
       <UniqueIdentifier>{10c924e3-8d25-4059-84fa-ea4591c5b066}</UniqueIdentifier>
     </Filter>
+    <Filter Include="iobroker\DB">
+      <UniqueIdentifier>{30aa3cdd-61f2-42f9-8d96-57a61ffc2d5c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="SmartHomeBoard.ino" />
@@ -105,6 +108,33 @@
     </None>
     <None Include="iobroker\test\TestPing.js">
       <Filter>iobroker\test</Filter>
+    </None>
+    <None Include="iobroker\DB\Function_ConsumedEnergy.sql">
+      <Filter>iobroker\DB</Filter>
+    </None>
+    <None Include="iobroker\DB\Function_EnergyStat.sql">
+      <Filter>iobroker\DB</Filter>
+    </None>
+    <None Include="iobroker\DB\Function_PowerValue.sql">
+      <Filter>iobroker\DB</Filter>
+    </None>
+    <None Include="iobroker\DB\Sequence_pv_sequence.sql">
+      <Filter>iobroker\DB</Filter>
+    </None>
+    <None Include="iobroker\DB\Table_PowerValues.sql">
+      <Filter>iobroker\DB</Filter>
+    </None>
+    <None Include="iobroker\DB\View_Electricity.sql">
+      <Filter>iobroker\DB</Filter>
+    </None>
+    <None Include="iobroker\DB\View_Energy.sql">
+      <Filter>iobroker\DB</Filter>
+    </None>
+    <None Include="iobroker\DB\View_EnergyView.sql">
+      <Filter>iobroker\DB</Filter>
+    </None>
+    <None Include="iobroker\DB\View_PowerMeters.sql">
+      <Filter>iobroker\DB</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

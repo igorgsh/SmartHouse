@@ -108,7 +108,7 @@ double PowerMeter::Power() {
 double PowerMeter::Energy() {
 	double v;
 	if (version != 3) {
-		v = pzem->energy(ip);
+		v = pzem->energy(ip)/1000.0;
 	}
 	else {
 		v = pzem3->energy();
@@ -205,8 +205,8 @@ void PowerMeter::PublishPowerMeter(PowerMeterValues step, double v) {
 	uint8_t p2;
 
 	p1 = (unsigned long)v;
-	p2 = (uint8_t)((v - p1) * 100);
-	sprintf(payload, "%lu.%02u", p1, p2);
+	p2 = (uint8_t)((v - p1) * 1000);
+	sprintf(payload, "%lu.%03u", p1, p2);
 
 	MqttTopic(Id, topic, step);
 	Config.MqttClient->Publish(topic, payload);
