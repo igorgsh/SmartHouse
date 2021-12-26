@@ -57,13 +57,13 @@ void Action::InitAction() {
 void Action::ReadFromEEPROM(uint16_t addr) {
 
 
-	Id = SigmaEEPROM::Read8(addr);
-	originId = SigmaEEPROM::Read8(addr + 1);
-	originType = (UnitType)SigmaEEPROM::Read8(addr + 2);
-	event = SigmaEEPROM::Read8(addr + 3);
-	targetId = SigmaEEPROM::Read8(addr + 4);
-	targetAction = (ActionType)SigmaEEPROM::Read8(addr + 5);
-	targetType = (UnitType)SigmaEEPROM::Read8(addr + 6);
+	Id = SigmaEEPROM::Read16(addr); //0-1
+	originId = SigmaEEPROM::Read16(addr + 2); //2-3
+	originType = (UnitType)SigmaEEPROM::Read8(addr + 4); 
+	event = SigmaEEPROM::Read8(addr + 5);
+	targetId = SigmaEEPROM::Read16(addr + 6); //6-7
+	targetAction = (ActionType)SigmaEEPROM::Read8(addr + 8);
+	targetType = (UnitType)SigmaEEPROM::Read8(addr + 9);
 
 }
 
@@ -77,5 +77,4 @@ void Action::WriteToEEPROM(uint16_t addr) {
 	SigmaEEPROM::Write16(addr + 6, targetId);
 	SigmaEEPROM::Write8(addr + 8, targetAction);
 	SigmaEEPROM::Write8(addr + 9, targetType);
-
 }

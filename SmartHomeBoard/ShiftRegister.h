@@ -24,6 +24,8 @@ public:
     void ReadFromEEPROM(uint16_t addr);
     void WriteToEEPROM(uint16_t addr);
     void ProcessUnit(ActionType action) {};
+    void const print(const char* header, DebugLevel level);
+
 protected:
     byte masks[8] = { 0b11111110,
                      0b11111101,

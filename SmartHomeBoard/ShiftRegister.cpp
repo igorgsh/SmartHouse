@@ -1,5 +1,8 @@
 #include "ShiftRegister.h"
 #include "SigmaEEPROM.h"
+#include "Configuration.h"
+
+extern Configuration Config;
 
 bool ShiftRegister::Compare(const Unit* u)
 {
@@ -32,6 +35,21 @@ void ShiftRegister::ConfigField(const JsonObject& jsonList) {
 		pinsNumber = jsonList["PinsN"];
 	}
 }
+
+void const ShiftRegister::print(const char* header, DebugLevel level) {
+	if (header != NULL) {
+		Config.Log->append(header);
+	}
+	Config.Log->append(F("Id:")).append((unsigned int)Id);
+	Config.Log->append(F(";Type:")).append((char)Type);
+	Config.Log->append(F(";DPin:")).append((unsigned int)DPin);
+	Config.Log->append(F(";latch:")).append((unsigned int)LatchPin);
+	Config.Log->append(F(";clock:")).append((unsigned int)ClockPin);
+	Config.Log->append(F(";PinsN:")).append((unsigned int)pinsNumber);
+	Config.Log->append(F(" @"));
+	Config.Log->Log(level);
+}
+
 
 void ShiftRegister::ReadFromEEPROM(uint16_t addr)
 {
