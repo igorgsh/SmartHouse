@@ -17,13 +17,17 @@ function checkStates() {
                     } else {
                         log("Undefined device "+ devName, "debug");
                     }
-                } else { //check Watchdog
-                    if (checkWatchDog(devName) > 3* 60 * 1000) { //watchDog older than 3 minutes
-                        if (typeof DevConfig[devName] != 'undefined') {
-                            log("WatchDog: Device " + devName +" on pin:" + DevConfig[devName] + " should be reset", 'error');
+                /*} else if (checkWatchDog(devName) > 3 * 60 * 1000) { //watchDog older than 3 minutes
+                    if (typeof DevConfig[devName] != 'undefined') {
+                        log("WatchDog: Device " + devName +" on pin:" + DevConfig[devName] + " should be reset", 'error');
                 
-                            resetDevice(DevConfig[devName], devName);
-                        }
+                        resetDevice(DevConfig[devName], devName);
+                    }*/
+                } else if(!checkWatchDog2(devName)) { //WatchDog2 check failed
+                    if (typeof DevConfig[devName] != 'undefined') {
+                        log("WatchDog2: Device " + devName +" on pin:" + DevConfig[devName] + " should be reset", 'error');
+                
+                         resetDevice(DevConfig[devName], devName);
                     }
                 }
             }
@@ -33,14 +37,13 @@ function checkStates() {
     }
 }
 
-schedule ('{"time":{"start":"00:00","end":"23:59","mode":"minutes","interval":5},"period":{"days":1}}', function(){
-//schedule ("*/5 * * * *", function(){
-    //log("Timer Check 5 is started", 'info');
-
-    //initResetGPIO();
+schedule ('{"time":{"start":"00:00","end":"23:59","mode":"minutes","interval":1},"period":{"days":1}}', function(){
     checkStates();
 
 });
+
+
+
 
 
 

@@ -134,7 +134,7 @@ var Configurations = [
 		    ,'{"id":133, "type":"R","Pin":33,"lhOn":1,"priority":10}'  //L6.6 СУ2 над ванной
             ,'{"id":134, "type":"R","Pin":34,"lhOn":1,"priority":10}'	//L4.7
 		    ,'{"id":135, "type":"R","Pin":35,"lhOn":1,"priority":10}'  //L6.7 желтая спальня над входом
-            ,'{"id":136, "type":"R","Pin":36,"lhOn":1,"priority":10}'	//L4.8
+            ,'{"id":136, "type":"R","Pin":36,"lhOn":1,"priority":10}'	//L4.8 желтая спальня возле окна
 		    ,'{"id":137, "type":"R","Pin":37,"lhOn":1,"priority":10}'  //L6.8 Синяя спальня Юг
             ,'{"id":138, "type":"R","Pin":38,"lhOn":1,"priority":10}'	//L5.2
 		    ,'{"id":139, "type":"R","Pin":39,"lhOn":1,"priority":10}'   //L5.8 - Взрыв
@@ -369,6 +369,9 @@ var Actions = [
 
 //Желтая спальня
          ,'{"id":130,"originId":108,"originType":"B","event":1,"targetId":135,"targetAction":3,"targetType":"R"}'
+         ,'{"id":131,"originId":108,"originType":"B","event":2,"targetId":136,"targetAction":3,"targetType":"R"}'
+         ,'{"id":132,"originId":108,"originType":"B","event":4,"targetId":135,"targetAction":3,"targetType":"R"}'
+         ,'{"id":133,"originId":108,"originType":"B","event":4,"targetId":136,"targetAction":3,"targetType":"R"}'
 
 //Зеленая спальня
          ,'{"id":140,"originId":106,"originType":"B","event":1,"targetId":128,"targetAction":3,"targetType":"R"}'
