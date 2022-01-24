@@ -23,6 +23,8 @@ var prefixOthers = prefixTopic + '.Others';
 var prefixHeating = prefixOthers + '.Heating'; 
 
 var watchDogPart = 'WatchDog';
+var watchDog2Part = 'WatchDog2';
+
 var reqConfPart = 'ConfigurationRequest';
 
 var reqActPart = 'ActionRequest';
