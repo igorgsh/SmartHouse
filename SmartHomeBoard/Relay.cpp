@@ -64,6 +64,15 @@ void Relay::ProcessUnit(ActionType event) {
 		delayStart = millis();
 		break;
 	}
+	case ACT_RELAY_DELAY_SWITCH:
+	{
+		RelaySwitch();
+		status = event;
+		Publish(MQTT_RELAYS);
+		Config.ProcessAction(Id, status);
+		delayStart = millis();
+		break;
+	}
 	default:
 		break;
 	}
@@ -80,6 +89,12 @@ void Relay::UnitLoop(unsigned long timePeriod, bool isParent, bool val) {
 	else if (status == ACT_RELAY_DELAY_ON) {
 		if (now >= delayStart + Config.Delay_ON_7) {
 			RelayOn();
+		}
+	}
+	else if (status == ACT_RELAY_DELAY_SWITCH) {
+		unsigned long delay = (status == lhOn ? Config.Delay_ON_7 : Config.Delay_OFF_6);
+		if (now >= delayStart + delay) {
+			RelaySwitch();
 		}
 	}
 }

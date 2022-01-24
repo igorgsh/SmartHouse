@@ -41,6 +41,7 @@ typedef enum {
 	ACT_SHORT_LONG = 5, //Button. Is pressed not released yet. And pressed time less than long
 	ACT_RELAY_DELAY_OFF = 6, //Relay off with delay
 	ACT_RELAY_DELAY_ON = 7, //Relay on with delay
+	ACT_RELAY_DELAY_SWITCH = 8, //Relay switch with delay
 	ACT_SENSOR_READY = 10 //Sensor ready
 } ActionType;
 

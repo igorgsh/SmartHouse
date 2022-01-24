@@ -2,6 +2,8 @@
 Smart House development
 
 History.
+V 3.5
+- add support of delayed relay Switch (action=8)
 V 3.4
 - add support of WatchDog2
 
@@ -13,7 +15,7 @@ V 3.2
 - bug fixes
 
 V 3.1
-- add support of dalayed relay on and off
+- add support of delayed relay on and off
 - bug fixes 
 
 V 3.0 (not recommended)
