@@ -202,10 +202,10 @@ void PowerMeter::PublishPowerMeter(PowerMeterValues step, double v) {
 	//sprintf(payload, "%f", v);
 	//dtostrf(v, 20, 2, payload);
 	unsigned long p1;
-	uint8_t p2;
+	unsigned int p2;
 
 	p1 = (unsigned long)v;
-	p2 = (uint8_t)((v - p1) * 1000);
+	p2 = (unsigned int)((v - p1) * 1000);
 	sprintf(payload, "%lu.%03u", p1, p2);
 
 	MqttTopic(Id, topic, step);

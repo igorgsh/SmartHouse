@@ -2,6 +2,8 @@
 Smart House development
 
 History.
+V 3.6
+- fix bug with energy publishing
 V 3.5
 - add support of delayed relay Switch (action=8)
 V 3.4
