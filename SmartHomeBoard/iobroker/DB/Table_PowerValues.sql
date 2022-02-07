@@ -26,6 +26,9 @@ CREATE TABLE IF NOT EXISTS public."PowerValues"
     powerfactor_a real,
     powerfactor_b real,
     powerfactor_c real,
+    consumption_a real,
+    consumption_b real,
+    consumption_c real,
     CONSTRAINT "PowerValues_pkey" PRIMARY KEY (id)
 )
 
