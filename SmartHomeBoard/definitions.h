@@ -28,7 +28,8 @@ typedef enum {
 	VIRTUAL_BUTTON	= 'b',
 	CONTACTOR		= 'C',
 	SHIFTOUT		= 'S',
-	SHIFTIN			= 's'
+	SHIFTIN			= 's',
+	VOLTMETER		= 'V'
 } UnitType;
 
 

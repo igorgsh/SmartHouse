@@ -30,7 +30,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SmartHomeBoard.ino" />
     <None Include="iobroker\objects.json">
       <Filter>iobroker</Filter>
     </None>
@@ -192,6 +191,12 @@
     <ClInclude Include="ShiftRegisterIn.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VoltmeterDC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Action.cpp">
@@ -239,10 +244,19 @@
     <ClCompile Include="ShiftRegisterIn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SmartHomeBoard.ino" />
+    <ClCompile Include="VoltmeterDC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="iobroker\dummy.txt">
       <Filter>iobroker</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SmartHomeBoard.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

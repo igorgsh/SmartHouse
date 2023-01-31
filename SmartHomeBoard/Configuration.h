@@ -51,6 +51,7 @@ public:
 	void UpdateUnit(UnitType type, uint16_t id, uint16_t value);
 	void UpdatePowerMeter(uint16_t unitId, uint16_t value) { UpdateUnit(UnitType::POWER_METER, unitId, value); };
 	void UpdateContactor(uint16_t unitId, uint16_t value) { UpdateUnit(UnitType::CONTACTOR, unitId, value); };
+	void UpdateVoltmeter(uint16_t unitId, uint16_t value) { UpdateUnit(UnitType::VOLTMETER, unitId, value); };
 	void ProcessAction(uint16_t id, byte event);
 	void Pass2Parent(uint16_t parentId, byte parentPin, bool status);
 

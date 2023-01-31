@@ -15,6 +15,7 @@
 #include "OneWireBus.h"
 #include "OneWireThermo.h"
 #include "PowerMeter.h"
+#include "VoltmeterDC.h"
 #include "Contactor.h"
 #include "ShiftRegisterOut.h"
 #include "ShiftRegisterIn.h"
@@ -191,6 +192,14 @@ Unit* Configuration::CreateTypedUnit(byte type) {
 			Board::Reset(10000);
 		}
 		u->Type = UnitType::SHIFTIN;
+	}
+	else if (type == UnitType::VOLTMETER) {
+		u = new VoltmeterDC();
+		if (u == NULL) {
+			Log->Error(F("Can't create Voltmeter Unit"));
+			Board::Reset(10000);
+		}
+		u->Type = UnitType::VOLTMETER;
 	}
 	if (u == NULL) {
 		Log->append(F("Can't create a typed unit:")).append((char)type).Error();

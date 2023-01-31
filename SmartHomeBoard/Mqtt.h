@@ -54,6 +54,7 @@
 #define MQTT_POWERMETER  MQTT_EQUIPMENT MQTT_SEPARATOR "PowerMeter"
 #define MQTT_VIRTUAL_BUTTONS  MQTT_VIRTUAL_EQUIPMENT MQTT_SEPARATOR "Buttons"
 #define MQTT_CONTACTOR  MQTT_EQUIPMENT MQTT_SEPARATOR "Contactors"
+#define MQTT_VOLTMETERDC  MQTT_EQUIPMENT MQTT_SEPARATOR "VoltmetersDC"
 
 
 void callbackFunc(char* topic, uint8_t* payload, unsigned int length);

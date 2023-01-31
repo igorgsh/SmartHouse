@@ -7,9 +7,9 @@
 
 void setup() {
   // EEPROM.write(Address, ID)
-	byte id = 0x03;
+	byte id = 0x06;
 	byte ip[4] = { 192,168,0,90 };
-	byte mqttIp = 34;
+	byte mqttIp = 99;
 
 	ip[3] += id;
 	EEPROM.write(0,id);

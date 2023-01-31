@@ -32,6 +32,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
+  <ImportGroup Label="Shared">
+    <Import Project="..\..\..\Documents\Arduino\libraries\INA3221\INA3221-0.0.1.vcxitems" Label="Shared" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -61,10 +64,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\SmartHomeBoard;$(ProjectDir)..\..\..\Documents\Arduino\libraries\PZEM004Tv30\src;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SoftwareSerial\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\MemoryFree-master;$(ProjectDir)..\..\..\Documents\Arduino\libraries\SafeString\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\ArduinoJson\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\PZEM004T-master;$(ProjectDir)..\..\..\Documents\Arduino\libraries\PubSubClient\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\DallasTemperature-3.8.0;$(ProjectDir)..\..\..\Documents\Arduino\libraries\OneWire;C:\Program Files (x86)\Arduino\libraries\Ethernet\src;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\src;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\EEPROM\src;C:\Program Files (x86)\Arduino\libraries\Ethernet\src\utility;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega;C:\Program Files (x86)\Arduino\hardware\tools\avr\\lib\gcc\avr\7.3.0\include;C:\Program Files (x86)\Arduino\hardware\tools\avr\avr\include;C:\Program Files (x86)\Arduino\hardware\tools\avr\\lib\gcc\avr\7.3.0\include;C:\Program Files (x86)\Arduino\hardware\tools\avr\avr\include-fixed;C:\Program Files (x86)\Arduino\hardware\tools\avr\avr\include\avr;C:\Program Files (x86)\Arduino\hardware\tools\avr\lib\gcc\avr\4.9.2\include;C:\Program Files (x86)\Arduino\hardware\tools\avr\lib\gcc\avr\4.9.2\include;C:\Program Files (x86)\Arduino\hardware\tools\avr\lib\gcc\avr\4.9.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\SmartHomeBoard;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\Wire\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\INA3221\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\PZEM004Tv30\src;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SoftwareSerial\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\MemoryFree-master;$(ProjectDir)..\..\..\Documents\Arduino\libraries\SafeString\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\ArduinoJson\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\PZEM004T-master;$(ProjectDir)..\..\..\Documents\Arduino\libraries\PubSubClient\src;$(ProjectDir)..\..\..\Documents\Arduino\libraries\DallasTemperature-3.8.0;$(ProjectDir)..\..\..\Documents\Arduino\libraries\OneWire;C:\Program Files (x86)\Arduino\libraries\Ethernet\src;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\SPI\src;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\EEPROM\src;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\Wire\src\utility;C:\Program Files (x86)\Arduino\libraries\Ethernet\src\utility;$(ProjectDir)..\..\..\\Project\\SmartHouse\\SmartHomeBoard;C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino;C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\variants\\mega;C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\libraries\\Wire\\src;$(ProjectDir)..\..\..\\Documents\\Arduino\\libraries\\INA3221\\src;$(ProjectDir)..\..\..\\Documents\\Arduino\\libraries\\PZEM004Tv30\\src;C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\libraries\\SoftwareSerial\\src;$(ProjectDir)..\..\..\\Documents\\Arduino\\libraries\\MemoryFree-master;$(ProjectDir)..\..\..\\Documents\\Arduino\\libraries\\SafeString\\src;$(ProjectDir)..\..\..\\Documents\\Arduino\\libraries\\ArduinoJson\\src;$(ProjectDir)..\..\..\\Documents\\Arduino\\libraries\\PZEM004T-master;$(ProjectDir)..\..\..\\Documents\\Arduino\\libraries\\PubSubClient\\src;$(ProjectDir)..\..\..\\Documents\\Arduino\\libraries\\DallasTemperature-3.8.0;$(ProjectDir)..\..\..\\Documents\\Arduino\\libraries\\OneWire;C:\\Program Files (x86)\\Arduino\\libraries\\Ethernet\\src;C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\libraries\\SPI\\src;C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\libraries\\EEPROM\\src;C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr\\\\lib\\gcc\\avr\\7.3.0\\include;C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr\\avr\\include;C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr\\\\lib\\gcc\\avr\\7.3.0\\include;C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr\\avr\\include-fixed;C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr\\avr\\include\\avr;C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr\\lib\\gcc\\avr\\4.8.1\\include;C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr\\lib\\gcc\\avr\\4.9.2\\include;C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr\\lib\\gcc\\avr\\4.9.3\\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ProjectDir)__vm\.SmartHomeBoard.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <PreprocessorDefinitions>__AVR_atmega2560__;__AVR_ATmega2560__;F_CPU=16000000L;ARDUINO=108012;ARDUINO_AVR_MEGA2560;ARDUINO_ARCH_AVR;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_VMICRO_INTELLISENSE;__AVR_atmega2560__;__AVR_ATmega2560__;F_CPU=16000000L;ARDUINO=108012;ARDUINO_AVR_MEGA2560;ARDUINO_ARCH_AVR;__cplusplus=201103L;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -79,6 +82,7 @@
     <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="VoltmeterDC.cpp" />
     <None Include="iobroker\common\Accum_schedule.js" />
     <None Include="iobroker\common\AstroSchedule.js" />
     <None Include="iobroker\common\BolierSchedule.js" />
@@ -114,9 +118,10 @@
     <None Include="iobroker\test\TestPing.js" />
     <None Include="iobroker\vis-user.css" />
     <None Include="iobroker\vis-views.json" />
-    <None Include="SmartHomeBoard.ino">
+    <ClCompile Include="SmartHomeBoard.ino">
       <FileType>CppCode</FileType>
-    </None>
+      <DeploymentContent>true</DeploymentContent>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Action.h" />
@@ -130,12 +135,14 @@
     <ClInclude Include="Mqtt.h" />
     <ClInclude Include="PowerMeter.h" />
     <ClInclude Include="Relay.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ShiftRegister.h" />
     <ClInclude Include="ShiftRegisterIn.h" />
     <ClInclude Include="ShiftRegisterOut.h" />
     <ClInclude Include="SigmaEEPROM.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="VoltmeterDC.h" />
     <ClInclude Include="__vm\.SmartHomeBoard.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
@@ -158,12 +165,15 @@
   <ItemGroup>
     <Text Include="iobroker\dummy.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SmartHomeBoard.rc" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties arduino.upload.port="COM4" config.Debug.arduino.upload.port="COM3" config.Debug.customdebug_mega_atmega2560_debugger_type="universal" config.Release.arduino.upload.port="COM4" />
+      <UserProperties arduino.upload.port="COM4" config.Debug.arduino.upload.port="COM3" config.Debug.customdebug_mega_atmega2560_debugger_type="universal" config.Release.arduino.upload.port="COM3" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

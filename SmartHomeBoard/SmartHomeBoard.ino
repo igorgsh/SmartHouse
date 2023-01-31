@@ -5,6 +5,8 @@
 */
 
 
+#include <Wire.h>
+#include <INA3221.h>
 #include <PZEM004Tv30.h>
 #include <MemoryFree.h>
 #include <SerialComs.h>
@@ -52,7 +54,7 @@ void setup() {
 	while (!Serial) {
 		delay(10); // wait for serial port to connect. Needed for native USB port only
 	}
-	Serial.println("Serial!");
+	Serial.println("Starting!");
 	//MEMFREE("Start Init");
 	SafeString::setOutput(Serial);
 	//init random generator

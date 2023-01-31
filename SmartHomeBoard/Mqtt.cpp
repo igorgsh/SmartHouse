@@ -130,6 +130,9 @@ void Mqtt::Callback() {
 						else if (strncmp(topicCB, MQTT_CONTACTOR, strlen(MQTT_CONTACTOR)) == 0) {
 							Config.UpdateContactor(GetUnitId(topicCB, strlen(MQTT_CONTACTOR) + 2), v);
 						}
+						else if (strncmp(topicCB, MQTT_VOLTMETERDC, strlen(MQTT_VOLTMETERDC)) == 0) {
+							Config.UpdateVoltmeter(GetUnitId(topicCB, strlen(MQTT_VOLTMETERDC) + 2), v);
+						}
 					}
 				}
 			}

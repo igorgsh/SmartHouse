@@ -72,6 +72,7 @@ void Unit::PublishTypedUnit(UnitType ut, uint16_t id, byte status)
 		break;
 	}
 	case POWER_METER:
+	case VOLTMETER:
 	case NOTHING:
 	case SHIFTIN:
 	case SHIFTOUT: {

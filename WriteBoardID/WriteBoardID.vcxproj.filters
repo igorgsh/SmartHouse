@@ -15,7 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="WriteBoardID.ino" />
     <None Include="src\arduino folders read me.txt">
       <Filter>Misc Files</Filter>
     </None>
@@ -24,5 +23,8 @@
     <ClInclude Include="__vm\.WriteBoardID.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="WriteBoardID.ino" />
   </ItemGroup>
 </Project>
