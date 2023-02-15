@@ -152,21 +152,21 @@ void VoltmeterDC::publishVoltmeter()
 		for (int i = 0; i < 3; i++) {
 
 			p1 = (unsigned long)voltage[i];
-			p2 = (unsigned int)((voltage[i] - p1) * 1000);
-			sprintf(payload, "%lu.%03u", p1, p2);
+			p2 = (unsigned int)((voltage[i] - p1) * 10);
+			sprintf(payload, "%lu.%01u", p1, p2);
 
 			sprintf(topic, "%s%sCH%1u%sVoltage", topic0, MQTT_SEPARATOR, i, MQTT_SEPARATOR);
 			Config.MqttClient->Publish(topic, payload);
 
 			p1 = (unsigned long)current[i];
-			p2 = (unsigned int)((current[i] - p1) * 1000);
-			sprintf(payload, "%lu.%03u", p1, p2);
+			p2 = (unsigned int)((current[i] - p1) * 10);
+			sprintf(payload, "%lu.%01u", p1, p2);
 			sprintf(topic, "%s%sCH%1u%sCurrent", topic0, MQTT_SEPARATOR, i, MQTT_SEPARATOR);
 			Config.MqttClient->Publish(topic, payload);
 
 			p1 = (unsigned long)currentComp[i];
-			p2 = (unsigned int)((currentComp[i] - p1) * 1000);
-			sprintf(payload, "%lu.%03u", p1, p2);
+			p2 = (unsigned int)((currentComp[i] - p1) * 10);
+			sprintf(payload, "%lu.%01u", p1, p2);
 			sprintf(topic, "%s%sCH%1u%sCurrentCompensated", topic0, MQTT_SEPARATOR, i, MQTT_SEPARATOR);
 			Config.MqttClient->Publish(topic, payload);
 		}
